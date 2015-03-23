@@ -175,4 +175,7 @@
 <string name="action_sort_location">"Vom dichtesten"</string>
 <string name="action_sort_location_desc">"Vom weitesten"</string>
 <string name="from_map">"Von den karte"</string>
+<string name="no_location">"Unfähig den Standort zu bestimmen"</string>
+<string name="no_location_description">"Diese Applikation erhält nur den ungefähren Standort vom System aufgrund der benötigten Berechtigungen und des Energieverbrauches. Wenn du diesen Dialog siehst, war es aus irgendeinem Grund nicht möglich, die Position zu bestimmen. Bitte überprüfe die Einstellungen von deinem Gerät (Du kannst den Button unten dazu nutzen)"</string>
+<string name="location_settings">"STANDORTEINSTELLUNGEN"</string>
 </resources>

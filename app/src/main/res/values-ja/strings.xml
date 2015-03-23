@@ -160,4 +160,7 @@
 <string name="action_sort_location">"近くから"</string>
 <string name="action_sort_location_desc">"遠くから"</string>
 <string name="from_map">"地図から"</string>
+<string name="no_location">"Unable to determine location"</string>
+<string name="no_location_description">"This application receives only the approximate location from the system, due to the necessary permissions and energy consumption. If you see this dialog, for some reason it was not possible to determine the position. Please check the settings of your device (you can use the button below)."</string>
+<string name="location_settings">"LOCATION SETTINGS"</string>
 </resources>

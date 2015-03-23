@@ -175,4 +175,7 @@
 <string name="action_sort_location">"Od najbližšej"</string>
 <string name="action_sort_location_desc">"Od najvzdialenejšie"</string>
 <string name="from_map">"Z mapy"</string>
+<string name="no_location">"Nemožno určiť polohu"</string>
+<string name="no_location_description">"Táto aplikácia získava približné umiestnenie z vášho systému a to hlavne kvôli nevyhnutným oprávnením a nižšej spotrebe energie. Ak vidíte tento dialóg, z nejakého dôvodu sa určenia polohy zlyhalo. Skontrolujte prosím nastavenia vášho zariadenia (môžete použiť tlačidlo nižšie)."</string>
+<string name="location_settings">"NASTAVENIE POLOHY"</string>
 </resources>
