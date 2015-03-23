@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -601,19 +602,25 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                         switch (which) {
                             case 0:
                                 knownLocation = Utils.getLastKnownLocation(getApplicationContext());
-                                fudge = Math.pow(Math.cos(Math.toRadians(knownLocation.getLatitude())),2);
+                                fudge = Math.pow(Math.cos(Math.toRadians(knownLocation.getLatitude())), 2);
 
                                 sortOrder = "((" + knownLocation.getLatitude() + " - latitude) * (" +
                                         knownLocation.getLatitude() + " - latitude) + (" + knownLocation.getLongitude() +
                                         " - longitude) * (" + knownLocation.getLongitude() + " - longitude) * " + fudge + " ) ASC";
+                                if (knownLocation.isNotDetected()) {
+                                    showLocationWarningDialog();
+                                }
                                 break;
                             case 1:
                                 knownLocation = Utils.getLastKnownLocation(getApplicationContext());
-                                fudge = Math.pow(Math.cos(Math.toRadians(knownLocation.getLatitude())),2);
+                                fudge = Math.pow(Math.cos(Math.toRadians(knownLocation.getLatitude())), 2);
 
                                 sortOrder = "((" + knownLocation.getLatitude() + " - latitude) * (" +
                                         knownLocation.getLatitude() + " - latitude) + (" + knownLocation.getLongitude() +
                                         " - longitude) * (" + knownLocation.getLongitude() + " - longitude) * " + fudge + " ) DESC";
+                                if (knownLocation.isNotDetected()) {
+                                    showLocationWarningDialog();
+                                }
                                 break;
                             case 2:
                                 sortOrder = "created_at ASC";
@@ -634,6 +641,22 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                     }
                 })
                 .negativeText(R.string.close)
+                .show();
+    }
+
+    private void showLocationWarningDialog() {
+        dialog = new MaterialDialog.Builder(this)
+                .title(R.string.no_location)
+                .content(R.string.no_location_description)
+                .neutralText(R.string.location_settings)
+                .positiveText(android.R.string.ok)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onNeutral(MaterialDialog dialog) {
+                        Intent viewIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(viewIntent);
+                    }
+                })
                 .show();
     }
 

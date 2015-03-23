@@ -22,10 +22,12 @@ public class KnownLocation {
 
     private final double latitude;
     private final double longitude;
+    private boolean notDetected;
 
-    public KnownLocation(double latitude, double longitude) {
+    public KnownLocation(double latitude, double longitude, boolean notDetected) {
         this.latitude = latitude;
         this.longitude = longitude;
+        this.notDetected = notDetected;
     }
 
     public double getLatitude() {
@@ -34,5 +36,9 @@ public class KnownLocation {
 
     public double getLongitude() {
         return longitude;
+    }
+
+    public boolean isNotDetected() {
+        return notDetected;
     }
 }

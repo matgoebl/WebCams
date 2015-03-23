@@ -20,6 +20,7 @@ package cz.yetanotherview.webcamviewer.app;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Environment;
@@ -243,18 +244,25 @@ public class Utils {
      * Get last know location
      */
     public static KnownLocation getLastKnownLocation (Context context) {
+        KnownLocation location;
+
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        Location mLastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        double mLatitude, mLongitude;
-        if (mLastLocation != null) {
-            mLatitude = Utils.roundDouble(mLastLocation.getLatitude(), 6);
-            mLongitude = Utils.roundDouble(mLastLocation.getLongitude(), 6);
-            Log.i("KnownLocation", String.valueOf(mLatitude) + " " + String.valueOf(mLongitude));
-        } else {
-            mLatitude = 0.0;
-            mLongitude = 0.0;
-            Log.i("KnownLocation", "No location detected");
+        Criteria criteria = new Criteria();
+        String bestProvider = locationManager.getBestProvider(criteria, false);
+        if (bestProvider == null) {
+            bestProvider = LocationManager.NETWORK_PROVIDER;
         }
-        return new KnownLocation(mLatitude, mLongitude);
+        Location mLastLocation = locationManager.getLastKnownLocation(bestProvider);
+
+        if (mLastLocation != null) {
+                location =  new KnownLocation(Utils.roundDouble(mLastLocation.getLatitude(), 6),
+                        Utils.roundDouble(mLastLocation.getLongitude(), 6), false);
+                Log.i("KnownLocation", String.valueOf(location.getLatitude()) + " " + String.valueOf(location.getLongitude()));
+        } else {
+            Log.i("KnownLocation", "No last location detected");
+            location = new KnownLocation(0,0, true);
+        }
+
+        return location;
     }
 }

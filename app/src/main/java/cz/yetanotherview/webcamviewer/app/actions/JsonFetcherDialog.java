@@ -22,12 +22,14 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.backup.BackupManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -454,56 +456,62 @@ public class JsonFetcherDialog extends DialogFragment {
 
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
-                MaterialDialog dialog = new MaterialDialog.Builder(mActivity)
-                        .title(R.string.select_radius)
-                        .customView(R.layout.seekbar_dialog, false)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-
-                                new nearSelectionBackgroundTask().execute();
-                                swapProgressDialog();
-                            }
-                        })
-                        .positiveText(android.R.string.ok)
-                        .build();
-
-                seekBar = (SeekBar) dialog.getCustomView().findViewById(R.id.seekbar_seek);
-                seekBarText = (TextView) dialog.getCustomView().findViewById(R.id.seekbar_text);
-
-                units = " km";
-                String mLocale = getResources().getConfiguration().locale.getISO3Country();
-                if (mLocale.equalsIgnoreCase(Locale.US.getISO3Country())) {
-                    units = " mi";
+                if (knownLocation.isNotDetected()) {
+                    initDialog.dismiss();
+                    showLocationWarningDialog();
                 }
+                else {
+                    MaterialDialog dialog = new MaterialDialog.Builder(mActivity)
+                            .title(R.string.select_radius)
+                            .customView(R.layout.seekbar_dialog, false)
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
 
-                seekBarCorrection = 10;
-                seekBar.setMax(290);
-                seekBarProgress = 50;
-                seekBar.setProgress(seekBarProgress - seekBarCorrection);
-                seekBarText.setText((seekBar.getProgress() + seekBarCorrection) + units);
+                                    new nearSelectionBackgroundTask().execute();
+                                    swapProgressDialog();
+                                }
+                            })
+                            .positiveText(android.R.string.ok)
+                            .build();
 
-                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                    int val = seekBar.getProgress();
+                    seekBar = (SeekBar) dialog.getCustomView().findViewById(R.id.seekbar_seek);
+                    seekBarText = (TextView) dialog.getCustomView().findViewById(R.id.seekbar_text);
 
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                        seekBarProgress = val;
+                    units = " km";
+                    String mLocale = getResources().getConfiguration().locale.getISO3Country();
+                    if (mLocale.equalsIgnoreCase(Locale.US.getISO3Country())) {
+                        units = " mi";
                     }
 
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                    }
+                    seekBarCorrection = 10;
+                    seekBar.setMax(290);
+                    seekBarProgress = 50;
+                    seekBar.setProgress(seekBarProgress - seekBarCorrection);
+                    seekBarText.setText((seekBar.getProgress() + seekBarCorrection) + units);
 
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-                        val = progressValue + seekBarCorrection;
-                        seekBarText.setText(val + units);
-                    }
-                });
+                    seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                        int val = seekBar.getProgress();
 
-                initDialog.dismiss();
-                dialog.show();
+                        @Override
+                        public void onStopTrackingTouch(SeekBar seekBar) {
+                            seekBarProgress = val;
+                        }
+
+                        @Override
+                        public void onStartTrackingTouch(SeekBar seekBar) {
+                        }
+
+                        @Override
+                        public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
+                            val = progressValue + seekBarCorrection;
+                            seekBarText.setText(val + units);
+                        }
+                    });
+
+                    initDialog.dismiss();
+                    dialog.show();
+                }
             }
         });
     }
@@ -795,6 +803,10 @@ public class JsonFetcherDialog extends DialogFragment {
 
                 initDialog.dismiss();
                 dialog.show();
+
+                if (knownLocation.isNotDetected()) {
+                    showLocationWarningDialog();
+                }
             }
         });
     }
@@ -903,6 +915,22 @@ public class JsonFetcherDialog extends DialogFragment {
                 .title(R.string.server_unavailable)
                 .content(R.string.server_unavailable_summary)
                 .positiveText(android.R.string.ok)
+                .show();
+    }
+
+    private void showLocationWarningDialog() {
+        new MaterialDialog.Builder(mActivity)
+                .title(R.string.no_location)
+                .content(R.string.no_location_description)
+                .neutralText(R.string.location_settings)
+                .positiveText(android.R.string.ok)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onNeutral(MaterialDialog dialog) {
+                        Intent viewIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(viewIntent);
+                    }
+                })
                 .show();
     }
 }
