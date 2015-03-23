@@ -78,6 +78,7 @@ import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.WebCamListener;
 import cz.yetanotherview.webcamviewer.app.model.Category;
+import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class MainActivity extends ActionBarActivity implements WebCamListener, JsonFetcherDialog.ReloadInterface, SwipeRefreshLayout.OnRefreshListener {
@@ -569,21 +570,23 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     private void showSortDialog() {
 
         int whatMarkToCheck = 0;
-        switch (sortOrder) {
-            case "created_at ASC":
-                whatMarkToCheck = 0;
-                break;
-            case "created_at DESC":
-                whatMarkToCheck = 1;
-                break;
-            case "webcam_name COLLATE UNICODE":
-                whatMarkToCheck = 2;
-                break;
-            case "webcam_name COLLATE UNICODE DESC":
-                whatMarkToCheck = 3;
-                break;
-            default:
-                break;
+        if (sortOrder.contains(" ) ASC")) {
+            whatMarkToCheck = 0;
+        }
+        else if (sortOrder.contains(" ) DESC")) {
+            whatMarkToCheck = 1;
+        }
+        else if (sortOrder.contains("created_at ASC")) {
+            whatMarkToCheck = 2;
+        }
+        else if (sortOrder.contains("created_at DESC")) {
+            whatMarkToCheck = 3;
+        }
+        else if (sortOrder.contains("UNICODE ASC")) {
+            whatMarkToCheck = 4;
+        }
+        else if (sortOrder.contains("UNICODE DESC")) {
+            whatMarkToCheck = 5;
         }
 
         dialog = new MaterialDialog.Builder(this)
@@ -592,17 +595,36 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                 .itemsCallbackSingleChoice(whatMarkToCheck, new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                        KnownLocation knownLocation;
+                        Double fudge;
                         switch (which) {
                             case 0:
-                                sortOrder = "created_at ASC";
+                                knownLocation = Utils.getLastKnownLocation(getApplicationContext());
+                                fudge = Math.pow(Math.cos(Math.toRadians(knownLocation.getLatitude())),2);
+
+                                sortOrder = "((" + knownLocation.getLatitude() + " - latitude) * (" +
+                                        knownLocation.getLatitude() + " - latitude) + (" + knownLocation.getLongitude() +
+                                        " - longitude) * (" + knownLocation.getLongitude() + " - longitude) * " + fudge + " ) ASC";
                                 break;
                             case 1:
-                                sortOrder = "created_at DESC";
+                                knownLocation = Utils.getLastKnownLocation(getApplicationContext());
+                                fudge = Math.pow(Math.cos(Math.toRadians(knownLocation.getLatitude())),2);
+
+                                sortOrder = "((" + knownLocation.getLatitude() + " - latitude) * (" +
+                                        knownLocation.getLatitude() + " - latitude) + (" + knownLocation.getLongitude() +
+                                        " - longitude) * (" + knownLocation.getLongitude() + " - longitude) * " + fudge + " ) DESC";
                                 break;
                             case 2:
-                                sortOrder = "webcam_name COLLATE UNICODE";
+                                sortOrder = "created_at ASC";
                                 break;
                             case 3:
+                                sortOrder = "created_at DESC";
+                                break;
+                            case 4:
+                                sortOrder = "webcam_name COLLATE UNICODE ASC";
+                                break;
+                            case 5:
                                 sortOrder = "webcam_name COLLATE UNICODE DESC";
                                 break;
                             default:

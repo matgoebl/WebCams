@@ -2,6 +2,8 @@
 <resources>
 
     <string-array name="sort_values">
+        <item>@string/action_sort_location</item>
+        <item>@string/action_sort_location_desc</item>
         <item>@string/action_sort_date</item>
         <item>@string/action_sort_date_desc</item>
         <item>@string/action_sort_name</item>

@@ -22,11 +22,9 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.backup.BackupManager;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -73,6 +71,7 @@ import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.WebCamNameComparator;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.Country;
+import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class JsonFetcherDialog extends DialogFragment {
@@ -103,9 +102,7 @@ public class JsonFetcherDialog extends DialogFragment {
     private ManualSelectionAdapter manualSelectionAdapter;
     private ReloadInterface mListener;
 
-    protected Location mLastLocation;
-    private double mLatitude;
-    private double mLongitude;
+    private KnownLocation knownLocation;
     private SeekBar seekBar;
     private TextView seekBarText;
     private int seekBarProgress;
@@ -253,7 +250,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             backupManager.dataChanged();
                         }
                         else if (selection == 1) {
-                            getLastKnownLocation();
+                            knownLocation = Utils.getLastKnownLocation(mActivity);
 
                             noNewWebCams = false;
                             handleNearSelection();
@@ -297,7 +294,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             handleCountrySelection();
                         }
                         else if (selection == 4) {
-                            getLastKnownLocation();
+                            knownLocation = Utils.getLastKnownLocation(mActivity);
 
                             selectedMarker = ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null);
                             markerNotSelected = ResourcesCompat.getDrawable(getResources(), R.drawable.marker_not_selected, null);
@@ -306,7 +303,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             for (WebCam webCam : importWebCams) {
                                 LatLng latLng = new LatLng(webCam.getLatitude(), webCam.getLongitude());
                                 Marker marker = new Marker(mMapView, webCam.getName(), String.valueOf(webCam.getLatitude()) +
-                                        " - " + String.valueOf(webCam.getLongitude()), latLng);
+                                        ", " + String.valueOf(webCam.getLongitude()), latLng);
                                 marker.setMarker(markerNotSelected);
                                 markers.add(marker);
                             }
@@ -524,7 +521,7 @@ public class JsonFetcherDialog extends DialogFragment {
                 for (WebCam webCam : importWebCams) {
 
                     float[] distance = new float[1];
-                    Location.distanceBetween(webCam.getLatitude(), webCam.getLongitude(), mLatitude, mLongitude, distance);
+                    Location.distanceBetween(webCam.getLatitude(), webCam.getLongitude(), knownLocation.getLatitude(), knownLocation.getLongitude(), distance);
 
                     if (distance[0] < selectedDistance) {
                         if (allWebCams.size() != 0) {
@@ -752,7 +749,7 @@ public class JsonFetcherDialog extends DialogFragment {
                         .build();
 
                 mMapView = (MapView) dialog.getCustomView().findViewById(R.id.mapView);
-                LatLng latLng = new LatLng(mLatitude, mLongitude);
+                LatLng latLng = new LatLng(knownLocation.getLatitude(), knownLocation.getLongitude());
                 mMapView.setCenter(latLng);
                 mMapView.setZoom(8);
 
@@ -873,18 +870,6 @@ public class JsonFetcherDialog extends DialogFragment {
 
             }
         });
-    }
-
-    private void getLastKnownLocation () {
-        LocationManager locationManager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
-        mLastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        if (mLastLocation != null) {
-            mLatitude = Utils.roundDouble(mLastLocation.getLatitude(), 6);
-            mLongitude = Utils.roundDouble(mLastLocation.getLongitude(), 6);
-            Log.i(TAG, String.valueOf(mLatitude) + " " + String.valueOf(mLongitude));
-        } else {
-            Log.i(TAG, "No location detected");
-        }
     }
 
     private void reportDialog(int newWebCams, int duplicityWebCams) {

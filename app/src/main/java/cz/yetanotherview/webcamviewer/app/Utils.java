@@ -20,6 +20,8 @@ package cz.yetanotherview.webcamviewer.app;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Environment;
 import android.util.Log;
 
@@ -37,6 +39,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
 
 public class Utils {
 
@@ -233,5 +237,24 @@ public class Utils {
      */
     public static String getLocaleCode(){
         return Locale.getDefault().toString();
+    }
+
+    /**
+     * Get last know location
+     */
+    public static KnownLocation getLastKnownLocation (Context context) {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        Location mLastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        double mLatitude, mLongitude;
+        if (mLastLocation != null) {
+            mLatitude = Utils.roundDouble(mLastLocation.getLatitude(), 6);
+            mLongitude = Utils.roundDouble(mLastLocation.getLongitude(), 6);
+            Log.i("KnownLocation", String.valueOf(mLatitude) + " " + String.valueOf(mLongitude));
+        } else {
+            mLatitude = 0.0;
+            mLongitude = 0.0;
+            Log.i("KnownLocation", "No location detected");
+        }
+        return new KnownLocation(mLatitude, mLongitude);
     }
 }

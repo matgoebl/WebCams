@@ -21,6 +21,7 @@ package cz.yetanotherview.webcamviewer.app.maps;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +50,8 @@ public class MapsFragment extends Fragment {
 
         LatLng latLng = new LatLng(latitude, longitude);
         Marker marker = new Marker(mMapView, name, String.valueOf(latitude) +
-                " - " + String.valueOf(longitude), latLng);
-        marker.setMarker(getResources().getDrawable(R.drawable.marker));
+                ", " + String.valueOf(longitude), latLng);
+        marker.setMarker(ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null));
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.setCenter(latLng);
