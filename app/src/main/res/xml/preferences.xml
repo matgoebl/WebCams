@@ -104,6 +104,12 @@
     <PreferenceCategory
         android:title="@string/other">
 
+        <CheckBoxPreference
+            android:key="pref_simple_list"
+            android:checked="false"
+            android:title="@string/simple_listview"
+            android:summary="@string/simple_listview_summary" />
+
         <Preference
             android:key="pref_reset_last_check"
             android:title="@string/pref_reset_last_check"

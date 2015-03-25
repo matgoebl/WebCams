@@ -43,6 +43,18 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="MainCardViewSimple">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginTop">@dimen/main_small_margin</item>
+        <item name="android:layout_marginBottom">@dimen/main_small_margin</item>
+        <item name="android:layout_marginLeft">@dimen/small_padding</item>
+        <item name="android:layout_marginStart">@dimen/small_padding</item>
+        <item name="android:layout_marginRight">@dimen/small_padding</item>
+        <item name="android:layout_marginEnd">@dimen/small_padding</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
     <style name="MainCardViewList">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -73,10 +85,16 @@
 
     <style name="CardTitle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">sans-serif-light</item>
-        <item name="android:gravity">bottom|left</item>
+    </style>
+
+    <style name="CardNumber">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/custom_grey</item>
+        <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
     <style name="ToolbarTitle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">

@@ -20,11 +20,14 @@ package cz.yetanotherview.webcamviewer.app;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.bumptech.glide.Glide;
 
@@ -40,6 +43,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
 
@@ -243,7 +247,7 @@ public class Utils {
     /**
      * Get last know location
      */
-    public static KnownLocation getLastKnownLocation (Context context) {
+    public static KnownLocation getLastKnownLocation(Context context) {
         KnownLocation location;
 
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -264,5 +268,44 @@ public class Utils {
         }
 
         return location;
+    }
+
+    /**
+     * Get random image
+     */
+    public static int getRandomImage() {
+        Random r = new Random();
+        int[] imgIds = {R.drawable.no_image_0, R.drawable.no_image_1, R.drawable.no_image_2,
+                R.drawable.no_image_3, R.drawable.no_image_4, R.drawable.no_image_5,
+                R.drawable.no_image_6, R.drawable.no_image_7, R.drawable.no_image_8,
+                R.drawable.no_image_9, R.drawable.no_image_10, R.drawable.no_image_11};
+        int randomInt = r.nextInt(imgIds .length);
+
+        return imgIds[randomInt];
+    }
+
+    /**
+     * Calculate image height
+     */
+    public static int getImageHeight(Context context, int layoutId) {
+        int minHeight = 0;
+
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int mWidth = size.x;
+
+        if (layoutId == 1) {
+            minHeight = (int) (mWidth * 0.67);
+        }
+        else if (layoutId == 2) {
+            minHeight = (int) ((mWidth * 0.67) / 2);
+        }
+        else if (layoutId == 3) {
+            minHeight = (int) ((mWidth * 0.67) / 3);
+        }
+
+        return minHeight;
     }
 }

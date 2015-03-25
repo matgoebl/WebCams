@@ -19,16 +19,12 @@
 package cz.yetanotherview.webcamviewer.app.adapter;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.os.Build;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -43,7 +39,6 @@ import com.bumptech.glide.signature.StringSignature;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.Utils;
@@ -53,8 +48,8 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
 
     private final int mLayoutId;
     private final int mOrientation;
-    private int minHeight;
-    private boolean mImageOn;
+    private boolean imageOn;
+    private boolean simpleList;
 
     private StringSignature mStringSignature;
 
@@ -63,13 +58,15 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
     private ArrayList<WebCam> filteredList;
     private ClickListener clickListener;
 
-    public WebCamAdapter(Context context, List<WebCam> webCamItems, int orientation, int layoutId, StringSignature stringSignature, boolean imageOn) {
+    public WebCamAdapter(Context context, List<WebCam> webCamItems, int orientation, int layoutId,
+                         StringSignature stringSignature, boolean imageOn, boolean simpleList) {
         this.webCamItems = webCamItems;
         mContext = context;
         mLayoutId = layoutId;
         mOrientation = orientation;
         mStringSignature = stringSignature;
-        mImageOn = imageOn;
+        this.imageOn = imageOn;
+        this.simpleList = simpleList;
         this.filteredList = new ArrayList<>();
         this.filteredList.addAll(webCamItems);
     }
@@ -104,10 +101,15 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
     public WebCamViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
         if (mLayoutId == 1) {
-            if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT_WATCH) {
-                return new WebCamViewHolder(LayoutInflater.from(mContext).inflate(R.layout.webcam_layout_list_pre_lollipop, viewGroup, false));
+            if (!imageOn && simpleList) {
+                return new WebCamViewHolder(LayoutInflater.from(mContext).inflate(R.layout.webcam_layout_list_simple, viewGroup, false));
             }
-            else return new WebCamViewHolder(LayoutInflater.from(mContext).inflate(R.layout.webcam_layout_list, viewGroup, false));
+            else {
+                if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT_WATCH) {
+                    return new WebCamViewHolder(LayoutInflater.from(mContext).inflate(R.layout.webcam_layout_list_pre_lollipop, viewGroup, false));
+                }
+                else return new WebCamViewHolder(LayoutInflater.from(mContext).inflate(R.layout.webcam_layout_list, viewGroup, false));
+            }
         }
         else return new WebCamViewHolder(LayoutInflater.from(mContext).inflate(R.layout.webcam_layout_grid, viewGroup, false));
     }
@@ -116,46 +118,30 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
     public void onBindViewHolder(WebCamViewHolder webcamViewHolder, int position) {
         WebCam webCam = webCamItems.get(position);
         webcamViewHolder.vName.setText(webCam.getName());
-        webcamViewHolder.vProgress.setVisibility(View.VISIBLE);
 
-        if (webcamViewHolder.vImage.getWidth() == 0) {
-
-            WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-            Display display = wm.getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            int mWidth = size.x;
-
-            if (mLayoutId == 1) {
-                minHeight = (int) (mWidth * 0.67);
+        if (imageOn) {
+            webcamViewHolder.vProgress.setVisibility(View.VISIBLE);
+            if (webcamViewHolder.vImage.getWidth() == 0) {
+                webcamViewHolder.vImage.setMinimumHeight(Utils.getImageHeight(mContext, mLayoutId));
             }
-            else if (mLayoutId == 2) {
-                minHeight = (int) ((mWidth * 0.67) / 2);
-            }
-            else if (mLayoutId == 3) {
-                minHeight = (int) ((mWidth * 0.67) / 3);
-            }
-        }
-        webcamViewHolder.vImage.setMinimumHeight(minHeight);
-
-        if (mImageOn) {
             loadImages(webcamViewHolder, webCam.getUrl());
+        }
+        else if (simpleList){
+            webcamViewHolder.vProgress.setVisibility(View.GONE);
+            webcamViewHolder.vImage.setVisibility(View.GONE);
+            webcamViewHolder.vNumber.setText((position + 1) + ". ");
+            webcamViewHolder.vName.setShadowLayer(0,0,0,0);
+            webcamViewHolder.vName.setTextColor(mContext.getResources().getColor(R.color.primary));
+            webcamViewHolder.vButton.setImageResource(R.drawable.ic_action_navigation_more_vert_dark);
         }
         else {
             webcamViewHolder.vProgress.setVisibility(View.GONE);
 
             if (mLayoutId == 1) {
-                webcamViewHolder.vImage.setMaxHeight(minHeight);
+                webcamViewHolder.vImage.setMaxHeight(Utils.getImageHeight(mContext, mLayoutId));
             }
 
-            Random r = new Random();
-            int[] res = {R.drawable.no_image_0, R.drawable.no_image_1, R.drawable.no_image_2,
-                    R.drawable.no_image_3, R.drawable.no_image_4, R.drawable.no_image_5,
-                    R.drawable.no_image_6, R.drawable.no_image_7, R.drawable.no_image_8,
-                    R.drawable.no_image_9, R.drawable.no_image_10, R.drawable.no_image_11};
-
-            int rndInt = r.nextInt(res .length);
-            webcamViewHolder.vImage.setImageDrawable(ResourcesCompat.getDrawable(mContext.getResources(), res[rndInt], null));
+            webcamViewHolder.vImage.setImageResource(Utils.getRandomImage());
         }
     }
 
@@ -195,6 +181,7 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
 
     public class WebCamViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
+        protected TextView vNumber;
         protected TextView vName;
         protected ImageView vImage;
         protected ImageButton vButton;
@@ -203,35 +190,57 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
 
         public WebCamViewHolder(View itemLayoutView) {
             super(itemLayoutView);
+            vNumber = (TextView) itemLayoutView.findViewById(R.id.numberTextView);
             vName = (TextView) itemLayoutView.findViewById(R.id.titleTextView);
             vImage = (ImageView) itemLayoutView.findViewById(R.id.imageView);
             vButton = (ImageButton) itemLayoutView.findViewById(R.id.action_edit);
 
             vProgress = (ProgressBar) itemLayoutView.findViewById(R.id.loadingProgressBar);
 
-            vImage.setOnClickListener(this);
+
             vButton.setOnClickListener(this);
+
+            if (!imageOn && simpleList) {
+                vName.setOnClickListener(this);
+            }
+            else vImage.setOnClickListener(this);
 
             final int small = mContext.getResources().getDimensionPixelSize(R.dimen.small_padding);
             final int middle = mContext.getResources().getDimensionPixelSize(R.dimen.middle_padding);
             final int big = mContext.getResources().getDimensionPixelSize(R.dimen.big_padding);
 
             if (mLayoutId == 1) {
+                vNumber.setTextSize(28);
                 vName.setTextSize(28);
-                vName.setPadding(big,0,0,middle);
+                if (!imageOn && simpleList) {
+                    vNumber.setPadding(big,0,0,middle);
+                }
+                else vName.setPadding(big,0,0,middle);
             }
             else if (mLayoutId == 2 && mOrientation == 1) {
+                vNumber.setTextSize(16);
                 vName.setTextSize(16);
-                vName.setPadding(middle,0,0,small);
+                if (!imageOn && simpleList) {
+                    vNumber.setPadding(middle,0,0,small);
+                }
+                else vName.setPadding(middle,0,0,small);
                 vButton.setMaxHeight(120);
             }
             else if (mLayoutId == 2 && mOrientation == 2) {
+                vNumber.setTextSize(26);
                 vName.setTextSize(26);
-                vName.setPadding(middle,0,0,small);
+                if (!imageOn && simpleList) {
+                    vNumber.setPadding(middle,0,0,small);
+                }
+                else vName.setPadding(middle,0,0,small);
             }
             else if (mLayoutId == 3) {
+                vNumber.setTextSize(19);
                 vName.setTextSize(19);
-                vName.setPadding(small,0,0,0);
+                if (!imageOn && simpleList) {
+                    vNumber.setPadding(small,0,0,0);
+                }
+                else vName.setPadding(small,0,0,0);
                 vButton.setMaxHeight(120);
             }
         }

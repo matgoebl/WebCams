@@ -128,6 +128,8 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     private MenuItem searchItem;
     private SearchView searchView;
 
+    private boolean simpleList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -301,7 +303,8 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         }
         db.closeDB();
 
-        mAdapter = new WebCamAdapter(this, allWebCams, mOrientation, mLayoutId, new StringSignature(mStringSignature), imagesOnOff);
+        mAdapter = new WebCamAdapter(this, allWebCams, mOrientation, mLayoutId,
+                new StringSignature(mStringSignature), imagesOnOff, simpleList);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setClickListener(new WebCamAdapter.ClickListener() {
 
@@ -570,7 +573,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
     private void showSortDialog() {
 
-        int whatMarkToCheck = 0;
+        int whatMarkToCheck = 2;
         if (sortOrder.contains(" ) ASC")) {
             whatMarkToCheck = 0;
         }
@@ -1187,6 +1190,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         selectedCategory = preferences.getInt("pref_selected_category", 0);
         selectedCategoryName = preferences.getString("pref_selected_category_name", allWebCamsString);
         screenAlwaysOn = preferences.getBoolean("pref_screen_always_on", false);
+        simpleList = preferences.getBoolean("pref_simple_list", false);
     }
 
     private void saveToPref(){

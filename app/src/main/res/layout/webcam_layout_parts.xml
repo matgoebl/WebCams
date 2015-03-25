@@ -1,0 +1,35 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <RelativeLayout
+        android:id="@+id/InnerRelativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <TextView
+            style="@style/CardNumber"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/numberTextView"/>
+
+        <TextView
+            style="@style/CardTitle"
+            android:layout_toEndOf="@id/numberTextView"
+            android:layout_toRightOf="@id/numberTextView"
+            android:shadowColor="@color/black"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="4"
+            android:id="@+id/titleTextView"/>
+
+    </RelativeLayout>
+
+    <ImageButton
+        style="@style/EditImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/imageView"
+        android:id="@+id/action_edit" />
+
+</merge>
