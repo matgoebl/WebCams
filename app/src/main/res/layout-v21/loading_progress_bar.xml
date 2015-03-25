@@ -2,8 +2,7 @@
 
     <ProgressBar
         style="@style/ProgressBarHorizontal"
-        android:indeterminateDrawable="@drawable/green_progress"
         android:id="@+id/loadingProgressBar"
-        android:layout_height="2dp"/>
+        android:layout_height="wrap_content"/>
 
 </merge>

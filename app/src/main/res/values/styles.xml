@@ -88,6 +88,9 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:paddingRight">@dimen/huge_padding</item>
+        <item name="android:paddingEnd">@dimen/huge_padding</item>
     </style>
 
     <style name="CardNumber">
@@ -95,6 +98,18 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/custom_grey</item>
         <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="ProgressBarHorizontal" parent="Base.Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginLeft">@dimen/progress_padding</item>
+        <item name="android:layout_marginStart">@dimen/progress_padding</item>
+        <item name="android:layout_marginRight">@dimen/progress_padding</item>
+        <item name="android:layout_marginEnd">@dimen/progress_padding</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:visibility">visible</item>
     </style>
 
     <style name="ToolbarTitle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">

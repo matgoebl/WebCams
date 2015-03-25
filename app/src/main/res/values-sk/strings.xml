@@ -167,7 +167,7 @@
 <string name="action_search">"Hľadať"</string>
 <string name="selecting_from_map">"Výber z mapy"</string>
 <string name="simple_listview">"Jednoduchý zoznam"</string>
-<string name="simple_listview_summary">"Ak sú realistické náhľady vypnuté, zobraziť iba jednoduchý zoznam s názvami"</string>
+<string name="simple_listview_summary">"Ak sú živé náhľady vypnuté, zobraziť iba jednoduchý zoznam s názvami"</string>
 <string name="delete_webcams">"Zmazať vybrané"</string>
 <string name="delete_webcams_summary">"Zmazať vybrané WebKamery z aktuálnej databázy"</string>
 <string name="submit_suggestion">"Odoslať návrh"</string>
