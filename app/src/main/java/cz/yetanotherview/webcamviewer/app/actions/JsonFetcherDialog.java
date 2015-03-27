@@ -68,12 +68,15 @@ import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.Utils;
 import cz.yetanotherview.webcamviewer.app.adapter.CountryAdapter;
 import cz.yetanotherview.webcamviewer.app.adapter.ManualSelectionAdapter;
+import cz.yetanotherview.webcamviewer.app.adapter.TypeAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.CountryNameComparator;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
+import cz.yetanotherview.webcamviewer.app.helper.TypeNameComparator;
 import cz.yetanotherview.webcamviewer.app.helper.WebCamNameComparator;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.Country;
 import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
+import cz.yetanotherview.webcamviewer.app.model.Type;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class JsonFetcherDialog extends DialogFragment {
@@ -90,6 +93,7 @@ public class JsonFetcherDialog extends DialogFragment {
     private int selection;
     private boolean noNewWebCams = true;
     private List<Country> countryList;
+    private List<Type> typeList;
     private int newWebCams;
     private int duplicityWebCams;
     private String importProgress;
@@ -191,7 +195,7 @@ public class JsonFetcherDialog extends DialogFragment {
 
                     // Swap dialogs
                     maxProgressValue = importWebCams.size();
-                    if (selection == 0 || selection == 5 || selection == 6) {
+                    if (selection == 0 || selection == 6 || selection == 7) {
                         swapProgressDialog();
                     }
 
@@ -296,6 +300,35 @@ public class JsonFetcherDialog extends DialogFragment {
                             handleCountrySelection();
                         }
                         else if (selection == 4) {
+                            typeList = new ArrayList<>();
+                            List<Integer> countList = new ArrayList<>();
+                            List<String> listAllTypes = Arrays.asList(getResources().getStringArray(R.array.types));
+                            for (String typeName : listAllTypes) {
+                                Type type = new Type();
+                                type.setId(listAllTypes.indexOf(typeName));
+                                type.setTypeName(typeName);
+                                type.setIcon(Utils.getIconId(listAllTypes.indexOf(typeName)));
+
+                                typeList.add(type);
+                            }
+
+                            for (WebCam webCam : importWebCams) {
+                                countList.add(webCam.getStatus());
+                            }
+
+                            Collections.sort(typeList, new TypeNameComparator());
+                            Collections.sort(countList);
+
+                            for (Type type : typeList) {
+                                int status = type.getId();
+                                int occurrences = Collections.frequency(countList, status);
+                                type.setCount(occurrences);
+                            }
+
+                            noNewWebCams = false;
+                            handleTypeSelection();
+                        }
+                        else if (selection == 5) {
                             knownLocation = Utils.getLastKnownLocation(mActivity);
 
                             selectedMarker = ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null);
@@ -313,7 +346,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             noNewWebCams = false;
                             handleMapSelection();
                         }
-                        else if (selection == 5) {
+                        else if (selection == 6) {
                             noNewWebCams = false;
 
                             synchronized (sDataLock) {
@@ -355,7 +388,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             backupManager.dataChanged();
 
                         }
-                        else if (selection == 6) {
+                        else if (selection == 7) {
 
                             synchronized (sDataLock) {
                                 long lastFetchLatest = preferences.getLong("pref_last_fetch_latest", 0);
@@ -430,7 +463,7 @@ public class JsonFetcherDialog extends DialogFragment {
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
 
-                if (selection == 0 || selection == 5 || selection == 6) {
+                if (selection == 0 || selection == 6 || selection == 7) {
                     initDialog.dismiss();
                 }
                 progressDialog = new MaterialDialog.Builder(mActivity)
@@ -703,6 +736,75 @@ public class JsonFetcherDialog extends DialogFragment {
 
                 for (WebCam webCam : importWebCams) {
                     if (webCam.getCountry().equals(text)) {
+                        if (allWebCams.size() != 0) {
+                            boolean notFound = false;
+                            for (WebCam allWebCam : allWebCams) {
+                                if (webCam.getUniId() == allWebCam.getUniId()) {
+                                    db.createWebCamCategory(allWebCam.getId(), categoryCountry);
+                                    notFound = false;
+                                    duplicityWebCams++;
+                                    break;
+                                }
+                                else notFound = true;
+                            }
+                            if (notFound) {
+                                db.createWebCam(webCam, new long[]{categoryCountry});
+                                newWebCams++;
+                            }
+                        }
+                        else {
+                            db.createWebCam(webCam, new long[]{categoryCountry});
+                            newWebCams++;
+                        }
+                    }
+                    progressUpdate();
+                }
+
+                showResult();
+            }
+            db.closeDB();
+            backupManager.dataChanged();
+
+            return null;
+        }
+    }
+
+    private void handleTypeSelection() {
+
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+
+                MaterialDialog dialog = new MaterialDialog.Builder(mActivity)
+                        .title(R.string.types)
+                        .adapter(new TypeAdapter(mActivity, typeList),
+                                new MaterialDialog.ListCallback() {
+                                    @Override
+                                    public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                                        Type type = typeList.get(which);
+                                        new typeSelectionBackgroundTask().execute(type);
+                                        dialog.dismiss();
+                                        swapProgressDialog();
+                                    }
+                                })
+                        .build();
+
+                initDialog.dismiss();
+                dialog.show();
+            }
+        });
+    }
+
+    private class typeSelectionBackgroundTask extends AsyncTask<Type, Integer, Long> {
+
+        @Override
+        protected Long doInBackground(Type... types) {
+
+            synchronized (sDataLock) {
+                Type type = types[0];
+                long categoryCountry = db.createCategory(new Category(type.getTypeName() + " " + Utils.getDateString()));
+
+                for (WebCam webCam : importWebCams) {
+                    if (webCam.getStatus() == type.getId()) {
                         if (allWebCams.size() != 0) {
                             boolean notFound = false;
                             for (WebCam allWebCam : allWebCams) {

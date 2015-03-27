@@ -31,9 +31,35 @@
         <item>@string/nearby_webcams</item>
         <item>@string/selecting_by_name</item>
         <item>@string/selecting_by_country</item>
+        <item>@string/selecting_by_type</item>
         <item>@string/selecting_from_map</item>
         <item>@string/all_webcams</item>
         <item>@string/latest_webcams</item>
+    </string-array>
+
+    <string-array name="types">
+        <item>@string/airports</item>
+        <item>@string/animals</item>
+        <item>@string/beaches</item>
+        <item>@string/bridges</item>
+        <item>@string/castles</item>
+        <item>@string/cities</item>
+        <item>@string/constructions</item>
+        <item>@string/harbours</item>
+        <item>@string/churches</item>
+        <item>@string/indoors</item>
+        <item>@string/lakes</item>
+        <item>@string/market_square</item>
+        <item>@string/mountains</item>
+        <item>@string/others</item>
+        <item>@string/parks</item>
+        <item>@string/pools</item>
+        <item>@string/radio_studios</item>
+        <item>@string/railways</item>
+        <item>@string/rivers</item>
+        <item>@string/ski_resorts</item>
+        <item>@string/traffic_cameras</item>
+        <item>@string/universities</item>
     </string-array>
 
 </resources>

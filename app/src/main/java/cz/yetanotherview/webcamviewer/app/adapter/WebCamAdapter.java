@@ -23,7 +23,6 @@ import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -179,7 +178,7 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
         }
     }
 
-    public class WebCamViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
+    public class WebCamViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         protected TextView vNumber;
         protected TextView vName;
@@ -202,8 +201,12 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
 
             if (!imageOn && simpleList) {
                 vName.setOnClickListener(this);
+                vName.setOnLongClickListener(this);
             }
-            else vImage.setOnClickListener(this);
+            else {
+                vImage.setOnClickListener(this);
+                vImage.setOnLongClickListener(this);
+            }
 
             final int small = mContext.getResources().getDimensionPixelSize(R.dimen.small_padding);
             final int middle = mContext.getResources().getDimensionPixelSize(R.dimen.middle_padding);
@@ -248,16 +251,22 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
         @Override
         public void onClick(View v) {
             if (v instanceof ImageButton){
-                clickListener.onClick(v, getAdapterPosition(), true);
+                clickListener.onClick(v, getAdapterPosition(), true, false);
             } else {
-                clickListener.onClick(v, getAdapterPosition(), false);
+                clickListener.onClick(v, getAdapterPosition(), false, false);
             }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            clickListener.onClick(v, getAdapterPosition(), false, true);
+            return true;
         }
     }
 
     public interface ClickListener {
 
-        public void onClick(View v, int position, boolean isEditClick);
+        public void onClick(View v, int position, boolean isEditClick, boolean isLongClick);
     }
 
     /* Setter for listener. */

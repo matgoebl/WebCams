@@ -3,22 +3,7 @@
 <string name="app_name">"WebCams"</string>
 
 <!-- Not translating the diety part. -->
-<string name="about_body"><![CDATA[
-    <b>Author: <a href="http://www.yetanotherview.cz">Tomas Valenta</a></b><br>
-    <b>Contribute:</b> Source code on <b><a href="https://github.com/TomasValenta/WebCamViewer">GitHub</a></b><br>
-    For help translating into your language <b><a href="http://goo.gl/MUJqYZ">use this online tool</a></b>.<br>
-    <br>
-    <b>Special thanks to these open source tools:</b><br>
-    <b><a href="https://developer.android.com/tools/support-library/features.html">Support Libraries</a></b><i> by Google, Inc.</i><br>
-    <b><a href="https://github.com/afollestad/material-dialogs">Material Dialogs</a></b><i> by Aidan Follestad.</i><br>
-    <b><a href="https://github.com/bumptech/glide">Glide</a></b><i> by Bump, Inc.</i><br><br>
-    <b>Special thanks to these translators:</b><br>
-    German - <b><a href="http://blog.strubbl.de/">Sven Fischer</a></b><br>
-    Japanese - <b><a href="mailto:naofum@gmail.com">Naofumi</a></b><br>
-    Norwegian - <b><a href="http://0p.no/">Lars Falk-Petersen</a></b><br>
-    <br>
-    <b>Also a huge thanks to <a href="http://upload.wikimedia.org/wikipedia/commons/b/b3/Shield-Trinity-Scutum-Fidei-English.svg">God, Jesus and Holy Spirit!</a> As well as, <a href="https://plus.google.com/111192437899852242451/">Tomas Borov</a>, <a href="https://plus.google.com/104896455725487013630/">Radek Matouch</a></b> for all of his help + useful tips.
-]]></string>
+<string name="about_body"><![CDATA[ <b>Author: <a href="http://www.yetanotherview.cz">Tomas Valenta</a></b><br> <b>Contribute:</b> Source code on <b><a href="https://github.com/TomasValenta/WebCamViewer">GitHub</a></b><br> For help translating into your language <b><a href="http://goo.gl/MUJqYZ">use this online tool</a></b>.<br> <br> <b>Special thanks to these open source tools:</b><br> <b><a href="https://developer.android.com/tools/support-library/features.html">Support Libraries</a></b><i> by Google, Inc.</i><br> <b><a href="https://github.com/afollestad/material-dialogs">Material Dialogs</a></b><i> by Aidan Follestad.</i><br> <b><a href="https://github.com/bumptech/glide">Glide</a></b><i> by Bump, Inc.</i><br><br> <b>Special thanks to these translators:</b><br> German - <b><a href="http://blog.strubbl.de/">Sven Fischer</a></b><br> Japanese - <b><a href="mailto:naofum@gmail.com">Naofumi</a></b><br> Norwegian - <b><a href="http://0p.no/">Lars Falk-Petersen</a></b><br> <br> <b>Also a huge thanks to <a href="http://upload.wikimedia.org/wikipedia/commons/b/b3/Shield-Trinity-Scutum-Fidei-English.svg">God, Jesus and Holy Spirit!</a> As well as, <a href="https://plus.google.com/111192437899852242451/">Tomas Borov</a>, <a href="https://plus.google.com/104896455725487013630/">Radek Matouch</a></b> for all of his help + useful tips. ]]></string>
 <string name="action_menu_about">"Om"</string>
 <string name="action_settings">"Instillinger"</string>
 <string name="pref_general">"Generelt"</string>
@@ -32,7 +17,7 @@
 <string name="No">"Nei"</string>
 <string name="input_dialog_title">"Nytt webkamera"</string>
 <string name="webcam_name">"Navn"</string>
-<string name="webcam_url">"Webadresse"</string>
+<string name="webcam_url">"Web-adresse"</string>
 <string name="webcam_category">"Kategorier"</string>
 <string name="hint_webcam_name">"Mitt webkamera"</string>
 <string name="hint_webcam_url">"http://www.example.com/webkamera/kamera.jpg"</string>
@@ -180,4 +165,29 @@
 <string name="no_location">"Klarer ikke finne posisjon"</string>
 <string name="no_location_description">"Denne appen får bare den omtrentlige posisjonen fra systemet, pga. tilgangene og strømsparing. Hvis du ser denne meldingen, var det ikke mulig å finne posisjonen. Vennligst sjekk innstillingene for enheten din (du kan bruke knappen under)."</string>
 <string name="location_settings">"POSISJONS_INSTILLINGER"</string>
+<string name="airports">"Flyplasser"</string>
+<string name="animals">"Dyr"</string>
+<string name="beaches">"Strender"</string>
+<string name="bridges">"Broer"</string>
+<string name="castles">"Slott"</string>
+<string name="cities">"Byer"</string>
+<string name="constructions">"Bygninger"</string>
+<string name="harbours">"Havner"</string>
+<string name="churches">"Kirker"</string>
+<string name="indoors">"Innendørs"</string>
+<string name="lakes">"Innsjøer"</string>
+<string name="market_square">"Markedsplasser"</string>
+<string name="mountains">"Fjell"</string>
+<string name="parks">"Parker"</string>
+<string name="pools">"Bassenger"</string>
+<string name="radio_studios">"Radiostudioer"</string>
+<string name="railways">"Togbaner"</string>
+<string name="rivers">"Elver"</string>
+<string name="ski_resorts">"Skibakker"</string>
+<string name="traffic_cameras">"Trafikk-kameraer"</string>
+<string name="universities">"Universiteter"</string>
+<string name="selecting_by_type">"Velg etter type"</string>
+<string name="types">"Typer"</string>
+<string name="others">"Andre"</string>
+<string name="list_is_empty">"Listen er tom"</string>
 </resources>

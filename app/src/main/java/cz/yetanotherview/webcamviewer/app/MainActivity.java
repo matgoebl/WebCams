@@ -95,7 +95,6 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     private RecyclerView mRecyclerView;
     private View mEmptyView;
     private WebCamAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private int numberOfColumns;
     private FloatingActionButton fab;
     private int mOrientation;
@@ -120,7 +119,6 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     private boolean autoRefreshFullScreenOnly;
     private boolean screenAlwaysOn;
     private boolean notUndo;
-    private int mLayoutId;
     private String mStringSignature;
     private boolean imagesOnOff;
 
@@ -272,7 +270,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     }
 
     private void initRecyclerView() {
-        mLayoutId = 1;
+        int mLayoutId = 1;
         if (numberOfColumns == 1 && mOrientation == 1) {
             mLayoutId = 1;
         }
@@ -285,7 +283,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         else if(numberOfColumns == 2 && mOrientation == 2) {
             mLayoutId = 3;
         }
-        mLayoutManager = new StaggeredGridLayoutManager(mLayoutId, StaggeredGridLayoutManager.VERTICAL);
+        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(mLayoutId, StaggeredGridLayoutManager.VERTICAL);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.cardList);
         mRecyclerView.setHasFixedSize(true);
@@ -309,12 +307,13 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         mAdapter.setClickListener(new WebCamAdapter.ClickListener() {
 
             @Override
-            public void onClick(View v, int position, boolean isEditClick) {
+            public void onClick(View v, int position, boolean isEditClick, boolean isLongClick) {
                 if (isEditClick) {
                     showOptionsDialog(position);
-                } else {
-                    showImageFullscreen(position, false);
                 }
+//                else if (isLongClick) {
+//                }
+                else showImageFullscreen(position, false);
             }
         });
 
@@ -596,9 +595,9 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         dialog = new MaterialDialog.Builder(this)
                 .title(R.string.action_sort)
                 .items(R.array.sort_values)
-                .itemsCallbackSingleChoice(whatMarkToCheck, new MaterialDialog.ListCallback() {
+                .itemsCallbackSingleChoice(whatMarkToCheck, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
                         KnownLocation knownLocation;
                         Double fudge;
@@ -641,6 +640,8 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                                 break;
                         }
                         reInitializeRecyclerViewAdapter(selectedCategory);
+
+                        return true;
                     }
                 })
                 .negativeText(R.string.close)
@@ -768,9 +769,9 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         dialog = new MaterialDialog.Builder(this)
                 .title(R.string.add_options)
                 .items(R.array.choose_values)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallback() {
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         if (which == 0) {
                             DialogFragment selection = new SelectionDialog();
                             selection.show(getFragmentManager(), "SelectionDialog");
@@ -781,6 +782,8 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                         else if (which == 2){
                             showSuggestionDialog();
                         }
+
+                        return true;
                     }
                 })
                 .positiveText(R.string.choose)

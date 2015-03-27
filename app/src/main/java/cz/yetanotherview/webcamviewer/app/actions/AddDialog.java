@@ -167,18 +167,12 @@ public class AddDialog extends DialogFragment {
                 public void onClick(View v) {
                     new MaterialDialog.Builder(getActivity())
                             .title(R.string.webcam_category)
-                            .autoDismiss(false)
                             .items(items)
-                            .itemsCallbackMultiChoice(whichSelected, new MaterialDialog.ListCallbackMulti() {
+                            .itemsCallbackMultiChoice(whichSelected, new MaterialDialog.ListCallbackMultiChoice() {
                                 @Override
-                                public void onSelection(MaterialDialog multiDialog, Integer[] which, CharSequence[] text) {
-                                }
-                            })
-                            .positiveText(R.string.choose)
-                            .callback(new MaterialDialog.ButtonCallback() {
-                                @Override
-                                public void onPositive(MaterialDialog multiDialog) {
-                                    whichSelected = multiDialog.getSelectedIndices();
+                                public boolean onSelection(MaterialDialog multiDialog, Integer[] which, CharSequence[] text) {
+
+                                    whichSelected = which;
 
                                     if (whichSelected != null && whichSelected.length != 0) {
                                         StringBuilder str = new StringBuilder();
@@ -200,9 +194,10 @@ public class AddDialog extends DialogFragment {
                                     } else
                                         webCamCategoryButton.setText(R.string.category_array_choose);
 
-                                    multiDialog.dismiss();
+                                    return true;
                                 }
                             })
+                            .positiveText(R.string.choose)
                             .show();
                 }
 

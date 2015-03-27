@@ -177,18 +177,10 @@ public class EditDialog extends DialogFragment {
                 public void onClick(View v) {
                     new MaterialDialog.Builder(getActivity())
                             .title(R.string.webcam_category)
-                            .autoDismiss(false)
                             .items(items)
-                            .itemsCallbackMultiChoice(checked, new MaterialDialog.ListCallbackMulti() {
+                            .itemsCallbackMultiChoice(checked, new MaterialDialog.ListCallbackMultiChoice() {
                                 @Override
-                                public void onSelection(MaterialDialog multiDialog, Integer[] which, CharSequence[] text) {
-                                }
-                            })
-                            .positiveText(R.string.choose)
-                            .callback(new MaterialDialog.ButtonCallback() {
-                                @Override
-                                public void onPositive(MaterialDialog multiDialog) {
-                                    Integer[] which = multiDialog.getSelectedIndices();
+                                public boolean onSelection(MaterialDialog multiDialog, Integer[] which, CharSequence[] text) {
 
                                     if (which != null && which.length != 0) {
                                         StringBuilder str = new StringBuilder();
@@ -214,9 +206,10 @@ public class EditDialog extends DialogFragment {
                                     checked = which;
                                     positiveAction.setEnabled(true);
 
-                                    multiDialog.dismiss();
+                                    return true;
                                 }
                             })
+                            .positiveText(R.string.choose)
                             .show();
                 }
 

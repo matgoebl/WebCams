@@ -73,12 +73,12 @@ public class WebCam {
         this.uniId = uniId;
     }
 
-    public void setName(String webcamName) {
-        this.webCamName = webcamName;
+    public void setName(String webCamName) {
+        this.webCamName = webCamName;
     }
 
-    public void setUrl(String webcamUrl) {
-        this.webCamUrl = webcamUrl;
+    public void setUrl(String webCamUrl) {
+        this.webCamUrl = webCamUrl;
     }
 
     public void setPosition(int position) {

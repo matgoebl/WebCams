@@ -100,9 +100,9 @@ public class ImportDialog extends DialogFragment {
                 importDialog = new MaterialDialog.Builder(mActivity)
                         .title(R.string.external_files)
                         .items(items)
-                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallback() {
+                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
                                 if (which >= 0) {
                                     inputName = (items[which]);
@@ -139,6 +139,8 @@ public class ImportDialog extends DialogFragment {
                                                 .show();
                                     }
                                 }
+
+                                return true;
                             }
                         })
                         .positiveText(R.string.choose)
