@@ -190,4 +190,6 @@
 <string name="types">"Typer"</string>
 <string name="others">"Andre"</string>
 <string name="list_is_empty">"Listen er tom"</string>
+<string name="buildings">"Bygninger"</string>
+<string name="landscapes">"Landskap"</string>
 </resources>

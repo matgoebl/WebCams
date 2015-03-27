@@ -42,6 +42,7 @@
         <item>@string/animals</item>
         <item>@string/beaches</item>
         <item>@string/bridges</item>
+        <item>@string/buildings</item>
         <item>@string/castles</item>
         <item>@string/cities</item>
         <item>@string/constructions</item>
@@ -49,6 +50,7 @@
         <item>@string/churches</item>
         <item>@string/indoors</item>
         <item>@string/lakes</item>
+        <item>@string/landscapes</item>
         <item>@string/market_square</item>
         <item>@string/mountains</item>
         <item>@string/others</item>

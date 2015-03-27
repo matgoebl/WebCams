@@ -203,4 +203,6 @@
 <string name="types">"Typy"</string>
 <string name="others">"Ostatní"</string>
 <string name="list_is_empty">"Seznam je prázdný"</string>
+<string name="buildings">"Budovy"</string>
+<string name="landscapes">"Krajiny"</string>
 </resources>

@@ -203,4 +203,6 @@
 <string name="types">"Typen"</string>
 <string name="others">"Andere"</string>
 <string name="list_is_empty">"Die Liste ist leer"</string>
+<string name="buildings">"Gebäudes"</string>
+<string name="landscapes">"Landschaften"</string>
 </resources>
