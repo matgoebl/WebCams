@@ -43,7 +43,7 @@ public class Category {
         this.id = id;
     }
 
-    public void setcategoryName(String category_name) {
+    public void setCategoryName(String category_name) {
         this.category_name = category_name;
     }
 
@@ -56,7 +56,7 @@ public class Category {
         return this.id;
     }
 
-    public String getcategoryName() {
+    public String getCategoryName() {
         return this.category_name;
     }
 

@@ -357,7 +357,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_CATEGORY_NAME, category.getcategoryName());
+        values.put(KEY_CATEGORY_NAME, category.getCategoryName());
         values.put(KEY_CREATED_AT, getDateTime());
 
         // insert row
@@ -381,7 +381,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             do {
                 Category t = new Category();
                 t.setId(c.getInt((c.getColumnIndex(KEY_ID))));
-                t.setcategoryName(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
+                t.setCategoryName(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
 
                 // adding to categories list
                 categories.add(t);
@@ -400,7 +400,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_CATEGORY_NAME, category.getcategoryName());
+        values.put(KEY_CATEGORY_NAME, category.getCategoryName());
 
         // updating row
         return db.update(TABLE_CATEGORY, values, KEY_ID + " = ?",

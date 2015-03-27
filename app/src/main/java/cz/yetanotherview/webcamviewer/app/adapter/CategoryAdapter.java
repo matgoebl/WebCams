@@ -59,7 +59,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
             categoryCount.setTypeface(null, Typeface.BOLD);
         }
 
-        categoryName.setText(category.getcategoryName());
+        categoryName.setText(category.getCategoryName());
         categoryCount.setText("(" + category.getCountAsString() + ")");
         db.closeDB();
 

@@ -88,7 +88,7 @@ public class AddDialog extends DialogFragment {
         items = new String[allCategories.size()];
         int count = 0;
         for (Category category : allCategories) {
-            items[count] = category.getcategoryName();
+            items[count] = category.getCategoryName();
             count++;
         }
 
@@ -187,7 +187,7 @@ public class AddDialog extends DialogFragment {
                                             count++;
 
                                             str.append("[");
-                                            str.append(category.getcategoryName());
+                                            str.append(category.getCategoryName());
                                             str.append("] ");
                                         }
                                         webCamCategoryButton.setText(str);

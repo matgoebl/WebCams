@@ -284,7 +284,7 @@ public class SettingsFragment extends PreferenceFragment {
                 String[] items = new String[allCategories.size()];
                 int count = 0;
                 for (Category category : allCategories) {
-                    items[count] = category.getcategoryName();
+                    items[count] = category.getCategoryName();
                     count++;
                 }
 
@@ -328,7 +328,7 @@ public class SettingsFragment extends PreferenceFragment {
                     public void onPositive(MaterialDialog dialog) {
                         inputName = input.getText().toString().trim();
                         synchronized (SettingsFragment.sDataLock) {
-                            category.setcategoryName(inputName);
+                            category.setCategoryName(inputName);
                             db.updateCategory(category);
                             db.closeDB();
                         }
@@ -341,7 +341,7 @@ public class SettingsFragment extends PreferenceFragment {
 
         input = (EditText) dialog.getCustomView().findViewById(R.id.input_name);
         input.requestFocus();
-        input.setText(category.getcategoryName());
+        input.setText(category.getCategoryName());
 
         positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
 
@@ -373,7 +373,7 @@ public class SettingsFragment extends PreferenceFragment {
                 String[] items = new String[allCategories.size()];
                 int count = 0;
                 for (Category category : allCategories) {
-                    items[count] = category.getcategoryName();
+                    items[count] = category.getCategoryName();
                     count++;
                 }
 

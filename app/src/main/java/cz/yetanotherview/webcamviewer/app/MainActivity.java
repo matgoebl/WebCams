@@ -217,7 +217,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         }
 
         allWebCamsCategory = new Category();
-        allWebCamsCategory.setcategoryName(allWebCamsString);
+        allWebCamsCategory.setCategoryName(allWebCamsString);
         allWebCamsCategory.setCount(db.getWebCamCount());
         db.closeDB();
     }
@@ -297,7 +297,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         else {
             Category category = allCategories.get(selectedCategory - 1);
             allWebCams = db.getAllWebCamsByCategory(category.getId(),sortOrder);
-            selectedCategoryName = category.getcategoryName();
+            selectedCategoryName = category.getCategoryName();
         }
         db.closeDB();
 
@@ -377,7 +377,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                 Category category = allCategories.get(position - 1);
                 allWebCams = db.getAllWebCamsByCategory(category.getId(),sortOrder);
                 mAdapter.swapData(allWebCams);
-                selectedCategoryName = category.getcategoryName();
+                selectedCategoryName = category.getCategoryName();
             }
             db.closeDB();
             saveToPref();

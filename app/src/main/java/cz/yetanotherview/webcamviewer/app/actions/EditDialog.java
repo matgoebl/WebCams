@@ -100,7 +100,7 @@ public class EditDialog extends DialogFragment {
         int count = 0;
         for (Category category : allCategories) {
             ids [count] = category.getId();
-            items[count] = category.getcategoryName();
+            items[count] = category.getCategoryName();
             count++;
         }
 
@@ -195,7 +195,7 @@ public class EditDialog extends DialogFragment {
                                             count++;
 
                                             str.append("[");
-                                            str.append(category.getcategoryName());
+                                            str.append(category.getCategoryName());
                                             str.append("] ");
                                         }
                                         webCamCategoryButton.setText(str);

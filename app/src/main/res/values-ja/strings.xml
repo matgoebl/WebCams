@@ -169,7 +169,7 @@
 <string name="bridges">"橋"</string>
 <string name="castles">"城"</string>
 <string name="cities">"街"</string>
-<string name="constructions">"建物"</string>
+<string name="constructions">"構築物"</string>
 <string name="harbours">"港"</string>
 <string name="churches">"教会"</string>
 <string name="indoors">"室内"</string>
@@ -188,4 +188,6 @@
 <string name="types">"タイプ"</string>
 <string name="others">"その他"</string>
 <string name="list_is_empty">"リストは空です"</string>
+<string name="buildings">"建物"</string>
+<string name="landscapes">"景観地"</string>
 </resources>

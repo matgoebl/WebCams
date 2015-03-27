@@ -1029,8 +1029,9 @@ public class JsonFetcherDialog extends DialogFragment {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onNeutral(MaterialDialog dialog) {
+                        db.closeDB();
                         Intent viewIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivity(viewIntent);
+                        mActivity.startActivity(viewIntent);
                     }
                 })
                 .show();
