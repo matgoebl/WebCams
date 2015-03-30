@@ -27,20 +27,17 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nispok.snackbar.Snackbar;
 
 import java.util.List;
 
+import cz.yetanotherview.webcamviewer.app.actions.AddCategoryDialog;
+import cz.yetanotherview.webcamviewer.app.actions.EditCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ExportDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ImportDialog;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
@@ -52,12 +49,8 @@ public class SettingsFragment extends PreferenceFragment {
     // Object for intrinsic lock
     public static final Object sDataLock = new Object();
 
-    private String inputName;
-    private View positiveAction;
-    private EditText input;
     private List<Category> allCategories;
-    private List<WebCam> allWebcams;
-    private Category category;
+    private List<WebCam> allWebCams;
     private int actionColor;
 
     private Integer[] whichDelete;
@@ -224,50 +217,8 @@ public class SettingsFragment extends PreferenceFragment {
         pref_category_add.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference activity_preference) {
 
-                MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                        .title(R.string.new_category_name)
-                        .customView(R.layout.enter_name_dialog, true)
-                        .positiveText(R.string.dialog_positive_text)
-                        .negativeText(android.R.string.cancel)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                inputName = input.getText().toString().trim();
-                                synchronized (SettingsFragment.sDataLock) {
-                                    String iconPath = "@drawable/icon_manual";
-                                    Category category = new Category(iconPath, inputName);
-                                    db.createCategory(category);
-                                    db.closeDB();
-                                }
-                                BackupManager backupManager = new BackupManager(getActivity());
-                                backupManager.dataChanged();
-
-                                saveDone();
-                            }
-                        })
-                        .build();
-
-                input = (EditText) dialog.getCustomView().findViewById(R.id.input_name);
-                input.requestFocus();
-                input.setHint(R.string.new_category_hint);
-
-                positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
-
-                input.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        positiveAction.setEnabled(s.toString().trim().length() > 0);
-                    }
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-                });
-
-                dialog.show();
-                positiveAction.setEnabled(false);
+                DialogFragment addCategoryDialog = new AddCategoryDialog();
+                addCategoryDialog.show(getFragmentManager(), "AddCategoryDialog");
 
                 return true;
             }
@@ -282,85 +233,15 @@ public class SettingsFragment extends PreferenceFragment {
 
                 allCategories = db.getAllCategories();
 
-                String[] items = new String[allCategories.size()];
-                int count = 0;
-                for (Category category : allCategories) {
-                    items[count] = category.getCategoryName();
-                    count++;
-                }
-
                 if (allCategories.size() > 0) {
-                    new MaterialDialog.Builder(getActivity())
-                            .title(R.string.webcam_category)
-                            .items(items)
-                            .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-                                @Override
-                                public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                    if (which >= 0) {
-                                        Category editCategory = allCategories.get(which);
-                                        categoryEditDialog(editCategory);
-                                    }
-                                    return true;
-                                }
-                            })
-                            .positiveText(R.string.choose)
-                            .show();
-                } else Snackbar.with(getActivity().getApplicationContext())
-                        .text(R.string.no_categories_found)
-                        .actionLabel(R.string.dismiss)
-                        .actionColor(actionColor)
-                        .show(getActivity());
+                    DialogFragment editCategoryDialog = new EditCategoryDialog();
+                    editCategoryDialog.show(getFragmentManager(), "EditCategoryDialog");
+                }
+                else noCategoriesFound();
+
                 return true;
             }
         });
-    }
-
-    private void categoryEditDialog(Category editCategory) {
-
-        this.category = editCategory;
-
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                .title(R.string.new_category_name)
-                .customView(R.layout.enter_name_dialog, true)
-                .positiveText(R.string.dialog_positive_text)
-                .negativeText(android.R.string.cancel)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        inputName = input.getText().toString().trim();
-                        synchronized (SettingsFragment.sDataLock) {
-                            category.setCategoryName(inputName);
-                            db.updateCategory(category);
-                            db.closeDB();
-                        }
-                        BackupManager backupManager = new BackupManager(getActivity());
-                        backupManager.dataChanged();
-
-                        saveDone();
-                    }
-                }).build();
-
-        input = (EditText) dialog.getCustomView().findViewById(R.id.input_name);
-        input.requestFocus();
-        input.setText(category.getCategoryName());
-
-        positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
-
-        input.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                positiveAction.setEnabled(s.toString().trim().length() > 0);
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        dialog.show();
-        positiveAction.setEnabled(false);
     }
 
     private void categoryDelete() {
@@ -399,11 +280,8 @@ public class SettingsFragment extends PreferenceFragment {
                             .positiveText(R.string.choose)
                             .show();
                 }
-                else Snackbar.with(getActivity().getApplicationContext())
-                        .text(R.string.no_categories_found)
-                        .actionLabel(R.string.dismiss)
-                        .actionColor(actionColor)
-                        .show(getActivity());
+                else noCategoriesFound();
+
                 return true;
             }
         });
@@ -464,16 +342,16 @@ public class SettingsFragment extends PreferenceFragment {
         pref_delete_selected.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
 
-                allWebcams = db.getAllWebCams("webcam_name COLLATE UNICODE ASC");
+                allWebCams = db.getAllWebCams("webcam_name COLLATE UNICODE ASC");
 
-                String[] items = new String[allWebcams.size()];
+                String[] items = new String[allWebCams.size()];
                 int count = 0;
-                for (WebCam webCam : allWebcams) {
+                for (WebCam webCam : allWebCams) {
                     items[count] = webCam.getName();
                     count++;
                 }
 
-                if (allWebcams.size() > 0) {
+                if (allWebCams.size() > 0) {
                     new MaterialDialog.Builder(getActivity())
                             .title(R.string.app_name)
                             .items(items)
@@ -513,7 +391,7 @@ public class SettingsFragment extends PreferenceFragment {
             if (whichDelete != null && whichDelete.length != 0) {
                 synchronized (SettingsFragment.sDataLock) {
                     for (Integer aWhich : whichDelete) {
-                        WebCam deleteWebCam = allWebcams.get(aWhich);
+                        WebCam deleteWebCam = allWebCams.get(aWhich);
                         db.deleteWebCam(deleteWebCam.getId());
                     }
                     db.closeDB();
@@ -723,6 +601,14 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
+    private void noCategoriesFound() {
+        Snackbar.with(getActivity().getApplicationContext())
+                .text(R.string.no_categories_found)
+                .actionLabel(R.string.dismiss)
+                .actionColor(actionColor)
+                .show(getActivity());
+    }
+
     private void deleteDone() {
         Snackbar.with(getActivity().getApplicationContext())
                 .text(R.string.action_deleted)
@@ -735,7 +621,7 @@ public class SettingsFragment extends PreferenceFragment {
         Snackbar.with(getActivity().getApplicationContext())
                 .text(R.string.dialog_positive_toast_message)
                 .actionLabel(R.string.dismiss)
-                .actionColor(getResources().getColor(R.color.yellow))
+                .actionColor(actionColor)
                 .show(getActivity());
     }
 }

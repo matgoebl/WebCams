@@ -30,6 +30,8 @@ import java.io.IOException;
 
 import cz.yetanotherview.webcamviewer.app.MainActivity;
 import cz.yetanotherview.webcamviewer.app.SettingsFragment;
+import cz.yetanotherview.webcamviewer.app.actions.AddCategoryDialog;
+import cz.yetanotherview.webcamviewer.app.actions.EditCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ImportDialog;
 import cz.yetanotherview.webcamviewer.app.actions.JsonFetcherDialog;
 
@@ -43,10 +45,10 @@ public class BackupAgent extends BackupAgentHelper {
 
     @Override
     public void onCreate(){
-        FileBackupHelper filehelper = new FileBackupHelper(this, DB_NAME);
-        addHelper(FILES_BACKUP_KEY, filehelper);
-        SharedPreferencesBackupHelper preferenceshelper = new SharedPreferencesBackupHelper(this, PREFS);
-        addHelper(PREFS_BACKUP_KEY, preferenceshelper);
+        FileBackupHelper fileHelper = new FileBackupHelper(this, DB_NAME);
+        addHelper(FILES_BACKUP_KEY, fileHelper);
+        SharedPreferencesBackupHelper preferencesHelper = new SharedPreferencesBackupHelper(this, PREFS);
+        addHelper(PREFS_BACKUP_KEY, preferencesHelper);
     }
 
     @Override
@@ -74,6 +76,14 @@ public class BackupAgent extends BackupAgentHelper {
         synchronized (ImportDialog.sDataLock) {
             super.onBackup(oldState, data, newState);
         }
+
+        synchronized (AddCategoryDialog.sDataLock) {
+            super.onBackup(oldState, data, newState);
+        }
+
+        synchronized (EditCategoryDialog.sDataLock) {
+            super.onBackup(oldState, data, newState);
+        }
     }
 
     @Override
@@ -93,6 +103,14 @@ public class BackupAgent extends BackupAgentHelper {
         }
 
         synchronized (ImportDialog.sDataLock) {
+            super.onRestore(data, appVersionCode, newState);
+        }
+
+        synchronized (AddCategoryDialog.sDataLock) {
+            super.onRestore(data, appVersionCode, newState);
+        }
+
+        synchronized (EditCategoryDialog.sDataLock) {
             super.onRestore(data, appVersionCode, newState);
         }
     }
