@@ -190,4 +190,6 @@
 <string name="list_is_empty">"リストは空です"</string>
 <string name="buildings">"建物"</string>
 <string name="landscapes">"景観地"</string>
+<string name="new_category">新しいカテゴリ</string>
+<string name="edit_category">カテゴリの編集</string>
 </resources>

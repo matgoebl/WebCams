@@ -192,4 +192,6 @@
 <string name="list_is_empty">"Listen er tom"</string>
 <string name="buildings">"Bygninger"</string>
 <string name="landscapes">"Landskap"</string>
+<string name="new_category">"Ny kategori"</string>
+<string name="edit_category">"Rediger kategori"</string>
 </resources>

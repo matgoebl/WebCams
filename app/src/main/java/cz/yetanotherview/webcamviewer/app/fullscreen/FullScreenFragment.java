@@ -23,6 +23,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,7 @@ public class FullScreenFragment extends Fragment {
 
     private View view;
     private RelativeLayout mButtonsLayout;
-    private TouchImageView image;
+    private TouchImageView touchImageView;
     private ProgressBar progressBar;
     private Animation fadeOut;
     private String signature;
@@ -63,7 +64,7 @@ public class FullScreenFragment extends Fragment {
     private double latitude;
     private double longitude;
     private boolean autoRefresh;
-    private boolean firtsTime;
+    private boolean firstTime;
     private int autoRefreshInterval;
     private boolean fullScreen;
     private ImageButton backButton;
@@ -86,7 +87,7 @@ public class FullScreenFragment extends Fragment {
 
         stringSignature = new StringSignature(signature);
 
-        firtsTime = true;
+        firstTime = true;
 
         // Auto Refresh timer
         if (autoRefresh) {
@@ -109,15 +110,16 @@ public class FullScreenFragment extends Fragment {
     private void initViews() {
         mButtonsLayout = (RelativeLayout) view.findViewById(R.id.buttons_layout);
 
-        image = (TouchImageView) view.findViewById(R.id.touch_image);
-        image.setMaxZoom(zoom);
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
+        View.OnClickListener touchImageViewsListener = new View.OnClickListener() {
             public void onClick(View v) {
                 mButtonsLayout.setVisibility(View.VISIBLE);
                 mButtonsLayout.startAnimation(fadeOut);
             }
-        });
+        };
+
+        touchImageView = (TouchImageView) view.findViewById(R.id.touch_image);
+        touchImageView.setMaxZoom(zoom);
+        touchImageView.setOnClickListener(touchImageViewsListener);
 
         ImageButton mapButton = (ImageButton) view.findViewById(R.id.maps_button);
         mapButton.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +154,7 @@ public class FullScreenFragment extends Fragment {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firtsTime = true;
+                firstTime = true;
                 refresh();
             }
         });
@@ -203,21 +205,21 @@ public class FullScreenFragment extends Fragment {
 
     private void loadImage() {
 
-        Glide.with(image.getContext())
+        Glide.with(touchImageView.getContext())
                 .load(url)
                 .crossFade()
                 .placeholder(R.drawable.placeholder)
                 .signature(stringSignature)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(new GlideDrawableImageViewTarget(image) {
+                .into(new GlideDrawableImageViewTarget(touchImageView) {
                     @Override
                     public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
                         super.onResourceReady(drawable, anim);
                         progressBar.setVisibility(View.GONE);
-                        if (firtsTime) {
+                        if (firstTime) {
                             mButtonsLayout.startAnimation(fadeOut);
                             mButtonsLayout.setBackgroundResource(R.drawable.selector);
-                            firtsTime = false;
+                            firstTime = false;
                         }
                     }
                 });
@@ -244,7 +246,7 @@ public class FullScreenFragment extends Fragment {
     }
 
     private void refresh() {
-        Glide.get(image.getContext()).clearMemory();
+        Glide.get(touchImageView.getContext()).clearMemory();
         mButtonsLayout.setBackgroundResource(0);
         progressBar.setVisibility(View.VISIBLE);
         stringSignature = new StringSignature(UUID.randomUUID().toString());

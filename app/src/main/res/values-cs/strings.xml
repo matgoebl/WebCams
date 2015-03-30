@@ -205,4 +205,6 @@
 <string name="list_is_empty">"Seznam je prázdný"</string>
 <string name="buildings">"Budovy"</string>
 <string name="landscapes">"Krajiny"</string>
+<string name="new_category">"Nová kategorie"</string>
+<string name="edit_category">"Úprava kategorie"</string>
 </resources>

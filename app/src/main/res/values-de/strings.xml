@@ -205,4 +205,6 @@
 <string name="list_is_empty">"Die Liste ist leer"</string>
 <string name="buildings">"Gebäudes"</string>
 <string name="landscapes">"Landschaften"</string>
+<string name="new_category">"Neue Kategorie"</string>
+<string name="edit_category">"Kategorie bearbeiten"</string>
 </resources>
