@@ -10,6 +10,7 @@
     <dimen name="empty_textview_padding">20dp</dimen>
 
     <dimen name="huge_padding">28dp</dimen>
+    <dimen name="bigger_padding">18dp</dimen>
     <dimen name="big_padding">10dp</dimen>
     <dimen name="middle_padding">6dp</dimen>
     <dimen name="small_padding">2dp</dimen>
@@ -19,5 +20,7 @@
     <dimen name="main_margin">8dp</dimen>
     <dimen name="main_middle_margin">4dp</dimen>
     <dimen name="main_small_margin">3dp</dimen>
+
+    <dimen name="icon_selector">40dp</dimen>
 
 </resources>

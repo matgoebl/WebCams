@@ -75,6 +75,7 @@ import cz.yetanotherview.webcamviewer.app.helper.TypeNameComparator;
 import cz.yetanotherview.webcamviewer.app.helper.WebCamNameComparator;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.Country;
+import cz.yetanotherview.webcamviewer.app.model.Icons;
 import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
 import cz.yetanotherview.webcamviewer.app.model.Type;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
@@ -306,10 +307,11 @@ public class JsonFetcherDialog extends DialogFragment {
                             List<String> listAllTypes = Arrays.asList(getResources().getStringArray(R.array.types));
                             for (String typeName : listAllTypes) {
                                 Type type = new Type();
+                                Icons icons = new Icons();
                                 type.setId(listAllTypes.indexOf(typeName));
-                                type.setIconName(Utils.getIconName(listAllTypes.indexOf(typeName)));
+                                type.setIconName(icons.getIconName(listAllTypes.indexOf(typeName)));
                                 type.setTypeName(typeName);
-                                type.setIcon(Utils.getIconId(listAllTypes.indexOf(typeName)));
+                                type.setIcon(icons.getIconId(listAllTypes.indexOf(typeName)));
 
                                 typeList.add(type);
                             }
@@ -871,7 +873,10 @@ public class JsonFetcherDialog extends DialogFragment {
                 mMapView = (MapView) dialog.getCustomView().findViewById(R.id.mapView);
                 LatLng latLng = new LatLng(knownLocation.getLatitude(), knownLocation.getLongitude());
                 mMapView.setCenter(latLng);
-                mMapView.setZoom(8);
+                if (knownLocation.isNotDetected()) {
+                    mMapView.setZoom(3);
+                }
+                else mMapView.setZoom(8);
 
                 for (Marker marker : markers) {
                     mMapView.addMarker(marker);

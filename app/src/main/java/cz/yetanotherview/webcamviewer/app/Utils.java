@@ -179,37 +179,6 @@ public class Utils {
             } catch (Exception e) {
                 return R.drawable.unknown;
             }
-
-    }
-
-    /**
-     * Get the icon Id.
-     */
-    public static int getIconId(int id) {
-
-        int[] iconIds = {R.drawable.icon_airports, R.drawable.icon_animals, R.drawable.icon_beaches,
-                R.drawable.icon_bridges, R.drawable.icon_buildings, R.drawable.icon_castles,
-                R.drawable.icon_cities, R.drawable.icon_constructions, R.drawable.icon_harbours,
-                R.drawable.icon_churches, R.drawable.icon_indoors, R.drawable.icon_lakes,
-                R.drawable.icon_landscapes, R.drawable.icon_market_square, R.drawable.icon_mountains,
-                R.drawable.icon_others, R.drawable.icon_parks, R.drawable.icon_pools,
-                R.drawable.icon_radio_studios, R.drawable.icon_railways, R.drawable.icon_rivers,
-                R.drawable.icon_ski_resorts, R.drawable.icon_traffic_cameras, R.drawable.icon_universities};
-
-        return iconIds[id];
-    }
-
-    /**
-     * Get the icon Name.
-     */
-    public static String getIconName(int id) {
-
-        String[] iconNames = {"airports", "animals", "beaches", "bridges", "buildings", "castles",
-                "cities", "constructions", "harbours", "churches", "indoors", "lakes", "landscapes",
-                "market_square", "mountains", "others", "parks", "pools", "radio_studios", "railways",
-                "rivers", "ski_resorts", "traffic_cameras", "universities"};
-
-        return iconNames[id];
     }
 
     /**

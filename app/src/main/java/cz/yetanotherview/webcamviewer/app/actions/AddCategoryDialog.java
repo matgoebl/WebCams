@@ -18,6 +18,7 @@
 
 package cz.yetanotherview.webcamviewer.app.actions;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.backup.BackupManager;
@@ -25,7 +26,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -33,8 +36,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.nispok.snackbar.Snackbar;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.adapter.IconAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.model.Category;
+import cz.yetanotherview.webcamviewer.app.model.Icons;
 
 public class AddCategoryDialog extends DialogFragment {
 
@@ -46,15 +51,27 @@ public class AddCategoryDialog extends DialogFragment {
     private EditText input;
     private Category category;
 
+    private String iconPath;
+    private Icons icons;
+    private ImageView category_icon;
+
+    private MaterialDialog gridDialog;
     private DatabaseHelper db;
+    private Activity mActivity;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = activity;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        db = new DatabaseHelper(getActivity().getApplicationContext());
+        db = new DatabaseHelper(mActivity);
 
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+        MaterialDialog dialog = new MaterialDialog.Builder(mActivity)
                 .title(R.string.new_category)
                 .customView(R.layout.add_edit_category_dialog, true)
                 .positiveText(R.string.dialog_positive_text)
@@ -64,12 +81,14 @@ public class AddCategoryDialog extends DialogFragment {
                     public void onPositive(MaterialDialog dialog) {
                         inputName = input.getText().toString().trim();
                         synchronized (AddCategoryDialog.sDataLock) {
-                            String iconPath = "@drawable/icon_manual";
+                            if (iconPath == null) {
+                                iconPath = "@drawable/icon_manual";
+                            }
                             category = new Category(iconPath, inputName);
                             db.createCategory(category);
                             db.closeDB();
                         }
-                        BackupManager backupManager = new BackupManager(getActivity());
+                        BackupManager backupManager = new BackupManager(mActivity);
                         backupManager.dataChanged();
 
                         saveDone();
@@ -77,32 +96,29 @@ public class AddCategoryDialog extends DialogFragment {
                 })
                 .build();
 
-        ImageView category_icon = (ImageView) dialog.getCustomView().findViewById(R.id.category_icon);
+        category_icon = (ImageView) dialog.getCustomView().findViewById(R.id.category_icon);
         category_icon.setImageResource(R.drawable.icon_manual);
         category_icon.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Prepare grid view
-//                GridView gridView = new GridView(this);
-//
-//                List<Integer>  mList = new ArrayList<Integer>();
-//                for (int i = 1; i < 36; i++) {
-//                    mList.add(i);
-//                }
-//
-//                gridView.setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_1, mList));
-//                gridView.setNumColumns(5);
-//                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                        // do something here
-//                    }
-//                });
-//
-//                // Set grid view to alertDialog
-//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//                builder.setView(gridView);
-//                builder.setTitle("Goto");
-//                builder.show();
+
+                icons = new Icons();
+
+                View view = mActivity.getLayoutInflater().inflate(R.layout.icon_selector_grid, null);
+                GridView gridView = (GridView) view.findViewById(R.id.icons_grid_view);
+                gridView.setAdapter(new IconAdapter(mActivity, icons.getIconsIds()));
+                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        category_icon.setImageResource(icons.getIconId(position));
+                        iconPath = "@drawable/icon_" + icons.getIconName(position);
+                        gridDialog.dismiss();
+                    }
+                });
+                gridDialog = new MaterialDialog.Builder(mActivity)
+                        .customView(gridView, false)
+                        .build();
+
+                gridDialog.show();
             }
         });
 
@@ -130,10 +146,10 @@ public class AddCategoryDialog extends DialogFragment {
     }
 
     private void saveDone() {
-        Snackbar.with(getActivity().getApplicationContext())
+        Snackbar.with(mActivity.getApplicationContext())
                 .text(R.string.dialog_positive_toast_message)
                 .actionLabel(R.string.dismiss)
-                .actionColor(getResources().getColor(R.color.yellow))
-                .show(getActivity());
+                .actionColor(mActivity.getResources().getColor(R.color.yellow))
+                .show(mActivity);
     }
 }

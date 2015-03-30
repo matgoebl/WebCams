@@ -26,7 +26,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -36,8 +38,10 @@ import com.nispok.snackbar.Snackbar;
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.adapter.IconAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.model.Category;
+import cz.yetanotherview.webcamviewer.app.model.Icons;
 
 public class EditCategoryDialog extends DialogFragment {
 
@@ -50,7 +54,12 @@ public class EditCategoryDialog extends DialogFragment {
     private Category category;
     private List<Category> allCategories;
 
+    private String iconPath;
+    private Icons icons;
+    private ImageView category_icon;
+
     private MaterialDialog dialog;
+    private MaterialDialog gridDialog;
     private DatabaseHelper db;
     private Activity mActivity;
 
@@ -105,6 +114,7 @@ public class EditCategoryDialog extends DialogFragment {
                     public void onPositive(MaterialDialog dialog) {
                         inputName = input.getText().toString().trim();
                         synchronized (EditCategoryDialog.sDataLock) {
+                            category.setCategoryIcon(iconPath);
                             category.setCategoryName(inputName);
                             db.updateCategory(category);
                             db.closeDB();
@@ -116,12 +126,35 @@ public class EditCategoryDialog extends DialogFragment {
                     }
                 }).build();
 
-        ImageView category_icon = (ImageView) dialog.getCustomView().findViewById(R.id.category_icon);
-        category_icon.setImageResource(mActivity.getResources().getIdentifier(category.getCategoryIcon(),
+        category_icon = (ImageView) dialog.getCustomView().findViewById(R.id.category_icon);
+
+        String iconName = category.getCategoryIcon();
+        if (iconName == null) {
+            iconName = "@drawable/icon_unknown";
+        }
+        category_icon.setImageResource(mActivity.getResources().getIdentifier(iconName,
                 null, mActivity.getPackageName()));
         category_icon.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                icons = new Icons();
 
+                View view = mActivity.getLayoutInflater().inflate(R.layout.icon_selector_grid, null);
+                GridView gridView = (GridView) view.findViewById(R.id.icons_grid_view);
+                gridView.setAdapter(new IconAdapter(mActivity, icons.getIconsIds()));
+                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        category_icon.setImageResource(icons.getIconId(position));
+                        iconPath = "@drawable/icon_" + icons.getIconName(position);
+                        positiveAction.setEnabled(true);
+                        gridDialog.dismiss();
+                    }
+                });
+                gridDialog = new MaterialDialog.Builder(mActivity)
+                        .customView(gridView, false)
+                        .build();
+
+                gridDialog.show();
             }
         });
 
