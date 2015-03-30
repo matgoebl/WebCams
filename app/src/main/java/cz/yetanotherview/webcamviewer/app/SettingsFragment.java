@@ -234,7 +234,8 @@ public class SettingsFragment extends PreferenceFragment {
                             public void onPositive(MaterialDialog dialog) {
                                 inputName = input.getText().toString().trim();
                                 synchronized (SettingsFragment.sDataLock) {
-                                    Category category = new Category(inputName);
+                                    String iconPath = "@drawable/icon_manual";
+                                    Category category = new Category(iconPath, inputName);
                                     db.createCategory(category);
                                     db.closeDB();
                                 }

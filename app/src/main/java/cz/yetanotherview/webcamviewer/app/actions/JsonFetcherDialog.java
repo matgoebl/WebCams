@@ -210,7 +210,8 @@ public class JsonFetcherDialog extends DialogFragment {
 
                             synchronized (sDataLock) {
                                 long lastFetchPopular = preferences.getLong("pref_last_fetch_popular", 0);
-                                long categoryPopular = db.createCategory(new Category(getString(R.string.popular) + " " + Utils.getDateString()));
+                                long categoryPopular = db.createCategory(new Category("@drawable/icon_popular",
+                                        getString(R.string.popular) + " " + Utils.getDateString()));
 
                                 for (WebCam webCam : importWebCams) {
                                     long webCamDateAdded = webCam.getDateAdded().getTime();
@@ -306,6 +307,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             for (String typeName : listAllTypes) {
                                 Type type = new Type();
                                 type.setId(listAllTypes.indexOf(typeName));
+                                type.setIconName(Utils.getIconName(listAllTypes.indexOf(typeName)));
                                 type.setTypeName(typeName);
                                 type.setIcon(Utils.getIconId(listAllTypes.indexOf(typeName)));
 
@@ -350,7 +352,8 @@ public class JsonFetcherDialog extends DialogFragment {
                             noNewWebCams = false;
 
                             synchronized (sDataLock) {
-                                long categoryAll = db.createCategory(new Category(getString(R.string.all) + " " + Utils.getDateString()));
+                                long categoryAll = db.createCategory(new Category("@drawable/icon_all_imported",
+                                        getString(R.string.all) + " " + Utils.getDateString()));
                                 for (WebCam webCam : importWebCams) {
                                     if (allWebCams.size() != 0) {
                                         boolean notFound = false;
@@ -392,7 +395,8 @@ public class JsonFetcherDialog extends DialogFragment {
 
                             synchronized (sDataLock) {
                                 long lastFetchLatest = preferences.getLong("pref_last_fetch_latest", 0);
-                                long categoryLatest = db.createCategory(new Category(getString(R.string.latest) + " " + Utils.getDateString()));
+                                long categoryLatest = db.createCategory(new Category("@drawable/icon_latest",
+                                        getString(R.string.latest) + " " + Utils.getDateString()));
 
                                 for (WebCam webCam : importWebCams) {
                                     long webCamDateAdded = webCam.getDateAdded().getTime();
@@ -556,13 +560,15 @@ public class JsonFetcherDialog extends DialogFragment {
 
             synchronized (sDataLock) {
                 String selected = mActivity.getString(R.string.nearby);
-                long categoryNear = db.createCategory(new Category(selected + " " + Utils.getDateString()));
+                long categoryNear = db.createCategory(new Category("@drawable/icon_nearby",
+                        selected + " " + Utils.getDateString()));
                 float selectedDistance = seekBarProgress * 1000;
 
                 for (WebCam webCam : importWebCams) {
 
                     float[] distance = new float[1];
-                    Location.distanceBetween(webCam.getLatitude(), webCam.getLongitude(), knownLocation.getLatitude(), knownLocation.getLongitude(), distance);
+                    Location.distanceBetween(webCam.getLatitude(), webCam.getLongitude(),
+                            knownLocation.getLatitude(), knownLocation.getLongitude(), distance);
 
                     if (distance[0] < selectedDistance) {
                         if (allWebCams.size() != 0) {
@@ -659,7 +665,8 @@ public class JsonFetcherDialog extends DialogFragment {
 
             synchronized (sDataLock) {
                 String selected = mActivity.getString(R.string.selected);
-                long categorySelected = db.createCategory(new Category(selected + " " + Utils.getDateString()));
+                long categorySelected = db.createCategory(new Category("@drawable/icon_selected",
+                        selected + " " + Utils.getDateString()));
 
                 for (WebCam webCam : importWebCams) {
                     if (webCam.isSelected()) {
@@ -732,7 +739,8 @@ public class JsonFetcherDialog extends DialogFragment {
 
             synchronized (sDataLock) {
                 String text = texts[0];
-                long categoryCountry = db.createCategory(new Category(text + " " + Utils.getDateString()));
+                long categoryCountry = db.createCategory(new Category("@drawable/icon_country",
+                        text + " " + Utils.getDateString()));
 
                 for (WebCam webCam : importWebCams) {
                     if (webCam.getCountry().equals(text)) {
@@ -801,7 +809,9 @@ public class JsonFetcherDialog extends DialogFragment {
 
             synchronized (sDataLock) {
                 Type type = types[0];
-                long categoryCountry = db.createCategory(new Category(type.getTypeName() + " " + Utils.getDateString()));
+                String iconPath = "@drawable/icon_" + type.getIconName();
+                long categoryType = db.createCategory(new Category(iconPath, type.getTypeName() +
+                        " " + Utils.getDateString()));
 
                 for (WebCam webCam : importWebCams) {
                     if (webCam.getStatus() == type.getId()) {
@@ -809,7 +819,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             boolean notFound = false;
                             for (WebCam allWebCam : allWebCams) {
                                 if (webCam.getUniId() == allWebCam.getUniId()) {
-                                    db.createWebCamCategory(allWebCam.getId(), categoryCountry);
+                                    db.createWebCamCategory(allWebCam.getId(), categoryType);
                                     notFound = false;
                                     duplicityWebCams++;
                                     break;
@@ -817,12 +827,12 @@ public class JsonFetcherDialog extends DialogFragment {
                                 else notFound = true;
                             }
                             if (notFound) {
-                                db.createWebCam(webCam, new long[]{categoryCountry});
+                                db.createWebCam(webCam, new long[]{categoryType});
                                 newWebCams++;
                             }
                         }
                         else {
-                            db.createWebCam(webCam, new long[]{categoryCountry});
+                            db.createWebCam(webCam, new long[]{categoryType});
                             newWebCams++;
                         }
                     }
@@ -870,7 +880,8 @@ public class JsonFetcherDialog extends DialogFragment {
                 mMapView.setDiskCacheEnabled(false);
 
                 selMarkers = new ArrayList<>();
-                mMapView.addItemizedOverlay(new ItemizedIconOverlay(mActivity, markers, new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
+                mMapView.addItemizedOverlay(new ItemizedIconOverlay(mActivity, markers,
+                        new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
 
                     @Override
                     public boolean onItemSingleTapUp(int i, Marker marker) {
@@ -920,7 +931,8 @@ public class JsonFetcherDialog extends DialogFragment {
 
             synchronized (sDataLock) {
                 String fromMap = mActivity.getString(R.string.from_map);
-                long categoryFromMap = db.createCategory(new Category(fromMap + " " + Utils.getDateString()));
+                long categoryFromMap = db.createCategory(new Category("@drawable/icon_map", fromMap + " " +
+                        Utils.getDateString()));
 
                 for (Marker marker : markers) {
                     if (selMarkers.contains(marker)) {

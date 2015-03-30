@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -49,8 +50,17 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.drawer_list_item, parent, false);
         }
 
+        ImageView categoryIcon = (ImageView) convertView.findViewById(R.id.categoryIcon);
         TextView categoryName = (TextView) convertView.findViewById(R.id.categoryName);
         TextView categoryCount = (TextView) convertView.findViewById(R.id.categoryCount);
+
+        int imageResource;
+        if (category.getCategoryIcon() != null) {
+            imageResource = getContext().getResources().getIdentifier(category.getCategoryIcon(), null,
+                    getContext().getPackageName());
+        }
+        else imageResource = R.drawable.icon_unknown;
+        categoryIcon.setImageResource(imageResource);
 
         categoryName.setTypeface(null, Typeface.NORMAL);
         categoryCount.setTypeface(null, Typeface.NORMAL);

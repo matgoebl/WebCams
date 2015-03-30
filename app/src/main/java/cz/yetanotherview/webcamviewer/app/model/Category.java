@@ -21,6 +21,7 @@ package cz.yetanotherview.webcamviewer.app.model;
 public class Category {
 
     private long id;
+    private String category_icon;
     private String category_name;
     private int count;
 
@@ -29,7 +30,8 @@ public class Category {
 
     }
 
-    public Category(String category_name) {
+    public Category(String category_icon, String category_name) {
+        this.category_icon = category_icon;
         this.category_name = category_name;
     }
 
@@ -43,6 +45,10 @@ public class Category {
         this.id = id;
     }
 
+    public void setCategoryIcon(String category_icon) {
+        this.category_icon = category_icon;
+    }
+
     public void setCategoryName(String category_name) {
         this.category_name = category_name;
     }
@@ -54,6 +60,10 @@ public class Category {
     // getter
     public long getId() {
         return this.id;
+    }
+
+    public String getCategoryIcon() {
+        return this.category_icon;
     }
 
     public String getCategoryName() {

@@ -200,6 +200,19 @@ public class Utils {
     }
 
     /**
+     * Get the icon Name.
+     */
+    public static String getIconName(int id) {
+
+        String[] iconNames = {"airports", "animals", "beaches", "bridges", "buildings", "castles",
+                "cities", "constructions", "harbours", "churches", "indoors", "lakes", "landscapes",
+                "market_square", "mountains", "others", "parks", "pools", "radio_studios", "railways",
+                "rivers", "ski_resorts", "traffic_cameras", "universities"};
+
+        return iconNames[id];
+    }
+
+    /**
      * Round double
      */
     public static double roundDouble(double value, int places) {

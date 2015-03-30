@@ -40,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = DatabaseHelper.class.getName();
 
     // Database Version
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // Database Name
     public static final String DATABASE_NAME = "webCamDatabase.db";
@@ -64,6 +64,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_LONGITUDE = "longitude";
 
     // CATEGORY'S Table - column names
+    private static final String KEY_CATEGORY_ICON = "category_icon";
     private static final String KEY_CATEGORY_NAME = "category_name";
 
     // WEBCAM_CATEGORY'S Table - column names
@@ -79,7 +80,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Category table create statement
     private static final String CREATE_TABLE_CATEGORY = "CREATE TABLE IF NOT EXISTS " + TABLE_CATEGORY
-            + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_CATEGORY_NAME + " TEXT,"
+            + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_CATEGORY_ICON + " TEXT," + KEY_CATEGORY_NAME + " TEXT,"
             + KEY_CREATED_AT + " DATETIME" + ")";
 
     // WebCam category table create statement
@@ -108,11 +109,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         {
             switch (upgradeTo)
             {
-                case 2:
-                    //badUpgrade(db);
-                    break;
                 case 3:
                     migrateOldTables(db);
+                    break;
+                case 5:
+                    db.execSQL("ALTER TABLE " + TABLE_CATEGORY + " ADD COLUMN " + KEY_CATEGORY_ICON + " TEXT");
                     break;
             }
             upgradeTo++;
@@ -299,20 +300,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_LATITUDE, webCam.getLatitude());
         values.put(KEY_LONGITUDE, webCam.getLongitude());
 
-        long webcam_id = webCam.getId();
+        long webCam_id = webCam.getId();
 
         // updating row
         db.update(TABLE_WEBCAM, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(webcam_id) });
+                new String[] { String.valueOf(webCam_id) });
 
         //remove all assigned categories
-        deleteWebCamCategory(webcam_id);
+        deleteWebCamCategory(webCam_id);
 
         //assign new categories
         if (category_ids != null) {
             // insert category_ids
             for (long category_id : category_ids) {
-                createWebCamCategory(webcam_id, category_id);
+                createWebCamCategory(webCam_id, category_id);
             }
         }
 
@@ -357,6 +358,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_CATEGORY_ICON, category.getCategoryIcon());
         values.put(KEY_CATEGORY_NAME, category.getCategoryName());
         values.put(KEY_CREATED_AT, getDateTime());
 
@@ -380,7 +382,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             do {
                 Category t = new Category();
-                t.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                t.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                t.setCategoryIcon(c.getString(c.getColumnIndex(KEY_CATEGORY_ICON)));
                 t.setCategoryName(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
 
                 // adding to categories list
@@ -400,6 +403,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_CATEGORY_ICON, category.getCategoryIcon());
         values.put(KEY_CATEGORY_NAME, category.getCategoryName());
 
         // updating row

@@ -217,6 +217,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         }
 
         allWebCamsCategory = new Category();
+        allWebCamsCategory.setCategoryIcon("@drawable/icon_all");
         allWebCamsCategory.setCategoryName(allWebCamsString);
         allWebCamsCategory.setCount(db.getWebCamCount());
         db.closeDB();

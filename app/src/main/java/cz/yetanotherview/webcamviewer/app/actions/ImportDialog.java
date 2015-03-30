@@ -178,7 +178,8 @@ public class ImportDialog extends DialogFragment {
                     maxProgressValue = allWebCams.size();
                     showProgressDialog();
 
-                    long categoryFromCurrentDate = db.createCategory(new Category(imported + " " + Utils.getDateString()));
+                    long categoryFromCurrentDate = db.createCategory(new Category("@drawable/icon_imported",
+                            imported + " " + Utils.getDateString()));
                     synchronized (sDataLock) {
                         for(WebCam webCam : allWebCams) {
                             db.createWebCam(webCam, new long[] {categoryFromCurrentDate});

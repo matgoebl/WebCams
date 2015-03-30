@@ -22,6 +22,7 @@ public class Type {
 
     private int id;
     private int icon;
+    private String icon_name;
     private String type_name;
     private int count;
 
@@ -30,12 +31,14 @@ public class Type {
 
     }
 
-    public Type(String type_name) {
+    public Type(String icon_name, String type_name) {
+        this.icon_name = icon_name;
         this.type_name = type_name;
     }
 
-    public Type(int id, String type_name) {
+    public Type(int id, String icon_name, String type_name) {
         this.id = id;
+        this.icon_name = icon_name;
         this.type_name = type_name;
     }
 
@@ -46,6 +49,10 @@ public class Type {
 
     public void setIcon(int icon) {
         this.icon = icon;
+    }
+
+    public void setIconName(String icon_name) {
+        this.icon_name = icon_name;
     }
 
     public void setTypeName(String type_name) {
@@ -63,6 +70,10 @@ public class Type {
 
     public int getIcon() {
         return this.icon;
+    }
+
+    public String getIconName() {
+        return this.icon_name;
     }
 
     public String getTypeName() {
