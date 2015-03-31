@@ -23,22 +23,15 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.signature.StringSignature;
 
 import java.util.Timer;
@@ -48,13 +41,13 @@ import java.util.UUID;
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.actions.SaveDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ShareDialog;
+import cz.yetanotherview.webcamviewer.app.adapter.DiaporamaAdapter;
 
 public class FullScreenFragment extends Fragment {
 
     private View view;
     private RelativeLayout mButtonsLayout;
     private TouchImageView touchImageView;
-    private ProgressBar progressBar;
     private Animation fadeOut;
     private String signature;
     private StringSignature stringSignature;
@@ -64,10 +57,10 @@ public class FullScreenFragment extends Fragment {
     private double latitude;
     private double longitude;
     private boolean autoRefresh;
-    private boolean firstTime;
     private int autoRefreshInterval;
     private boolean fullScreen;
     private ImageButton backButton;
+    private DiaporamaAdapter diaporamaAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,8 +80,6 @@ public class FullScreenFragment extends Fragment {
 
         stringSignature = new StringSignature(signature);
 
-        firstTime = true;
-
         // Auto Refresh timer
         if (autoRefresh) {
             autoRefreshTimer(autoRefreshInterval);
@@ -101,8 +92,11 @@ public class FullScreenFragment extends Fragment {
         }
 
         initViews();
+        initDiaporamaAdapter();
         setAnimation();
         loadImage();
+
+        mButtonsLayout.startAnimation(fadeOut);
 
         return view;
     }
@@ -154,7 +148,6 @@ public class FullScreenFragment extends Fragment {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firstTime = true;
                 refresh();
             }
         });
@@ -180,8 +173,12 @@ public class FullScreenFragment extends Fragment {
                 }
             });
         }
+    }
 
-        progressBar = (ProgressBar) view.findViewById(R.id.loadingProgressBar);
+    private void initDiaporamaAdapter() {
+        diaporamaAdapter = new DiaporamaAdapter(touchImageView);
+        diaporamaAdapter.setPlaceholder(R.drawable.placeholder);
+        diaporamaAdapter.setAnimationDuration(0);
     }
 
     private void setAnimation() {
@@ -203,28 +200,6 @@ public class FullScreenFragment extends Fragment {
         });
     }
 
-    private void loadImage() {
-
-        Glide.with(touchImageView.getContext())
-                .load(url)
-                .crossFade()
-                .placeholder(R.drawable.placeholder)
-                .signature(stringSignature)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(new GlideDrawableImageViewTarget(touchImageView) {
-                    @Override
-                    public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
-                        super.onResourceReady(drawable, anim);
-                        progressBar.setVisibility(View.GONE);
-                        if (firstTime) {
-                            mButtonsLayout.startAnimation(fadeOut);
-                            mButtonsLayout.setBackgroundResource(R.drawable.selector);
-                            firstTime = false;
-                        }
-                    }
-                });
-    }
-
     private void autoRefreshTimer(int interval) {
         final Handler handler = new Handler();
         Timer timer = new Timer();
@@ -235,9 +210,7 @@ public class FullScreenFragment extends Fragment {
                     public void run() {
                         try {
                             refresh();
-                        } catch (Exception e) {
-                            // Auto-generated catch block
-                        }
+                        } catch (Exception ignored) {}
                     }
                 });
             }
@@ -246,10 +219,11 @@ public class FullScreenFragment extends Fragment {
     }
 
     private void refresh() {
-        Glide.get(touchImageView.getContext()).clearMemory();
-        mButtonsLayout.setBackgroundResource(0);
-        progressBar.setVisibility(View.VISIBLE);
         stringSignature = new StringSignature(UUID.randomUUID().toString());
         loadImage();
+    }
+
+    private void loadImage() {
+        diaporamaAdapter.loadNextImage(url, stringSignature);
     }
 }

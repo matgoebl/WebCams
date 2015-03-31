@@ -58,7 +58,6 @@
 <string name="add_new_category_summary">"Add new category to the database"</string>
 <string name="edit_category_summary">"Edit category name in database"</string>
 <string name="delete_category_summary">"Delete category from database"</string>
-<string name="new_category_name">"Category Name"</string>
 <string name="new_category_hint">"New list"</string>
 <string name="dismiss">"DISMISS"</string>
 <string name="refresh">"Refresh"</string>
@@ -99,7 +98,6 @@
 <string name="no_new_webcams">"No new WebCams"</string>
 <string name="no_new_webcams_summary">"There are no new WebCams since the last download."</string>
 <string name="countries">"Countries"</string>
-<string name="add_options">"Add options"</string>
 <string name="add_manually">"Add manually"</string>
 <string name="import_done">"Import Successful!"</string>
 <string name="import_progress">"Importing in progress and searching for possible duplicates."</string>

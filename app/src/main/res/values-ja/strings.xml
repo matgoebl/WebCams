@@ -43,7 +43,6 @@
 <string name="add_new_category_summary">"データベースに新しいカテゴリーを追加します"</string>
 <string name="edit_category_summary">"データベースのカテゴリー名を編集します"</string>
 <string name="delete_category_summary">"データベースからカテゴリーを削除します"</string>
-<string name="new_category_name">"カテゴリー名"</string>
 <string name="new_category_hint">"新しいリスト"</string>
 <string name="dismiss">"破棄"</string>
 <string name="refresh">"リフレッシュ"</string>
@@ -84,7 +83,6 @@
 <string name="no_new_webcams">"新しいウェブカムはありません"</string>
 <string name="no_new_webcams_summary">"最後にダウンロードしてから新しいウェブカムはありません。"</string>
 <string name="countries">"国"</string>
-<string name="add_options">"オプションの追加"</string>
 <string name="add_manually">"手動で追加"</string>
 <string name="import_done">"正常にインポートしました!"</string>
 <string name="import_progress">"インポート処理中です。重複の可能性も確認しています。"</string>
@@ -190,6 +188,6 @@
 <string name="list_is_empty">"リストは空です"</string>
 <string name="buildings">"建物"</string>
 <string name="landscapes">"景観地"</string>
-<string name="new_category">新しいカテゴリ</string>
-<string name="edit_category">カテゴリの編集</string>
+<string name="new_category">"新しいカテゴリー"</string>
+<string name="edit_category">"カテゴリーを編集"</string>
 </resources>

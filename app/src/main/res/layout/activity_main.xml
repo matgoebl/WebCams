@@ -51,16 +51,62 @@
 
                 </android.support.v4.widget.SwipeRefreshLayout>
 
-                    <com.melnykov.fab.FloatingActionButton
+                <View
+                    android:id="@+id/shadowView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:background="@color/black_transparent"
+                    android:onClick="hideShadowView"/>
+
+                    <com.getbase.floatingactionbutton.FloatingActionsMenu
                         android:id="@+id/fab"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|end"
-                        android:layout_margin="16dp"
-                        android:src="@drawable/ic_action_content_new"
-                        fab:fab_colorNormal="@color/fab_normal"
-                        fab:fab_colorPressed="@color/fab_pressed"
-                        fab:fab_colorRipple="@color/fab_ripple" />
+                        fab:fab_addButtonColorNormal="@color/fab_normal"
+                        fab:fab_addButtonColorPressed="@color/fab_pressed"
+                        fab:fab_addButtonPlusIconColor="@color/white"
+                        fab:fab_labelStyle="@style/menu_labels_style"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginEnd="16dp">
+
+                        <com.getbase.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/action_a"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            fab:fab_size="mini"
+                            fab:fab_icon="@drawable/ic_action_content_import"
+                            fab:fab_colorNormal="@color/fab_normal"
+                            fab:fab_title="@string/pref_import_from_server"
+                            fab:fab_colorPressed="@color/fab_pressed"
+                            android:onClick="showSelectionDialog"/>
+
+                        <com.getbase.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/action_b"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            fab:fab_size="mini"
+                            fab:fab_icon="@drawable/ic_action_content_manually"
+                            fab:fab_colorNormal="@color/fab_normal"
+                            fab:fab_title="@string/add_manually"
+                            fab:fab_colorPressed="@color/fab_pressed"
+                            android:onClick="showAddDialog"/>
+
+                        <com.getbase.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/action_c"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            fab:fab_size="mini"
+                            fab:fab_icon="@drawable/ic_action_content_suggestion"
+                            fab:fab_colorNormal="@color/fab_normal"
+                            fab:fab_title="@string/submit_suggestion"
+                            fab:fab_colorPressed="@color/fab_pressed"
+                            android:onClick="showSuggestionDialog"/>
+
+                    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
                      <ImageView
                         android:id="@+id/empty"

@@ -20,7 +20,7 @@
 
     <color name="fab_normal">#D12C00</color>
     <color name="fab_pressed">#BA2700</color>
-    <color name="fab_ripple">#A72700</color>
+    <color name="black_transparent">#72000000</color>
 
     <color name="swipe">@color/fab_normal</color>
 

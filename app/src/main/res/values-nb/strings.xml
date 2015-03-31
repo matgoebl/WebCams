@@ -45,7 +45,6 @@
 <string name="add_new_category_summary">"Legg til ny kategori i databasen"</string>
 <string name="edit_category_summary">"Rediger kategori i databasen"</string>
 <string name="delete_category_summary">"Slett kategori fra databasen"</string>
-<string name="new_category_name">"Kategori-navn"</string>
 <string name="new_category_hint">"Ny liste"</string>
 <string name="dismiss">"LUKK"</string>
 <string name="refresh">"Oppfrisk"</string>
@@ -86,7 +85,6 @@
 <string name="no_new_webcams">"Ingen nye webkamera"</string>
 <string name="no_new_webcams_summary">"Det er ingen nye webkamera siden forrige sjekk."</string>
 <string name="countries">"Land"</string>
-<string name="add_options">"Legg til valg"</string>
 <string name="add_manually">"Legg til manuelt"</string>
 <string name="import_done">"Import OK!"</string>
 <string name="import_progress">"Import undervei og sjekk for duplikater."</string>

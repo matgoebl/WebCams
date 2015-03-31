@@ -58,7 +58,6 @@
 <string name="add_new_category_summary">"Pridať novú kategóriu do databázy"</string>
 <string name="edit_category_summary">"Upraviť názov kategórie v databáze"</string>
 <string name="delete_category_summary">"Zmazať kategóriu z databázy"</string>
-<string name="new_category_name">"Názov kategórie"</string>
 <string name="new_category_hint">"Nový zoznam"</string>
 <string name="dismiss">"SKRYŤ"</string>
 <string name="refresh">"Obnoviť"</string>
@@ -99,7 +98,6 @@
 <string name="no_new_webcams">"Žiadne nové WebKamery"</string>
 <string name="no_new_webcams_summary">"Od posledného sťahovania neboli nájdené žiadne nové WebKamery."</string>
 <string name="countries">"Krajiny"</string>
-<string name="add_options">"Možnosti pridania"</string>
 <string name="add_manually">"Pridať ručne"</string>
 <string name="import_done">"Import bol úspešný!"</string>
 <string name="import_progress">"Prebieha importovanie WebKamer a zároveň hľadanie možných duplicít."</string>

@@ -58,7 +58,6 @@
 <string name="add_new_category_summary">"Neue Kategorie in der Datenbank hinzufügen"</string>
 <string name="edit_category_summary">"Kategorienamen in der Datenbank bearbeiten"</string>
 <string name="delete_category_summary">"Kategorie aus der Datenbank löschen"</string>
-<string name="new_category_name">"Kategoriename"</string>
 <string name="new_category_hint">"Neue Liste"</string>
 <string name="dismiss">"VERBERGEN"</string>
 <string name="refresh">"Aktualisieren"</string>
@@ -99,7 +98,6 @@
 <string name="no_new_webcams">"Keine neuen WebCams"</string>
 <string name="no_new_webcams_summary">"Keine neuen WebCam seit dem letzten Download."</string>
 <string name="countries">"Länder"</string>
-<string name="add_options">"Optionen hinzufügen"</string>
 <string name="add_manually">"Manuell hinzufügen"</string>
 <string name="import_done">"Import erfolgreich!"</string>
 <string name="import_progress">"Import und Suche nach möglichen Duplikaten läuft."</string>
