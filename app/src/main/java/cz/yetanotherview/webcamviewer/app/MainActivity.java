@@ -20,6 +20,7 @@ package cz.yetanotherview.webcamviewer.app;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.DialogFragment;
 import android.app.SearchManager;
 import android.app.backup.BackupManager;
@@ -861,7 +862,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
             public void run() {
                 floatingActionsMenu.collapse();
             }
-        }, 1000);
+        }, 500);
     }
 
     private void showEditDialog(int position) {
@@ -1124,6 +1125,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                 .show();
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -1136,6 +1138,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void goFullScreen() {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN

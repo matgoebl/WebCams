@@ -13,14 +13,15 @@
 
     <color name="black">#000000</color>
     <color name="grey">#cecece</color>
+    <color name="very_dark_grey">#373737</color>
     <color name="light_grey">#44909090</color>
     <color name="dark_grey">#b8474747</color>
     <color name="custom_grey">#4d4d4d</color>
     <color name="drawer_icons_grey">#7f7f7f</color>
 
-    <color name="fab_normal">#D12C00</color>
-    <color name="fab_pressed">#BA2700</color>
-    <color name="black_transparent">#72000000</color>
+    <color name="fab_normal">#DB4437</color>
+    <color name="fab_pressed">#EF5350</color>
+    <color name="black_transparent">#96000000</color>
 
     <color name="swipe">@color/fab_normal</color>
 

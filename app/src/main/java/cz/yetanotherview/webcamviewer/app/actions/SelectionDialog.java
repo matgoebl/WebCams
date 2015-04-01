@@ -26,6 +26,7 @@ import android.view.View;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.adapter.SelectionAdapter;
 
 public class SelectionDialog extends DialogFragment {
 
@@ -39,22 +40,19 @@ public class SelectionDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         return new MaterialDialog.Builder(getActivity())
-                .title(R.string.available_options)
                 .items(R.array.selection_values)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                        DialogFragment fetcher = new JsonFetcherDialog();
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("selection", which);
-                        fetcher.setArguments(bundle);
-                        fetcher.show(getFragmentManager(), "JsonFetcherDialog");
-
-                        return true;
-                    }
-                })
-                .positiveText(R.string.choose)
+                .adapter(new SelectionAdapter(getActivity(), R.array.selection_values),
+                        new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                                DialogFragment fetcher = new JsonFetcherDialog();
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("selection", which);
+                                fetcher.setArguments(bundle);
+                                fetcher.show(getFragmentManager(), "JsonFetcherDialog");
+                                dialog.dismiss();
+                            }
+                        })
                 .build();
     }
 }

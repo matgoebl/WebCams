@@ -18,6 +18,7 @@
 
 package cz.yetanotherview.webcamviewer.app.fullscreen;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -102,6 +103,7 @@ public class FullScreenActivity extends Activity {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void goFullScreen() {
 
         // The UI options currently enabled are represented by a bitfield.

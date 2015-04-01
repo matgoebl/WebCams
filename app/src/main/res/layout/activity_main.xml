@@ -79,9 +79,9 @@
                             android:layout_height="wrap_content"
                             fab:fab_size="mini"
                             fab:fab_icon="@drawable/ic_action_content_import"
-                            fab:fab_colorNormal="@color/fab_normal"
+                            fab:fab_colorNormal="@color/white"
                             fab:fab_title="@string/pref_import_from_server"
-                            fab:fab_colorPressed="@color/fab_pressed"
+                            fab:fab_colorPressed="@color/grey"
                             android:onClick="showSelectionDialog"/>
 
                         <com.getbase.floatingactionbutton.FloatingActionButton
@@ -90,9 +90,9 @@
                             android:layout_height="wrap_content"
                             fab:fab_size="mini"
                             fab:fab_icon="@drawable/ic_action_content_manually"
-                            fab:fab_colorNormal="@color/fab_normal"
+                            fab:fab_colorNormal="@color/white"
                             fab:fab_title="@string/add_manually"
-                            fab:fab_colorPressed="@color/fab_pressed"
+                            fab:fab_colorPressed="@color/grey"
                             android:onClick="showAddDialog"/>
 
                         <com.getbase.floatingactionbutton.FloatingActionButton
@@ -101,9 +101,9 @@
                             android:layout_height="wrap_content"
                             fab:fab_size="mini"
                             fab:fab_icon="@drawable/ic_action_content_suggestion"
-                            fab:fab_colorNormal="@color/fab_normal"
+                            fab:fab_colorNormal="@color/white"
                             fab:fab_title="@string/submit_suggestion"
-                            fab:fab_colorPressed="@color/fab_pressed"
+                            fab:fab_colorPressed="@color/grey"
                             android:onClick="showSuggestionDialog"/>
 
                     </com.getbase.floatingactionbutton.FloatingActionsMenu>
