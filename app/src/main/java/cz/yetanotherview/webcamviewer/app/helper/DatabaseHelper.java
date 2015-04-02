@@ -253,9 +253,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 // Care about this hack, zero value instead KEY_ID is important!
                 wc.setId(c.getLong(0));
                 wc.setUniId(c.getLong(c.getColumnIndex(KEY_UNI_ID)));
-                wc.setName((c.getString(c.getColumnIndex(KEY_WEBCAM))));
-                wc.setUrl((c.getString(c.getColumnIndex(KEY_WEBCAM_URL))));
-                wc.setPosition((c.getInt(c.getColumnIndex(KEY_POSITION))));
+                wc.setName(c.getString(c.getColumnIndex(KEY_WEBCAM)));
+                wc.setUrl(c.getString(c.getColumnIndex(KEY_WEBCAM_URL)));
+                wc.setPosition(c.getInt(c.getColumnIndex(KEY_POSITION)));
                 wc.setStatus(c.getInt(c.getColumnIndex(KEY_STATUS)));
                 wc.setLatitude(c.getDouble(c.getColumnIndex(KEY_LATITUDE)));
                 wc.setLongitude(c.getDouble(c.getColumnIndex(KEY_LONGITUDE)));
@@ -316,7 +316,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 createWebCamCategory(webCam_id, category_id);
             }
         }
+    }
 
+    /**
+     * Updating a WebCam position
+     */
+    public void updateWebCamPosition(WebCam webCam) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_POSITION, webCam.getPosition());
+
+        // updating row
+        db.update(TABLE_WEBCAM, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(webCam.getId()) });
     }
 
     /**

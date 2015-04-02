@@ -45,7 +45,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -89,6 +91,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
     // Object for intrinsic lock
     public static final Object sDataLock = new Object();
+    protected Object mActionMode;
 
     private DatabaseHelper db;
     private WebCam webCam;
@@ -110,7 +113,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     private Toolbar mToolbar;
 
     private boolean firstRun;
-    private String sortOrder = "id ASC";
+    private String sortOrder = "position";
     private String allWebCamsString;
     private String allWebCamsTitle;
     private String selectedCategoryName;
@@ -134,6 +137,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     private boolean simpleList;
     private View shadowView;
     private EventListener eventListener;
+    private int mPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -319,8 +323,10 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                 if (isEditClick) {
                     showOptionsDialog(position);
                 }
-//                else if (isLongClick) {
-//                }
+                else if (isLongClick) {
+                    mPosition = position;
+                    moveItem();
+                }
                 else showImageFullscreen(position, false);
             }
         });
@@ -645,24 +651,27 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
     private void showSortDialog() {
 
-        int whatMarkToCheck = 2;
+        int whatMarkToCheck = 3;
         if (sortOrder.contains(" ) ASC")) {
             whatMarkToCheck = 0;
         }
         else if (sortOrder.contains(" ) DESC")) {
             whatMarkToCheck = 1;
         }
-        else if (sortOrder.contains("created_at ASC")) {
+        else if (sortOrder.contains("position")) {
             whatMarkToCheck = 2;
         }
-        else if (sortOrder.contains("created_at DESC")) {
+        else if (sortOrder.contains("created_at ASC")) {
             whatMarkToCheck = 3;
         }
-        else if (sortOrder.contains("UNICODE ASC")) {
+        else if (sortOrder.contains("created_at DESC")) {
             whatMarkToCheck = 4;
         }
-        else if (sortOrder.contains("UNICODE DESC")) {
+        else if (sortOrder.contains("UNICODE ASC")) {
             whatMarkToCheck = 5;
+        }
+        else if (sortOrder.contains("UNICODE DESC")) {
+            whatMarkToCheck = 6;
         }
 
         dialog = new MaterialDialog.Builder(this)
@@ -698,15 +707,18 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                                 }
                                 break;
                             case 2:
-                                sortOrder = "created_at ASC";
+                                sortOrder = "position";
                                 break;
                             case 3:
-                                sortOrder = "created_at DESC";
+                                sortOrder = "created_at ASC";
                                 break;
                             case 4:
-                                sortOrder = "webcam_name COLLATE UNICODE ASC";
+                                sortOrder = "created_at DESC";
                                 break;
                             case 5:
+                                sortOrder = "webcam_name COLLATE UNICODE ASC";
+                                break;
+                            case 6:
                                 sortOrder = "webcam_name COLLATE UNICODE DESC";
                                 break;
                             default:
@@ -785,10 +797,10 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
         String[] options_values = getResources().getStringArray(R.array.opt_values);
         if (webCam.getUniId() != 0) {
-            options_values[6] = getString(R.string.report_problem);
+            options_values[7] = getString(R.string.report_problem);
         }
         else {
-            options_values[6] = getString(R.string.submit_to_appr);
+            options_values[7] = getString(R.string.submit_to_appr);
         }
 
         dialog = new MaterialDialog.Builder(this)
@@ -804,9 +816,13 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                                 webCamDeleted(webCam, position);
                                 break;
                             case 2:
-                                showImageFullscreen(position, false);
+                                mPosition = position;
+                                moveItem();
                                 break;
                             case 3:
+                                showImageFullscreen(position, false);
+                                break;
+                            case 4:
                                 SaveDialog saveDialog = new SaveDialog();
                                 Bundle saveDialogBundle = new Bundle();
                                 saveDialogBundle.putString("name", webCam.getName());
@@ -814,17 +830,17 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                                 saveDialog.setArguments(saveDialogBundle);
                                 saveDialog.show(getFragmentManager(), "SaveDialog");
                                 break;
-                            case 4:
+                            case 5:
                                 ShareDialog shareDialog = new ShareDialog();
                                 Bundle shareDialogBundle = new Bundle();
                                 shareDialogBundle.putString("url", webCam.getUrl());
                                 shareDialog.setArguments(shareDialogBundle);
                                 shareDialog.show(getFragmentManager(), "ShareDialog");
                                 break;
-                            case 5:
+                            case 6:
                                 showImageFullscreen(position, true);
                                 break;
-                            case 6:
+                            case 7:
                                 if (webCam.getUniId() != 0) {
                                     sendEmail(webCam, true);
                                 } else sendEmail(webCam, false);
@@ -1009,6 +1025,81 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     public void invokeReload() {
         reInitializeRecyclerViewAdapter(selectedCategory);
         reInitializeDrawerListAdapter();
+    }
+
+    private void moveItem() {
+
+        mToolbar.startActionMode(new ActionMode.Callback() {
+
+            int pos = mPosition;
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.move_menu, menu);
+                mode.setTitle(R.string.move);
+                return true;
+            }
+
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.up:
+                        mAdapter.moveItemUp(mAdapter.getItemAt(pos));
+                        if (pos > 0) {
+                            pos = pos - 1;
+                        }
+                        return true;
+                    case R.id.down:
+                        mAdapter.moveItemDown(mAdapter.getItemAt(pos));
+                        if (pos < (mAdapter.getItemCount() - 1)) {
+                            pos = pos + 1;
+                        }
+                        return true;
+                    case R.id.done:
+                        sortOrder = "position";
+                        new savePositionsToDB().execute();
+                        mode.finish();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            public void onDestroyActionMode(ActionMode mode) {
+                mActionMode = null;
+            }
+        });
+    }
+
+    private class savePositionsToDB extends AsyncTask<Long, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Long... longs) {
+
+            List<WebCam> newWebCams = mAdapter.getItems();
+            synchronized (sDataLock) {
+                int i = 0;
+                for (WebCam mWebCam : newWebCams) {
+                    mWebCam.setPosition(i);
+                    db.updateWebCamPosition(mWebCam);
+                    i++;
+                }
+            }
+            db.closeDB();
+            BackupManager backupManager = new BackupManager(getApplicationContext());
+            backupManager.dataChanged();
+            this.publishProgress();
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+            saveDone();
+        }
     }
 
     private void saveDone() {

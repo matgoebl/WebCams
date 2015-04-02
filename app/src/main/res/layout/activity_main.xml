@@ -51,6 +51,14 @@
 
                 </android.support.v4.widget.SwipeRefreshLayout>
 
+                <ImageView
+                    android:id="@+id/empty"
+                    android:layout_gravity="center"
+                    android:src="@drawable/background_blank"
+                    android:layout_width="220dp"
+                    android:layout_height="220dp"
+                    android:contentDescription="@string/image_description" />
+
                 <View
                     android:id="@+id/shadowView"
                     android:layout_width="match_parent"
@@ -107,14 +115,6 @@
                             android:onClick="showSuggestionDialog"/>
 
                     </com.getbase.floatingactionbutton.FloatingActionsMenu>
-
-                     <ImageView
-                        android:id="@+id/empty"
-                        android:layout_gravity="center"
-                        android:src="@drawable/background_blank"
-                        android:layout_width="220dp"
-                        android:layout_height="220dp"
-                        android:contentDescription="@string/image_description" />
 
             </FrameLayout>
     </LinearLayout>

@@ -88,7 +88,6 @@
 <string name="server_unavailable">"Server is unavailable"</string>
 <string name="server_unavailable_summary">"You are not connected to the Internet or the server is temporarily unavailable..."</string>
 <string name="choose">"CHOOSE"</string>
-<string name="available_options">"Available options"</string>
 <string name="external_files">"External files"</string>
 <string name="popular_webcams">"Popular WebCams"</string>
 <string name="selecting_by_country">"Selecting by Country"</string>
@@ -205,4 +204,8 @@
 <string name="landscapes">"Landscapes"</string>
 <string name="new_category">"New Category"</string>
 <string name="edit_category">"Edit Category"</string>
+<string name="move">"Move"</string>
+<string name="up">"Up"</string>
+<string name="down">"Down"</string>
+<string name="action_sort_manually">"Manually"</string>
 </resources>

@@ -4,6 +4,7 @@
     <string-array name="sort_values">
         <item>@string/action_sort_location</item>
         <item>@string/action_sort_location_desc</item>
+        <item>@string/action_sort_manually</item>
         <item>@string/action_sort_date</item>
         <item>@string/action_sort_date_desc</item>
         <item>@string/action_sort_name</item>
@@ -13,6 +14,7 @@
     <string-array name="opt_values" translatable="false">
         <item>@string/action_edit</item>
         <item>@string/action_delete</item>
+        <item>@string/move</item>
         <item>@string/maximize</item>
         <item>@string/save_to</item>
         <item>@string/share</item>

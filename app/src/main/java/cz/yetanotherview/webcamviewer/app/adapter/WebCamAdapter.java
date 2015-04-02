@@ -37,6 +37,7 @@ import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.signature.StringSignature;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
@@ -283,6 +284,10 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
         return webCamItems.get(location);
     }
 
+    public List<WebCam> getItems() {
+        return webCamItems;
+    }
+
     public WebCam getItemAt(int position) {
         if (position < webCamItems.size())
             return webCamItems.get(position);
@@ -299,10 +304,28 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
         notifyItemChanged(position);
     }
 
-    public void removeItem(WebCam item) {
-        int position = webCamItems.indexOf(item);
+    public void removeItem(WebCam webCam) {
+        int position = webCamItems.indexOf(webCam);
         webCamItems.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void moveItemUp(WebCam webCam) {
+        int position = webCamItems.indexOf(webCam);
+        int newPosition = position - 1;
+        if (newPosition >= 0) {
+            Collections.swap(webCamItems, position, newPosition);
+            notifyItemMoved(position, newPosition);
+        }
+    }
+
+    public void moveItemDown(WebCam webCam) {
+        int position = webCamItems.indexOf(webCam);
+        int newPosition = position + 1;
+        if (newPosition < webCamItems.size()) {
+            Collections.swap(webCamItems, position, newPosition);
+            notifyItemMoved(position, newPosition);
+        }
     }
 
     public void refreshViewImages(StringSignature stringSignature) {
