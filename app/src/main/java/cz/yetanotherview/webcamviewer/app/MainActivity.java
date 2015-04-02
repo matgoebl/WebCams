@@ -101,43 +101,25 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     private RecyclerView mRecyclerView;
     private View mEmptyView;
     private WebCamAdapter mAdapter;
-    private int numberOfColumns;
+    private float zoom;
+    private int numberOfColumns, mOrientation, selectedCategory, autoRefreshInterval, mPosition;
+    private boolean firstRun, fullScreen, autoRefresh, autoRefreshFullScreenOnly, screenAlwaysOn,
+            notUndo, imagesOnOff, simpleList;
+    private String allWebCamsString, allWebCamsTitle, selectedCategoryName, mStringSignature;
+    private String sortOrder = "position";
     private FloatingActionsMenu floatingActionsMenu;
-    private int mOrientation;
-
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private CategoryAdapter mArrayAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
     private SwipeRefreshLayout swipeLayout;
     private Toolbar mToolbar;
-
-    private boolean firstRun;
-    private String sortOrder = "position";
-    private String allWebCamsString;
-    private String allWebCamsTitle;
-    private String selectedCategoryName;
-    private int selectedCategory;
-    private float zoom;
-    private boolean fullScreen;
-    private boolean autoRefresh;
-    private int autoRefreshInterval;
-    private boolean autoRefreshFullScreenOnly;
-    private boolean screenAlwaysOn;
-    private boolean notUndo;
-    private String mStringSignature;
-    private boolean imagesOnOff;
-
     private MaterialDialog dialog;
+    private DialogFragment dialogFragment;
     private MenuItem searchItem;
     private SearchView searchView;
-
-    private DialogFragment dialogFragment;
-
-    private boolean simpleList;
     private View shadowView;
     private EventListener eventListener;
-    private int mPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

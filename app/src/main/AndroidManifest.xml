@@ -45,6 +45,25 @@
         <meta-data
             android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAIfQukj2SydW0zsmnSyY1aNfveHIIDtKbPEAe5fA" />
+
+        <receiver
+            android:name=".widget.WvWidgetProvider"
+            android:icon="@drawable/ic_launcher" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="cz.yetanotherview.webcamviewer.app.widget.WIDGET_BUTTON" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget" />
+        </receiver>
+
+        <activity android:name=".widget.WvWidgetConfigure">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
