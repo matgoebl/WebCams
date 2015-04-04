@@ -18,13 +18,18 @@
 
 package cz.yetanotherview.webcamviewer.app.actions;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.backup.BackupManager;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -38,6 +43,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,6 +75,8 @@ public class ImportDialog extends DialogFragment {
 
     private DatabaseHelper db;
     private Activity mActivity;
+
+    private static final int OPEN_REQUEST_CODE = 41;
 
     @Override
     public void onAttach(Activity activity) {
@@ -108,7 +117,7 @@ public class ImportDialog extends DialogFragment {
                                     inputName = (items[which]);
                                     if (inputName.contains(Utils.extension)) {
                                         importDialog = new MaterialDialog.Builder(mActivity)
-                                                .title(getString(R.string.pref_delete_all) + "?")
+                                                .title(getString(R.string.pref_delete_all_webcams) + "?")
                                                 .content(R.string.import_summary)
                                                 .positiveText(R.string.Yes)
                                                 .negativeText(R.string.No)
@@ -138,11 +147,16 @@ public class ImportDialog extends DialogFragment {
                                                 })
                                                 .show();
                                     }
+                                    importDialog.dismiss(); // ToDo: Don´t work...
+                                }
+                                else {
+                                    openFile();
                                 }
 
                                 return true;
                             }
                         })
+                        .autoDismiss(false)
                         .positiveText(R.string.choose)
                         .build();
             }
@@ -152,6 +166,56 @@ public class ImportDialog extends DialogFragment {
         else nothingToImport();
 
         return importDialog;
+    }
+
+    // ToDo: !!!! Finish implementation and make visible only on KitKat UP!
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public void openFile()
+    {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/octet-stream");
+        startActivityForResult(intent, OPEN_REQUEST_CODE);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+
+        Uri currentUri = null;
+
+        if (resultCode == Activity.RESULT_OK)
+        {
+            if (requestCode == OPEN_REQUEST_CODE)
+            {
+
+                if (resultData != null) {
+                    currentUri = resultData.getData();
+                    try{
+                        InputStream inputStream = getActivity().getContentResolver().openInputStream(currentUri);
+
+                        Gson gson = new Gson();
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
+                                inputStream));
+
+                        allWebCams = Arrays.asList(gson.fromJson(bufferedReader, WebCam[].class));
+                        bufferedReader.close();
+
+                        long categoryFromCurrentDate = db.createCategory(new Category("@drawable/icon_imported",
+                                imported + " " + Utils.getDateString()));
+                        synchronized (sDataLock) {
+                            for(WebCam webCam : allWebCams) {
+                                db.createWebCam(webCam, new long[] {categoryFromCurrentDate});
+                            }
+                        }
+                        db.closeDB();
+                        BackupManager backupManager = new BackupManager(mActivity);
+                        backupManager.dataChanged();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     private class importJsonBackgroundTask extends AsyncTask<String, Integer, Long> {

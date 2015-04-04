@@ -24,8 +24,10 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -51,18 +53,15 @@ public class SettingsFragment extends PreferenceFragment {
 
     private List<Category> allCategories;
     private List<WebCam> allWebCams;
-    private int actionColor;
-
     private Integer[] whichDelete;
-
     private MaterialDialog indeterminateProgress;
     private SeekBar seekBar;
     private TextView seekBarText;
-    private int seekBarProgress;
-    private int seekBarCorrection;
-
+    private int seekBarProgress, seekBarCorrection, actionColor;
     private DatabaseHelper db;
     private SharedPreferences sharedPref;
+    private Preference prefAutoRefreshFullScreen, prefAutoRefreshInterval;
+    private PreferenceCategory preferenceCategory;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,7 +79,7 @@ public class SettingsFragment extends PreferenceFragment {
         actionColor = getResources().getColor(R.color.yellow);
 
         setAutoRefreshInterval();
-        setZoom();
+        setAutoHideListener();
 
         categoryAdd();
         categoryEdit();
@@ -92,6 +91,7 @@ public class SettingsFragment extends PreferenceFragment {
         exportToExt();
         cleanExtFolder();
 
+        setZoom();
         resetLastCheck();
         cleanCacheAndTmpFolder();
 
@@ -156,55 +156,34 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
-    private void setZoom() {
-        // setZoom OnPreferenceClickListener
-        Preference pref_zoom = findPreference("pref_zoom");
-        pref_zoom.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
+    private void setAutoHideListener() {
+        // Auto Hide Preference Listener
+        preferenceCategory = (PreferenceCategory)findPreference("pref_category_general");
+        CheckBoxPreference prefA = (CheckBoxPreference)findPreference("pref_auto_refresh");
 
-                MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                            .title(R.string.pref_zoom)
-                            .customView(R.layout.seekbar_dialog, false)
-                            .positiveText(R.string.dialog_positive_text)
-                            .callback(new MaterialDialog.ButtonCallback() {
-                                @Override
-                                public void onPositive(MaterialDialog dialog) {
-                                    sharedPref.edit().putFloat("pref_zoom", seekBarProgress).apply();
+        prefAutoRefreshFullScreen = findPreference("pref_auto_refresh_fullscreen");
+        prefAutoRefreshInterval = findPreference("pref_auto_refresh_interval");
 
-                                    saveDone();
-                                }
-                            })
-                            .build();
+        Boolean state = getPreferenceManager().getSharedPreferences().getBoolean("pref_auto_refresh", false);
+        if (!state) {
+            preferenceCategory.removePreference(prefAutoRefreshFullScreen);
+            preferenceCategory.removePreference(prefAutoRefreshInterval);
+        }
 
-                seekBar = (SeekBar) dialog.getCustomView().findViewById(R.id.seekbar_seek);
-                seekBarText = (TextView) dialog.getCustomView().findViewById(R.id.seekbar_text);
+        prefA.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
-                seekBarCorrection = 1;
-                seekBar.setMax(3);
-                seekBarProgress = Math.round(sharedPref.getFloat("pref_zoom", 2));
-                seekBar.setProgress(seekBarProgress - seekBarCorrection);
-                seekBarText.setText((seekBar.getProgress() + seekBarCorrection) + "x " + getString(R.string.zoom_small));
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
 
-                seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-                    int val = seekBar.getProgress();
+                boolean switchedOn = (Boolean)newValue;
+                if (switchedOn) {
+                    preferenceCategory.addPreference(prefAutoRefreshFullScreen);
+                    preferenceCategory.addPreference(prefAutoRefreshInterval);
 
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                        seekBarProgress = val;
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                    }
-
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-                        val = progressValue + seekBarCorrection;
-                        seekBarText.setText(val + "x " + getString(R.string.zoom_small));
-                    }
-                });
-
-                dialog.show();
+                } else {
+                    preferenceCategory.removePreference(prefAutoRefreshFullScreen);
+                    preferenceCategory.removePreference(prefAutoRefreshInterval);
+                }
 
                 return true;
             }
@@ -412,7 +391,7 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
 
                 new MaterialDialog.Builder(getActivity())
-                        .title(R.string.pref_delete_all)
+                        .title(R.string.pref_delete_all_webcams)
                         .content(R.string.are_you_sure)
                         .positiveText(R.string.Yes)
                         .negativeText(R.string.No)
@@ -432,7 +411,7 @@ public class SettingsFragment extends PreferenceFragment {
     private void deleteAlsoCategoriesDialog (){
 
         new MaterialDialog.Builder(getActivity())
-                .title(R.string.pref_delete_all)
+                .title(R.string.pref_delete_all_webcams)
                 .content(R.string.also_delete_all_categories)
                 .positiveText(R.string.Yes)
                 .negativeText(R.string.No)
@@ -519,6 +498,61 @@ public class SettingsFragment extends PreferenceFragment {
                             }
                         })
                         .show();
+
+                return true;
+            }
+        });
+    }
+
+    private void setZoom() {
+        // setZoom OnPreferenceClickListener
+        Preference pref_zoom = findPreference("pref_zoom");
+        pref_zoom.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+
+                MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                        .title(R.string.pref_zoom)
+                        .customView(R.layout.seekbar_dialog, false)
+                        .positiveText(R.string.dialog_positive_text)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                sharedPref.edit().putFloat("pref_zoom", seekBarProgress).apply();
+
+                                saveDone();
+                            }
+                        })
+                        .build();
+
+                seekBar = (SeekBar) dialog.getCustomView().findViewById(R.id.seekbar_seek);
+                seekBarText = (TextView) dialog.getCustomView().findViewById(R.id.seekbar_text);
+
+                seekBarCorrection = 1;
+                seekBar.setMax(3);
+                seekBarProgress = Math.round(sharedPref.getFloat("pref_zoom", 2));
+                seekBar.setProgress(seekBarProgress - seekBarCorrection);
+                seekBarText.setText((seekBar.getProgress() + seekBarCorrection) + "x " + getString(R.string.zoom_small));
+
+                seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+                    int val = seekBar.getProgress();
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        seekBarProgress = val;
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
+
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
+                        val = progressValue + seekBarCorrection;
+                        seekBarText.setText(val + "x " + getString(R.string.zoom_small));
+                    }
+                });
+
+                dialog.show();
 
                 return true;
             }

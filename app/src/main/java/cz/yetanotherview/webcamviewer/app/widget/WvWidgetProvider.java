@@ -34,6 +34,7 @@ import com.bumptech.glide.signature.StringSignature;
 import java.util.UUID;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.Utils;
 
 public class WvWidgetProvider extends AppWidgetProvider {
 
@@ -42,25 +43,6 @@ public class WvWidgetProvider extends AppWidgetProvider {
     private RemoteViews mRemoteViews;
     private ComponentName mComponentName;
     private AppWidgetTarget mAppWidgetTarget;
-
-    @Override
-    public void onReceive(@NonNull Context context, @NonNull Intent intent) {
-        super.onReceive(context, intent);
-
-        if (WIDGET_BUTTON.equals(intent.getAction())) {
-            mRemoteViews = new RemoteViews(context.getPackageName(),
-                    R.layout.widget_layout);
-            mComponentName = new ComponentName(context, WvWidgetProvider.class);
-
-            mAppWidgetTarget = new AppWidgetTarget(context,mRemoteViews,R.id.wImage,400,400,mComponentName) {};
-
-            Glide.with(context)
-                    .load("http://www2.brno.cz/kamery/malinak/tmp/image.jpg")
-                    .asBitmap()
-                    .signature(new StringSignature(UUID.randomUUID().toString()))
-                    .into(mAppWidgetTarget);
-        }
-    }
 
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
@@ -88,4 +70,25 @@ public class WvWidgetProvider extends AppWidgetProvider {
 
         appWidgetManager.updateAppWidget(mComponentName, mRemoteViews);
 	}
+
+    @Override
+    public void onReceive(@NonNull Context context, @NonNull Intent intent) {
+        super.onReceive(context, intent);
+
+        if (WIDGET_BUTTON.equals(intent.getAction())) {
+            Utils.clearImageCache(context);
+
+            mRemoteViews = new RemoteViews(context.getPackageName(),
+                    R.layout.widget_layout);
+            mComponentName = new ComponentName(context, WvWidgetProvider.class);
+
+            mAppWidgetTarget = new AppWidgetTarget(context,mRemoteViews,R.id.wImage,400,400,mComponentName) {};
+
+            Glide.with(context)
+                    .load("http://www2.brno.cz/kamery/malinak/tmp/image.jpg")
+                    .asBitmap()
+                    .signature(new StringSignature(UUID.randomUUID().toString()))
+                    .into(mAppWidgetTarget);
+        }
+    }
 }

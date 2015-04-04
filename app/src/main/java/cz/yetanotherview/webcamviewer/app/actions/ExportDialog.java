@@ -18,12 +18,19 @@
 
 package cz.yetanotherview.webcamviewer.app.actions;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,6 +41,8 @@ import com.google.gson.Gson;
 import com.nispok.snackbar.Snackbar;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -50,6 +59,9 @@ public class ExportDialog extends DialogFragment {
     private String inputName;
     private EditText input;
     private List<WebCam> allWebCams;
+    private MaterialDialog dialog;
+
+    private static final int CREATE_REQUEST_CODE = 40;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -60,19 +72,30 @@ public class ExportDialog extends DialogFragment {
         allWebCams = db.getAllWebCams("id ASC");
         db.closeDB();
 
-        MaterialDialog dialog;
+
         if (allWebCams.size() != 0) {
 
             dialog = new MaterialDialog.Builder(getActivity())
                     .title(R.string.export_title)
-                    .customView(R.layout.enter_name_dialog, true)
+                    .customView(R.layout.export_dialog, true)
                     .positiveText(android.R.string.ok)
+                    .neutralText("TRY ME!")
                     .negativeText(android.R.string.cancel)
+                    .autoDismiss(false)
                     .callback(new MaterialDialog.ButtonCallback() {
                         @Override
                         public void onPositive(MaterialDialog dialog) {
                             inputName = input.getText().toString().trim();
                             exportJson(inputName);
+                            dialog.dismiss();
+                        }
+                        @Override
+                        public void onNeutral(MaterialDialog dialog) {
+                            newFile();
+                        }
+                        @Override
+                        public void onNegative(MaterialDialog dialog) {
+                            dialog.dismiss();
                         }
                     }).build();
 
@@ -141,6 +164,58 @@ public class ExportDialog extends DialogFragment {
                     .actionLabel(R.string.dismiss)
                     .actionColor(getResources().getColor(R.color.yellow))
                     .show(getActivity());
+        }
+    }
+
+    // ToDo: !!!! Finish implementation and make visible only on KitKat UP!
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public void newFile() {
+
+
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/octet-stream");
+        intent.putExtra(Intent.EXTRA_TITLE, "Example.wcv");
+
+        startActivityForResult(intent, CREATE_REQUEST_CODE);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+
+        if (resultCode == Activity.RESULT_OK)
+        {
+            if (requestCode == CREATE_REQUEST_CODE)
+            {
+                if (resultData != null) {
+                    Log.d("","CREATE_REQUEST_CODE");
+                    Uri currentUri = resultData.getData();
+                    writeFileContent(currentUri);
+                }
+            }
+        }
+    }
+
+        private void writeFileContent(Uri uri) {
+            try{
+                ParcelFileDescriptor pfd =
+                        getActivity().getContentResolver().
+                                openFileDescriptor(uri, "w");
+
+                FileOutputStream fileOutputStream =
+                        new FileOutputStream(pfd.getFileDescriptor());
+
+                Gson gson = new Gson();
+                String json = gson.toJson(allWebCams);
+
+                fileOutputStream.write(json.getBytes());
+
+                fileOutputStream.close();
+                pfd.close();
+                dialog.dismiss();
+            } catch (IOException e) {
+                e.printStackTrace();
         }
     }
 }

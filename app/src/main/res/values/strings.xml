@@ -23,7 +23,6 @@
 <string name="action_new">"Add"</string>
 <string name="action_delete">"Delete"</string>
 <string name="action_deleted">"Deleted"</string>
-<string name="pref_delete_all">"Clear the current database"</string>
 <string name="pref_delete_all_summ">"Delete all WebCams from the current database"</string>
 <string name="are_you_sure">"Are you sure?"</string>
 <string name="Yes">"Yes"</string>
@@ -37,11 +36,6 @@
 <string name="how_to">"How to"</string>
 <string name="dialog_positive_text">"Save"</string>
 <string name="dialog_positive_toast_message">"Saved!"</string>
-<string name="pref_database">"Database"</string>
-<string name="pref_import_from_ext">"Import from External Storage"</string>
-<string name="pref_import_from_ext_summ">"Import WebCam database from External Storage"</string>
-<string name="pref_export_to_ext">"Export to External Storage"</string>
-<string name="pref_export_to_ext_summ">"Export WebCam database to External Storage"</string>
 <string name="export_title">"Enter the file name"</string>
 <string name="export_input_sample">"E.g. MyWebCams"</string>
 <string name="import_failed">"Import Failed!"</string>
@@ -49,7 +43,6 @@
 <string name="export_failed">"Export Failed!"</string>
 <string name="export_message">"This will create a new file in this folder:"</string>
 <string name="pref_clean_folder">"Delete backups"</string>
-<string name="pref_clean_folder_summ">"Delete all files from the backup folder"</string>
 <string name="nothing_to_import">"Nothing to import"</string>
 <string name="pref_full_screen">"Immersive mode"</string>
 <string name="pref_full_screen_summ">"Run application in immersive full-screen mode (only KitKat or higher)"</string>
@@ -165,7 +158,6 @@
 <string name="selecting_from_map">"Selecting from Map"</string>
 <string name="simple_listview">"Simple list"</string>
 <string name="simple_listview_summary">"If live previews are disabled, then show only a simple list of names"</string>
-<string name="delete_webcams">"Delete selected"</string>
 <string name="delete_webcams_summary">"Delete selected WebCams from the current database"</string>
 <string name="submit_suggestion">"Submit a Suggestion"</string>
 <string name="submit_suggestion_hint">"My favorite place"</string>
@@ -208,4 +200,13 @@
 <string name="up">"Up"</string>
 <string name="down">"Down"</string>
 <string name="action_sort_manually">"Manually"</string>
+<string name="delete_webcams">"Delete selected"</string>
+<string name="pref_web_cams">"WebCams"</string>
+<string name="pref_backup_restore">"Backup and Restore"</string>
+<string name="pref_restore">"Restore database"</string>
+<string name="pref_restore_summary">"Restore the WebCam database to the selected storage"</string>
+<string name="pref_backup">"Backup database"</string>
+<string name="pref_backup_summary">"Back up the WebCam database to the selected storage"</string>
+<string name="pref_clean_folder_summary">"Delete all files from the local backup folder"</string>
+<string name="pref_delete_all_webcams">"Delete all WebCams"</string>
 </resources>
