@@ -128,8 +128,8 @@
 <string name="report_problem">"Report a problem"</string>
 <string name="view">"View"</string>
 <string name="webcam_coordinates">"Coordinates"</string>
-<string name="hint_webcam_latitude">"50.770481 (latitude)"</string>
-<string name="hint_webcam_longitude">"14.209077 (longitude)"</string>
+<string name="hint_webcam_latitude">"50.770481"</string>
+<string name="hint_webcam_longitude">"14.209077"</string>
 <string name="maximize">"Maximize"</string>
 <string name="save_to">"Save to..."</string>
 <string name="share">"Share"</string>
@@ -211,4 +211,6 @@
 <string name="pref_delete_all_webcams">"Delete all WebCams"</string>
 <string name="local_device">"Local device"</string>
 <string name="document_storage">"Document storage"</string>
+<string name="latitude">"Latitude:"</string>
+<string name="longitude">"Longitude:"</string>
 </resources>

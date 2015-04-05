@@ -49,6 +49,7 @@ import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
 
 public class Utils {
 
+    public static String defaultSortOrder = "position";
     public static String folderWCVPath = Environment.getExternalStorageDirectory() + "/WebCamViewer/";
     public static String folderWCVPathTmp = folderWCVPath + "Tmp/";
     public static String extension = ".wcv";

@@ -30,7 +30,6 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -55,12 +54,10 @@ import cz.yetanotherview.webcamviewer.app.model.WebCam;
 public class ExportDialog extends DialogFragment {
 
     private View positiveAction;
-
-    private String inputName;
     private EditText input;
     private List<WebCam> allWebCams;
     private MaterialDialog dialog;
-
+    private Spinner spinner;
     private static final int CREATE_REQUEST_CODE = 40;
 
     @Override
@@ -68,25 +65,27 @@ public class ExportDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         DatabaseHelper db = new DatabaseHelper(getActivity().getApplicationContext());
-
-        allWebCams = db.getAllWebCams("id ASC");
+        allWebCams = db.getAllWebCams(Utils.defaultSortOrder);
         db.closeDB();
 
-
         if (allWebCams.size() != 0) {
-
             dialog = new MaterialDialog.Builder(getActivity())
                     .title(R.string.pref_backup)
                     .customView(R.layout.export_dialog, true)
                     .positiveText(android.R.string.ok)
                     .negativeText(android.R.string.cancel)
-                    .autoDismiss(false) //ToDo...!!!
+                    .autoDismiss(false)
                     .callback(new MaterialDialog.ButtonCallback() {
                         @Override
                         public void onPositive(MaterialDialog dialog) {
-                            //inputName = input.getText().toString().trim();
-                            //exportJson(inputName);
-                            dialog.dismiss();
+                            String inputName = input.getText().toString().trim();
+                            if (spinner.getSelectedItemPosition() == 0) {
+                                exportJson(inputName);
+                                dialog.dismiss();
+                            } else {
+                                newFile(inputName);
+                                dialog.hide();
+                            }
                         }
 
                         @Override
@@ -99,15 +98,14 @@ public class ExportDialog extends DialogFragment {
             input.requestFocus();
             input.setText(Utils.getCustomDateString("yyyy-MM-dd_HH-mm"));
 
-
-            String[] objects;
+            String[] backUpValues;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                objects = getResources().getStringArray(R.array.backup_values);
+                backUpValues = getResources().getStringArray(R.array.backup_values);
             }
-            else objects = getResources().getStringArray(R.array.backup_values_pre_kk);
+            else backUpValues = getResources().getStringArray(R.array.backup_values_pre_kk);
 
-            Spinner spinner = (Spinner) dialog.getCustomView().findViewById(R.id.backup_spinner);
-            spinner.setAdapter(new SpinnerAdapter(getActivity(), R.layout.spinner_item,objects));
+            spinner = (Spinner) dialog.getCustomView().findViewById(R.id.backup_spinner);
+            spinner.setAdapter(new SpinnerAdapter(getActivity(), R.layout.spinner_item, backUpValues));
 
             positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
 
@@ -134,7 +132,6 @@ public class ExportDialog extends DialogFragment {
     }
 
     private void exportJson(String fileName) {
-
         File exportDirectory = new File(Utils.folderWCVPath);
 
         if (!exportDirectory.exists()) {
@@ -151,11 +148,7 @@ public class ExportDialog extends DialogFragment {
                 writer.write(json);
                 writer.close();
 
-                Snackbar.with(getActivity().getApplicationContext())
-                        .text(R.string.export_done)
-                        .actionLabel(R.string.dismiss)
-                        .actionColor(getResources().getColor(R.color.yellow))
-                        .show(getActivity());
+                backUpDone();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -167,29 +160,22 @@ public class ExportDialog extends DialogFragment {
         }
     }
 
-    // ToDo: !!!! Finish implementation and make visible only on KitKat UP!
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public void newFile() {
-
-
+    public void newFile(String fileName) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
 
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("application/octet-stream");
-        intent.putExtra(Intent.EXTRA_TITLE, "Example.wcv");
+        intent.putExtra(Intent.EXTRA_TITLE, fileName + Utils.extension);
 
         startActivityForResult(intent, CREATE_REQUEST_CODE);
     }
 
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent resultData) {
-
-        if (resultCode == Activity.RESULT_OK)
-        {
-            if (requestCode == CREATE_REQUEST_CODE)
-            {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == CREATE_REQUEST_CODE) {
                 if (resultData != null) {
-                    Log.d("","CREATE_REQUEST_CODE");
                     Uri currentUri = resultData.getData();
                     writeFileContent(currentUri);
                 }
@@ -197,8 +183,8 @@ public class ExportDialog extends DialogFragment {
         }
     }
 
-        private void writeFileContent(Uri uri) {
-            try{
+    private void writeFileContent(Uri uri) {
+            try {
                 ParcelFileDescriptor pfd =
                         getActivity().getContentResolver().
                                 openFileDescriptor(uri, "w");
@@ -208,14 +194,22 @@ public class ExportDialog extends DialogFragment {
 
                 Gson gson = new Gson();
                 String json = gson.toJson(allWebCams);
-
                 fileOutputStream.write(json.getBytes());
-
                 fileOutputStream.close();
                 pfd.close();
+                backUpDone();
+
                 dialog.dismiss();
             } catch (IOException e) {
                 e.printStackTrace();
         }
+    }
+
+    private void backUpDone() {
+        Snackbar.with(getActivity().getApplicationContext())
+                .text(R.string.export_done)
+                .actionLabel(R.string.dismiss)
+                .actionColor(getResources().getColor(R.color.yellow))
+                .show(getActivity());
     }
 }

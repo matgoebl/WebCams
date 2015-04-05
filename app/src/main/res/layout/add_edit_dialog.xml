@@ -56,33 +56,68 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/main_middle_margin"
         android:text="@string/webcam_coordinates" />
 
-        <EditText
-            android:id="@+id/webcam_latitude"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_webcam_latitude"
-            android:layout_marginTop="5dip"
-            android:layout_marginBottom="20dip"
-            android:inputType="numberDecimal"
-            android:digits="0123456789."
-            android:maxLength="9"
-            android:singleLine="true"
-            android:imeOptions="actionNext"/>
+            android:paddingLeft="@dimen/large_padding"
+            android:paddingStart="@dimen/large_padding"
+            android:paddingRight="@dimen/zero_padding"
+            android:paddingEnd="@dimen/zero_padding"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
 
-        <EditText
-            android:id="@+id/webcam_longitude"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/big_padding"
+                android:layout_marginEnd="@dimen/big_padding"
+                android:text="@string/latitude" />
+
+            <EditText
+                android:id="@+id/webcam_latitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_webcam_latitude"
+                android:inputType="numberDecimal"
+                android:digits="0123456789."
+                android:maxLength="9"
+                android:singleLine="true"
+                android:imeOptions="actionNext" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_webcam_longitude"
-            android:layout_marginTop="5dip"
-            android:layout_marginBottom="20dip"
-            android:inputType="numberDecimal"
-            android:digits="0123456789."
-            android:maxLength="9"
-            android:singleLine="true"
-            android:imeOptions="actionDone"/>
+            android:paddingLeft="@dimen/large_padding"
+            android:paddingStart="@dimen/large_padding"
+            android:paddingRight="@dimen/zero_padding"
+            android:paddingEnd="@dimen/zero_padding"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/big_padding"
+                android:layout_marginEnd="@dimen/big_padding"
+                android:text="@string/longitude" />
+
+            <EditText
+                android:id="@+id/webcam_longitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_webcam_longitude"
+                android:inputType="numberDecimal"
+                android:digits="0123456789."
+                android:maxLength="9"
+                android:singleLine="true"
+                android:imeOptions="actionDone"/>
+
+        </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -93,10 +128,9 @@
             android:id="@+id/webcam_category_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dip"
-            android:layout_marginBottom="17dip"
-            android:layout_marginLeft="5dip"
-            android:layout_marginStart="5dip"
+            android:layout_marginTop="@dimen/middle_padding"
+            android:layout_marginLeft="@dimen/middle_padding"
+            android:layout_marginStart="@dimen/middle_padding"
             android:singleLine="true"/>
 
     <TextView
@@ -104,6 +138,7 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="17dip"
         android:text="@string/community_list" />
 
         <CheckBox
@@ -112,8 +147,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/submit_for_approval"
-            android:layout_marginTop="5dip"
-            android:layout_marginLeft="5dip"
-            android:layout_marginStart="5dip"/>
+            android:layout_marginTop="@dimen/middle_padding"
+            android:layout_marginLeft="@dimen/middle_padding"
+            android:layout_marginStart="@dimen/middle_padding"/>
 
 </LinearLayout>

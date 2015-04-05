@@ -105,7 +105,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     private boolean firstRun, fullScreen, autoRefresh, autoRefreshFullScreenOnly, screenAlwaysOn,
             notUndo, imagesOnOff, simpleList;
     private String allWebCamsString, allWebCamsTitle, selectedCategoryName, mStringSignature;
-    private String sortOrder = "position";
+    private String sortOrder = Utils.defaultSortOrder;
     private FloatingActionsMenu floatingActionsMenu;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;

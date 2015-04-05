@@ -281,7 +281,7 @@ public class ImportDialog extends DialogFragment {
                 backupManager.dataChanged();
 
                 db = new DatabaseHelper(mActivity);
-                allWebCams = db.getAllWebCams("id ASC");
+                allWebCams = db.getAllWebCams(Utils.defaultSortOrder);
                 db.closeDB();
                 exportJsonFromOldBackup(inputName);
             }

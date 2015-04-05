@@ -152,7 +152,7 @@ public class JsonFetcherDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         db = new DatabaseHelper(mActivity);
-        allWebCams = db.getAllWebCams("id ASC");
+        allWebCams = db.getAllWebCams(Utils.defaultSortOrder);
 
         Bundle bundle = this.getArguments();
         selection = bundle.getInt("selection", 0);

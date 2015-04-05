@@ -324,7 +324,7 @@ public class SettingsFragment extends PreferenceFragment {
         pref_delete_selected.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
 
-                allWebCams = db.getAllWebCams("webcam_name COLLATE UNICODE ASC");
+                allWebCams = db.getAllWebCams(Utils.defaultSortOrder);
 
                 String[] items = new String[allWebCams.size()];
                 int count = 0;
