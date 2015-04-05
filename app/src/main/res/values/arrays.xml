@@ -60,4 +60,13 @@
         <item>@string/universities</item>
     </string-array>
 
+    <string-array name="backup_values">
+        <item>@string/local_device</item>
+        <item>@string/document_storage</item>
+    </string-array>
+
+    <string-array name="backup_values_pre_kk">
+        <item>@string/local_device</item>
+    </string-array>
+
 </resources>

@@ -38,6 +38,7 @@ import com.nispok.snackbar.Snackbar;
 
 import java.util.List;
 
+import cz.yetanotherview.webcamviewer.app.actions.AboutDialog;
 import cz.yetanotherview.webcamviewer.app.actions.AddCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.actions.EditCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ExportDialog;
@@ -62,6 +63,7 @@ public class SettingsFragment extends PreferenceFragment {
     private SharedPreferences sharedPref;
     private Preference prefAutoRefreshFullScreen, prefAutoRefreshInterval;
     private PreferenceCategory preferenceCategory;
+    private DialogFragment dialogFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,7 @@ public class SettingsFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preferences);
 
         // Enable immersive mode only on Kitkat and up
-        if (Build.VERSION.SDK_INT >= 19) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getPreferenceScreen().findPreference("pref_full_screen").setEnabled(true);
         }
 
@@ -94,6 +96,7 @@ public class SettingsFragment extends PreferenceFragment {
         setZoom();
         resetLastCheck();
         cleanCacheAndTmpFolder();
+        showAbout();
 
         // Main activity sorting hack
         sharedPref = getPreferenceManager().getSharedPreferences();
@@ -196,8 +199,8 @@ public class SettingsFragment extends PreferenceFragment {
         pref_category_add.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference activity_preference) {
 
-                DialogFragment addCategoryDialog = new AddCategoryDialog();
-                addCategoryDialog.show(getFragmentManager(), "AddCategoryDialog");
+                dialogFragment = new AddCategoryDialog();
+                dialogFragment.show(getFragmentManager(), "AddCategoryDialog");
 
                 return true;
             }
@@ -213,8 +216,8 @@ public class SettingsFragment extends PreferenceFragment {
                 allCategories = db.getAllCategories();
 
                 if (allCategories.size() > 0) {
-                    DialogFragment editCategoryDialog = new EditCategoryDialog();
-                    editCategoryDialog.show(getFragmentManager(), "EditCategoryDialog");
+                    dialogFragment = new EditCategoryDialog();
+                    dialogFragment.show(getFragmentManager(), "EditCategoryDialog");
                 }
                 else noCategoriesFound();
 
@@ -459,8 +462,8 @@ public class SettingsFragment extends PreferenceFragment {
         Preference pref_export_to_ext = findPreference("pref_export_to_ext");
         pref_export_to_ext.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
-                DialogFragment exportDialog = new ExportDialog();
-                exportDialog.show(getFragmentManager(), "ExportDialog");
+                dialogFragment = new ExportDialog();
+                dialogFragment.show(getFragmentManager(), "ExportDialog");
                 return true;
             }
         });
@@ -471,8 +474,8 @@ public class SettingsFragment extends PreferenceFragment {
         Preference pref_import_from_ext = findPreference("pref_import_from_ext");
         pref_import_from_ext.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
-                DialogFragment importDialog = new ImportDialog();
-                importDialog.show(getFragmentManager(), "ImportDialog");
+                dialogFragment = new ImportDialog();
+                dialogFragment.show(getFragmentManager(), "ImportDialog");
                 return true;
             }
         });
@@ -610,6 +613,20 @@ public class SettingsFragment extends PreferenceFragment {
                             }
                         })
                         .show();
+
+                return true;
+            }
+        });
+    }
+
+    private void showAbout() {
+        // About OnPreferenceClickListener
+        Preference pref_about = findPreference("pref_about");
+        pref_about.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+
+                dialogFragment = new AboutDialog();
+                dialogFragment.show(getFragmentManager(), "AboutDialog");
 
                 return true;
             }

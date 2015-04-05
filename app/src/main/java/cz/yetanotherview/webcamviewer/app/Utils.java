@@ -78,9 +78,9 @@ public class Utils {
      * Get current date for files in specific format
      * @return Date in specific format
      */
-    public static String getCustomDateString() {
+    public static String getCustomDateString(String pattern) {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("HH.mm_d.M.yy");
+        SimpleDateFormat df = new SimpleDateFormat(pattern);
         return df.format(c.getTime());
     }
 

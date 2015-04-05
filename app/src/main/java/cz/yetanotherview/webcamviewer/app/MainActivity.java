@@ -69,7 +69,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
-import cz.yetanotherview.webcamviewer.app.actions.AboutDialog;
 import cz.yetanotherview.webcamviewer.app.actions.AddDialog;
 import cz.yetanotherview.webcamviewer.app.actions.EditDialog;
 import cz.yetanotherview.webcamviewer.app.actions.JsonFetcherDialog;
@@ -140,7 +139,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         }
 
         // Go FullScreen only on KitKat and up
-        if (Build.VERSION.SDK_INT >= 19 && fullScreen) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && fullScreen) {
             goFullScreen();
         }
 
@@ -593,11 +592,6 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                 saveToPref();
                 break;
 
-            //About
-            case R.id.menu_about:
-                showAbout();
-                break;
-
             //Help
             case R.id.menu_help:
                 Intent helpIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://youtu.be/Xcp0j2vwbxI"));
@@ -734,11 +728,6 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     private void showWelcomeDialog() {
         dialogFragment = new WelcomeDialog();
         dialogFragment.show(getFragmentManager(), "WelcomeDialog");
-    }
-
-    private void showAbout() {
-        dialogFragment = new AboutDialog();
-        dialogFragment.show(getFragmentManager(), "AboutDialog");
     }
 
     private void showImageFullscreen(int position, boolean map) {

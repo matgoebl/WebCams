@@ -43,22 +43,16 @@
         android:orderInCategory="6"
         app:showAsAction="ifRoom" />
 
-    <item android:icon="@drawable/ic_action_info"
-        android:id="@+id/menu_about"
-        android:title="@string/action_menu_about"
-        android:orderInCategory="7"
-        app:showAsAction="ifRoom"/>
-
     <item android:icon="@drawable/ic_action_help"
         android:id="@+id/menu_help"
         android:title="@string/action_menu_help"
-        android:orderInCategory="8"
+        android:orderInCategory="7"
         app:showAsAction="ifRoom"/>
 
     <item android:icon="@drawable/ic_action_favorite"
         android:id="@+id/menu_donate"
         android:title="@string/donate"
-        android:orderInCategory="9"
+        android:orderInCategory="8"
         app:showAsAction="ifRoom"/>
 
 </menu>

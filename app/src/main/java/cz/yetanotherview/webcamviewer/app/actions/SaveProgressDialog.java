@@ -67,7 +67,7 @@ public class SaveProgressDialog extends DialogFragment {
                 URL url = new URL(args[0]);
                 URLConnection connexion = url.openConnection();
                 connexion.connect();
-                String targetFileName = (Utils.getNameStrippedAccents(args[1]) + " " + Utils.getCustomDateString() + ".jpg")
+                String targetFileName = (Utils.getNameStrippedAccents(args[1]) + " " + Utils.getCustomDateString("HH-mm_d-M-yy") + ".jpg")
                         .replaceAll("\\s+","_");
                 int lengthOfFile = connexion.getContentLength();
                 InputStream input = new BufferedInputStream(url.openStream());

@@ -49,7 +49,7 @@ public class FullScreenActivity extends Activity {
         boolean screenAlwaysOn = intent.getExtras().getBoolean("screenAlwaysOn");
 
         // Go FullScreen only on KitKat and up
-        if (Build.VERSION.SDK_INT >= 19 && fullScreen) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && fullScreen) {
             goFullScreen();
         }
 
@@ -119,12 +119,12 @@ public class FullScreenActivity extends Activity {
         }
 
         // Navigation bar hiding:  Backwards compatible to ICS.
-        if (Build.VERSION.SDK_INT >= 14) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
         }
 
         // Status bar hiding: Backwards compatible to Jellybean
-        if (Build.VERSION.SDK_INT >= 16) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
         }
 
@@ -136,7 +136,7 @@ public class FullScreenActivity extends Activity {
         // Sticky immersive mode differs in that it makes the navigation and status bars
         // semi-transparent, and the UI flag does not get cleared when the user interacts with
         // the screen.
-        if (Build.VERSION.SDK_INT >= 18) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         }
 

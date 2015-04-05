@@ -33,7 +33,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Spinner;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -41,7 +41,6 @@ import com.google.gson.Gson;
 import com.nispok.snackbar.Snackbar;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -49,6 +48,7 @@ import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.adapter.SpinnerAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
@@ -76,23 +76,19 @@ public class ExportDialog extends DialogFragment {
         if (allWebCams.size() != 0) {
 
             dialog = new MaterialDialog.Builder(getActivity())
-                    .title(R.string.export_title)
+                    .title(R.string.pref_backup)
                     .customView(R.layout.export_dialog, true)
                     .positiveText(android.R.string.ok)
-                    .neutralText("TRY ME!")
                     .negativeText(android.R.string.cancel)
-                    .autoDismiss(false)
+                    .autoDismiss(false) //ToDo...!!!
                     .callback(new MaterialDialog.ButtonCallback() {
                         @Override
                         public void onPositive(MaterialDialog dialog) {
-                            inputName = input.getText().toString().trim();
-                            exportJson(inputName);
+                            //inputName = input.getText().toString().trim();
+                            //exportJson(inputName);
                             dialog.dismiss();
                         }
-                        @Override
-                        public void onNeutral(MaterialDialog dialog) {
-                            newFile();
-                        }
+
                         @Override
                         public void onNegative(MaterialDialog dialog) {
                             dialog.dismiss();
@@ -101,10 +97,17 @@ public class ExportDialog extends DialogFragment {
 
             input = (EditText) dialog.getCustomView().findViewById(R.id.input_name);
             input.requestFocus();
-            input.setHint(R.string.export_input_sample);
+            input.setText(Utils.getCustomDateString("yyyy-MM-dd_HH-mm"));
 
-            TextView message = (TextView) dialog.getCustomView().findViewById(R.id.message);
-            message.setText(getString(R.string.export_message) + "\n" + Utils.folderWCVPath + "\n");
+
+            String[] objects;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                objects = getResources().getStringArray(R.array.backup_values);
+            }
+            else objects = getResources().getStringArray(R.array.backup_values_pre_kk);
+
+            Spinner spinner = (Spinner) dialog.getCustomView().findViewById(R.id.backup_spinner);
+            spinner.setAdapter(new SpinnerAdapter(getActivity(), R.layout.spinner_item,objects));
 
             positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
 
@@ -120,9 +123,6 @@ public class ExportDialog extends DialogFragment {
                 public void afterTextChanged(Editable s) {
                 }
             });
-
-            positiveAction.setEnabled(false);
-
         }
         else dialog = new MaterialDialog.Builder(getActivity())
                 .title(R.string.nothing_to_export)

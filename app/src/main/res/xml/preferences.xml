@@ -127,5 +127,9 @@
             android:title="@string/pref_clear_cache_and_tmp"
             android:summary="@string/pref_clear_cache_and_tmp_summary" />
 
+        <Preference
+            android:key="pref_about"
+            android:title="@string/action_menu_about"/>
+
     </PreferenceCategory>
 </PreferenceScreen>
