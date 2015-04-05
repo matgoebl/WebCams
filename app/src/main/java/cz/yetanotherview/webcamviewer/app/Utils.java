@@ -138,18 +138,18 @@ public class Utils {
         return fileDB.delete();
     }
 
-    /**
-     * Clean backup folder.
-     */
-    public static void cleanBackupFolder() {
-        File backupFolder = new File(folderWCVPath);
-        if (backupFolder.isDirectory()) {
-            String[] children = backupFolder.list();
-            for (String aChildren : children) {
-                new File(backupFolder, aChildren).delete();
-            }
-        }
-    }
+//    /**
+//     * Clean backup folder.
+//     */
+//    public static void cleanBackupFolder() {
+//        File backupFolder = new File(folderWCVPath);
+//        if (backupFolder.isDirectory()) {
+//            String[] children = backupFolder.list();
+//            for (String aChildren : children) {
+//                new File(backupFolder, aChildren).delete();
+//            }
+//        }
+//    }
 
     /**
      * Get the resources Id.

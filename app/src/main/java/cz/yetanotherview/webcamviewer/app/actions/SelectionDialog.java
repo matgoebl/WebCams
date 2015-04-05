@@ -30,6 +30,10 @@ import cz.yetanotherview.webcamviewer.app.adapter.SelectionAdapter;
 
 public class SelectionDialog extends DialogFragment {
 
+    private int[] mIcons = {R.drawable.icon_popular, R.drawable.icon_nearby, R.drawable.icon_selected,
+            R.drawable.icon_country, R.drawable.icon_mountains, R.drawable.icon_map,
+            R.drawable.icon_all_imported, R.drawable.icon_latest};
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +45,7 @@ public class SelectionDialog extends DialogFragment {
 
         return new MaterialDialog.Builder(getActivity())
                 .items(R.array.selection_values)
-                .adapter(new SelectionAdapter(getActivity(), R.array.selection_values),
+                .adapter(new SelectionAdapter(getActivity(), R.array.selection_values, mIcons),
                         new MaterialDialog.ListCallback() {
                             @Override
                             public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {

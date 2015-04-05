@@ -103,67 +103,67 @@ public class ImportDialog extends DialogFragment {
 
         imported = getString(R.string.imported);
 
-        if (fileNames != null) {
-            if (fileNames.size() != 0) {
-                items = fileNames.toArray(new String[fileNames.size()]);
-                importDialog = new MaterialDialog.Builder(mActivity)
-                        .title(R.string.external_files)
-                        .items(items)
-                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+//        if (fileNames != null) {
+//            if (fileNames.size() != 0) {
+//            }
+//            else nothingToImport();
+//        }
+//        else nothingToImport();
 
-                                if (which >= 0) {
-                                    inputName = (items[which]);
-                                    if (inputName.contains(Utils.extension)) {
-                                        importDialog = new MaterialDialog.Builder(mActivity)
-                                                .title(getString(R.string.pref_delete_all_webcams) + "?")
-                                                .content(R.string.import_summary)
-                                                .positiveText(R.string.Yes)
-                                                .negativeText(R.string.No)
-                                                .callback(new MaterialDialog.ButtonCallback() {
-                                                    @Override
-                                                    public void onPositive(MaterialDialog dialog) {
-                                                        new importJsonBackgroundTask().execute(inputName,"clean");
-                                                    }
+        items = fileNames.toArray(new String[fileNames.size()]);
+        importDialog = new MaterialDialog.Builder(mActivity)
+                .title(R.string.external_files)
+                .items(items)
+                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                                                    @Override
-                                                    public void onNegative(MaterialDialog dialog) {
-                                                        new importJsonBackgroundTask().execute(inputName,"not");
-                                                    }
-                                                })
-                                                .show();
-                                    } else if (inputName.contains(Utils.oldExtension)) {
-                                        importDialog = new MaterialDialog.Builder(mActivity)
-                                                .title(R.string.old_database_detected)
-                                                .content(R.string.old_database_detected_summary)
-                                                .positiveText(android.R.string.ok)
-                                                .callback(new MaterialDialog.ButtonCallback() {
-                                                    @Override
-                                                    public void onPositive(MaterialDialog dialog) {
-                                                        importOldDb(inputName);
-                                                    }
+                        if (which >= 0) {
+                            inputName = (items[which]);
+                            if (inputName.contains(Utils.extension)) {
+                                importDialog = new MaterialDialog.Builder(mActivity)
+                                        .title(getString(R.string.pref_delete_all_webcams) + "?")
+                                        .content(R.string.import_summary)
+                                        .positiveText(R.string.Yes)
+                                        .negativeText(R.string.No)
+                                        .callback(new MaterialDialog.ButtonCallback() {
+                                            @Override
+                                            public void onPositive(MaterialDialog dialog) {
+                                                new importJsonBackgroundTask().execute(inputName,"clean");
+                                            }
 
-                                                })
-                                                .show();
-                                    }
-                                    importDialog.dismiss(); // ToDo: Don´t work...
-                                }
-                                else {
-                                    openFile();
-                                }
+                                            @Override
+                                            public void onNegative(MaterialDialog dialog) {
+                                                new importJsonBackgroundTask().execute(inputName,"not");
+                                            }
+                                        })
+                                        .show();
+                            } else if (inputName.contains(Utils.oldExtension)) {
+                                importDialog = new MaterialDialog.Builder(mActivity)
+                                        .title(R.string.old_database_detected)
+                                        .content(R.string.old_database_detected_summary)
+                                        .positiveText(android.R.string.ok)
+                                        .callback(new MaterialDialog.ButtonCallback() {
+                                            @Override
+                                            public void onPositive(MaterialDialog dialog) {
+                                                importOldDb(inputName);
+                                            }
 
-                                return true;
+                                        })
+                                        .show();
                             }
-                        })
-                        .autoDismiss(false)
-                        .positiveText(R.string.choose)
-                        .build();
-            }
-            else nothingToImport();
+                            importDialog.dismiss(); // ToDo: Don´t work...
+                        }
+                        else {
+                            openFile();
+                        }
 
-        }
-        else nothingToImport();
+                        return true;
+                    }
+                })
+                .autoDismiss(false)
+                .positiveText(R.string.choose)
+                .build();
 
         return importDialog;
     }
@@ -379,13 +379,5 @@ public class ImportDialog extends DialogFragment {
                 .actionLabel(R.string.dismiss)
                 .actionColor(actionColor)
                 .show(mActivity);
-    }
-
-    private void nothingToImport() {
-        importDialog = new MaterialDialog.Builder(mActivity)
-                .title(R.string.nothing_to_import)
-                .content(R.string.nothing_to_import_summary)
-                .positiveText(android.R.string.ok)
-                .build();
     }
 }

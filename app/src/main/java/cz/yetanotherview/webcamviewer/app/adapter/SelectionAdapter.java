@@ -33,17 +33,16 @@ public class SelectionAdapter extends BaseAdapter {
 
     private Context context;
     private CharSequence[] mItems;
-    private int[] mIcons = {R.drawable.icon_popular, R.drawable.icon_nearby, R.drawable.icon_selected,
-            R.drawable.icon_country, R.drawable.icon_mountains, R.drawable.icon_map,
-            R.drawable.icon_all_imported, R.drawable.icon_latest};
+    private int[] mIcons;
 
-    public SelectionAdapter(Context context, @ArrayRes int arrayResId) {
-        this(context, context.getResources().getTextArray(arrayResId));
+    public SelectionAdapter(Context context, @ArrayRes int arrayResId, int[] icons) {
+        this(context, context.getResources().getTextArray(arrayResId), icons);
     }
 
-    public SelectionAdapter(Context context, CharSequence[] items) {
+    public SelectionAdapter(Context context, CharSequence[] items, int[] icons) {
         this.context = context;
         this.mItems = items;
+        this.mIcons = icons;
     }
 
     @Override

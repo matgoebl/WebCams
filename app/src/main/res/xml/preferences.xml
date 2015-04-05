@@ -35,6 +35,12 @@
         android:summary="@string/pref_screen_always_on_summary" />
 
     <CheckBoxPreference
+        android:key="pref_simple_list"
+        android:checked="false"
+        android:title="@string/simple_listview"
+        android:summary="@string/simple_listview_summary" />
+
+    <CheckBoxPreference
         android:key="pref_auto_refresh"
         android:checked="false"
         android:title="@string/pref_auto_refresh"
@@ -58,17 +64,9 @@
         android:title="@string/webcam_category">
 
         <Preference
-            android:key="pref_category_add"
-            android:title="@string/action_new"
-            android:summary="@string/add_new_category_summary" />
-        <Preference
-            android:key="pref_category_edit"
-            android:title="@string/action_edit"
-            android:summary="@string/edit_category_summary" />
-        <Preference
-            android:key="pref_category_delete"
-            android:title="@string/action_delete"
-            android:summary="@string/delete_category_summary" />
+            android:key="pref_category_add_edit_delete"
+            android:title="@string/pref_category_add_edit_delete"
+            android:summary="@string/pref_category_add_edit_delete_summary" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_web_cams">
@@ -97,25 +95,9 @@
             android:title="@string/pref_restore"
             android:summary="@string/pref_restore_summary" />
 
-        <Preference
-            android:key="pref_clean_folder"
-            android:title="@string/pref_clean_folder"
-            android:summary="@string/pref_clean_folder_summary" />
-
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/other">
-
-        <CheckBoxPreference
-            android:key="pref_simple_list"
-            android:checked="false"
-            android:title="@string/simple_listview"
-            android:summary="@string/simple_listview_summary" />
-
-        <Preference
-            android:key="pref_zoom"
-            android:title="@string/pref_zoom"
-            android:summary="@string/pref_zoom_summary" />
 
         <Preference
             android:key="pref_reset_last_check"
@@ -126,6 +108,11 @@
             android:key="pref_clean_cache_and_tmp"
             android:title="@string/pref_clear_cache_and_tmp"
             android:summary="@string/pref_clear_cache_and_tmp_summary" />
+
+        <Preference
+            android:key="pref_zoom"
+            android:title="@string/pref_zoom"
+            android:summary="@string/pref_zoom_summary" />
 
         <Preference
             android:key="pref_about"

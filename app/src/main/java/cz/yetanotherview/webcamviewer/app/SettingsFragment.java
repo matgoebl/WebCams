@@ -29,6 +29,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -43,6 +44,7 @@ import cz.yetanotherview.webcamviewer.app.actions.AddCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.actions.EditCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ExportDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ImportDialog;
+import cz.yetanotherview.webcamviewer.app.adapter.SelectionAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
@@ -83,15 +85,13 @@ public class SettingsFragment extends PreferenceFragment {
         setAutoRefreshInterval();
         setAutoHideListener();
 
-        categoryAdd();
-        categoryEdit();
-        categoryDelete();
+        categoryAddEditDelete();
 
         deleteSelectedWebCams();
         deleteAllWebCams();
+
         importFromExt();
         exportToExt();
-        cleanExtFolder();
 
         setZoom();
         resetLastCheck();
@@ -193,76 +193,70 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
-    private void categoryAdd() {
-        // Category Add OnPreferenceClickListener
-        Preference pref_category_add = findPreference("pref_category_add");
-        pref_category_add.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+    private void categoryAddEditDelete() {
+        // Category Add/Edit/Delete OnPreferenceClickListener
+        Preference pref_category_add_edit_delete = findPreference("pref_category_add_edit_delete");
+        pref_category_add_edit_delete.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference activity_preference) {
 
-                dialogFragment = new AddCategoryDialog();
-                dialogFragment.show(getFragmentManager(), "AddCategoryDialog");
+                int[] mIcons = {R.drawable.icon_add, R.drawable.icon_manual, R.drawable.icon_delete};
+                new MaterialDialog.Builder(getActivity())
+                        .items(R.array.add_edit_delete)
+                        .adapter(new SelectionAdapter(getActivity(), R.array.add_edit_delete, mIcons),
+                                new MaterialDialog.ListCallback() {
+                                    @Override
+                                    public void onSelection(MaterialDialog dialog, View itemView,
+                                                            int which, CharSequence text) {
 
-                return true;
-            }
-        });
-    }
-
-    private void categoryEdit() {
-        // Category Edit OnPreferenceClickListener
-        Preference pref_category_edit = findPreference("pref_category_edit");
-        pref_category_edit.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-
-                allCategories = db.getAllCategories();
-
-                if (allCategories.size() > 0) {
-                    dialogFragment = new EditCategoryDialog();
-                    dialogFragment.show(getFragmentManager(), "EditCategoryDialog");
-                }
-                else noCategoriesFound();
-
-                return true;
-            }
-        });
-    }
-
-    private void categoryDelete() {
-        // Category Delete OnPreferenceClickListener
-        Preference pref_category_delete = findPreference("pref_category_delete");
-        pref_category_delete.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-
-                allCategories = db.getAllCategories();
-
-                String[] items = new String[allCategories.size()];
-                int count = 0;
-                for (Category category : allCategories) {
-                    items[count] = category.getCategoryName();
-                    count++;
-                }
-
-                if (allCategories.size() > 0) {
-                    new MaterialDialog.Builder(getActivity())
-                            .title(R.string.webcam_category)
-                            .items(items)
-                            .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
-                                @Override
-                                public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-
-                                    whichDelete = which;
-                                    if (whichDelete != null) {
-                                        if (whichDelete.length != 0) {
-                                            categoryDeleteAlsoWebCamsDialog();
+                                        if (which == 0) {
+                                            dialogFragment = new AddCategoryDialog();
+                                            dialogFragment.show(getFragmentManager(), "AddCategoryDialog");
                                         }
-                                    }
+                                        else if (which == 1) {
+                                            allCategories = db.getAllCategories();
+                                            if (allCategories.size() > 0) {
+                                                dialogFragment = new EditCategoryDialog();
+                                                dialogFragment.show(getFragmentManager(), "EditCategoryDialog");
+                                            }
+                                            else noCategoriesFound();
+                                        }
+                                        else {
+                                            allCategories = db.getAllCategories();
+                                            String[] items = new String[allCategories.size()];
+                                            int count = 0;
+                                            for (Category category : allCategories) {
+                                                items[count] = category.getCategoryName();
+                                                count++;
+                                            }
 
-                                    return true;
-                                }
-                            })
-                            .positiveText(R.string.choose)
-                            .show();
-                }
-                else noCategoriesFound();
+                                            if (allCategories.size() > 0) {
+                                                new MaterialDialog.Builder(getActivity())
+                                                        .title(R.string.webcam_category)
+                                                        .items(items)
+                                                        .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
+                                                            @Override
+                                                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+
+                                                                whichDelete = which;
+                                                                if (whichDelete != null) {
+                                                                    if (whichDelete.length != 0) {
+                                                                        categoryDeleteAlsoWebCamsDialog();
+                                                                    }
+                                                                }
+
+                                                                return true;
+                                                            }
+                                                        })
+                                                        .positiveText(R.string.choose)
+                                                        .show();
+                                            }
+                                            else noCategoriesFound();
+                                        }
+
+                                        dialog.dismiss();
+                                    }
+                                })
+                        .show();
 
                 return true;
             }
@@ -476,32 +470,6 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 dialogFragment = new ImportDialog();
                 dialogFragment.show(getFragmentManager(), "ImportDialog");
-                return true;
-            }
-        });
-    }
-
-    private void cleanExtFolder() {
-        // Clean Folder OnPreferenceClickListener
-        Preference pref_clean_folder = findPreference("pref_clean_folder");
-        pref_clean_folder.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-
-                new MaterialDialog.Builder(getActivity())
-                        .title(R.string.pref_clean_folder)
-                        .content(R.string.are_you_sure)
-                        .positiveText(R.string.Yes)
-                        .negativeText(R.string.No)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                Utils.cleanBackupFolder();
-
-                                deleteDone();
-                            }
-                        })
-                        .show();
-
                 return true;
             }
         });

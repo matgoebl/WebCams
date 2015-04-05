@@ -20,7 +20,6 @@
 <string name="action_menu_about">"About"</string>
 <string name="action_settings">"Settings"</string>
 <string name="pref_general">"General"</string>
-<string name="action_new">"Add"</string>
 <string name="action_delete">"Delete"</string>
 <string name="action_deleted">"Deleted"</string>
 <string name="pref_delete_all_summ">"Delete all WebCams from the current database"</string>
@@ -42,15 +41,11 @@
 <string name="export_done">"Export Successful!"</string>
 <string name="export_failed">"Export Failed!"</string>
 <string name="export_message">"This will create a new file in this folder:"</string>
-<string name="pref_clean_folder">"Delete backups"</string>
 <string name="nothing_to_import">"Nothing to import"</string>
 <string name="pref_full_screen">"Immersive mode"</string>
 <string name="pref_full_screen_summ">"Run application in immersive full-screen mode (only KitKat or higher)"</string>
 <string name="action_edit">"Edit"</string>
 <string name="action_sort">"Sort"</string>
-<string name="add_new_category_summary">"Add new category to the database"</string>
-<string name="edit_category_summary">"Edit category name in database"</string>
-<string name="delete_category_summary">"Delete category from database"</string>
 <string name="new_category_hint">"New list"</string>
 <string name="dismiss">"DISMISS"</string>
 <string name="refresh">"Refresh"</string>
@@ -207,10 +202,12 @@
 <string name="pref_restore_summary">"Restore the WebCam database to the selected storage"</string>
 <string name="pref_backup">"Backup database"</string>
 <string name="pref_backup_summary">"Back up the WebCam database to the selected storage"</string>
-<string name="pref_clean_folder_summary">"Delete all files from the local backup folder"</string>
 <string name="pref_delete_all_webcams">"Delete all WebCams"</string>
 <string name="local_device">"Local device"</string>
 <string name="document_storage">"Document storage"</string>
 <string name="latitude">"Latitude:"</string>
 <string name="longitude">"Longitude:"</string>
+<string name="action_new">"Add"</string>
+<string name="pref_category_add_edit_delete">"Manage"</string>
+<string name="pref_category_add_edit_delete_summary">"Add, edit and delete categories"</string>
 </resources>
