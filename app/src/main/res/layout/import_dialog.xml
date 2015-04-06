@@ -21,10 +21,33 @@ android:layout_width="match_parent"
 android:layout_height="wrap_content"
 android:orientation="vertical">
 
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test"/>
+        android:paddingLeft="@dimen/not_so_huge_padding"
+        android:paddingStart="@dimen/not_so_huge_padding"
+        android:paddingRight="@dimen/zero_padding"
+        android:paddingEnd="@dimen/zero_padding"
+        android:paddingTop="@dimen/big_padding"
+        android:paddingBottom="@dimen/big_padding"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="@dimen/bigger_margin"
+            android:layout_marginEnd="@dimen/bigger_margin"
+            android:src="@drawable/ic_action_device_usb"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/another_grey"
+            android:text="@string/local_device"/>
+
+    </LinearLayout>
 
     <ListView
         android:id="@+id/list_files"
@@ -33,19 +56,61 @@ android:orientation="vertical">
 
     <TextView
         android:id="@+id/list_files_empty"
-        android:text="Empty"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:text="@string/no_backups"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/big_margin"
+        android:layout_marginBottom="@dimen/big_margin"
+        android:textSize="22sp"
+        android:textColor="@color/black"
         android:gravity="center"/>
 
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test 21"/>
+        android:orientation="vertical"
+        android:id="@+id/container_layout"
+        android:visibility="gone">
 
-    <Button
-        android:id="@+id/ds_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/not_so_huge_padding"
+            android:paddingStart="@dimen/not_so_huge_padding"
+            android:paddingRight="@dimen/zero_padding"
+            android:paddingEnd="@dimen/zero_padding"
+            android:paddingTop="@dimen/big_padding"
+            android:paddingBottom="@dimen/big_padding"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginRight="@dimen/bigger_margin"
+                android:layout_marginEnd="@dimen/bigger_margin"
+                android:src="@drawable/ic_action_description"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/another_grey"
+                android:text="@string/document_storage"/>
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/fake_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginBottom="44dp"
+            android:background="@color/grey"/>
+
+    </LinearLayout>
 
 </LinearLayout>

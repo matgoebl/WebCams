@@ -199,12 +199,12 @@
 <string name="pref_web_cams">"WebCams"</string>
 <string name="pref_backup_restore">"Backup and Restore"</string>
 <string name="pref_restore">"Restore database"</string>
-<string name="pref_restore_summary">"Restore the WebCam database to the selected storage"</string>
+<string name="pref_restore_summary">"Restore the WebCam database from the selected storage"</string>
 <string name="pref_backup">"Backup database"</string>
 <string name="pref_backup_summary">"Back up the WebCam database to the selected storage"</string>
 <string name="pref_delete_all_webcams">"Delete all WebCams"</string>
 <string name="local_device">"Local device"</string>
-<string name="document_storage">"Document storage"</string>
+<string name="document_storage">"Document Storage"</string>
 <string name="latitude">"Latitude:"</string>
 <string name="longitude">"Longitude:"</string>
 <string name="action_new">"Add"</string>
@@ -212,4 +212,9 @@
 <string name="pref_category_add_edit_delete_summary">"Add, edit and delete categories"</string>
 <string name="backup_name">"Backup name"</string>
 <string name="rename">"Rename"</string>
+<string name="backups">"Backups"</string>
+<string name="browse">"Browse..."</string>
+<string name="restore_progress">"Importing from the selected file"</string>
+<string name="restore_confirm">"This action changes the current state of your database with entries from the backup file."</string>
+<string name="no_backups">"No backups in this location"</string>
 </resources>

@@ -18,67 +18,117 @@
 
 package cz.yetanotherview.webcamviewer.app.adapter;
 
-import android.content.Context;
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.Utils;
 
 public class ListButtonAdapter extends ArrayAdapter<File> {
 
-    File localFile;
-    ArrayList<File> files;
+    private Activity context;
+    private ArrayList<File> files;
+    private EditText input;
 
-    public ListButtonAdapter(Context context, ArrayList<File> files) {
+    public ListButtonAdapter(Activity context, ArrayList<File> files) {
         super(context, 0, files);
+        this.context = context;
         this.files = files;
+    }
+
+    static class ViewHolder {
+        int position;
+        protected TextView text;
+        protected ImageView imageView;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        View view;
 
-        localFile = getItem(position);
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.import_dialog_item, parent, false);
+            LayoutInflater inflater = context.getLayoutInflater();
+            view = inflater.inflate(R.layout.import_dialog_item, null);
+            final ViewHolder viewHolder = new ViewHolder();
+
+            viewHolder.text = (TextView) view.findViewById(R.id.file_Name);
+            viewHolder.imageView = (ImageView) view.findViewById(R.id.file_Button);
+
+            viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    PopupMenu popup = new PopupMenu(getContext(), v);
+                    popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+
+                            switch (item.getItemId()) {
+                                case R.id.rename:
+
+                                    MaterialDialog dialog = new MaterialDialog.Builder(context)
+                                            .title(R.string.rename)
+                                            .customView(R.layout.enter_name_dialog, true)
+                                            .positiveText(android.R.string.ok)
+                                            .negativeText(android.R.string.cancel)
+                                            .callback(new MaterialDialog.ButtonCallback() {
+                                                @Override
+                                                public void onPositive(MaterialDialog dialog) {
+                                                    String inputName = input.getText().toString().trim();
+
+                                                    File file = (File) viewHolder.imageView.getTag();
+                                                    File newName = new File(Utils.folderWCVPath + inputName + Utils.extension);
+                                                    file.renameTo(newName);
+                                                    files.set(viewHolder.position, newName);
+                                                    notifyDataSetChanged();
+                                                }
+                                            })
+                                            .build();
+
+                                    input = (EditText) dialog.getCustomView().findViewById(R.id.input_name);
+                                    input.setText(files.get(viewHolder.position).getName().replaceFirst("[.][^.]+$", ""));
+                                    dialog.show();
+                                    break;
+
+                                case R.id.delete:
+                                    File file = (File) viewHolder.imageView.getTag();
+                                    files.remove(file);
+                                    file.delete();
+                                    notifyDataSetChanged();
+                                    break;
+                            }
+                            return true;
+                        }
+                    });
+
+                    popup.show();
+                }
+            });
+            view.setTag(viewHolder);
+            viewHolder.imageView.setTag(files.get(position));
+
+        } else {
+            view = convertView;
+            ((ViewHolder) view.getTag()).imageView.setTag(files.get(position));
         }
-        TextView fileName = (TextView) convertView.findViewById(R.id.file_Name);
-        String name = localFile.getName();
-        fileName.setText(name.replaceFirst("[.][^.]+$", ""));
-
-        ImageView fileButton = (ImageView) convertView.findViewById(R.id.file_Button);
-        fileButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(getContext(), v);
-                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        Toast.makeText(getContext(), "You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
-
-//                        files.remove(localFile);
-//                        localFile.delete();
-//                        notifyDataSetChanged();
-                        return true;
-                    }
-                });
-
-                popup.show();
-            }
-        });
-
-        return convertView;
+        ViewHolder holder = (ViewHolder) view.getTag();
+        holder.text.setText(files.get(position).getName().replaceFirst("[.][^.]+$", ""));
+        holder.position = position;
+        return view;
     }
 }

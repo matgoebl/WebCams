@@ -29,6 +29,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -57,8 +59,8 @@ public class ImportDialog extends DialogFragment {
     public static final Object sDataLock = new Object();
 
     private MaterialDialog importDialog;
-    private List<WebCam> allWebCams;
     private File selectedFile;
+    private InputStream inputStream;
     private ListButtonAdapter listButtonAdapter;
 
     private MaterialDialog progressDialog;
@@ -86,7 +88,7 @@ public class ImportDialog extends DialogFragment {
 
         db = new DatabaseHelper(mActivity);
         importDialog = new MaterialDialog.Builder(mActivity)
-                .title(R.string.pref_restore)
+                .title(R.string.backups)
                 .customView(R.layout.import_dialog, false)
                 .build();
 
@@ -100,67 +102,95 @@ public class ImportDialog extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> list, View view, int position, long id) {
 
-                    importDialog.dismiss();
-                    selectedFile = listButtonAdapter.getItem(position);
-                    importDialog = new MaterialDialog.Builder(mActivity)
-                            .title(getString(R.string.pref_delete_all_webcams) + "?")
-                            .content(R.string.import_summary)
-                            .positiveText(R.string.Yes)
-                            .negativeText(R.string.No)
-                            .callback(new MaterialDialog.ButtonCallback() {
-                                @Override
-                                public void onPositive(MaterialDialog dialog) {
-                                    new importJsonBackgroundTask().execute(true);
-                                }
-                                @Override
-                                public void onNegative(MaterialDialog dialog) {
-                                    new importJsonBackgroundTask().execute(false);
-                                }
-                            })
-                            .show();
+                selectedFile = listButtonAdapter.getItem(position);
+                new MaterialDialog.Builder(mActivity)
+                        .title(R.string.are_you_sure)
+                        .content(R.string.restore_confirm)
+                        .positiveText(android.R.string.ok)
+                        .negativeText(android.R.string.cancel)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                importDialog.dismiss();
+                                importDialog = new MaterialDialog.Builder(mActivity)
+                                        .title(getString(R.string.pref_delete_all_webcams) + "?")
+                                        .content(R.string.import_summary)
+                                        .positiveText(R.string.Yes)
+                                        .negativeText(R.string.No)
+                                        .callback(new MaterialDialog.ButtonCallback() {
+                                            @Override
+                                            public void onPositive(MaterialDialog dialog) {
+                                                new importJsonBackgroundTask().execute(true, true);
+                                            }
+                                            @Override
+                                            public void onNegative(MaterialDialog dialog) {
+                                                new importJsonBackgroundTask().execute(false, true);
+                                            }
+                                        })
+                                        .show();
+                            }
+                        })
+                        .show();
             }
 
         });
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+            LinearLayout containerLayout = (LinearLayout) importDialog.getCustomView().findViewById(R.id.container_layout);
+            containerLayout.setVisibility(View.VISIBLE);
+
+            ArrayAdapter<String> itemsAdapter =
+                    new ArrayAdapter<>(mActivity, R.layout.simple_list_item,
+                            Arrays.asList(mActivity.getString(R.string.browse)));
+            ListView fakeList = (ListView) importDialog.getCustomView().findViewById(R.id.fake_list);
+            fakeList.setVisibility(View.VISIBLE);
+            fakeList.setAdapter(itemsAdapter);
+
+            fakeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> list, View view, int position, long id) {
+                    openFile();
+                }
+
+            });
+        }
+
         return importDialog;
     }
 
-    // ToDo: !!!! Finish implementation and make visible only on KitKat UP!
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public void openFile()
-    {
+    public void openFile() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("application/octet-stream");
         startActivityForResult(intent, OPEN_REQUEST_CODE);
     }
 
-    public void onActivityResult(int requestCode, int resultCode,
-                                 Intent resultData) {
-
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == OPEN_REQUEST_CODE) {
                 if (resultData != null) {
                     try {
-                        InputStream inputStream = mActivity.getContentResolver().openInputStream(resultData.getData());
+                        inputStream = mActivity.getContentResolver().openInputStream(resultData.getData());
 
-                        Gson gson = new Gson();
-                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
-                                inputStream));
-
-                        allWebCams = Arrays.asList(gson.fromJson(bufferedReader, WebCam[].class));
-                        bufferedReader.close();
-
-                        long categoryFromCurrentDate = db.createCategory(new Category("@drawable/icon_imported",
-                                mActivity.getString(R.string.imported) + " " + Utils.getDateString()));
-                        synchronized (sDataLock) {
-                            for(WebCam webCam : allWebCams) {
-                                db.createWebCam(webCam, new long[] {categoryFromCurrentDate});
-                            }
-                        }
-                        db.closeDB();
-                        BackupManager backupManager = new BackupManager(mActivity);
-                        backupManager.dataChanged();
+                        importDialog.dismiss();
+                        importDialog = new MaterialDialog.Builder(mActivity)
+                                .title(getString(R.string.pref_delete_all_webcams) + "?")
+                                .content(R.string.import_summary)
+                                .positiveText(R.string.Yes)
+                                .negativeText(R.string.No)
+                                .callback(new MaterialDialog.ButtonCallback() {
+                                    @Override
+                                    public void onPositive(MaterialDialog dialog) {
+                                        new importJsonBackgroundTask().execute(true, false);
+                                    }
+                                    @Override
+                                    public void onNegative(MaterialDialog dialog) {
+                                        new importJsonBackgroundTask().execute(false, false);
+                                    }
+                                })
+                                .show();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -181,10 +211,18 @@ public class ImportDialog extends DialogFragment {
 
             try {
                 Gson gson = new Gson();
-                BufferedReader bufferedReader = new BufferedReader(
-                        new FileReader(selectedFile));
 
-                allWebCams = Arrays.asList(gson.fromJson(bufferedReader, WebCam[].class));
+                BufferedReader bufferedReader;
+                if (booleans[1]) {
+                    bufferedReader = new BufferedReader(
+                            new FileReader(selectedFile));
+                }
+                else {
+                    bufferedReader = new BufferedReader(new InputStreamReader(
+                            inputStream));
+                }
+
+                List<WebCam> allWebCams = Arrays.asList(gson.fromJson(bufferedReader, WebCam[].class));
                 bufferedReader.close();
 
                 maxProgressValue = allWebCams.size();
@@ -218,7 +256,7 @@ public class ImportDialog extends DialogFragment {
             public void run() {
 
                 progressDialog = new MaterialDialog.Builder(mActivity)
-                        .title(R.string.pref_import_from_ext)
+                        .title(R.string.restore_progress)
                         .content(R.string.please_wait)
                         .progress(false, maxProgressValue)
                         .show();

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="22sp"
+    android:textColor="@color/black"
+    android:gravity="center_vertical"
+    android:paddingLeft="@dimen/like_huge_padding"
+    android:paddingRight="@dimen/like_huge_padding"
+    android:paddingTop="@dimen/more_than_big_padding"
+    android:paddingBottom="@dimen/more_than_big_padding" />
