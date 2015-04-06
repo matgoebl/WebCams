@@ -199,9 +199,10 @@ public class SettingsFragment extends PreferenceFragment {
         pref_category_add_edit_delete.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference activity_preference) {
 
-                int[] mIcons = {R.drawable.icon_add, R.drawable.icon_manual, R.drawable.icon_delete};
+                int[] mIcons = {R.drawable.icon_add, R.drawable.icon_edit, R.drawable.icon_delete};
                 new MaterialDialog.Builder(getActivity())
                         .items(R.array.add_edit_delete)
+                        .title(R.string.pref_category_add_edit_delete)
                         .adapter(new SelectionAdapter(getActivity(), R.array.add_edit_delete, mIcons),
                                 new MaterialDialog.ListCallback() {
                                     @Override

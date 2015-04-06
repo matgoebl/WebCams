@@ -53,7 +53,6 @@ public class Utils {
     public static String folderWCVPath = Environment.getExternalStorageDirectory() + "/WebCamViewer/";
     public static String folderWCVPathTmp = folderWCVPath + "Tmp/";
     public static String extension = ".wcv";
-    public static String oldExtension = ".db";
     public static String email = "cz840311@gmail.com";
 
     /**
@@ -98,33 +97,21 @@ public class Utils {
     }
 
     /**
-     * Get All files from given Directory
+     * Get All files from given Directory with wcv extension
      * @param DirectoryPath Directory patch
-     * @return An array of files
+     * @return An ArrayList of files only with wcv extension
      */
-    public static File[] getFiles(String DirectoryPath) {
-        File f = new File(DirectoryPath);
-        f.mkdirs();
-        return f.listFiles();
-    }
-
-    /**
-     * Get file names
-     * @param file An array list of files
-     * @return An array list of strings file names
-     */
-    public static ArrayList<String> getFileNames(File[] file){
-        ArrayList<String> arrayFiles = new ArrayList<>();
-        if (file.length == 0)
-            return null;
-        else {
-            for (File aFile : file) {
-                if (aFile.isFile()) {
-                    arrayFiles.add(aFile.getName());
-                }
+    public static ArrayList<File> getFiles(String DirectoryPath) {
+        File directory = new File(DirectoryPath);
+        directory.mkdirs();
+        File[] files = directory.listFiles();
+        ArrayList<File> arrayList = new ArrayList<>();
+        for (File file : files) {
+            if (!file.isDirectory() && (file.getAbsolutePath().endsWith(extension))) {
+               arrayList.add(file);
             }
         }
-        return arrayFiles;
+        return arrayList;
     }
 
     /**
@@ -137,19 +124,6 @@ public class Utils {
         Log.d("", String.valueOf(fileDB));
         return fileDB.delete();
     }
-
-//    /**
-//     * Clean backup folder.
-//     */
-//    public static void cleanBackupFolder() {
-//        File backupFolder = new File(folderWCVPath);
-//        if (backupFolder.isDirectory()) {
-//            String[] children = backupFolder.list();
-//            for (String aChildren : children) {
-//                new File(backupFolder, aChildren).delete();
-//            }
-//        }
-//    }
 
     /**
      * Get the resources Id.

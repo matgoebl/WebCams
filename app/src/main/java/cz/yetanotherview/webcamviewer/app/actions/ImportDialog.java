@@ -24,13 +24,12 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.backup.BackupManager;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
@@ -38,20 +37,16 @@ import com.nispok.snackbar.Snackbar;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.channels.FileChannel;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.adapter.ListButtonAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
@@ -62,13 +57,9 @@ public class ImportDialog extends DialogFragment {
     public static final Object sDataLock = new Object();
 
     private MaterialDialog importDialog;
-    private String[] items;
-    private String inputName;
-    private String imported;
     private List<WebCam> allWebCams;
-    private int actionColor;
-    private File extRootDirectory;
-    private File inputDB;
+    private File selectedFile;
+    private ListButtonAdapter listButtonAdapter;
 
     private MaterialDialog progressDialog;
     private int maxProgressValue;
@@ -94,76 +85,42 @@ public class ImportDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         db = new DatabaseHelper(mActivity);
-
-        extRootDirectory = Environment.getExternalStorageDirectory();
-        actionColor = getResources().getColor(R.color.yellow);
-
-        File[] filesList = Utils.getFiles(Utils.folderWCVPath);
-        ArrayList<String> fileNames = Utils.getFileNames(filesList);
-
-        imported = getString(R.string.imported);
-
-//        if (fileNames != null) {
-//            if (fileNames.size() != 0) {
-//            }
-//            else nothingToImport();
-//        }
-//        else nothingToImport();
-
-        items = fileNames.toArray(new String[fileNames.size()]);
         importDialog = new MaterialDialog.Builder(mActivity)
-                .title(R.string.external_files)
-                .items(items)
-                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                        if (which >= 0) {
-                            inputName = (items[which]);
-                            if (inputName.contains(Utils.extension)) {
-                                importDialog = new MaterialDialog.Builder(mActivity)
-                                        .title(getString(R.string.pref_delete_all_webcams) + "?")
-                                        .content(R.string.import_summary)
-                                        .positiveText(R.string.Yes)
-                                        .negativeText(R.string.No)
-                                        .callback(new MaterialDialog.ButtonCallback() {
-                                            @Override
-                                            public void onPositive(MaterialDialog dialog) {
-                                                new importJsonBackgroundTask().execute(inputName,"clean");
-                                            }
-
-                                            @Override
-                                            public void onNegative(MaterialDialog dialog) {
-                                                new importJsonBackgroundTask().execute(inputName,"not");
-                                            }
-                                        })
-                                        .show();
-                            } else if (inputName.contains(Utils.oldExtension)) {
-                                importDialog = new MaterialDialog.Builder(mActivity)
-                                        .title(R.string.old_database_detected)
-                                        .content(R.string.old_database_detected_summary)
-                                        .positiveText(android.R.string.ok)
-                                        .callback(new MaterialDialog.ButtonCallback() {
-                                            @Override
-                                            public void onPositive(MaterialDialog dialog) {
-                                                importOldDb(inputName);
-                                            }
-
-                                        })
-                                        .show();
-                            }
-                            importDialog.dismiss(); // ToDo: Don´t work...
-                        }
-                        else {
-                            openFile();
-                        }
-
-                        return true;
-                    }
-                })
-                .autoDismiss(false)
-                .positiveText(R.string.choose)
+                .title(R.string.pref_restore)
+                .customView(R.layout.import_dialog, false)
                 .build();
+
+        listButtonAdapter = new ListButtonAdapter(mActivity, Utils.getFiles(Utils.folderWCVPath));
+        ListView listView = (ListView) importDialog.getCustomView().findViewById(R.id.list_files);
+        View empty = importDialog.getCustomView().findViewById(R.id.list_files_empty);
+        listView.setEmptyView(empty);
+        listView.setAdapter(listButtonAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> list, View view, int position, long id) {
+
+                    importDialog.dismiss();
+                    selectedFile = listButtonAdapter.getItem(position);
+                    importDialog = new MaterialDialog.Builder(mActivity)
+                            .title(getString(R.string.pref_delete_all_webcams) + "?")
+                            .content(R.string.import_summary)
+                            .positiveText(R.string.Yes)
+                            .negativeText(R.string.No)
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
+                                    new importJsonBackgroundTask().execute(true);
+                                }
+                                @Override
+                                public void onNegative(MaterialDialog dialog) {
+                                    new importJsonBackgroundTask().execute(false);
+                                }
+                            })
+                            .show();
+            }
+
+        });
 
         return importDialog;
     }
@@ -181,17 +138,11 @@ public class ImportDialog extends DialogFragment {
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent resultData) {
 
-        Uri currentUri = null;
-
-        if (resultCode == Activity.RESULT_OK)
-        {
-            if (requestCode == OPEN_REQUEST_CODE)
-            {
-
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == OPEN_REQUEST_CODE) {
                 if (resultData != null) {
-                    currentUri = resultData.getData();
-                    try{
-                        InputStream inputStream = getActivity().getContentResolver().openInputStream(currentUri);
+                    try {
+                        InputStream inputStream = mActivity.getContentResolver().openInputStream(resultData.getData());
 
                         Gson gson = new Gson();
                         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
@@ -201,7 +152,7 @@ public class ImportDialog extends DialogFragment {
                         bufferedReader.close();
 
                         long categoryFromCurrentDate = db.createCategory(new Category("@drawable/icon_imported",
-                                imported + " " + Utils.getDateString()));
+                                mActivity.getString(R.string.imported) + " " + Utils.getDateString()));
                         synchronized (sDataLock) {
                             for(WebCam webCam : allWebCams) {
                                 db.createWebCam(webCam, new long[] {categoryFromCurrentDate});
@@ -218,96 +169,46 @@ public class ImportDialog extends DialogFragment {
         }
     }
 
-    private class importJsonBackgroundTask extends AsyncTask<String, Integer, Long> {
+    private class importJsonBackgroundTask extends AsyncTask<Boolean, Integer, Long> {
 
         @Override
-        protected Long doInBackground(String... texts) {
+        protected Long doInBackground(Boolean... booleans) {
 
-            String text = texts[0];
-            if (texts[1].contains("clean")) {
+            if (booleans[0]) {
                 db.deleteAllWebCams(true);
                 db.closeDB();
             }
 
             try {
-                if (extRootDirectory.canRead()) {
+                Gson gson = new Gson();
+                BufferedReader bufferedReader = new BufferedReader(
+                        new FileReader(selectedFile));
 
-                    Gson gson = new Gson();
-                    BufferedReader bufferedReader = new BufferedReader(
-                            new FileReader(Utils.folderWCVPath + text));
+                allWebCams = Arrays.asList(gson.fromJson(bufferedReader, WebCam[].class));
+                bufferedReader.close();
 
-                    allWebCams = Arrays.asList(gson.fromJson(bufferedReader, WebCam[].class));
-                    bufferedReader.close();
+                maxProgressValue = allWebCams.size();
+                showProgressDialog();
 
-                    maxProgressValue = allWebCams.size();
-                    showProgressDialog();
-
-                    long categoryFromCurrentDate = db.createCategory(new Category("@drawable/icon_imported",
-                            imported + " " + Utils.getDateString()));
-                    synchronized (sDataLock) {
-                        for(WebCam webCam : allWebCams) {
-                            db.createWebCam(webCam, new long[] {categoryFromCurrentDate});
-                            progressUpdate();
-                        }
+                long categoryFromCurrentDate = db.createCategory(new Category("@drawable/icon_imported",
+                        mActivity.getString(R.string.imported) + " " + Utils.getDateString()));
+                synchronized (sDataLock) {
+                    for(WebCam webCam : allWebCams) {
+                        db.createWebCam(webCam, new long[] {categoryFromCurrentDate});
+                        progressUpdate();
                     }
-                    db.closeDB();
-                    BackupManager backupManager = new BackupManager(mActivity);
-                    backupManager.dataChanged();
-                    snackBarImportDone();
                 }
+                db.closeDB();
+                BackupManager backupManager = new BackupManager(mActivity);
+                backupManager.dataChanged();
+                snackBarImportDone();
+
             } catch (IOException e) {
                 e.printStackTrace();
                 snackBarImportFailed();
             }
 
             return null;
-        }
-    }
-
-    private void importOldDb(String fileName) {
-        try {
-            if (extRootDirectory.canRead()) {
-
-                File currentDB = new File(mActivity.getDatabasePath(DatabaseHelper.DATABASE_NAME).getPath());
-                inputDB = new File(Utils.folderWCVPath + fileName);
-                synchronized (sDataLock) {
-                    FileChannel src = new FileInputStream(inputDB).getChannel();
-                    FileChannel dst = new FileOutputStream(currentDB).getChannel();
-                    dst.transferFrom(src, 0, src.size());
-                    src.close();
-                    dst.close();
-                }
-                BackupManager backupManager = new BackupManager(mActivity);
-                backupManager.dataChanged();
-
-                db = new DatabaseHelper(mActivity);
-                allWebCams = db.getAllWebCams(Utils.defaultSortOrder);
-                db.closeDB();
-                exportJsonFromOldBackup(inputName);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            snackBarImportFromOldDbFailed();
-        }
-    }
-
-    private void exportJsonFromOldBackup(String fileName) {
-
-        String newFileName = fileName.replace(Utils.oldExtension,"");
-        try {
-            if (extRootDirectory.canWrite()) {
-                Gson gson = new Gson();
-                String json = gson.toJson(allWebCams);
-
-                FileWriter writer = new FileWriter(Utils.folderWCVPath + newFileName + Utils.extension);
-                writer.write(json);
-                writer.close();
-
-                Utils.removeDB(inputDB);
-                snackBarImportFromOldDbDone();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -344,7 +245,7 @@ public class ImportDialog extends DialogFragment {
                 Snackbar.with(mActivity)
                         .text(R.string.import_done)
                         .actionLabel(R.string.dismiss)
-                        .actionColor(actionColor)
+                        .actionColor(mActivity.getResources().getColor(R.color.yellow))
                         .show(mActivity);
             }
         });
@@ -359,25 +260,9 @@ public class ImportDialog extends DialogFragment {
                 Snackbar.with(mActivity)
                         .text(R.string.import_failed)
                         .actionLabel(R.string.dismiss)
-                        .actionColor(actionColor)
+                        .actionColor(mActivity.getResources().getColor(R.color.yellow))
                         .show(mActivity);
             }
         });
-    }
-
-    private void snackBarImportFromOldDbFailed() {
-        Snackbar.with(mActivity)
-                .text(R.string.import_failed)
-                .actionLabel(R.string.dismiss)
-                .actionColor(actionColor)
-                .show(mActivity);
-    }
-
-    private void snackBarImportFromOldDbDone() {
-        Snackbar.with(mActivity)
-                .text(R.string.import_done)
-                .actionLabel(R.string.dismiss)
-                .actionColor(actionColor)
-                .show(mActivity);
     }
 }

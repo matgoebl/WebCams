@@ -210,4 +210,6 @@
 <string name="action_new">"Add"</string>
 <string name="pref_category_add_edit_delete">"Manage"</string>
 <string name="pref_category_add_edit_delete_summary">"Add, edit and delete categories"</string>
+<string name="backup_name">"Backup name"</string>
+<string name="rename">"Rename"</string>
 </resources>
