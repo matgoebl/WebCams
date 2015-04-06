@@ -627,14 +627,14 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
     private void showSortDialog() {
 
-        int whatMarkToCheck = 3;
-        if (sortOrder.contains(" ) ASC")) {
+        int whatMarkToCheck = 0;
+        if (sortOrder.contains("position")) {
             whatMarkToCheck = 0;
         }
-        else if (sortOrder.contains(" ) DESC")) {
+        else if (sortOrder.contains(" ) ASC")) {
             whatMarkToCheck = 1;
         }
-        else if (sortOrder.contains("position")) {
+        else if (sortOrder.contains(" ) DESC")) {
             whatMarkToCheck = 2;
         }
         else if (sortOrder.contains("created_at ASC")) {
@@ -661,6 +661,9 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                         Double fudge;
                         switch (which) {
                             case 0:
+                                sortOrder = "position";
+                                break;
+                            case 1:
                                 knownLocation = Utils.getLastKnownLocation(getApplicationContext());
                                 fudge = Math.pow(Math.cos(Math.toRadians(knownLocation.getLatitude())), 2);
 
@@ -671,7 +674,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                                     showLocationWarningDialog();
                                 }
                                 break;
-                            case 1:
+                            case 2:
                                 knownLocation = Utils.getLastKnownLocation(getApplicationContext());
                                 fudge = Math.pow(Math.cos(Math.toRadians(knownLocation.getLatitude())), 2);
 
@@ -681,9 +684,6 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                                 if (knownLocation.isNotDetected()) {
                                     showLocationWarningDialog();
                                 }
-                                break;
-                            case 2:
-                                sortOrder = "position";
                                 break;
                             case 3:
                                 sortOrder = "created_at ASC";

@@ -16,16 +16,13 @@
 ~ *****************************************************************************
 -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_configure_list_text"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/big_padding"
-    android:paddingRight="@dimen/big_padding"
-    android:paddingTop="@dimen/big_padding"
-    android:paddingBottom="@dimen/big_padding">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/widget_selection_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</RelativeLayout>
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+    android:gravity="center_vertical"
+    android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:background="?android:attr/selectableItemBackground"/>

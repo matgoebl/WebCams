@@ -2,27 +2,34 @@ package cz.yetanotherview.webcamviewer.app.widget;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.EditText;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.adapter.WidgetConfigureAdapter;
+import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
+import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class WvWidgetConfigure extends Activity {
+
     static final String TAG = "WvWidgetConfigure";
 
     private static final String PREFS_NAME
             = "cz.yetanotherview.webcamviewer.app.widget.WvWidgetConfigure";
     private static final String PREF_PREFIX_KEY = "widget_";
 
+    private List<WebCam> allWebCams;
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    //EditText mUsername, mPassword;
 
     public WvWidgetConfigure() {
         super();
@@ -31,22 +38,8 @@ public class WvWidgetConfigure extends Activity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
-        // Set the result to CANCELED.  This will cause the widget host to cancel
-        // out of the widget placement if they press the back button.
         setResult(RESULT_CANCELED);
 
-        // Set the view layout resource to use.
-        setContentView(R.layout.widget_configure);
-
-        // Find the EditText
-        //mUsername = (EditText)findViewById(R.id.user_name);
-        //mPassword = (EditText)findViewById(R.id.pass_word);
-
-        // Bind the action for the save button.
-        findViewById(R.id.widget_save_button).setOnClickListener(mOnClickListener);
-
-        // Find the widget id from the intent.
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
@@ -54,64 +47,46 @@ public class WvWidgetConfigure extends Activity {
                     AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
 
-        // If they gave us an intent without the widget id, just bail.
-        if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish();
-        }
+        setContentView(R.layout.widget_configure);
 
-//        mAppWidgetPrefix.setText(loadTitlePref(ExampleAppWidgetConfigure.this, mAppWidgetId));
-    }
+        DatabaseHelper db = new DatabaseHelper(this);
+        allWebCams = db.getAllWebCams(Utils.defaultSortOrder);
 
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            final Context context = WvWidgetConfigure.this;
+        RecyclerView recList = (RecyclerView) findViewById(R.id.widget_selection_list);
+        recList.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(llm);
 
-            // When the button is clicked, save the string in our prefs and return that they
-            // clicked OK.
-            //String username = mUsername.getText().toString();
-            //String password = mPassword.getText().toString();
-            //Log.d("log_U", username);
-            //Log.d("log_P", password);
-            //saveTitlePref(context, mAppWidgetId, "username", username);
-            //saveTitlePref(context, mAppWidgetId, "password", password);
+        WidgetConfigureAdapter widgetConfigureAdapter = new WidgetConfigureAdapter(allWebCams);
+        recList.setAdapter(widgetConfigureAdapter);
 
-            // Push widget update to surface with newly set prefix
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            //WvWidgetProvider.updateAppWidget(context, appWidgetManager,
-            //        mAppWidgetId);
+        widgetConfigureAdapter.setClickListener(new WidgetConfigureAdapter.ClickListener() {
 
-            // Make sure we pass back the original appWidgetId
-            Intent resultValue = new Intent();
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-            setResult(RESULT_OK, resultValue);
-            finish();
-        }
-    };
+            @Override
+            public void onClick(View v, int position) {
+                WebCam selWebCam = allWebCams.get(position);
 
-    // Write the prefix to the SharedPreferences object for this widget
-    static void saveTitlePref(Context context, int appWidgetId, String key, String value) {
-//        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-//        prefs.putString(PREF_PREFIX_KEY + "androtwitt" + key, value);
-//        prefs.commit();
-    }
+//                Context context = WvWidgetConfigure.this;
+//
+//                // We need to broadcast an APPWIDGET_UPDATE to our appWidget
+//                // so it will update the user name TextView.
+//                AppWidgetManager appWidgetManager = AppWidgetManager
+//                        .getInstance(context);
+//                ComponentName thisAppWidget = new ComponentName(context
+//                        .getPackageName(), WvWidgetProvider.class.getName());
+//                Intent updateIntent = new Intent(context, WvWidgetProvider.class);
+//                int[] appWidgetIds = appWidgetManager
+//                        .getAppWidgetIds(thisAppWidget);
+//                updateIntent
+//                        .setAction("android.appwidget.action.APPWIDGET_UPDATE");
+//                updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,
+//                        appWidgetIds);
+//                context.sendBroadcast(updateIntent);
+//                // Done with Configure, finish Activity.
+//                finish();
 
-    // Read the prefix from the SharedPreferences object for this widget.
-    // If there is no preference saved, get the default from a resource
-    static String loadTitlePref(Context context, int appWidgetId, String key) {
-//        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-//        String value = prefs.getString(PREF_PREFIX_KEY + "androtwitt" + key, null);
-//        if (value != null) {
-//            return value;
-//        } else {
-//            return context.getString(R.string.appwidget_prefix_default);
-//        }
-        return key;
-    }
-
-    static void deleteTitlePref(Context context, int appWidgetId) {
-    }
-
-    static void loadAllTitlePrefs(Context context, ArrayList<Integer> appWidgetIds,
-                                  ArrayList<String> texts) {
+            }
+        });
     }
 }

@@ -266,11 +266,9 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
     }
 
     public interface ClickListener {
-
         public void onClick(View v, int position, boolean isEditClick, boolean isLongClick);
     }
 
-    /* Setter for listener. */
     public void setClickListener(ClickListener clickListener) {
         this.clickListener = clickListener;
     }
