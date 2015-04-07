@@ -25,6 +25,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
@@ -42,53 +43,57 @@ public class WvWidgetProvider extends AppWidgetProvider {
 
     private RemoteViews mRemoteViews;
     private ComponentName mComponentName;
-    private AppWidgetTarget mAppWidgetTarget;
+    private static String name, url;
 
-	@Override
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
-			int[] appWidgetIds) {
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
+    @Override
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager,
+                         int[] appWidgetIds) {
+
+        for (int appWidgetId : appWidgetIds) {
+
+            name = WvWidgetConfigure.loadSelectedPref(context, appWidgetId, "name");
+            url = WvWidgetConfigure.loadSelectedPref(context, appWidgetId, "url");
+            Log.d("",appWidgetId + name + url);
+        }
+
 
         mRemoteViews = new RemoteViews(context.getPackageName(),
                 R.layout.widget_layout);
 
         Intent intent = new Intent(WIDGET_BUTTON);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mRemoteViews.setOnClickPendingIntent(R.id.sync_button, pendingIntent );
+        mRemoteViews.setOnClickPendingIntent(R.id.sync_button, pendingIntent);
 
-        mRemoteViews.setTextViewText(R.id.wTitle, "Working Example");
+        mRemoteViews.setTextViewText(R.id.wTitle, name);
 
-        mComponentName = new ComponentName(context, WvWidgetProvider.class);
-
-        mAppWidgetTarget = new AppWidgetTarget(context,mRemoteViews,R.id.wImage,400,400,mComponentName) {};
-
-        Glide.with(context)
-                .load("http://www2.brno.cz/kamery/malinak/tmp/image.jpg")
-                .asBitmap()
-                .signature(new StringSignature(UUID.randomUUID().toString()))
-                .into(mAppWidgetTarget);
+        loadImage(context);
 
         appWidgetManager.updateAppWidget(mComponentName, mRemoteViews);
-	}
+    }
 
     @Override
     public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         super.onReceive(context, intent);
 
         if (WIDGET_BUTTON.equals(intent.getAction())) {
-            Utils.clearImageCache(context);
-
             mRemoteViews = new RemoteViews(context.getPackageName(),
                     R.layout.widget_layout);
-            mComponentName = new ComponentName(context, WvWidgetProvider.class);
+            loadImage(context);
+        }
+    }
 
-            mAppWidgetTarget = new AppWidgetTarget(context,mRemoteViews,R.id.wImage,400,400,mComponentName) {};
+    private void loadImage(Context context) {
+
+            Utils.clearImageCache(context);
+
+            mComponentName = new ComponentName(context, WvWidgetProvider.class);
+            AppWidgetTarget mAppWidgetTarget = new AppWidgetTarget(context, mRemoteViews,
+                    R.id.wImage, 400, 400, mComponentName) {};
 
             Glide.with(context)
-                    .load("http://www2.brno.cz/kamery/malinak/tmp/image.jpg")
+                    .load(url)
                     .asBitmap()
                     .signature(new StringSignature(UUID.randomUUID().toString()))
                     .into(mAppWidgetTarget);
         }
-    }
 }

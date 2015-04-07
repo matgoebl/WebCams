@@ -35,13 +35,9 @@
 <string name="how_to">"Jak na to"</string>
 <string name="dialog_positive_text">"Uložit"</string>
 <string name="dialog_positive_toast_message">"Uloženo!"</string>
-<string name="export_title">"Zadejte název souboru"</string>
-<string name="export_input_sample">"Např. MojeWebKamery"</string>
 <string name="import_failed">"Importování se nezdařilo!"</string>
 <string name="export_done">"Export byl úspěšně dokončen!"</string>
 <string name="export_failed">"Exportování se nezdařilo!"</string>
-<string name="export_message">"Bude vytvořen nový databázový soubor v adresáři:"</string>
-<string name="nothing_to_import">"Není co importovat"</string>
 <string name="pref_full_screen">"Režim celé obrazovky"</string>
 <string name="pref_full_screen_summ">"Spouštět aplikaci v immersive módu (pouze KitKat a výš)"</string>
 <string name="action_edit">"Upravit"</string>
@@ -66,9 +62,6 @@
 <string name="also_delete_webcams">"Smazat také Webkamery, které se nachází pouze v této kategorii?"</string>
 <string name="imported">"Importováno"</string>
 <string name="nothing_to_export">"Není co exportovat"</string>
-<string name="old_database_detected">"Zjištěna stará verze zálohy databáze"</string>
-<string name="old_database_detected_summary">"Jedná se o starší typ zálohy databáze! Tento soubor bude automaticky převeden do nového formátu a poté smazán."</string>
-<string name="nothing_to_import_summary">"Nejprve musíte vytvořit nějaké zálohy."</string>
 <string name="nothing_to_export_summary">"Nejprve musíte vytvořit nějaké WebKamery."</string>
 <string name="import_summary">"Smazat před importem všechny WebKamery z aktuální databáze?"</string>
 <string name="importing_from_server">"Probíhá import ze serveru"</string>
@@ -76,7 +69,6 @@
 <string name="server_unavailable">"Server je nedostupný"</string>
 <string name="server_unavailable_summary">"Nejste připojeni k Internetu nebo je server dočasně nedostupný ..."</string>
 <string name="choose">"ZVOLIT"</string>
-<string name="external_files">"Externí soubory"</string>
 <string name="popular_webcams">"Populární WebKamery"</string>
 <string name="selecting_by_country">"Výběr podle země"</string>
 <string name="latest_webcams">"Nejnovější WebKamery"</string>

@@ -35,13 +35,9 @@
 <string name="how_to">"How to"</string>
 <string name="dialog_positive_text">"Save"</string>
 <string name="dialog_positive_toast_message">"Saved!"</string>
-<string name="export_title">"Enter the file name"</string>
-<string name="export_input_sample">"E.g. MyWebCams"</string>
 <string name="import_failed">"Import Failed!"</string>
 <string name="export_done">"Export Successful!"</string>
 <string name="export_failed">"Export Failed!"</string>
-<string name="export_message">"This will create a new file in this folder:"</string>
-<string name="nothing_to_import">"Nothing to import"</string>
 <string name="pref_full_screen">"Immersive mode"</string>
 <string name="pref_full_screen_summ">"Run application in immersive full-screen mode (only KitKat or higher)"</string>
 <string name="action_edit">"Edit"</string>
@@ -66,9 +62,6 @@
 <string name="also_delete_webcams">"Also delete WebCams that are only in this category?"</string>
 <string name="imported">"Imported"</string>
 <string name="nothing_to_export">"Nothing to export"</string>
-<string name="old_database_detected">"Old database detected"</string>
-<string name="old_database_detected_summary">"This is an older type of backup database! This file will be automatically converted to the new format and then deleted."</string>
-<string name="nothing_to_import_summary">"You must first create some backups."</string>
 <string name="nothing_to_export_summary">"You must first create some WebCams in your database."</string>
 <string name="import_summary">"Delete all WebCams from the current database before importing?"</string>
 <string name="importing_from_server">"Importing from server"</string>
@@ -76,7 +69,6 @@
 <string name="server_unavailable">"Server is unavailable"</string>
 <string name="server_unavailable_summary">"You are not connected to the Internet or the server is temporarily unavailable..."</string>
 <string name="choose">"CHOOSE"</string>
-<string name="external_files">"External files"</string>
 <string name="popular_webcams">"Popular WebCams"</string>
 <string name="selecting_by_country">"Selecting by Country"</string>
 <string name="latest_webcams">"Latest WebCams"</string>

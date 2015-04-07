@@ -35,13 +35,9 @@
 <string name="how_to">"Anleitungen"</string>
 <string name="dialog_positive_text">"Speichern"</string>
 <string name="dialog_positive_toast_message">"Gespeichert!"</string>
-<string name="export_title">"Gib den Dateinamen ein"</string>
-<string name="export_input_sample">"Z.B. MeineWebCams"</string>
 <string name="import_failed">"Importieren fehlgeschlagen!"</string>
 <string name="export_done">"Export erfolgreich!"</string>
 <string name="export_failed">"Exportieren fehlgeschlagen!"</string>
-<string name="export_message">"Dadurch wird eine neue Datenbank-Datei in das Verzeichnis erstellt:"</string>
-<string name="nothing_to_import">"Keine Datenbankdateien gefunden"</string>
 <string name="pref_full_screen">"Vollbildmodus"</string>
 <string name="pref_full_screen_summ">"App im Vollbildmodus laufen lassen (nur KitKat und höher)"</string>
 <string name="action_edit">"Bearbeiten"</string>
@@ -66,9 +62,6 @@
 <string name="also_delete_webcams">"Auch WebCams löschen, die nur in dieser Kategorie sind?"</string>
 <string name="imported">"Importiert"</string>
 <string name="nothing_to_export">"Nichts zu exportieren"</string>
-<string name="old_database_detected">"Alte Datenbank gefunden"</string>
-<string name="old_database_detected_summary">"Dies ist eine ältere Typ des Datenbank-Backups! Diese Datei wird automatisch in das neue Format umgewandelt und dann gelöscht."</string>
-<string name="nothing_to_import_summary">"Du musst zunächst einige Backups erstellen."</string>
 <string name="nothing_to_export_summary">"Du musst zunächst einige WebCams in der Datenbank erstellen."</string>
 <string name="import_summary">"Vor dem Import alle WebCams aus der aktuellen Datenbank löschen?"</string>
 <string name="importing_from_server">"Importieren vom Server"</string>
@@ -76,7 +69,6 @@
 <string name="server_unavailable">"Server ist nicht verfügbar"</string>
 <string name="server_unavailable_summary">"Du bist nicht mit dem Internet verbunden oder der Server ist nicht verfügbar..."</string>
 <string name="choose">"AUSWÄHLEN"</string>
-<string name="external_files">"Externe Dateien"</string>
 <string name="popular_webcams">"Beliebte WebCams"</string>
 <string name="selecting_by_country">"Auswahl nach Ländern"</string>
 <string name="latest_webcams">"Neueste WebCams"</string>

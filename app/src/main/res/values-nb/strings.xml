@@ -22,13 +22,9 @@
 <string name="how_to">"Hvordan"</string>
 <string name="dialog_positive_text">"Lagre"</string>
 <string name="dialog_positive_toast_message">"Lagret!"</string>
-<string name="export_title">"Skriv filnavnet"</string>
-<string name="export_input_sample">"F.eks. MittWebkamera"</string>
 <string name="import_failed">"Import Feilet!"</string>
 <string name="export_done">"Eksport OK!"</string>
 <string name="export_failed">"Eksport Feilet!"</string>
-<string name="export_message">"Dette vil opprette en ny fil i denne mappen:"</string>
-<string name="nothing_to_import">"Ingen ting å importere"</string>
 <string name="pref_full_screen">"Fullskjermsmodus"</string>
 <string name="pref_full_screen_summ">"Kjør app i fullskjermsmodus (kun for KitKat eller høyere)"</string>
 <string name="action_edit">"Rediger"</string>
@@ -53,9 +49,6 @@
 <string name="also_delete_webcams">"Også slett webkameraer som er kun i denne kategorien?"</string>
 <string name="imported">"Importert"</string>
 <string name="nothing_to_export">"Ingen ting å eksportere"</string>
-<string name="old_database_detected">"Gammel database oppdaget"</string>
-<string name="old_database_detected_summary">"Dette er en eldre type sikkerhetskopi av databasen! Denne filen vil automatisk bli konvertert til nytt format og så slettet."</string>
-<string name="nothing_to_import_summary">"Du må først opprette noen sikkerhetskopier."</string>
 <string name="nothing_to_export_summary">"Du må først opprette noen webkameraer i databasen din."</string>
 <string name="import_summary">"Slett alle webkameraer fra databasen før import?"</string>
 <string name="importing_from_server">"Importerer fra server"</string>
@@ -63,7 +56,6 @@
 <string name="server_unavailable">"Serveren er utilgjengelig"</string>
 <string name="server_unavailable_summary">"Du er ikke koblet til internett eller serveren er midlertidig utilgjengelig..."</string>
 <string name="choose">"VELG"</string>
-<string name="external_files">"Eksterne filer"</string>
 <string name="popular_webcams">"Populære webkameraer"</string>
 <string name="selecting_by_country">"Velg etter Land"</string>
 <string name="latest_webcams">"Siste webkamera"</string>
