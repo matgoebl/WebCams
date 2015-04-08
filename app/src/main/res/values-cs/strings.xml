@@ -196,7 +196,7 @@
 <string name="pref_backup_summary">"Zálohovat databázi WebKamer do zvoleného úložiště"</string>
 <string name="pref_delete_all_webcams">"Smazat všechny WebKamery"</string>
 <string name="local_device">"Paměť zařízení"</string>
-<string name="document_storage">"Cloudové úložiště"</string>
+<string name="document_storage">"Vzdálené úložiště"</string>
 <string name="latitude">"Zeměpisná šířka:"</string>
 <string name="longitude">"Zeměpisná délka:"</string>
 <string name="action_new">"Přidat"</string>

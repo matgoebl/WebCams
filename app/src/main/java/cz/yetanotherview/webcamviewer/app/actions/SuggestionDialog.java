@@ -20,19 +20,11 @@ package cz.yetanotherview.webcamviewer.app.actions;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.List;
@@ -42,29 +34,20 @@ import cz.yetanotherview.webcamviewer.app.Utils;
 
 public class SuggestionDialog extends DialogFragment {
 
-    private EditText input;
     private String inputName;
-    private View positiveAction;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+        return new MaterialDialog.Builder(getActivity())
                 .title(R.string.submit_suggestion)
                 .customView(R.layout.enter_name_dialog, true)
                 .positiveText(R.string.send_via_email)
-                .showListener(new DialogInterface.OnShowListener() {
+                .input(0, R.string.submit_suggestion_hint, new MaterialDialog.InputCallback() {
                     @Override
-                    public void onShow(DialogInterface dialog) {
-                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
-                    }
-                })
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        inputName = input.getText().toString().trim();
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        inputName = input.toString().trim();
 
                         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                                 "mailto", Utils.email, null));
@@ -82,33 +65,9 @@ public class SuggestionDialog extends DialogFragment {
                                 noEmailClientsFound();
                             }
                         }
-
                     }
                 })
                 .build();
-
-        input = (EditText) dialog.getCustomView().findViewById(R.id.input_name);
-        input.requestFocus();
-        input.setHint(R.string.submit_suggestion_hint);
-
-        positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
-
-        input.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                positiveAction.setEnabled(s.toString().trim().length() > 0);
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        positiveAction.setEnabled(false);
-
-        return dialog;
     }
 
     private void noEmailClientsFound() {

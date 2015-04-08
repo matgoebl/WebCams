@@ -82,8 +82,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_webcam_latitude"
                 android:inputType="numberDecimal"
-                android:digits="0123456789."
-                android:maxLength="9"
+                android:digits="0123456789.-"
+                android:maxLength="10"
                 android:singleLine="true"
                 android:imeOptions="actionNext" />
 
@@ -112,8 +112,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_webcam_longitude"
                 android:inputType="numberDecimal"
-                android:digits="0123456789."
-                android:maxLength="9"
+                android:digits="0123456789.-"
+                android:maxLength="10"
                 android:singleLine="true"
                 android:imeOptions="actionDone"/>
 
