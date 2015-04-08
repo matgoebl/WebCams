@@ -52,6 +52,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
@@ -98,7 +99,8 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     private List<Category> allCategories;
     private Category allWebCamsCategory;
     private RecyclerView mRecyclerView;
-    private View mEmptyView;
+    private View mEmptyView, shadowView;
+    private ImageView mMoveView;
     private WebCamAdapter mAdapter;
     private float zoom;
     private int numberOfColumns, mOrientation, selectedCategory, autoRefreshInterval, mPosition;
@@ -117,7 +119,6 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     private DialogFragment dialogFragment;
     private MenuItem searchItem;
     private SearchView searchView;
-    private View shadowView;
     private EventListener eventListener;
 
     @Override
@@ -300,11 +301,13 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         mAdapter.setClickListener(new WebCamAdapter.ClickListener() {
 
             @Override
-            public void onClick(View v, int position, boolean isEditClick, boolean isLongClick) {
+            public void onClick(View view, int position, boolean isEditClick, boolean isLongClick, ImageView imageView) {
                 if (isEditClick) {
+                    mMoveView = imageView;
                     showOptionsDialog(position);
                 }
                 else if (isLongClick) {
+                    mMoveView = imageView;
                     mPosition = position;
                     moveItem();
                 }
@@ -1007,6 +1010,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                 MenuInflater inflater = mode.getMenuInflater();
                 inflater.inflate(R.menu.move_menu, menu);
                 mode.setTitle(R.string.move);
+                mMoveView.setColorFilter(getResources().getColor(R.color.move));
                 return true;
             }
 
@@ -1040,6 +1044,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
             public void onDestroyActionMode(ActionMode mode) {
                 mActionMode = null;
+                mMoveView.clearColorFilter();
             }
         });
     }

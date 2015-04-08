@@ -25,7 +25,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
@@ -79,7 +78,6 @@ public class WvWidgetProvider extends AppWidgetProvider {
 
             name = WvWidgetConfigure.loadSelectedPref(context, appWidgetId, "name");
             url = WvWidgetConfigure.loadSelectedPref(context, appWidgetId, "url");
-            Log.d("",appWidgetId + name + url);
         }
 
         mRemoteViews = new RemoteViews(context.getPackageName(),

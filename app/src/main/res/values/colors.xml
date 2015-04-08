@@ -25,5 +25,6 @@
     <color name="black_transparent">#96000000</color>
 
     <color name="swipe">@color/fab_normal</color>
+    <color name="move">#B14a148c</color>
 
 </resources>
