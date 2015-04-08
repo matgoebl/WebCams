@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -41,7 +40,6 @@ public class ListButtonAdapter extends ArrayAdapter<File> {
 
     private Activity context;
     private ArrayList<File> files;
-    private EditText input;
 
     public ListButtonAdapter(Activity context, ArrayList<File> files) {
         super(context, 0, files);
@@ -81,15 +79,14 @@ public class ListButtonAdapter extends ArrayAdapter<File> {
                             switch (item.getItemId()) {
                                 case R.id.rename:
 
-                                    MaterialDialog dialog = new MaterialDialog.Builder(context)
+                                    String input_prefill = files.get(viewHolder.position).getName()
+                                            .replaceFirst("[.][^.]+$", "");
+                                    new MaterialDialog.Builder(context)
                                             .title(R.string.rename)
-                                            .customView(R.layout.enter_name_dialog, true)
-                                            .positiveText(android.R.string.ok)
-                                            .negativeText(android.R.string.cancel)
-                                            .callback(new MaterialDialog.ButtonCallback() {
+                                            .input(null, input_prefill, new MaterialDialog.InputCallback() {
                                                 @Override
-                                                public void onPositive(MaterialDialog dialog) {
-                                                    String inputName = input.getText().toString().trim();
+                                                public void onInput(MaterialDialog dialog, CharSequence input) {
+                                                    String inputName = input.toString().trim();
 
                                                     File file = (File) viewHolder.imageView.getTag();
                                                     File newName = new File(Utils.folderWCVPath + inputName + Utils.extension);
@@ -98,11 +95,7 @@ public class ListButtonAdapter extends ArrayAdapter<File> {
                                                     notifyDataSetChanged();
                                                 }
                                             })
-                                            .build();
-
-                                    input = (EditText) dialog.getCustomView().findViewById(R.id.input_name);
-                                    input.setText(files.get(viewHolder.position).getName().replaceFirst("[.][^.]+$", ""));
-                                    dialog.show();
+                                            .show();
                                     break;
 
                                 case R.id.delete:

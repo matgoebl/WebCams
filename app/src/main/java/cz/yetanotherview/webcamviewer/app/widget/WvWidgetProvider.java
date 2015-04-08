@@ -43,7 +43,33 @@ public class WvWidgetProvider extends AppWidgetProvider {
 
     private RemoteViews mRemoteViews;
     private ComponentName mComponentName;
+    private AppWidgetTarget mAppWidgetTarget;
+    private AppWidgetManager mAppWidgetManager;
     private static String name, url;
+
+    @Override
+    public void onEnabled(Context context) {
+        super.onEnabled(context);
+
+        Utils.clearImageCache(context);
+
+        mRemoteViews = new RemoteViews(context.getPackageName(),
+                R.layout.widget_layout);
+
+        mComponentName = new ComponentName(context, WvWidgetProvider.class);
+        mAppWidgetManager = AppWidgetManager.getInstance(context);
+
+        int[] appWidgetIds = mAppWidgetManager.getAppWidgetIds(mComponentName);
+
+        //Using appWidgetIds.
+        mAppWidgetTarget = new AppWidgetTarget(context,mRemoteViews,R.id.wImage,400,400, appWidgetIds) {};
+
+        Glide.with(context)
+                .load(url)
+                .asBitmap()
+                .signature(new StringSignature(UUID.randomUUID().toString()))
+                .into(mAppWidgetTarget);
+    }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
@@ -56,9 +82,9 @@ public class WvWidgetProvider extends AppWidgetProvider {
             Log.d("",appWidgetId + name + url);
         }
 
-
         mRemoteViews = new RemoteViews(context.getPackageName(),
                 R.layout.widget_layout);
+
 
         Intent intent = new Intent(WIDGET_BUTTON);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -66,7 +92,17 @@ public class WvWidgetProvider extends AppWidgetProvider {
 
         mRemoteViews.setTextViewText(R.id.wTitle, name);
 
-        loadImage(context);
+        mComponentName = new ComponentName(context, WvWidgetProvider.class);
+        mAppWidgetManager = AppWidgetManager.getInstance(context);
+
+        //Using ComponentName.
+        mAppWidgetTarget = new AppWidgetTarget(context,mRemoteViews,R.id.wImage,400,400,mComponentName) {};
+
+        Glide.with(context)
+                .load(url)
+                .asBitmap()
+                .signature(new StringSignature(UUID.randomUUID().toString()))
+                .into(mAppWidgetTarget);
 
         appWidgetManager.updateAppWidget(mComponentName, mRemoteViews);
     }
@@ -78,17 +114,14 @@ public class WvWidgetProvider extends AppWidgetProvider {
         if (WIDGET_BUTTON.equals(intent.getAction())) {
             mRemoteViews = new RemoteViews(context.getPackageName(),
                     R.layout.widget_layout);
-            loadImage(context);
-        }
-    }
 
-    private void loadImage(Context context) {
 
-            Utils.clearImageCache(context);
+            mRemoteViews = new RemoteViews(context.getPackageName(),
+                    R.layout.widget_layout);
 
             mComponentName = new ComponentName(context, WvWidgetProvider.class);
-            AppWidgetTarget mAppWidgetTarget = new AppWidgetTarget(context, mRemoteViews,
-                    R.id.wImage, 400, 400, mComponentName) {};
+
+            mAppWidgetTarget = new AppWidgetTarget(context,mRemoteViews,R.id.wImage,400,400,mComponentName) {};
 
             Glide.with(context)
                     .load(url)
@@ -96,4 +129,5 @@ public class WvWidgetProvider extends AppWidgetProvider {
                     .signature(new StringSignature(UUID.randomUUID().toString()))
                     .into(mAppWidgetTarget);
         }
+    }
 }

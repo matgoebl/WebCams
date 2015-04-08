@@ -42,7 +42,6 @@ public class SuggestionDialog extends DialogFragment {
 
         return new MaterialDialog.Builder(getActivity())
                 .title(R.string.submit_suggestion)
-                .customView(R.layout.enter_name_dialog, true)
                 .positiveText(R.string.send_via_email)
                 .input(0, R.string.submit_suggestion_hint, new MaterialDialog.InputCallback() {
                     @Override
