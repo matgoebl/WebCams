@@ -24,6 +24,16 @@
     android:background="@drawable/widget_background"
     android:orientation="vertical" >
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textColor="@color/white"
+        android:text="@string/refresh_is_running"
+        android:textSize="14sp" />
+
     <RelativeLayout
         android:id="@+id/buttonContainer"
         android:layout_width="match_parent"

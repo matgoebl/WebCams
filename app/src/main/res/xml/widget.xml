@@ -21,7 +21,7 @@
     android:minHeight="110dp"
     android:minWidth="180dp"
     android:configure="cz.yetanotherview.webcamviewer.app.widget.WvWidgetConfigure"
-    android:previewImage="@drawable/background_blank"
+    android:previewImage="@drawable/widget_preview"
     android:updatePeriodMillis="0"
     android:resizeMode="horizontal|vertical">
 

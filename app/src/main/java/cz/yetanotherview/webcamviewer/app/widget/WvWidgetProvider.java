@@ -21,10 +21,11 @@ package cz.yetanotherview.webcamviewer.app.widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
@@ -41,91 +42,68 @@ public class WvWidgetProvider extends AppWidgetProvider {
     public static String WIDGET_BUTTON = "cz.yetanotherview.webcamviewer.app.widget.WIDGET_BUTTON";
 
     private RemoteViews mRemoteViews;
-    private ComponentName mComponentName;
-    private AppWidgetTarget mAppWidgetTarget;
-    private AppWidgetManager mAppWidgetManager;
-    private static String name, url;
-
-    @Override
-    public void onEnabled(Context context) {
-        super.onEnabled(context);
-
-        Utils.clearImageCache(context);
-
-        mRemoteViews = new RemoteViews(context.getPackageName(),
-                R.layout.widget_layout);
-
-        mComponentName = new ComponentName(context, WvWidgetProvider.class);
-        mAppWidgetManager = AppWidgetManager.getInstance(context);
-
-        int[] appWidgetIds = mAppWidgetManager.getAppWidgetIds(mComponentName);
-
-        //Using appWidgetIds.
-        mAppWidgetTarget = new AppWidgetTarget(context,mRemoteViews,R.id.wImage,400,400, appWidgetIds) {};
-
-        Glide.with(context)
-                .load(url)
-                .asBitmap()
-                .signature(new StringSignature(UUID.randomUUID().toString()))
-                .into(mAppWidgetTarget);
-    }
+    private static String url;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
                          int[] appWidgetIds) {
+        Log.d("", "onUpdate");
+
+        Utils.clearImageCache(context);
 
         for (int appWidgetId : appWidgetIds) {
 
-            name = WvWidgetConfigure.loadSelectedPref(context, appWidgetId, "name");
+            String name = WvWidgetConfigure.loadSelectedPref(context, appWidgetId, "name");
             url = WvWidgetConfigure.loadSelectedPref(context, appWidgetId, "url");
+
+            mRemoteViews = new RemoteViews(context.getPackageName(),
+                    R.layout.widget_layout);
+
+            Intent intent = new Intent(context, WvWidgetProvider.class);
+            intent.setAction(WIDGET_BUTTON);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            mRemoteViews.setOnClickPendingIntent(R.id.sync_button, pendingIntent);
+            mRemoteViews.setTextViewText(R.id.wTitle, name);
+
+            loadImage(context, appWidgetId);
+
+            appWidgetManager.updateAppWidget(appWidgetId, mRemoteViews);
         }
-
-        mRemoteViews = new RemoteViews(context.getPackageName(),
-                R.layout.widget_layout);
-
-
-        Intent intent = new Intent(WIDGET_BUTTON);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mRemoteViews.setOnClickPendingIntent(R.id.sync_button, pendingIntent);
-
-        mRemoteViews.setTextViewText(R.id.wTitle, name);
-
-        mComponentName = new ComponentName(context, WvWidgetProvider.class);
-        mAppWidgetManager = AppWidgetManager.getInstance(context);
-
-        //Using ComponentName.
-        mAppWidgetTarget = new AppWidgetTarget(context,mRemoteViews,R.id.wImage,400,400,mComponentName) {};
-
-        Glide.with(context)
-                .load(url)
-                .asBitmap()
-                .signature(new StringSignature(UUID.randomUUID().toString()))
-                .into(mAppWidgetTarget);
-
-        appWidgetManager.updateAppWidget(mComponentName, mRemoteViews);
     }
 
     @Override
     public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         super.onReceive(context, intent);
+        Log.d("", "onReceive");
 
         if (WIDGET_BUTTON.equals(intent.getAction())) {
             mRemoteViews = new RemoteViews(context.getPackageName(),
                     R.layout.widget_layout);
 
+            Utils.clearImageCache(context);
 
-            mRemoteViews = new RemoteViews(context.getPackageName(),
-                    R.layout.widget_layout);
+            int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    AppWidgetManager.INVALID_APPWIDGET_ID);
 
-            mComponentName = new ComponentName(context, WvWidgetProvider.class);
+            url = WvWidgetConfigure.loadSelectedPref(context, appWidgetId, "url");
 
-            mAppWidgetTarget = new AppWidgetTarget(context,mRemoteViews,R.id.wImage,400,400,mComponentName) {};
-
-            Glide.with(context)
-                    .load(url)
-                    .asBitmap()
-                    .signature(new StringSignature(UUID.randomUUID().toString()))
-                    .into(mAppWidgetTarget);
+            loadImage(context, appWidgetId);
         }
+    }
+
+    private void loadImage(final Context context, int appWidgetId) {
+        int[] ids = {appWidgetId};
+        AppWidgetTarget mAppWidgetTarget = new AppWidgetTarget(context, mRemoteViews, R.id.wImage,
+                400, 400, ids) {};
+
+        Glide.with(context)
+                .load(url)
+                .asBitmap()
+                .signature(new StringSignature(UUID.randomUUID().toString()))
+                .into(mAppWidgetTarget);
     }
 }

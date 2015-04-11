@@ -43,7 +43,7 @@ public class SuggestionDialog extends DialogFragment {
         return new MaterialDialog.Builder(getActivity())
                 .title(R.string.submit_suggestion)
                 .positiveText(R.string.send_via_email)
-                .input(0, R.string.submit_suggestion_hint, new MaterialDialog.InputCallback() {
+                .input(R.string.submit_suggestion_hint, 0, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         inputName = input.toString().trim();

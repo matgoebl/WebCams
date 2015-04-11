@@ -149,6 +149,7 @@ public class FullScreenFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 refresh();
+                mButtonsLayout.startAnimation(fadeOut);
             }
         });
 

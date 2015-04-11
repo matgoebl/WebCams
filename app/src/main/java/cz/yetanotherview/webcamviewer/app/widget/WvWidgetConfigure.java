@@ -47,6 +47,7 @@ public class WvWidgetConfigure extends Activity {
         }
 
         setContentView(R.layout.widget_configure);
+        View mEmptyView = findViewById(R.id.empty_text);
 
         DatabaseHelper db = new DatabaseHelper(context);
         allWebCams = db.getAllWebCams(Utils.defaultSortOrder);
@@ -82,6 +83,12 @@ public class WvWidgetConfigure extends Activity {
                 finish();
             }
         });
+
+        if (widgetConfigureAdapter.getItemCount() == 0) {
+            mEmptyView.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyView.setVisibility(View.GONE);
+        }
     }
 
     public static void saveSelectedPref(Context context, int appWidgetId, String key, String value) {
