@@ -93,6 +93,9 @@ public class WvWidgetProvider extends AppWidgetProvider {
 
             loadImage(context, appWidgetId);
         }
+        else {
+            super.onReceive(context, intent);
+        }
     }
 
     private void loadImage(final Context context, int appWidgetId) {
