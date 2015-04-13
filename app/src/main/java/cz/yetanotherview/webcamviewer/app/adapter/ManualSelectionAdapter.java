@@ -30,6 +30,7 @@ import android.widget.Filterable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.Utils;
@@ -65,7 +66,7 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
                 if (constraint != null) {
                     if (origList != null && origList.size() > 0) {
                         for (final WebCam g : origList) {
-                            String strippedNameAndCountry = Utils.getNameStrippedAccents(g.getName() + " " + g.getCountry());
+                            String strippedNameAndCountry = Utils.getNameStrippedAccents(g.getName() + " " + g.getTags() + " " + new Locale("", g.getCountry()).getDisplayCountry());
                             String strippedInput = Utils.getNameStrippedAccents(constraint.toString().trim());
                             if (strippedNameAndCountry.toLowerCase()
                                     .contains(strippedInput))
@@ -136,7 +137,7 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
         WebCam webCam = webCamList.get(position);
 
         holder.selCheckBox.setText(webCamList.get(position).getName()
-                + " (" + webCamList.get(position).getCountry() + ")");
+                + " (" + new Locale("", webCamList.get(position).getCountry()).getDisplayCountry() + ")");
         holder.selCheckBox.setChecked(webCam.isSelected());
         holder.selCheckBox.setTag(webCam);
 

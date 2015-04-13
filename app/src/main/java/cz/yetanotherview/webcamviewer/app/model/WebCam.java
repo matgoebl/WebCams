@@ -25,6 +25,7 @@ public class WebCam {
     private long id;
     private long uniId;
     private String webCamName;
+    private String webCamTags;
     private String webCamUrl;
     private int position;
     private int status;
@@ -75,6 +76,10 @@ public class WebCam {
 
     public void setName(String webCamName) {
         this.webCamName = webCamName;
+    }
+
+    public void setTags(String webCamTags) {
+        this.webCamTags = webCamTags;
     }
 
     public void setUrl(String webCamUrl) {
@@ -129,6 +134,10 @@ public class WebCam {
 
     public String getName() {
         return this.webCamName;
+    }
+
+    public String getTags() {
+        return this.webCamTags;
     }
 
     public String getUrl() {

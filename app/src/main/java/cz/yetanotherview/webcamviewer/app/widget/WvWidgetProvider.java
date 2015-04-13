@@ -25,17 +25,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.AppWidgetTarget;
 import com.bumptech.glide.signature.StringSignature;
 
 import java.util.UUID;
 
 import cz.yetanotherview.webcamviewer.app.R;
-import cz.yetanotherview.webcamviewer.app.Utils;
 
 public class WvWidgetProvider extends AppWidgetProvider {
 
@@ -47,9 +46,6 @@ public class WvWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
                          int[] appWidgetIds) {
-        Log.d("", "onUpdate");
-
-        Utils.clearImageCache(context);
 
         for (int appWidgetId : appWidgetIds) {
 
@@ -78,13 +74,10 @@ public class WvWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         super.onReceive(context, intent);
-        Log.d("", "onReceive");
 
         if (WIDGET_BUTTON.equals(intent.getAction())) {
             mRemoteViews = new RemoteViews(context.getPackageName(),
                     R.layout.widget_layout);
-
-            Utils.clearImageCache(context);
 
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -106,6 +99,8 @@ public class WvWidgetProvider extends AppWidgetProvider {
         Glide.with(context)
                 .load(url)
                 .asBitmap()
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .signature(new StringSignature(UUID.randomUUID().toString()))
                 .into(mAppWidgetTarget);
     }

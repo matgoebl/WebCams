@@ -213,4 +213,6 @@
 <string name="restore_progress">"Importerer fra den valgte filen"</string>
 <string name="restore_confirm">"Denne handlingen endrer på databasen din med kameraer fra sikkerhetskopien."</string>
 <string name="no_backups">"Ingen sikkerhetskopier på denne lagringsenheten"</string>
+<string name="nothing_to_show">"Ingen ting å vise"</string>
+<string name="widget_refresh_info">"Ops, noe gikk galt. Vennligst prøv oppfriskingsknappen..."</string>
 </resources>

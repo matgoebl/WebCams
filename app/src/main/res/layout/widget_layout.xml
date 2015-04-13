@@ -31,7 +31,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:textColor="@color/white"
-        android:text="@string/refresh_is_running"
+        android:text="@string/widget_refresh_info"
         android:textSize="14sp" />
 
     <RelativeLayout

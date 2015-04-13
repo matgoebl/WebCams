@@ -209,4 +209,6 @@
 <string name="restore_progress">"Importing from the selected file"</string>
 <string name="restore_confirm">"This action changes the current state of your database with entries from the backup file."</string>
 <string name="no_backups">"No backups in this location"</string>
+<string name="nothing_to_show">"Nothing to show"</string>
+<string name="widget_refresh_info">"Oops, something went wrong. Please try to use the refresh button..."</string>
 </resources>

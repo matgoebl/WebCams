@@ -194,4 +194,6 @@
 <string name="restore_progress">"選択したファイルからインポート中"</string>
 <string name="restore_confirm">"この操作はバックアップファイルのエントリーで現在のデータベースを変更します。"</string>
 <string name="no_backups">"この場所にバックアップはありません"</string>
+<string name="nothing_to_show">"Nothing to show"</string>
+<string name="widget_refresh_info">"Oops, something went wrong. Please try to use the refresh button..."</string>
 </resources>

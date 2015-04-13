@@ -29,4 +29,33 @@
         mapbox:mapid="tomasvalenta.ldkbpoc2"
         mapbox:accessToken="sk.eyJ1IjoidG9tYXN2YWxlbnRhIiwiYSI6IjlVd3NHdmcifQ.avA_KfBKUSkOX7jT9i9yQQ"/>
 
+    <LinearLayout
+        android:id="@+id/zoomContainer"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="@dimen/middle_margin"
+        android:layout_marginEnd="@dimen/middle_margin"
+        android:layout_marginBottom="@dimen/huge_margin"
+        android:visibility="gone">
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/zoomIn"
+            android:src="@drawable/zoom_in"
+            android:background="@drawable/background_with_shadow" />
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/zoomOut"
+            android:src="@drawable/zoom_out"
+            android:background="@drawable/background_with_shadow_2" />
+
+    </LinearLayout>
+
 </RelativeLayout>

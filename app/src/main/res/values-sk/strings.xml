@@ -209,4 +209,6 @@
 <string name="restore_progress">"Importovanie z vybraného súboru"</string>
 <string name="restore_confirm">"Táto akcia zmení súčasný stav vašej databázy záznamy zo záložného súboru."</string>
 <string name="no_backups">"Žiadne zálohy v tomto umiestnení"</string>
+<string name="nothing_to_show">"Nič na zobrazenie"</string>
+<string name="widget_refresh_info">"Och! Niečo sa pokazilo. Prosím, skúste aktualizovať widget ručne ..."</string>
 </resources>

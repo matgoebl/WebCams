@@ -101,7 +101,8 @@ public class JsonFetcherDialog extends DialogFragment {
     private int maxProgressValue;
 
     private static final String TAG = "JsonFetcher";
-    private static final String JSON_FILE_URL = "http://api.yetanotherview.cz/webcams";
+    private static final String JSON_FILE_URL_ALL = "http://api.yetanotherview.cz/api/v1/get_all_webcams.php";
+    private static final String JSON_FILE_URL_POPULAR = "http://api.yetanotherview.cz/api/v1/get_popular_webcams.php";
     private static final int latest = 14;
 
     private Activity mActivity;
@@ -179,7 +180,13 @@ public class JsonFetcherDialog extends DialogFragment {
         protected String doInBackground(Void... params) {
 
             try {
-                URL url = new URL(JSON_FILE_URL);
+
+                URL url;
+                if (selection == 0) {
+                    url = new URL(JSON_FILE_URL_POPULAR);
+                }
+                else url = new URL(JSON_FILE_URL_ALL);
+
                 HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
                 InputStream content = new BufferedInputStream(urlConn.getInputStream());
 
@@ -190,7 +197,7 @@ public class JsonFetcherDialog extends DialogFragment {
                     //Read the server response and attempt to parse it as JSON
                     Reader reader = new InputStreamReader(content);
 
-                    Gson gson = new GsonBuilder().setDateFormat("dd.MM.yyyy HH:mm:ss, zzzz").create();
+                    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss, zzzz").create();
                     importWebCams = Arrays.asList(gson.fromJson(reader, WebCam[].class));
                     content.close();
 
@@ -218,7 +225,7 @@ public class JsonFetcherDialog extends DialogFragment {
                                     long webCamDateAdded = webCam.getDateAdded().getTime();
                                     long differenceBetweenLastFetch = lastFetchPopular - webCamDateAdded;
 
-                                    if (webCam.isPopular() && differenceBetweenLastFetch < 0) {
+                                    if (differenceBetweenLastFetch < 0) {
                                         if (allWebCams.size() != 0) {
                                             boolean notFound = false;
                                             for (WebCam allWebCam : allWebCams) {
@@ -275,14 +282,15 @@ public class JsonFetcherDialog extends DialogFragment {
                             countryList = new ArrayList<>();
                             for (WebCam webCam : importWebCams) {
 
-                                String countryName = webCam.getCountry();
-                                listAllCountries.add(countryName);
-                                if (!tempList.contains(countryName)) {
-                                    tempList.add(countryName);
+                                String countryCode = webCam.getCountry();
+                                listAllCountries.add(countryCode);
+                                if (!tempList.contains(countryCode)) {
+                                    tempList.add(countryCode);
 
                                     Country country = new Country();
-                                    country.setCountryName(countryName);
-                                    String drawable =  countryName.toLowerCase().replace(" ", "_").replace(".","").replace("é","e").trim();
+                                    country.setCountryCode(countryCode);
+                                    country.setCountryName(new Locale("", countryCode).getDisplayCountry());
+                                    String drawable =  countryCode.toLowerCase();
                                     country.setIcon(Utils.getResId(drawable, R.drawable.class));
 
                                     countryList.add(country);
@@ -293,8 +301,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             Collections.sort(listAllCountries);
 
                             for (Country country : countryList) {
-                                String countryName = country.getCountryName();
-                                int occurrences = Collections.frequency(listAllCountries, countryName);
+                                int occurrences = Collections.frequency(listAllCountries, country.getCountryCode());
                                 country.setCount(occurrences);
                             }
 
@@ -631,6 +638,7 @@ public class JsonFetcherDialog extends DialogFragment {
                         .build();
 
                 ListView manualSelectionList = (ListView) dialog.getCustomView().findViewById(R.id.filtered_list_view);
+                manualSelectionList.setEmptyView(dialog.getCustomView().findViewById(R.id.empty_info_text));
                 manualSelectionAdapter = new ManualSelectionAdapter(mActivity, importWebCams);
                 manualSelectionList.setAdapter(manualSelectionAdapter);
 
@@ -721,7 +729,7 @@ public class JsonFetcherDialog extends DialogFragment {
                                     @Override
                                     public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                                         Country country = countryList.get(which);
-                                        new countrySelectionBackgroundTask().execute(country.getCountryName());
+                                        new countrySelectionBackgroundTask().execute(country.getCountryCode(),country.getCountryName());
                                         dialog.dismiss();
                                         swapProgressDialog();
                                     }
@@ -740,12 +748,12 @@ public class JsonFetcherDialog extends DialogFragment {
         protected Long doInBackground(String... texts) {
 
             synchronized (sDataLock) {
-                String text = texts[0];
+                String countryCode = texts[0];
                 long categoryCountry = db.createCategory(new Category("@drawable/icon_country",
-                        text + " " + Utils.getDateString()));
+                        texts[1] + " " + Utils.getDateString()));
 
                 for (WebCam webCam : importWebCams) {
-                    if (webCam.getCountry().equals(text)) {
+                    if (webCam.getCountry().equals(countryCode)) {
                         if (allWebCams.size() != 0) {
                             boolean notFound = false;
                             for (WebCam allWebCam : allWebCams) {

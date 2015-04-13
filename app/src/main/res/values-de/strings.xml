@@ -209,4 +209,6 @@
 <string name="restore_progress">"Importieren der ausgewählten Datei"</string>
 <string name="restore_confirm">"Diese Aktion ändern den aktuellen Status deiner Datenbank und ersetzt sie mit den Einträgen der Sicherungsdatei"</string>
 <string name="no_backups">"Keine Sicherungen an diesem Speicherort"</string>
+<string name="nothing_to_show">"Nichts anzuzeigen"</string>
+<string name="widget_refresh_info">"Oops, etwas ist schief gegangen. Bitte versuche es noch einmal mit dem Aktualisierenbutton…"</string>
 </resources>

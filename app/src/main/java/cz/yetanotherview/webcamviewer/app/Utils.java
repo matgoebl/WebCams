@@ -39,9 +39,7 @@ import java.math.RoundingMode;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -115,45 +113,19 @@ public class Utils {
     }
 
     /**
-     * Remove old database file
-     * @param fileDB old file
-     * @return statement
-     */
-    public static boolean removeDB(File fileDB) {
-        Log.d("", "Delete is running...");
-        Log.d("", String.valueOf(fileDB));
-        return fileDB.delete();
-    }
-
-    /**
      * Get the resources Id.
      */
     public static int getResId(String resourceName, Class<?> c) {
-
-        List<String> us_states = Arrays.asList("alabama", "alaska", "arizona", "arkansas", "california",
-                "colorado", "connecticut", "delaware", "florida", "georgia", "hawaii", "idaho", "illinois",
-                "indiana", "iowa", "kansas", "kentucky", "louisiana", "maine", "maryland", "massachusetts",
-                "michigan", "minnesota", "mississippi", "missouri", "montana", "nebraska", "nevada",
-                "new_hampshire", "new_jersey", "new_mexico", "new_york", "north_carolina", "north_dakota",
-                "ohio", "oklahoma", "oregon", "pennsylvania", "rhode_island", "south_carolina",
-                "south_dakota", "tennessee", "texas", "utah", "vermont", "virginia", "washington",
-                "washington_dc", "west_virginia", "wisconsin", "wyoming");
-        boolean contains = us_states.contains(resourceName);
-
-            try {
-                int resId;
-                if (contains) {
-                    resId = R.drawable.united_states;
-                }
-                else {
-                    Field idField = c.getDeclaredField(resourceName);
-                    resId = idField.getInt(idField);
-                }
-                return resId;
-
-            } catch (Exception e) {
-                return R.drawable.unknown;
+        try {
+            // AAPT hack
+            if (resourceName.equals("do")) {
+                resourceName = "doo";
             }
+            Field idField = c.getDeclaredField(resourceName);
+            return idField.getInt(idField);
+        } catch (Exception e) {
+            return R.drawable.unknown;
+        }
     }
 
     /**

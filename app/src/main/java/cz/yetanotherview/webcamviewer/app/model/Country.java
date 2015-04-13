@@ -22,6 +22,7 @@ public class Country {
 
     private long id;
     private int icon;
+    private String country_code;
     private String country_name;
     private int count;
 
@@ -48,6 +49,10 @@ public class Country {
         this.icon = icon;
     }
 
+    public void setCountryCode(String country_code) {
+        this.country_code = country_code;
+    }
+
     public void setCountryName(String country_name) {
         this.country_name = country_name;
     }
@@ -63,6 +68,10 @@ public class Country {
 
     public int getIcon() {
         return this.icon;
+    }
+
+    public String getCountryCode() {
+        return this.country_code;
     }
 
     public String getCountryName() {
