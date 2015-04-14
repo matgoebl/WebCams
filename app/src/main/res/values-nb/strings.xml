@@ -215,4 +215,5 @@
 <string name="no_backups">"Ingen sikkerhetskopier på denne lagringsenheten"</string>
 <string name="nothing_to_show">"Ingen ting å vise"</string>
 <string name="widget_refresh_info">"Ops, noe gikk galt. Vennligst prøv oppfriskingsknappen..."</string>
+<string name="updated">"Oppdatert:"</string>
 </resources>

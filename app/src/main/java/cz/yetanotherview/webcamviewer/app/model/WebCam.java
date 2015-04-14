@@ -33,7 +33,8 @@ public class WebCam {
     private double longitude;
     private String country;
     private boolean popular;
-    private Date dateAdded;
+    private Date dateModified;
+    private long dateModifiedLong;
     private String created_at;
     private boolean selected;
 
@@ -110,8 +111,12 @@ public class WebCam {
         this.popular = popular;
     }
 
-    public void setDateAdded(Date dateAdded) {
-        this.dateAdded = dateAdded;
+    public void setDateModified(Date dateModified) {
+        this.dateModified = dateModified;
+    }
+
+    public void setDateModifiedFromDb(long dateModifiedFromDb) {
+        this.dateModifiedLong = dateModifiedFromDb;
     }
 
     public void setCreatedAt(String created_at){
@@ -168,8 +173,16 @@ public class WebCam {
         return this.popular;
     }
 
-    public Date getDateAdded() {
-        return this.dateAdded;
+    public Date getDateModified() {
+        return this.dateModified;
+    }
+
+    public long getDateModifiedToDb() {
+        return this.dateModified.getTime();
+    }
+
+    public long getDateModifiedFromDb() {
+        return this.dateModifiedLong;
     }
 
     public String getCreatedAt() {

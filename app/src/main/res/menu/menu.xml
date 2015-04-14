@@ -49,10 +49,4 @@
         android:orderInCategory="7"
         app:showAsAction="ifRoom"/>
 
-    <item android:icon="@drawable/ic_action_favorite"
-        android:id="@+id/menu_donate"
-        android:title="@string/donate"
-        android:orderInCategory="8"
-        app:showAsAction="ifRoom"/>
-
 </menu>

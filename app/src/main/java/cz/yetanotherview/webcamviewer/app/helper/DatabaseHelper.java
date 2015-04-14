@@ -40,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = DatabaseHelper.class.getName();
 
     // Database Version
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     // Database Name
     public static final String DATABASE_NAME = "webCamDatabase.db";
@@ -62,6 +62,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_STATUS = "status";
     private static final String KEY_LATITUDE = "latitude";
     private static final String KEY_LONGITUDE = "longitude";
+    private static final String KEY_DATE_MODIFIED = "date_modified";
 
     // CATEGORY'S Table - column names
     private static final String KEY_CATEGORY_ICON = "category_icon";
@@ -76,7 +77,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_WEBCAM = "CREATE TABLE IF NOT EXISTS "
             + TABLE_WEBCAM + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_UNI_ID + " INTEGER," + KEY_WEBCAM
             + " TEXT," + KEY_WEBCAM_URL + " TEXT," + KEY_POSITION + " INTEGER," + KEY_STATUS + " INTEGER,"
-            + KEY_LATITUDE + " REAL,"  + KEY_LONGITUDE + " REAL," + KEY_CREATED_AT + " DATETIME" + ")";
+            + KEY_LATITUDE + " REAL,"  + KEY_LONGITUDE + " REAL," + KEY_DATE_MODIFIED + " INTEGER,"
+            + KEY_CREATED_AT + " DATETIME" + ")";
 
     // Category table create statement
     private static final String CREATE_TABLE_CATEGORY = "CREATE TABLE IF NOT EXISTS " + TABLE_CATEGORY
@@ -105,15 +107,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         int upgradeTo = oldVersion + 1;
-        while (upgradeTo <= newVersion)
-        {
-            switch (upgradeTo)
-            {
+        while (upgradeTo <= newVersion) {
+            switch (upgradeTo) {
                 case 3:
                     migrateOldTables(db);
                     break;
                 case 5:
                     db.execSQL("ALTER TABLE " + TABLE_CATEGORY + " ADD COLUMN " + KEY_CATEGORY_ICON + " TEXT");
+                    break;
+                case 6:
+                    db.execSQL("ALTER TABLE " + TABLE_WEBCAM + " ADD COLUMN " + KEY_DATE_MODIFIED + " INTEGER");
                     break;
             }
             upgradeTo++;
@@ -147,6 +150,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_STATUS, webCam.getStatus());
         values.put(KEY_LATITUDE, webCam.getLatitude());
         values.put(KEY_LONGITUDE, webCam.getLongitude());
+        values.put(KEY_DATE_MODIFIED, webCam.getDateModifiedToDb());
         values.put(KEY_CREATED_AT, getDateTime());
 
         // insert row
@@ -185,6 +189,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 wc.setPosition(c.getInt(c.getColumnIndex(KEY_POSITION)));
                 wc.setLatitude(c.getDouble(c.getColumnIndex(KEY_LATITUDE)));
                 wc.setLongitude(c.getDouble(c.getColumnIndex(KEY_LONGITUDE)));
+                wc.setDateModifiedFromDb(c.getLong(c.getColumnIndex(KEY_DATE_MODIFIED)));
                 wc.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
             } while (c.moveToNext());
         }
@@ -218,6 +223,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 wc.setStatus(c.getInt(c.getColumnIndex(KEY_STATUS)));
                 wc.setLatitude(c.getDouble(c.getColumnIndex(KEY_LATITUDE)));
                 wc.setLongitude(c.getDouble(c.getColumnIndex(KEY_LONGITUDE)));
+                wc.setDateModifiedFromDb(c.getLong(c.getColumnIndex(KEY_DATE_MODIFIED)));
                 wc.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
 
                 // adding to WebCam list
@@ -259,6 +265,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 wc.setStatus(c.getInt(c.getColumnIndex(KEY_STATUS)));
                 wc.setLatitude(c.getDouble(c.getColumnIndex(KEY_LATITUDE)));
                 wc.setLongitude(c.getDouble(c.getColumnIndex(KEY_LONGITUDE)));
+                wc.setDateModifiedFromDb(c.getLong(c.getColumnIndex(KEY_DATE_MODIFIED)));
                 wc.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
 
                 // adding to WebCam list
@@ -316,6 +323,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 createWebCamCategory(webCam_id, category_id);
             }
         }
+    }
+
+    /**
+     * Updating a WebCam data from Json
+     */
+    public void updateWebCamFromJson(WebCam currentWebCam, WebCam newData, long category_id) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_WEBCAM, newData.getName());
+        values.put(KEY_WEBCAM_URL, newData.getUrl());
+        values.put(KEY_STATUS, newData.getStatus());
+        values.put(KEY_LATITUDE, newData.getLatitude());
+        values.put(KEY_LONGITUDE, newData.getLongitude());
+        values.put(KEY_DATE_MODIFIED, newData.getDateModifiedToDb());
+
+        long currentWebCamId = currentWebCam.getId();
+
+        // updating row
+        db.update(TABLE_WEBCAM, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(currentWebCamId) });
+
+        createWebCamCategory(currentWebCamId, category_id);
     }
 
     /**

@@ -542,16 +542,13 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
         switch (item.getItemId()) {
 
-            //Search
             case R.id.action_search:
                 return super.onOptionsItemSelected(item);
 
-            //Refresh
             case R.id.action_refresh:
                 refresh(false);
                 break;
 
-            //View
             case R.id.action_dashboard:
                 if (numberOfColumns == 1) {
                     numberOfColumns = 2;
@@ -565,12 +562,10 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                 saveToPref();
                 break;
 
-            //Sort view
             case R.id.action_sort:
                 showSortDialog();
                 break;
 
-            //Images on/off
             case R.id.action_image_on_off:
                 if (imagesOnOff) {
                     imagesOnOff = false;
@@ -586,7 +581,6 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                 saveToPref();
                 break;
 
-            //Settings
             case R.id.action_settings:
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, SettingsActivity.class);
@@ -595,24 +589,9 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                 saveToPref();
                 break;
 
-            //Help
             case R.id.menu_help:
                 Intent helpIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://youtu.be/Xcp0j2vwbxI"));
                 startActivity(helpIntent);
-                break;
-
-            //Donate
-            case R.id.menu_donate:
-                String mLoc;
-                String mDon = ".html#donatingTable";
-                String mLocale = Utils.getLocaleCode();
-                if (mLocale.equals("cs_CZ")) {
-                    mLoc = "cs";
-                }
-                else mLoc = "en";
-                String mDonUrl = "http://www.yetanotherview.cz/wcv/" + mLoc + mDon;
-                Intent donateIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mDonUrl));
-                startActivity(donateIntent);
                 break;
 
             default:
@@ -955,17 +934,20 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
                             @Override
                             public void onDismiss(Snackbar snackbar) {
+                                floatingActionsMenu.animate().translationYBy(snackbar.getHeight());
                             }
 
                             @Override
                             public void onDismissByReplace(Snackbar snackbar) {
+                                if (notUndo) {
+                                    new deleteWebCamBackgroundTask().execute(wc.getId());
+                                }
                             }
 
                             @Override
                             public void onDismissed(Snackbar snackbar) {
                                 if (notUndo) {
                                     new deleteWebCamBackgroundTask().execute(wc.getId());
-                                    floatingActionsMenu.animate().translationYBy(snackbar.getHeight());
                                 }
                             }
                         })
