@@ -65,7 +65,7 @@
 <string name="nothing_to_export_summary">"Du musst zunächst einige WebCams in der Datenbank erstellen."</string>
 <string name="import_summary">"Vor dem Import alle WebCams aus der aktuellen Datenbank löschen?"</string>
 <string name="importing_from_server">"Importieren vom Server"</string>
-<string name="please_wait">"Bitte warten ..."</string>
+<string name="please_wait">"Bitte warten..."</string>
 <string name="server_unavailable">"Server ist nicht verfügbar"</string>
 <string name="server_unavailable_summary">"Du bist nicht mit dem Internet verbunden oder der Server ist nicht verfügbar..."</string>
 <string name="choose">"AUSWÄHLEN"</string>
@@ -210,6 +210,6 @@
 <string name="restore_confirm">"Diese Aktion ändern den aktuellen Status deiner Datenbank und ersetzt sie mit den Einträgen der Sicherungsdatei"</string>
 <string name="no_backups">"Keine Sicherungen an diesem Speicherort"</string>
 <string name="nothing_to_show">"Nichts anzuzeigen"</string>
-<string name="widget_refresh_info">"Oops, etwas ist schief gegangen. Bitte versuche es noch einmal mit dem Aktualisierenbutton…"</string>
+<string name="widget_refresh_info">"Laden, bitte warten..."</string>
 <string name="updated">"Aktualisiert:"</string>
 </resources>

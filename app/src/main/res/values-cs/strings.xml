@@ -210,6 +210,6 @@
 <string name="restore_confirm">"Tato akce změní současný stav vaší databáze záznamy ze záložního souboru."</string>
 <string name="no_backups">"Žádné zálohy v tomto umístění"</string>
 <string name="nothing_to_show">"Nic k zobrazení"</string>
-<string name="widget_refresh_info">"Jejda! Něco se pokazilo. Prosím, zkuste aktualizovat widget ručně..."</string>
+<string name="widget_refresh_info">"Nahrávám, čekejte prosím..."</string>
 <string name="updated">"Aktualizováno:"</string>
 </resources>

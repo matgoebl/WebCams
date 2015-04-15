@@ -27,6 +27,11 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +57,9 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
     public class ViewHolder
     {
         CheckBox selCheckBox;
+        ImageView selImageView;
+        TextView selTextName;
+        TextView selTextCountry;
     }
 
     public Filter getFilter() {
@@ -110,35 +118,40 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if(convertView==null)
-        {
+
+        if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.filtered_list_view_item, parent, false);
             holder = new ViewHolder();
             holder.selCheckBox = (CheckBox) convertView.findViewById(R.id.sel_checkbox);
+            holder.selImageView = (ImageView) convertView.findViewById(R.id.sel_image);
+            holder.selTextName = (TextView) convertView.findViewById(R.id.sel_text_name);
+            holder.selTextCountry = (TextView) convertView.findViewById(R.id.sel_text_country);
             convertView.setTag(holder);
 
-            holder.selCheckBox.setOnClickListener( new OnClickListener()
-            {
+            holder.selCheckBox.setOnClickListener( new OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     CheckBox cb = (CheckBox) v;
                     WebCam webCam = (WebCam) cb.getTag();
 
                     webCam.setSelected(cb.isChecked());
                 }
             });
-        }
-        else
-        {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         WebCam webCam = webCamList.get(position);
 
-        holder.selCheckBox.setText(webCamList.get(position).getName()
-                + " (" + new Locale("", webCamList.get(position).getCountry()).getDisplayCountry() + ")");
         holder.selCheckBox.setChecked(webCam.isSelected());
+        Glide.with(context)
+                .load(webCam.getUrl())
+                .centerCrop()
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(holder.selImageView);
+        holder.selTextName.setText(webCam.getName());
+        holder.selTextCountry.setText("(" + new Locale("", webCam.getCountry()).getDisplayCountry() + ")");
         holder.selCheckBox.setTag(webCam);
 
         return convertView;

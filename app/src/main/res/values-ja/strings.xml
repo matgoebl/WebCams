@@ -195,6 +195,6 @@
 <string name="restore_confirm">"この操作はバックアップファイルのエントリーで現在のデータベースを変更します。"</string>
 <string name="no_backups">"この場所にバックアップはありません"</string>
 <string name="nothing_to_show">"表示するものはありません"</string>
-<string name="widget_refresh_info">"何か問題が発生しました。リフレッシュボタンを押してみてください..."</string>
+<string name="widget_refresh_info">"読み込み中、しばらくお待ちください..."</string>
 <string name="updated">"更新した:"</string>
 </resources>

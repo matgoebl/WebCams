@@ -1,6 +1,6 @@
 /*
 * ******************************************************************************
-* Copyright (c) 2013-2015 Tomas Valenta.
+* Copyright (c) 2013-2015 Róbert Papp - Tomas Valenta.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -23,25 +23,23 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.AppWidgetTarget;
-import com.bumptech.glide.signature.StringSignature;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.*;
 
-import java.util.UUID;
+import java.util.*;
 
 import cz.yetanotherview.webcamviewer.app.R;
 
 public class WvWidgetProvider extends AppWidgetProvider {
 
-    public static String WIDGET_BUTTON = "cz.yetanotherview.webcamviewer.app.widget.WIDGET_BUTTON";
-
-    private RemoteViews mRemoteViews;
-    private static String url;
+    public static final String WIDGET_BUTTON = "cz.yetanotherview.webcamviewer.app.widget.WIDGET_BUTTON";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
@@ -50,39 +48,35 @@ public class WvWidgetProvider extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
 
             String name = WvWidgetConfigure.loadSelectedPref(context, appWidgetId, "name");
-            url = WvWidgetConfigure.loadSelectedPref(context, appWidgetId, "url");
+            if(name == null) {
+                continue;
+            }
 
-            mRemoteViews = new RemoteViews(context.getPackageName(),
-                    R.layout.widget_layout);
-
-            Intent intent = new Intent(context, WvWidgetProvider.class);
-            intent.setAction(WIDGET_BUTTON);
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-            mRemoteViews.setOnClickPendingIntent(R.id.sync_button, pendingIntent);
-            mRemoteViews.setTextViewText(R.id.wTitle, name);
+            RemoteViews remoteViews =  new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+            remoteViews.setOnClickPendingIntent(R.id.sync_button, createRefresh(context, appWidgetId));
+            remoteViews.setTextViewText(R.id.wTitle, name);
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
             loadImage(context, appWidgetId);
-
-            appWidgetManager.updateAppWidget(appWidgetId, mRemoteViews);
         }
+    }
+
+    private PendingIntent createRefresh(Context context, int appWidgetId) {
+        Intent intent = new Intent(context, WvWidgetProvider.class);
+        intent.setAction(WIDGET_BUTTON);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+        return PendingIntent.getBroadcast(context, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     @Override
     public void onReceive(@NonNull Context context, @NonNull Intent intent) {
-        super.onReceive(context, intent);
+        intent.getStringExtra(null); // force unparcel so toString is verbose
 
         if (WIDGET_BUTTON.equals(intent.getAction())) {
-            mRemoteViews = new RemoteViews(context.getPackageName(),
-                    R.layout.widget_layout);
-
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
-
-            url = WvWidgetConfigure.loadSelectedPref(context, appWidgetId, "url");
 
             loadImage(context, appWidgetId);
         }
@@ -91,17 +85,43 @@ public class WvWidgetProvider extends AppWidgetProvider {
         }
     }
 
-    private void loadImage(final Context context, int appWidgetId) {
-        int[] ids = {appWidgetId};
-        AppWidgetTarget mAppWidgetTarget = new AppWidgetTarget(context, mRemoteViews, R.id.wImage,
-                400, 400, ids) {};
+    /**
+     * Need to store the AppWidgetTargets for each appWidgetId
+     * to be able to cancel a previous load when something new comes.
+     * @see AppWidgetTarget
+     */
+    private static final Map<Integer, AppWidgetTarget> TARGETS = new HashMap<>();
+
+    private void loadImage(Context context, final int appWidgetId) {
+        String url = WvWidgetConfigure.loadSelectedPref(context, appWidgetId, "url");
+
+        AppWidgetTarget target = TARGETS.get(appWidgetId);
+        if (target == null) {
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+                    R.layout.widget_layout);
+            target = new AppWidgetTarget(context, remoteViews, R.id.wImage,
+                    400, 400, new int[] {appWidgetId});
+            TARGETS.put(appWidgetId, target);
+        }
 
         Glide.with(context)
                 .load(url)
                 .asBitmap()
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .signature(new StringSignature(UUID.randomUUID().toString()))
-                .into(mAppWidgetTarget);
+                .listener(new RequestListener<String, Bitmap>() {
+                    @Override public boolean onException(
+                            Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
+                        TARGETS.remove(appWidgetId);
+                        return false;
+                    }
+                    @Override public boolean onResourceReady(
+                            Bitmap resource, String model, Target<Bitmap> target,
+                            boolean isFromMemoryCache, boolean isFirstResource) {
+                        TARGETS.remove(appWidgetId);
+                        return false;
+                    }
+                })
+                .into(target);
     }
 }

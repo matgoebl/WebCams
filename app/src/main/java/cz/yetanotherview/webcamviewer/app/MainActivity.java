@@ -55,6 +55,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.signature.StringSignature;
@@ -101,6 +102,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     private RecyclerView mRecyclerView;
     private View mEmptyView, shadowView;
     private ImageView mMoveView;
+    private TextView mMoveTextView;
     private WebCamAdapter mAdapter;
     private float zoom;
     private int numberOfColumns, mOrientation, selectedCategory, autoRefreshInterval, mPosition;
@@ -301,13 +303,15 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         mAdapter.setClickListener(new WebCamAdapter.ClickListener() {
 
             @Override
-            public void onClick(View view, int position, boolean isEditClick, boolean isLongClick, ImageView imageView) {
+            public void onClick(View view, int position, boolean isEditClick, boolean isLongClick, ImageView imageView, TextView textView) {
                 if (isEditClick) {
                     mMoveView = imageView;
+                    mMoveTextView = textView;
                     showOptionsDialog(position);
                 }
                 else if (isLongClick) {
                     mMoveView = imageView;
+                    mMoveTextView = textView;
                     mPosition = position;
                     moveItem();
                 }
@@ -992,7 +996,10 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                 MenuInflater inflater = mode.getMenuInflater();
                 inflater.inflate(R.menu.move_menu, menu);
                 mode.setTitle(R.string.move);
-                mMoveView.setColorFilter(getResources().getColor(R.color.move));
+                if (!simpleList) {
+                    mMoveView.setColorFilter(getResources().getColor(R.color.move));
+                }
+                else mMoveTextView.setTextColor(getResources().getColor(R.color.move));
                 return true;
             }
 
@@ -1026,7 +1033,10 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
             public void onDestroyActionMode(ActionMode mode) {
                 mActionMode = null;
-                mMoveView.clearColorFilter();
+                if (!simpleList) {
+                    mMoveView.clearColorFilter();
+                }
+                else mMoveTextView.setTextColor(getResources().getColor(R.color.primary));
             }
         });
     }
