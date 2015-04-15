@@ -57,7 +57,7 @@ public class WvWidgetProvider extends AppWidgetProvider {
             remoteViews.setTextViewText(R.id.wTitle, name);
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
-            loadImage(context, appWidgetId);
+            loadImage(context, remoteViews, appWidgetId);
         }
     }
 
@@ -72,13 +72,14 @@ public class WvWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onReceive(@NonNull Context context, @NonNull Intent intent) {
-        intent.getStringExtra(null); // force unparcel so toString is verbose
-
         if (WIDGET_BUTTON.equals(intent.getAction())) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
 
-            loadImage(context, appWidgetId);
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+                   R.layout.widget_layout);
+
+            loadImage(context, remoteViews, appWidgetId);
         }
         else {
             super.onReceive(context, intent);
@@ -92,13 +93,11 @@ public class WvWidgetProvider extends AppWidgetProvider {
      */
     private static final Map<Integer, AppWidgetTarget> TARGETS = new HashMap<>();
 
-    private void loadImage(Context context, final int appWidgetId) {
+    private void loadImage(Context context, RemoteViews remoteViews, final int appWidgetId) {
         String url = WvWidgetConfigure.loadSelectedPref(context, appWidgetId, "url");
 
         AppWidgetTarget target = TARGETS.get(appWidgetId);
         if (target == null) {
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-                    R.layout.widget_layout);
             target = new AppWidgetTarget(context, remoteViews, R.id.wImage,
                     400, 400, new int[] {appWidgetId});
             TARGETS.put(appWidgetId, target);

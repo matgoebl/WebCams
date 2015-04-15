@@ -72,7 +72,7 @@ public class WvWidgetConfigure extends Activity {
         final Context context = this;
 
         DatabaseHelper db = new DatabaseHelper(context);
-        allWebCams = db.getAllWebCams(Utils.defaultSortOrder);
+        allWebCams = db.getAllWebCams(Utils.nameSortOrder);
         db.closeDB();
 
         RecyclerView recList = (RecyclerView) findViewById(R.id.widget_selection_list);

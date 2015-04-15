@@ -148,6 +148,7 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
                 .load(webCam.getUrl())
                 .centerCrop()
                 .crossFade()
+                .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.selImageView);
         holder.selTextName.setText(webCam.getName());
