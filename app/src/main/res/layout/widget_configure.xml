@@ -16,26 +16,58 @@
 ~ *****************************************************************************
 -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/big_padding"
-    android:paddingBottom="@dimen/big_padding">
+    android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/widget_selection_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"/>
-
-    <TextView
-        android:id="@+id/empty_text"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="@string/list_is_empty" />
+        android:layout_marginTop="@dimen/middle_margin"
+        android:layout_marginBottom="@dimen/huge_margin"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
 
-</RelativeLayout>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_color"
+            android:textColor="@color/primary"
+            android:id="@+id/text_color"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/background_color"
+            android:textColor="@color/primary"
+            android:id="@+id/background_color"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/widget_selection_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical">
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/empty_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="@string/list_is_empty"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

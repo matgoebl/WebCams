@@ -443,6 +443,8 @@ public class SettingsFragment extends PreferenceFragment {
                     db.deleteAllWebCams(false);
                 }
                 db.closeDB();
+                sharedPref.edit().putLong("pref_last_fetch_popular", 0).apply();
+                sharedPref.edit().putLong("pref_last_fetch_latest", 0).apply();
             }
             BackupManager backupManager = new BackupManager(getActivity());
             backupManager.dataChanged();

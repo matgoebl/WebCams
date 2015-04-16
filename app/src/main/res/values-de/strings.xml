@@ -212,4 +212,7 @@
 <string name="nothing_to_show">"Nichts anzuzeigen"</string>
 <string name="widget_refresh_info">"Laden, bitte warten..."</string>
 <string name="updated">"Aktualisiert:"</string>
+<string name="color_chooser">"Color chooser"</string>
+<string name="text_color">"Text color"</string>
+<string name="background_color">"Background color"</string>
 </resources>

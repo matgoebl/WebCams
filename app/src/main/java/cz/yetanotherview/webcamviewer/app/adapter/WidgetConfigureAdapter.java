@@ -22,7 +22,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
@@ -44,9 +48,18 @@ public class WidgetConfigureAdapter extends RecyclerView.Adapter<WidgetConfigure
     }
 
     @Override
-    public void onBindViewHolder(WidgetConfigureViewHolder contactViewHolder, int i) {
+    public void onBindViewHolder(WidgetConfigureViewHolder widgetConfigureViewHolder, int i) {
         WebCam webCam = webCamList.get(i);
-        contactViewHolder.vName.setText(webCam.getName());
+
+        Glide.with(widgetConfigureViewHolder.vImage.getContext())
+                .load(webCam.getUrl())
+                .centerCrop()
+                .crossFade()
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(widgetConfigureViewHolder.vImage);
+
+        widgetConfigureViewHolder.vName.setText(webCam.getName());
     }
 
     @Override
@@ -59,10 +72,12 @@ public class WidgetConfigureAdapter extends RecyclerView.Adapter<WidgetConfigure
     }
 
     public class WidgetConfigureViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        protected ImageView vImage;
         protected TextView vName;
 
         public WidgetConfigureViewHolder(View v) {
             super(v);
+            vImage = (ImageView) v.findViewById(R.id.widget_configure_list_image);
             vName =  (TextView) v.findViewById(R.id.widget_configure_list_text);
             v.setOnClickListener(this);
         }

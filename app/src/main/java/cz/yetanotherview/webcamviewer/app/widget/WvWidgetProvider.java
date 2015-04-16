@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
@@ -47,6 +48,8 @@ public class WvWidgetProvider extends AppWidgetProvider {
 
         for (int appWidgetId : appWidgetIds) {
 
+            int textColor = WvWidgetConfigure.loadSelectedColor(context, appWidgetId, "textColor");
+            int backgroundColor = WvWidgetConfigure.loadSelectedColor(context, appWidgetId, "backgroundColor");
             String name = WvWidgetConfigure.loadSelectedPref(context, appWidgetId, "name");
             if(name == null) {
                 continue;
@@ -55,6 +58,20 @@ public class WvWidgetProvider extends AppWidgetProvider {
             RemoteViews remoteViews =  new RemoteViews(context.getPackageName(), R.layout.widget_layout);
             remoteViews.setOnClickPendingIntent(R.id.sync_button, createRefresh(context, appWidgetId));
             remoteViews.setTextViewText(R.id.wTitle, name);
+            if (textColor != 0) {
+                remoteViews.setTextColor(R.id.wTitle, textColor);
+                remoteViews.setInt(R.id.sync_button, "setColorFilter", textColor);
+            }
+            if (backgroundColor != 0) {
+                remoteViews.setInt(R.id.background_layout, "setColorFilter", backgroundColor);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    remoteViews.setInt(R.id.background_layout, "setImageAlpha",
+                            230);
+                } else {
+                    remoteViews.setInt(R.id.background_layout, "setAlpha",
+                            230);
+                }
+            }
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
             loadImage(context, remoteViews, appWidgetId);

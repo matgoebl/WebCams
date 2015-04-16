@@ -27,4 +27,6 @@
     <color name="swipe">@color/fab_normal</color>
     <color name="move">#B14a148c</color>
 
+    <color name="tint">@color/fab_pressed</color>
+
 </resources>

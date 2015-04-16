@@ -49,13 +49,14 @@ public class WebCam {
         this.status = status;
     }
 
-    public WebCam(String webCamName, String webCamUrl, int position, int status, double latitude, double longitude) {
+    public WebCam(String webCamName, String webCamUrl, int position, int status, double latitude, double longitude, Date dateModified) {
         this.webCamName = webCamName;
         this.webCamUrl = webCamUrl;
         this.position = position;
         this.status = status;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.dateModified = dateModified;
     }
 
     public WebCam(long id, String webCamName, String webCamUrl, int position, int status) {

@@ -216,4 +216,7 @@
 <string name="nothing_to_show">"Ingen ting å vise"</string>
 <string name="widget_refresh_info">"Laster, vennligst vent..."</string>
 <string name="updated">"Oppdatert:"</string>
+<string name="color_chooser">"Color chooser"</string>
+<string name="text_color">"Text color"</string>
+<string name="background_color">"Background color"</string>
 </resources>

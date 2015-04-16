@@ -500,7 +500,7 @@ public class JsonFetcherDialog extends DialogFragment {
                 progressDialog = new MaterialDialog.Builder(mActivity)
                         .title(R.string.importing_from_server)
                         .content(importProgress)
-                        .progress(false, maxProgressValue)
+                        .progress(false, maxProgressValue, false)
                         .show();
             }
         });

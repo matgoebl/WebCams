@@ -27,20 +27,26 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.actions.ColorChooserDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.WidgetConfigureAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
-public class WvWidgetConfigure extends Activity {
+public class WvWidgetConfigure extends Activity implements ColorChooserDialog.Callback{
 
     private static final String PREFS_NAME
             = "cz.yetanotherview.webcamviewer.app_widgets";
     private static final String PREF_PREFIX_KEY = "widget_";
+    static int selectedColorIndex = 0;
+    static int selectedColorIndex2 = 2;
+
+    private static Context context;
 
     private List<WebCam> allWebCams;
     private int mAppWidgetId;
@@ -68,8 +74,10 @@ public class WvWidgetConfigure extends Activity {
 
         setContentView(R.layout.widget_configure);
         View mEmptyView = findViewById(R.id.empty_text);
+        Button textColorButton = (Button) findViewById(R.id.text_color);
+        Button backgroundColorButton = (Button) findViewById(R.id.background_color);
 
-        final Context context = this;
+        context = this;
 
         DatabaseHelper db = new DatabaseHelper(context);
         allWebCams = db.getAllWebCams(Utils.nameSortOrder);
@@ -81,6 +89,12 @@ public class WvWidgetConfigure extends Activity {
 
         WidgetConfigureAdapter widgetConfigureAdapter = new WidgetConfigureAdapter(allWebCams);
         recList.setAdapter(widgetConfigureAdapter);
+
+        if (widgetConfigureAdapter.getItemCount() == 0) {
+            mEmptyView.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyView.setVisibility(View.GONE);
+        }
 
         widgetConfigureAdapter.setClickListener(new WidgetConfigureAdapter.ClickListener() {
 
@@ -107,17 +121,33 @@ public class WvWidgetConfigure extends Activity {
                 sendBroadcast(intent);
             }
         });
+        textColorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCustomColorChooser(selectedColorIndex, true);
+            }
+        });
+        backgroundColorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCustomColorChooser(selectedColorIndex2, false);
+            }
+        });
+    }
 
-        if (widgetConfigureAdapter.getItemCount() == 0) {
-            mEmptyView.setVisibility(View.VISIBLE);
-        } else {
-            mEmptyView.setVisibility(View.GONE);
-        }
+    private void showCustomColorChooser(int preselected, Boolean fromTextButton) {
+        new ColorChooserDialog().show(this, preselected, fromTextButton);
     }
 
     public static void saveSelectedPref(Context context, int appWidgetId, String key, String value) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putString(PREF_PREFIX_KEY + key + appWidgetId, value);
+        prefs.apply();
+    }
+
+    public static void saveSelectedColor(Context context, int appWidgetId, String key, int color) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.putInt(PREF_PREFIX_KEY + key + appWidgetId, color);
         prefs.apply();
     }
 
@@ -128,6 +158,28 @@ public class WvWidgetConfigure extends Activity {
             return value;
         } else {
             return null;
+        }
+    }
+
+    public static int loadSelectedColor(Context context, int appWidgetId, String key) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        int value = prefs.getInt(PREF_PREFIX_KEY + key + appWidgetId, 0);
+        if (value != 0) {
+            return value;
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public void onColorSelection(int index, int color, int darker, boolean fromTextButton) {
+        if (fromTextButton) {
+            selectedColorIndex = index;
+            saveSelectedColor(context, mAppWidgetId, "textColor", color);
+        }
+        else {
+            selectedColorIndex2 = index;
+            saveSelectedColor(context, mAppWidgetId, "backgroundColor", color);
         }
     }
 }

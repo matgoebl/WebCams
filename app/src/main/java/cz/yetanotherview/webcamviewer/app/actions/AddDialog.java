@@ -34,6 +34,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.util.Date;
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
@@ -123,7 +124,8 @@ public class AddDialog extends DialogFragment {
                                 0,
                                 0,
                                 latitude,
-                                longitude);
+                                longitude,
+                                new Date());
 
                         if (shareCheckBox.isChecked()) {
                             shareIsChecked = true;

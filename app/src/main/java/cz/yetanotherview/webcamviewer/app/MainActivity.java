@@ -118,7 +118,6 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     private SwipeRefreshLayout swipeLayout;
     private Toolbar mToolbar;
     private MaterialDialog dialog;
-    private DialogFragment dialogFragment;
     private MenuItem searchItem;
     private SearchView searchView;
     private EventListener eventListener;
@@ -514,6 +513,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
             @Override
             public boolean onQueryTextChange(String newText) {
                 mAdapter.filter(newText);
+                checkAdapterIsEmpty();
                 return true;
             }
         });
@@ -712,8 +712,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     }
 
     private void showWelcomeDialog() {
-        dialogFragment = new WelcomeDialog();
-        dialogFragment.show(getFragmentManager(), "WelcomeDialog");
+        new WelcomeDialog().show(getFragmentManager(), "WelcomeDialog");
     }
 
     private void showImageFullscreen(int position, boolean map) {
@@ -812,20 +811,17 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     }
 
     public void showSelectionDialog(View view) {
-        dialogFragment = new SelectionDialog();
-        dialogFragment.show(getFragmentManager(), "SelectionDialog");
+        new SelectionDialog().show(getFragmentManager(), "SelectionDialog");
         hideAfterDelay();
     }
 
     public void showAddDialog(View view) {
-        dialogFragment = AddDialog.newInstance(this);
-        dialogFragment.show(getFragmentManager(), "AddDialog");
+        AddDialog.newInstance(this).show(getFragmentManager(), "AddDialog");
         hideAfterDelay();
     }
 
     public void showSuggestionDialog(View view) {
-        dialogFragment = new SuggestionDialog();
-        dialogFragment.show(getFragmentManager(), "SuggestionDialog");
+        new SuggestionDialog().show(getFragmentManager(), "SuggestionDialog");
         hideAfterDelay();
     }
 
@@ -839,7 +835,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     }
 
     private void showEditDialog(int position) {
-        dialogFragment = EditDialog.newInstance(this);
+        DialogFragment dialogFragment = EditDialog.newInstance(this);
 
         webCam = (WebCam) mAdapter.getItem(position);
         Bundle bundle = new Bundle();
