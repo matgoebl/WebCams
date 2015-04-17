@@ -16,18 +16,26 @@
 * *****************************************************************************
 */
 
-package cz.yetanotherview.webcamviewer.app.helper;
+package cz.yetanotherview.webcamviewer.app.actions;
 
-import java.util.Comparator;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.os.Bundle;
 
-import cz.yetanotherview.webcamviewer.app.model.Type;
+import com.afollestad.materialdialogs.MaterialDialog;
 
-public class TypeNameComparator implements Comparator<Type> {
+import cz.yetanotherview.webcamviewer.app.R;
+
+public class UnavailableDialog extends DialogFragment {
+
     @Override
-    public int compare(Type type1, Type type2) {
-        String typeName1 = type1.getTypeName();
-        String typeName2 = type2.getTypeName();
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        return typeName1.compareToIgnoreCase(typeName2);
+        return new MaterialDialog.Builder(getActivity())
+                .title(R.string.server_unavailable)
+                .content(R.string.server_unavailable_summary)
+                .positiveText(android.R.string.ok)
+                .build();
     }
 }

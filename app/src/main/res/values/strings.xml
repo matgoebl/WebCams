@@ -215,4 +215,8 @@
 <string name="color_chooser">"Color chooser"</string>
 <string name="text_color">"Text color"</string>
 <string name="background_color">"Background color"</string>
+<string name="get_feedback">"I would like to get feedback"</string>
+<string name="email_hint">"me@example.com"</string>
+<string name="send">"Send"</string>
+<string name="sent">"Sent!"</string>
 </resources>

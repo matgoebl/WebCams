@@ -197,7 +197,7 @@
 <string name="nothing_to_show">"表示するものはありません"</string>
 <string name="widget_refresh_info">"読み込み中、しばらくお待ちください..."</string>
 <string name="updated">"更新した:"</string>
-<string name="color_chooser">"Color chooser"</string>
-<string name="text_color">"Text color"</string>
-<string name="background_color">"Background color"</string>
+<string name="color_chooser">"色の選択"</string>
+<string name="text_color">"文字色"</string>
+<string name="background_color">"背景色"</string>
 </resources>

@@ -205,7 +205,7 @@ public class JsonFetcherDialog extends DialogFragment {
                     //Read the server response and attempt to parse it as JSON
                     Reader reader = new InputStreamReader(content);
 
-                    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss, zzzz").create();
+                    Gson gson = new GsonBuilder().setDateFormat(Utils.dateTimeFormat).create();
                     importWebCams = Arrays.asList(gson.fromJson(reader, WebCam[].class));
                     content.close();
 
@@ -231,7 +231,7 @@ public class JsonFetcherDialog extends DialogFragment {
                                         getString(R.string.popular) + " " + Utils.getDateString()));
 
                                 for (WebCam webCam : importWebCams) {
-                                    long webCamDateModified = webCam.getDateModified().getTime();
+                                    long webCamDateModified = webCam.getDateModifiedMillisecond();
                                     long differenceBetweenLastFetch = lastFetchPopular - webCamDateModified;
 
                                     if (differenceBetweenLastFetch < 0) {
@@ -386,7 +386,7 @@ public class JsonFetcherDialog extends DialogFragment {
                                         boolean found = false;
                                         for (WebCam allWebCam : allWebCams) {
                                             if (webCam.getUniId() == allWebCam.getUniId()) {
-                                                if (webCam.getDateModified().getTime() == allWebCam.getDateModifiedFromDb()) {
+                                                if (webCam.getDateModifiedMillisecond() == allWebCam.getDateModifiedFromDb()) {
                                                     db.createWebCamCategory(allWebCam.getId(), categoryAll);
                                                     duplicityWebCams++;
                                                 }
@@ -423,7 +423,7 @@ public class JsonFetcherDialog extends DialogFragment {
                                         getString(R.string.latest) + " " + Utils.getDateString()));
 
                                 for (WebCam webCam : importWebCams) {
-                                    long webCamDateModified = webCam.getDateModified().getTime();
+                                    long webCamDateModified = webCam.getDateModifiedMillisecond();
                                     long differenceBetweenLastFetch = lastFetchLatest - webCamDateModified;
 
                                     if (differenceBetweenLastFetch < 0) {
@@ -485,7 +485,7 @@ public class JsonFetcherDialog extends DialogFragment {
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-            dialogUnavailable();
+            new UnavailableDialog().show(getFragmentManager(), "UnavailableDialog");
         }
     }
 
@@ -602,7 +602,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             boolean found = false;
                             for (WebCam allWebCam : allWebCams) {
                                 if (webCam.getUniId() == allWebCam.getUniId()) {
-                                    if (webCam.getDateModified().getTime() == allWebCam.getDateModifiedFromDb()) {
+                                    if (webCam.getDateModifiedMillisecond() == allWebCam.getDateModifiedFromDb()) {
                                         db.createWebCamCategory(allWebCam.getId(), categoryNear);
                                         duplicityWebCams++;
                                     }
@@ -706,7 +706,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             boolean found = false;
                             for (WebCam allWebCam : allWebCams) {
                                 if (webCam.getUniId() == allWebCam.getUniId()) {
-                                    if (webCam.getDateModified().getTime() == allWebCam.getDateModifiedFromDb()) {
+                                    if (webCam.getDateModifiedMillisecond() == allWebCam.getDateModifiedFromDb()) {
                                         db.createWebCamCategory(allWebCam.getId(), categorySelected);
                                         duplicityWebCams++;
                                     }
@@ -784,7 +784,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             boolean found = false;
                             for (WebCam allWebCam : allWebCams) {
                                 if (webCam.getUniId() == allWebCam.getUniId()) {
-                                    if (webCam.getDateModified().getTime() == allWebCam.getDateModifiedFromDb()) {
+                                    if (webCam.getDateModifiedMillisecond() == allWebCam.getDateModifiedFromDb()) {
                                         db.createWebCamCategory(allWebCam.getId(), categoryCountry);
                                         duplicityWebCams++;
                                     }
@@ -859,7 +859,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             boolean notFound = false;
                             for (WebCam allWebCam : allWebCams) {
                                 if (webCam.getUniId() == allWebCam.getUniId()) {
-                                    if (webCam.getDateModified().getTime() == allWebCam.getDateModifiedFromDb()) {
+                                    if (webCam.getDateModifiedMillisecond() == allWebCam.getDateModifiedFromDb()) {
                                         db.createWebCamCategory(allWebCam.getId(), categoryType);
                                         duplicityWebCams++;
                                     }
@@ -990,7 +990,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             boolean found = false;
                             for (WebCam allWebCam : allWebCams) {
                                 if (webCam.getUniId() == allWebCam.getUniId()) {
-                                    if (webCam.getDateModified().getTime() == allWebCam.getDateModifiedFromDb()) {
+                                    if (webCam.getDateModifiedMillisecond() == allWebCam.getDateModifiedFromDb()) {
                                         db.createWebCamCategory(allWebCam.getId(), categoryFromMap);
                                         duplicityWebCams++;
                                     }
@@ -1074,14 +1074,6 @@ public class JsonFetcherDialog extends DialogFragment {
         new MaterialDialog.Builder(mActivity)
                 .title(R.string.no_new_webcams)
                 .content(R.string.no_new_webcams_summary)
-                .positiveText(android.R.string.ok)
-                .show();
-    }
-
-    private void dialogUnavailable() {
-        new MaterialDialog.Builder(mActivity)
-                .title(R.string.server_unavailable)
-                .content(R.string.server_unavailable_summary)
                 .positiveText(android.R.string.ok)
                 .show();
     }

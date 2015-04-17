@@ -215,4 +215,8 @@
 <string name="color_chooser">"Výber farby"</string>
 <string name="text_color">"Farba textu"</string>
 <string name="background_color">"Farba pozadia"</string>
+<string name="get_feedback">"Chcel by som dostať spätnú väzbu"</string>
+<string name="email_hint">"horvath@zoznam.sk"</string>
+<string name="send">"Odoslať"</string>
+<string name="sent">"Odoslané!"</string>
 </resources>

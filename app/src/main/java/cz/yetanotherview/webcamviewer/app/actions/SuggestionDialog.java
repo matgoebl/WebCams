@@ -18,62 +18,138 @@
 
 package cz.yetanotherview.webcamviewer.app.actions;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Intent;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.nispok.snackbar.Snackbar;
 
-import java.util.List;
+import junit.framework.Assert;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
 
 import cz.yetanotherview.webcamviewer.app.R;
-import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.helper.PerformPostCall;
 
 public class SuggestionDialog extends DialogFragment {
 
-    private String inputName;
+    private String inputSuggestion;
+    private String inputEmail;
+    private EditText mSuggestion;
+    private EditText mEmail;
+    
+    private Activity mActivity;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = activity;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        return new MaterialDialog.Builder(getActivity())
-                .title(R.string.submit_suggestion)
-                .positiveText(R.string.send_via_email)
-                .input(R.string.submit_suggestion_hint, 0, new MaterialDialog.InputCallback() {
+        MaterialDialog dialog = new MaterialDialog.Builder(mActivity)
+                    .title(R.string.submit_suggestion)
+                .customView(R.layout.suggestion_layout, false)
+                .positiveText(R.string.send)
+                .showListener(new DialogInterface.OnShowListener() {
                     @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        inputName = input.toString().trim();
-
-                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                                "mailto", Utils.email, null));
-
-                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "New Suggestion");
-                        emailIntent.putExtra(Intent.EXTRA_TEXT, "Place: " + inputName);
-
-                        List<ResolveInfo> list = getActivity().getPackageManager().queryIntentActivities(emailIntent, 0);
-                        if (list.isEmpty()) {
-                            noEmailClientsFound();
-                        } else {
-                            try {
-                                startActivity(Intent.createChooser(emailIntent, getString(R.string.send_via_email)));
-                            } catch (android.content.ActivityNotFoundException ex) {
-                                noEmailClientsFound();
-                            }
-                        }
+                    public void onShow(DialogInterface dialog) {
+                        InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(mSuggestion, InputMethodManager.SHOW_IMPLICIT);
                     }
                 })
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        inputSuggestion = mSuggestion.getText().toString().trim();
+                        if (mEmail.isShown()) {
+                            inputEmail = mEmail.getText().toString().trim();
+                        } else inputEmail = "none";
+                        new CreateNewProduct().execute();
+                    }
+                })
+
                 .build();
+
+        mSuggestion = (EditText) dialog.getCustomView().findViewById(R.id.suggestion_input);
+        mSuggestion.setHint(R.string.submit_suggestion_hint);
+        mSuggestion.requestFocus();
+
+        CheckBox suggestionCheckBox = (CheckBox) dialog.getCustomView().findViewById(R.id.suggestion_checkbox);
+        suggestionCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mEmail.setVisibility(View.VISIBLE);
+                } else {
+                    mEmail.setVisibility(View.GONE);
+                }
+            }});
+
+        mEmail = (EditText) dialog.getCustomView().findViewById(R.id.suggestion_email);
+        mEmail.setHint(R.string.email_hint);
+
+        return dialog;
     }
 
-    private void noEmailClientsFound() {
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.oops)
-                .content(getString(R.string.no_email_clients_installed))
-                .positiveText(android.R.string.ok)
-                .show();
+    class CreateNewProduct extends AsyncTask<String, String, String> {
+
+        protected String doInBackground(String... args) {
+
+            String url = "http://api.yetanotherview.cz/api/v1/send_suggestion.php";
+
+            try {
+                URL mUrl = new URL(url);
+                HttpURLConnection urlConn = (HttpURLConnection) mUrl.openConnection();
+                urlConn.connect();
+                Assert.assertEquals(HttpURLConnection.HTTP_OK, urlConn.getResponseCode());
+
+                HashMap<String , String> postDataParams = new HashMap<>();
+                postDataParams.put("suggestion", inputSuggestion);
+                postDataParams.put("userEmail", inputEmail);
+                new PerformPostCall().performPostCall(url, postDataParams);
+                sent();
+            }
+            catch (IOException e) {
+                System.err.println("Error creating HTTP connection");
+                this.publishProgress();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... args) {
+            super.onProgressUpdate(args);
+            new UnavailableDialog().show(getFragmentManager(), "UnavailableDialog");
+        }
+    }
+
+    private void sent() {
+
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                Snackbar.with(mActivity)
+                        .text(R.string.sent)
+                        .actionLabel(R.string.dismiss)
+                        .actionColor(mActivity.getResources().getColor(R.color.yellow))
+                        .show(mActivity);
+            }
+        });
+
     }
 }

@@ -1142,10 +1142,11 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         timer.schedule(doAsynchronousTask, 0, interval);
     }
 
+    //ToDO: !!!!
     private void sendEmail(WebCam webCam, boolean fromCommunityList) {
 
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto", Utils.email, null));
+                "mailto", "cz840311@gmail.com", null));
 
         if (fromCommunityList) {
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Something is wrong");

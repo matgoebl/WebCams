@@ -40,7 +40,6 @@ import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.Random;
 
 import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
@@ -52,7 +51,7 @@ public class Utils {
     public static String folderWCVPath = Environment.getExternalStorageDirectory() + "/WebCamViewer/";
     public static String folderWCVPathTmp = folderWCVPath + "Tmp/";
     public static String extension = ".wcv";
-    public static String email = "cz840311@gmail.com";
+    public static String dateTimeFormat = "yyyy-MM-dd HH:mm:ss, zzzz";
 
     /**
      * Get current date
@@ -182,13 +181,6 @@ public class Utils {
                 child.delete();
             }
         }
-    }
-
-    /**
-     * Get locale code
-     */
-    public static String getLocaleCode(){
-        return Locale.getDefault().toString();
     }
 
     /**

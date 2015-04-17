@@ -34,7 +34,6 @@ public class WebCam {
     private String country;
     private boolean popular;
     private Date dateModified;
-    private long dateModifiedLong;
     private String created_at;
     private boolean selected;
 
@@ -116,10 +115,6 @@ public class WebCam {
         this.dateModified = dateModified;
     }
 
-    public void setDateModifiedFromDb(long dateModifiedFromDb) {
-        this.dateModifiedLong = dateModifiedFromDb;
-    }
-
     public void setCreatedAt(String created_at){
         this.created_at = created_at;
     }
@@ -174,16 +169,12 @@ public class WebCam {
         return this.popular;
     }
 
-    public Date getDateModified() {
-        return this.dateModified;
-    }
-
-    public long getDateModifiedToDb() {
+    public long getDateModifiedMillisecond () {
         return this.dateModified.getTime();
     }
 
     public long getDateModifiedFromDb() {
-        return this.dateModifiedLong;
+        return this.dateModified.getTime();
     }
 
     public String getCreatedAt() {

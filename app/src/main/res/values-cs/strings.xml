@@ -215,4 +215,8 @@
 <string name="color_chooser">"Výběr barvy"</string>
 <string name="text_color">"Barva textu"</string>
 <string name="background_color">"Barva pozadí"</string>
+<string name="get_feedback">"Chtěl bych obdržet zpětnou vazbu"</string>
+<string name="email_hint">"novak@seznam.cz"</string>
+<string name="send">"Odeslat"</string>
+<string name="sent">"Odesláno!"</string>
 </resources>

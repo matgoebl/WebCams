@@ -106,7 +106,7 @@ public class ShareDialog extends DialogFragment {
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-            dialogUnavailable();
+            new UnavailableDialog().show(getFragmentManager(), "UnavailableDialog");
         }
     }
 
@@ -165,13 +165,5 @@ public class ShareDialog extends DialogFragment {
 
             }
         });
-    }
-
-    private void dialogUnavailable() {
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.server_unavailable)
-                .content(R.string.server_unavailable_summary)
-                .positiveText(android.R.string.ok)
-                .show();
     }
 }

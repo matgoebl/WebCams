@@ -126,7 +126,7 @@ public class SaveDialog extends DialogFragment {
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-            dialogUnavailable();
+            new UnavailableDialog().show(getFragmentManager(), "UnavailableDialog");
         }
     }
 
@@ -170,14 +170,5 @@ public class SaveDialog extends DialogFragment {
                 saveProgressDialog.show(getFragmentManager(), "SaveProgressDialog");
             }
         });
-    }
-
-    private void dialogUnavailable() {
-        dialog.dismiss();
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.server_unavailable)
-                .content(R.string.server_unavailable_summary)
-                .positiveText(android.R.string.ok)
-                .show();
     }
 }

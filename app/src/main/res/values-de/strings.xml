@@ -210,9 +210,9 @@
 <string name="restore_confirm">"Diese Aktion ändern den aktuellen Status deiner Datenbank und ersetzt sie mit den Einträgen der Sicherungsdatei"</string>
 <string name="no_backups">"Keine Sicherungen an diesem Speicherort"</string>
 <string name="nothing_to_show">"Nichts anzuzeigen"</string>
-<string name="widget_refresh_info">"Laden, bitte warten..."</string>
+<string name="widget_refresh_info">"Lädt, bitte warten..."</string>
 <string name="updated">"Aktualisiert:"</string>
-<string name="color_chooser">"Color chooser"</string>
-<string name="text_color">"Text color"</string>
-<string name="background_color">"Background color"</string>
+<string name="color_chooser">"Farbauswahl"</string>
+<string name="text_color">"Textfarbe"</string>
+<string name="background_color">"Hintergrundfarbe"</string>
 </resources>

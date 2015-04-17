@@ -150,7 +150,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_STATUS, webCam.getStatus());
         values.put(KEY_LATITUDE, webCam.getLatitude());
         values.put(KEY_LONGITUDE, webCam.getLongitude());
-        values.put(KEY_DATE_MODIFIED, webCam.getDateModifiedToDb());
+        values.put(KEY_DATE_MODIFIED, webCam.getDateModifiedMillisecond());
         values.put(KEY_CREATED_AT, getDateTime());
 
         // insert row
@@ -189,7 +189,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 wc.setPosition(c.getInt(c.getColumnIndex(KEY_POSITION)));
                 wc.setLatitude(c.getDouble(c.getColumnIndex(KEY_LATITUDE)));
                 wc.setLongitude(c.getDouble(c.getColumnIndex(KEY_LONGITUDE)));
-                wc.setDateModifiedFromDb(c.getLong(c.getColumnIndex(KEY_DATE_MODIFIED)));
+                wc.setDateModified(loadDate(c, c.getColumnIndex(KEY_DATE_MODIFIED)));
                 wc.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
             } while (c.moveToNext());
         }
@@ -223,7 +223,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 wc.setStatus(c.getInt(c.getColumnIndex(KEY_STATUS)));
                 wc.setLatitude(c.getDouble(c.getColumnIndex(KEY_LATITUDE)));
                 wc.setLongitude(c.getDouble(c.getColumnIndex(KEY_LONGITUDE)));
-                wc.setDateModifiedFromDb(c.getLong(c.getColumnIndex(KEY_DATE_MODIFIED)));
+                wc.setDateModified(loadDate(c, c.getColumnIndex(KEY_DATE_MODIFIED)));
                 wc.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
 
                 // adding to WebCam list
@@ -265,7 +265,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 wc.setStatus(c.getInt(c.getColumnIndex(KEY_STATUS)));
                 wc.setLatitude(c.getDouble(c.getColumnIndex(KEY_LATITUDE)));
                 wc.setLongitude(c.getDouble(c.getColumnIndex(KEY_LONGITUDE)));
-                wc.setDateModifiedFromDb(c.getLong(c.getColumnIndex(KEY_DATE_MODIFIED)));
+                wc.setDateModified(loadDate(c, c.getColumnIndex(KEY_DATE_MODIFIED)));
                 wc.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
 
                 // adding to WebCam list
@@ -338,7 +338,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_STATUS, newData.getStatus());
         values.put(KEY_LATITUDE, newData.getLatitude());
         values.put(KEY_LONGITUDE, newData.getLongitude());
-        values.put(KEY_DATE_MODIFIED, newData.getDateModifiedToDb());
+        values.put(KEY_DATE_MODIFIED, newData.getDateModifiedMillisecond());
 
         long currentWebCamId = currentWebCam.getId();
 
@@ -591,5 +591,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Date date = new Date();
         return dateFormat.format(date);
+    }
+
+    /**
+     * load Date
+     * */
+    public static Date loadDate(Cursor cursor, int index) {
+        if (cursor.isNull(index)) {
+            return null;
+        }
+        return new Date(cursor.getLong(index));
     }
 }
