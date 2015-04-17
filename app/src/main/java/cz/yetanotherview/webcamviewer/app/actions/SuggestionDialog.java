@@ -42,6 +42,8 @@ import java.net.URL;
 import java.util.HashMap;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.actions.simple.UnavailableDialog;
 import cz.yetanotherview.webcamviewer.app.helper.PerformPostCall;
 
 public class SuggestionDialog extends DialogFragment {
@@ -81,7 +83,7 @@ public class SuggestionDialog extends DialogFragment {
                         if (mEmail.isShown()) {
                             inputEmail = mEmail.getText().toString().trim();
                         } else inputEmail = "none";
-                        new CreateNewProduct().execute();
+                        new createSuggestion().execute();
                     }
                 })
 
@@ -107,11 +109,12 @@ public class SuggestionDialog extends DialogFragment {
         return dialog;
     }
 
-    class CreateNewProduct extends AsyncTask<String, String, String> {
+    class createSuggestion extends AsyncTask<String, String, String> {
 
         protected String doInBackground(String... args) {
 
-            String url = "http://api.yetanotherview.cz/api/v1/send_suggestion.php";
+            String url = Utils.JSON_FILE_URL_SEND_SUGGESTION;
+            String reason = "New Suggestion";
 
             try {
                 URL mUrl = new URL(url);
@@ -120,6 +123,7 @@ public class SuggestionDialog extends DialogFragment {
                 Assert.assertEquals(HttpURLConnection.HTTP_OK, urlConn.getResponseCode());
 
                 HashMap<String , String> postDataParams = new HashMap<>();
+                postDataParams.put("subject", reason);
                 postDataParams.put("suggestion", inputSuggestion);
                 postDataParams.put("userEmail", inputEmail);
                 new PerformPostCall().performPostCall(url, postDataParams);
@@ -150,6 +154,5 @@ public class SuggestionDialog extends DialogFragment {
                         .show(mActivity);
             }
         });
-
     }
 }

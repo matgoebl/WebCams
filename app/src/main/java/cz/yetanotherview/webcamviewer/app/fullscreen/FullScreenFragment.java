@@ -31,7 +31,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.signature.StringSignature;
 
 import java.util.Timer;
@@ -41,6 +40,7 @@ import java.util.UUID;
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.actions.SaveDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ShareDialog;
+import cz.yetanotherview.webcamviewer.app.actions.simple.NoCoordinatesDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.DiaporamaAdapter;
 
 public class FullScreenFragment extends Fragment {
@@ -119,15 +119,11 @@ public class FullScreenFragment extends Fragment {
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (latitude != 0 && longitude != 0) {
+                if (latitude != 0 || longitude != 0) {
                     ((FullScreenActivity) getActivity()).replaceFragments(true);
                 }
                 else {
-                    new MaterialDialog.Builder(getActivity())
-                            .title(R.string.no_coordinates)
-                            .content(R.string.no_coordinates_summary)
-                            .positiveText(android.R.string.ok)
-                            .show();
+                    new NoCoordinatesDialog().show(getFragmentManager(), "NoCoordinatesDialog");
                 }
             }
         });

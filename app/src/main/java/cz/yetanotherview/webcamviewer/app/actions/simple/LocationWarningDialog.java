@@ -16,26 +16,36 @@
 * *****************************************************************************
 */
 
-package cz.yetanotherview.webcamviewer.app.actions;
+package cz.yetanotherview.webcamviewer.app.actions.simple;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import cz.yetanotherview.webcamviewer.app.R;
 
-public class UnavailableDialog extends DialogFragment {
+public class LocationWarningDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         return new MaterialDialog.Builder(getActivity())
-                .title(R.string.server_unavailable)
-                .content(R.string.server_unavailable_summary)
+                .title(R.string.no_location)
+                .content(R.string.no_location_description)
+                .neutralText(R.string.location_settings)
                 .positiveText(android.R.string.ok)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onNeutral(MaterialDialog dialog) {
+                        Intent viewIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(viewIntent);
+                    }
+                })
                 .build();
     }
 }

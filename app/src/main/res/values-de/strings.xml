@@ -215,4 +215,8 @@
 <string name="color_chooser">"Farbauswahl"</string>
 <string name="text_color">"Textfarbe"</string>
 <string name="background_color">"Hintergrundfarbe"</string>
+<string name="get_feedback">"Ich möchte Feedback erhalten"</string>
+<string name="email_hint">"ich@beispiel.de"</string>
+<string name="send">"Senden"</string>
+<string name="sent">"Gesendet!"</string>
 </resources>

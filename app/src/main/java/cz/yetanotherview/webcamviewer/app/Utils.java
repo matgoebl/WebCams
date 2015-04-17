@@ -53,6 +53,12 @@ public class Utils {
     public static String extension = ".wcv";
     public static String dateTimeFormat = "yyyy-MM-dd HH:mm:ss, zzzz";
 
+    public static final String JSON_FILE_URL_ALL = "http://api.yetanotherview.cz/api/v1/get_all_webcams.php";
+    public static final String JSON_FILE_URL_POPULAR = "http://api.yetanotherview.cz/api/v1/get_popular_webcams.php";
+    public static final String JSON_FILE_URL_LATEST = "http://api.yetanotherview.cz/api/v1/get_latest_webcams.php";
+    public static final String JSON_FILE_URL_SEND_TO_APPROVAL = "http://api.yetanotherview.cz/api/v1/send_to_approval.php";
+    public static final String JSON_FILE_URL_SEND_SUGGESTION = "http://api.yetanotherview.cz/api/v1/send_suggestion.php";
+
     /**
      * Get current date
      * @return Date

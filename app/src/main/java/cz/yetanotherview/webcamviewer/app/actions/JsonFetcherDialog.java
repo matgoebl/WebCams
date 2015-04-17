@@ -66,6 +66,8 @@ import java.util.Locale;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.actions.simple.LocationWarningDialog;
+import cz.yetanotherview.webcamviewer.app.actions.simple.UnavailableDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.CountryAdapter;
 import cz.yetanotherview.webcamviewer.app.adapter.ManualSelectionAdapter;
 import cz.yetanotherview.webcamviewer.app.adapter.TypeAdapter;
@@ -102,9 +104,6 @@ public class JsonFetcherDialog extends DialogFragment {
     private int maxProgressValue;
 
     private static final String TAG = "JsonFetcher";
-    private static final String JSON_FILE_URL_ALL = "http://api.yetanotherview.cz/api/v1/get_all_webcams.php";
-    private static final String JSON_FILE_URL_POPULAR = "http://api.yetanotherview.cz/api/v1/get_popular_webcams.php";
-    private static final String JSON_FILE_URL_LATEST = "http://api.yetanotherview.cz/api/v1/get_latest_webcams.php";
 
     private Activity mActivity;
     private EditText filterBox;
@@ -185,13 +184,13 @@ public class JsonFetcherDialog extends DialogFragment {
                 URL url;
                 switch (selection) {
                     case 0:
-                        url = new URL(JSON_FILE_URL_POPULAR);
+                        url = new URL(Utils.JSON_FILE_URL_POPULAR);
                         break;
                     case 7:
-                        url = new URL(JSON_FILE_URL_LATEST);
+                        url = new URL(Utils.JSON_FILE_URL_LATEST);
                         break;
                     default:
-                        url = new URL(JSON_FILE_URL_ALL);
+                        url = new URL(Utils.JSON_FILE_URL_ALL);
                         break;
                 }
 
@@ -522,7 +521,7 @@ public class JsonFetcherDialog extends DialogFragment {
             public void run() {
                 if (knownLocation.isNotDetected()) {
                     initDialog.dismiss();
-                    showLocationWarningDialog();
+                    new LocationWarningDialog().show(getFragmentManager(), "LocationWarningDialog");
                 }
                 else {
                     MaterialDialog dialog = new MaterialDialog.Builder(mActivity)
@@ -967,7 +966,7 @@ public class JsonFetcherDialog extends DialogFragment {
                 dialog.show();
 
                 if (knownLocation.isNotDetected()) {
-                    showLocationWarningDialog();
+                    new LocationWarningDialog().show(getFragmentManager(), "LocationWarningDialog");
                 }
             }
         });
@@ -1075,23 +1074,6 @@ public class JsonFetcherDialog extends DialogFragment {
                 .title(R.string.no_new_webcams)
                 .content(R.string.no_new_webcams_summary)
                 .positiveText(android.R.string.ok)
-                .show();
-    }
-
-    private void showLocationWarningDialog() {
-        new MaterialDialog.Builder(mActivity)
-                .title(R.string.no_location)
-                .content(R.string.no_location_description)
-                .neutralText(R.string.location_settings)
-                .positiveText(android.R.string.ok)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onNeutral(MaterialDialog dialog) {
-                        db.closeDB();
-                        Intent viewIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        mActivity.startActivity(viewIntent);
-                    }
-                })
                 .show();
     }
 }

@@ -39,6 +39,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.actions.simple.UnavailableDialog;
 
 public class SaveDialog extends DialogFragment {
 

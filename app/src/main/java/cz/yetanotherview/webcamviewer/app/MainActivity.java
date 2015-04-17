@@ -26,7 +26,6 @@ import android.app.SearchManager;
 import android.app.backup.BackupManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -34,7 +33,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -79,10 +77,13 @@ import cz.yetanotherview.webcamviewer.app.actions.SelectionDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ShareDialog;
 import cz.yetanotherview.webcamviewer.app.actions.SuggestionDialog;
 import cz.yetanotherview.webcamviewer.app.actions.WelcomeDialog;
+import cz.yetanotherview.webcamviewer.app.actions.simple.LocationWarningDialog;
+import cz.yetanotherview.webcamviewer.app.actions.simple.NoCoordinatesDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.CategoryAdapter;
 import cz.yetanotherview.webcamviewer.app.fullscreen.FullScreenActivity;
 import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
+import cz.yetanotherview.webcamviewer.app.helper.SendToInbox;
 import cz.yetanotherview.webcamviewer.app.helper.WebCamListener;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
@@ -657,7 +658,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                                         knownLocation.getLatitude() + " - latitude) + (" + knownLocation.getLongitude() +
                                         " - longitude) * (" + knownLocation.getLongitude() + " - longitude) * " + fudge + " ) ASC";
                                 if (knownLocation.isNotDetected()) {
-                                    showLocationWarningDialog();
+                                    new LocationWarningDialog().show(getFragmentManager(), "LocationWarningDialog");
                                 }
                                 break;
                             case 2:
@@ -668,7 +669,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                                         knownLocation.getLatitude() + " - latitude) + (" + knownLocation.getLongitude() +
                                         " - longitude) * (" + knownLocation.getLongitude() + " - longitude) * " + fudge + " ) DESC";
                                 if (knownLocation.isNotDetected()) {
-                                    showLocationWarningDialog();
+                                    new LocationWarningDialog().show(getFragmentManager(), "LocationWarningDialog");
                                 }
                                 break;
                             case 3:
@@ -692,22 +693,6 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                     }
                 })
                 .negativeText(R.string.close)
-                .show();
-    }
-
-    private void showLocationWarningDialog() {
-        dialog = new MaterialDialog.Builder(this)
-                .title(R.string.no_location)
-                .content(R.string.no_location_description)
-                .neutralText(R.string.location_settings)
-                .positiveText(android.R.string.ok)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onNeutral(MaterialDialog dialog) {
-                        Intent viewIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivity(viewIntent);
-                    }
-                })
                 .show();
     }
 
@@ -735,15 +720,11 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
             startActivity(intent);
         }
         else {
-            if (webCam.getLatitude() != 0 && webCam.getLongitude() != 0) {
+            if (webCam.getLatitude() != 0 || webCam.getLongitude() != 0) {
                 startActivity(intent);
             }
             else {
-                new MaterialDialog.Builder(this)
-                        .title(R.string.no_coordinates)
-                        .content(R.string.no_coordinates_summary)
-                        .positiveText(android.R.string.ok)
-                        .show();
+                new NoCoordinatesDialog().show(getFragmentManager(), "NoCoordinatesDialog");
             }
         }
     }
@@ -797,9 +778,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                                 showImageFullscreen(position, true);
                                 break;
                             case 7:
-                                if (webCam.getUniId() != 0) {
-                                    sendEmail(webCam, true);
-                                } else sendEmail(webCam, false);
+                                isFromCommunityOrNot();
                                 break;
                             default:
                                 break;
@@ -808,6 +787,12 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                     }
                 })
                 .show();
+    }
+
+    private void isFromCommunityOrNot() {
+        if (webCam.getUniId() != 0) {
+            new SendToInbox().sendToInbox(this, webCam, true);
+        } else new SendToInbox().sendToInbox(this, webCam, false);
     }
 
     public void showSelectionDialog(View view) {
@@ -867,7 +852,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         reInitializeDrawerListAdapter();
 
         if (share) {
-            sendEmail(wc, false);
+            new SendToInbox().sendToInbox(this, wc, false);
         }
         else saveDone();
     }
@@ -1140,45 +1125,6 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
             }
         };
         timer.schedule(doAsynchronousTask, 0, interval);
-    }
-
-    //ToDO: !!!!
-    private void sendEmail(WebCam webCam, boolean fromCommunityList) {
-
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto", "cz840311@gmail.com", null));
-
-        if (fromCommunityList) {
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Something is wrong");
-            emailIntent.putExtra(Intent.EXTRA_TEXT, "WebCam UniID: " + webCam.getUniId()
-                    + "\n" + "WebCam Name: " + webCam.getName());
-        }
-        else {
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "New WebCam for approval");
-            emailIntent.putExtra(Intent.EXTRA_TEXT, "WebCam Name: " + webCam.getName()
-                    + "\n" + "WebCam URL: " + webCam.getUrl() + "\n" + "WebCam Coordinates: "
-                    + webCam.getLatitude() + " - " + webCam.getLongitude());
-        }
-
-        List<ResolveInfo> list = getPackageManager().queryIntentActivities(emailIntent, 0);
-        if(list.isEmpty()) {
-            noEmailClientsFound();
-        }
-        else {
-            try {
-                startActivity(Intent.createChooser(emailIntent, getString(R.string.send_via_email)));
-            } catch (android.content.ActivityNotFoundException ex) {
-                noEmailClientsFound();
-            }
-        }
-    }
-
-    private void noEmailClientsFound() {
-        dialog = new MaterialDialog.Builder(this)
-                .title(R.string.oops)
-                .content(getString(R.string.no_email_clients_installed))
-                .positiveText(android.R.string.ok)
-                .show();
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

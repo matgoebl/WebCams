@@ -137,8 +137,8 @@
 <string name="all">"Alle"</string>
 <string name="no_coordinates">"Ingen koordinater"</string>
 <string name="no_coordinates_summary">"Dette webkameraet inneholder ikke informasjon om lokasjon (koordinater kan legges til i Rediger-dialogen)."</string>
-<string name="images_on">"Bilder slå på"</string>
-<string name="images_off">"Bilder slå av"</string>
+<string name="images_on">"Forhåndsvisning på"</string>
+<string name="images_off">"Forhåndsvisning av"</string>
 <string name="donate">"Donere"</string>
 <string name="drawer_open">"Åpen navigasjon skuff"</string>
 <string name="drawer_close">"Lukk navigasjons skuff"</string>
@@ -146,7 +146,7 @@
 <string name="action_search">"Søk"</string>
 <string name="selecting_from_map">"Velg i kart"</string>
 <string name="simple_listview">"Enkel liste"</string>
-<string name="simple_listview_summary">"Hvis realistiske forhåndsvisninger er deaktivert, kun vis en enkel navneliste"</string>
+<string name="simple_listview_summary">"Hvis forhåndsvisninger er av, vis en enkel navneliste"</string>
 <string name="delete_webcams_summary">"Slett valgte webkamera fra den nåværende databasen"</string>
 <string name="submit_suggestion">"Send et forslag"</string>
 <string name="submit_suggestion_hint">"Mitt favorittsted"</string>
@@ -216,7 +216,11 @@
 <string name="nothing_to_show">"Ingen ting å vise"</string>
 <string name="widget_refresh_info">"Laster, vennligst vent..."</string>
 <string name="updated">"Oppdatert:"</string>
-<string name="color_chooser">"Color chooser"</string>
-<string name="text_color">"Text color"</string>
-<string name="background_color">"Background color"</string>
+<string name="color_chooser">"Fargevelger"</string>
+<string name="text_color">"Tekstfarge"</string>
+<string name="background_color">"Bakgrunnsfarge"</string>
+<string name="get_feedback">"Jeg ønsker tilbakemelding"</string>
+<string name="email_hint">"meg@eksempel.com"</string>
+<string name="send">"Send"</string>
+<string name="sent">"Sendt!"</string>
 </resources>
