@@ -200,4 +200,8 @@
 <string name="color_chooser">"色の選択"</string>
 <string name="text_color">"文字色"</string>
 <string name="background_color">"背景色"</string>
+<string name="get_feedback">"よろしければフィードバックしてください"</string>
+<string name="email_hint">"me@example.com"</string>
+<string name="send">"送信"</string>
+<string name="sent">"送信しました!"</string>
 </resources>

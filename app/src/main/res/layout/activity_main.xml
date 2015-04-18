@@ -68,6 +68,13 @@
                     android:background="@color/black_transparent"
                     android:onClick="hideShadowView"/>
 
+                <View
+                    android:id="@+id/tempView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:visibility="gone"/>
+
                     <com.getbase.floatingactionbutton.FloatingActionsMenu
                         android:id="@+id/fab"
                         android:layout_width="wrap_content"

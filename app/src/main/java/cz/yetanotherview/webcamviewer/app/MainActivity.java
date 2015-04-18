@@ -973,6 +973,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         mToolbar.startActionMode(new ActionMode.Callback() {
 
             int pos = mPosition;
+            View tempView = findViewById(R.id.tempView);
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 MenuInflater inflater = mode.getMenuInflater();
                 inflater.inflate(R.menu.move_menu, menu);
@@ -981,6 +982,8 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                     mMoveView.setColorFilter(getResources().getColor(R.color.move));
                 }
                 else mMoveTextView.setTextColor(getResources().getColor(R.color.move));
+
+                tempView.setVisibility(View.VISIBLE);
                 return true;
             }
 
@@ -1018,6 +1021,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                     mMoveView.clearColorFilter();
                 }
                 else mMoveTextView.setTextColor(getResources().getColor(R.color.primary));
+                tempView.setVisibility(View.GONE);
             }
         });
     }

@@ -2,27 +2,27 @@
 <resources>
 
     <array name="colors">
-        <item>#ffffffff</item>
-        <item>#b89E9E9E</item>
-        <item>#b8474747</item>
-        <item>#b81F1F1F</item>
-        <item>#b8607D8B</item>
-        <item>#b8795548</item>
-        <item>#b8D32F2F</item>
-        <item>#b8E91E63</item>
-        <item>#b89C27B0</item>
-        <item>#b85E35B1</item>
-        <item>#b81E88E5</item>
-        <item>#b803A9F4</item>
-        <item>#b800BCD4</item>
-        <item>#b8009688</item>
-        <item>#b84CAF50</item>
-        <item>#b88BC34A</item>
-        <item>#b8CDDC39</item>
-        <item>#b8FFEB3B</item>
-        <item>#b8FFC107</item>
-        <item>#b8FF9800</item>
-        <item>#b8FF5722</item>
+        <item>#ffffff</item>
+        <item>#9E9E9E</item>
+        <item>#474747</item>
+        <item>#1F1F1F</item>
+        <item>#607D8B</item>
+        <item>#795548</item>
+        <item>#D32F2F</item>
+        <item>#E91E63</item>
+        <item>#9C27B0</item>
+        <item>#5E35B1</item>
+        <item>#1E88E5</item>
+        <item>#03A9F4</item>
+        <item>#00BCD4</item>
+        <item>#009688</item>
+        <item>#4CAF50</item>
+        <item>#8BC34A</item>
+        <item>#CDDC39</item>
+        <item>#FFEB3B</item>
+        <item>#FFC107</item>
+        <item>#FF9800</item>
+        <item>#FF5722</item>
     </array>
 
     <string-array name="sort_values">

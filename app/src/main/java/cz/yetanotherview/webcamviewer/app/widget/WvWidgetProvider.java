@@ -25,7 +25,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
@@ -37,6 +36,7 @@ import com.bumptech.glide.request.target.*;
 import java.util.*;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.Utils;
 
 public class WvWidgetProvider extends AppWidgetProvider {
 
@@ -60,17 +60,12 @@ public class WvWidgetProvider extends AppWidgetProvider {
             remoteViews.setTextViewText(R.id.wTitle, name);
             if (textColor != 0) {
                 remoteViews.setTextColor(R.id.wTitle, textColor);
+                remoteViews.setTextColor(R.id.wTime, textColor);
+                remoteViews.setTextColor(R.id.wRefreshInfoText, textColor);
                 remoteViews.setInt(R.id.sync_button, "setColorFilter", textColor);
             }
             if (backgroundColor != 0) {
                 remoteViews.setInt(R.id.background_layout, "setColorFilter", backgroundColor);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    remoteViews.setInt(R.id.background_layout, "setImageAlpha",
-                            230);
-                } else {
-                    remoteViews.setInt(R.id.background_layout, "setAlpha",
-                            230);
-                }
             }
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
@@ -110,7 +105,7 @@ public class WvWidgetProvider extends AppWidgetProvider {
      */
     private static final Map<Integer, AppWidgetTarget> TARGETS = new HashMap<>();
 
-    private void loadImage(Context context, RemoteViews remoteViews, final int appWidgetId) {
+    private void loadImage(final Context context, final RemoteViews remoteViews, final int appWidgetId) {
         String url = WvWidgetConfigure.loadSelectedPref(context, appWidgetId, "url");
 
         AppWidgetTarget target = TARGETS.get(appWidgetId);
@@ -135,6 +130,8 @@ public class WvWidgetProvider extends AppWidgetProvider {
                             Bitmap resource, String model, Target<Bitmap> target,
                             boolean isFromMemoryCache, boolean isFirstResource) {
                         TARGETS.remove(appWidgetId);
+                        remoteViews.setTextViewText(R.id.wTime,
+                                Utils.getCustomDateString(Utils.getPattern(context)));
                         return false;
                     }
                 })

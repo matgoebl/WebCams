@@ -25,6 +25,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Environment;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -86,6 +87,17 @@ public class Utils {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat(pattern);
         return df.format(c.getTime());
+    }
+
+    /**
+     * Get current used pattern in system
+     * @return Time pattern as String
+     */
+    public static String getPattern(Context context) {
+        if (!DateFormat.is24HourFormat(context)) {
+            return "K:mm a";
+        }
+        else return "HH:mm:ss";
     }
 
     /**
