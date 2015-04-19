@@ -596,7 +596,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * load Date
      * */
-    public static Date loadDate(Cursor cursor, int index) {
+    private static Date loadDate(Cursor cursor, int index) {
         if (cursor.isNull(index)) {
             return null;
         }

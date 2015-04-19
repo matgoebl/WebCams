@@ -75,11 +75,8 @@
 <string name="reset_last_check_message">"人気のある最新のウェブカムの、最後の確認回数をリセットしますか?"</string>
 <string name="community_list">"コミュニティリスト"</string>
 <string name="submit_for_approval">"承認のためこのウェブカムを送信"</string>
-<string name="send_via_email">"メールで送信..."</string>
-<string name="no_email_clients_installed">"メールクライアントがインストールされていません。"</string>
 <string name="import_webcams_now">"今すぐウェブカムをインポート!"</string>
 <string name="show_me_help">"ヘルプを表示"</string>
-<string name="oops">"エラー!"</string>
 <string name="also_delete_all_categories">"作成済のカテゴリーもすべて削除しますか?"</string>
 <string name="import_selected">"選択済をインポート"</string>
 <string name="selected">"選択済"</string>
@@ -122,7 +119,6 @@
 <string name="no_coordinates_summary">"このウェブカムは位置に関する情報がありません (経度と緯度は編集ダイアログで追加できます)"</string>
 <string name="images_on">"画像をオン"</string>
 <string name="images_off">"画像をオフ"</string>
-<string name="donate">"寄付する"</string>
 <string name="drawer_open">"オープンナビゲーションドロワー"</string>
 <string name="drawer_close">"閉じるナビゲーションドロワー"</string>
 <string name="selecting_by_name">"名前による選択"</string>
@@ -204,4 +200,6 @@
 <string name="email_hint">"me@example.com"</string>
 <string name="send">"送信"</string>
 <string name="sent">"送信しました!"</string>
+<string name="appearance">"外観"</string>
+<string name="select_webcam">"セレクトウェブカム"</string>
 </resources>

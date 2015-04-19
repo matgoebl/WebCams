@@ -1,5 +1,18 @@
+/*
+ * TouchImageView.java
+ * By: Michael Ortiz
+ * Updated By: Patrick Lackemacher
+ * Updated By: Babay88
+ * Updated By: @ipsilondev
+ * Updated By: hank-cp
+ * Updated By: singpolyma
+ * -------------------
+ * Extends Android ImageView to include pinch zooming, panning, fling and double tap zoom.
+ */
+
 package cz.yetanotherview.webcamviewer.app.fullscreen;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -9,10 +22,12 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -49,7 +64,7 @@ public class TouchImageView extends ImageView {
     //
     private Matrix matrix, prevMatrix;
 
-    private static enum State { NONE, DRAG, ZOOM, FLING, ANIMATE_ZOOM }
+    private static enum State { NONE, DRAG, ZOOM, FLING, ANIMATE_ZOOM };
     private State state;
 
     private float minScale;
@@ -85,40 +100,47 @@ public class TouchImageView extends ImageView {
     private OnTouchImageViewListener touchImageViewListener = null;
 
     public TouchImageView(Context context) {
-        super(context);
-        sharedConstructing(context);
+        this(context, null);
     }
 
     public TouchImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        sharedConstructing(context);
+        this(context, attrs, 0);
     }
 
     public TouchImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        sharedConstructing(context);
+        configureImageView(context);
     }
 
-    private void sharedConstructing(Context context) {
-        super.setClickable(true);
+    private void configureImageView(Context context) {
         this.context = context;
-        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+
+        super.setClickable(true);
+
+        mScaleDetector   = new ScaleGestureDetector(context, new ScaleListener());
         mGestureDetector = new GestureDetector(context, new GestureListener());
-        matrix = new Matrix();
+
+        matrix     = new Matrix();
         prevMatrix = new Matrix();
+
         m = new float[9];
         normalizedScale = 1;
         if (mScaleType == null) {
             mScaleType = ScaleType.FIT_CENTER;
         }
+
         minScale = 1;
         maxScale = 3;
+
         superMinScale = SUPER_MIN_MULTIPLIER * minScale;
         superMaxScale = SUPER_MAX_MULTIPLIER * maxScale;
+
         setImageMatrix(matrix);
         setScaleType(ScaleType.MATRIX);
         setState(State.NONE);
+
         onDrawReady = false;
+
         super.setOnTouchListener(new PrivateOnTouchListener());
     }
 
@@ -262,7 +284,7 @@ public class TouchImageView extends ImageView {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         onDrawReady = true;
         imageRenderedAtLeastOnce = true;
         if (delayedZoomVariables != null) {
@@ -340,7 +362,7 @@ public class TouchImageView extends ImageView {
     /**
      * Set zoom to the specified scale. Image will be centered around the point
      * (focusX, focusY). These floats range from 0 to 1 and denote the focus point
-     * as a fraction from the left and top of the view. For example, the top left
+     * as a fraction from the left and top of the view. For example, the top left 
      * corner of the image would be (0, 0). And the bottom right corner would be (1, 1).
      * @param scale
      * @param focusX
@@ -353,7 +375,7 @@ public class TouchImageView extends ImageView {
     /**
      * Set zoom to the specified scale. Image will be centered around the point
      * (focusX, focusY). These floats range from 0 to 1 and denote the focus point
-     * as a fraction from the left and top of the view. For example, the top left
+     * as a fraction from the left and top of the view. For example, the top left 
      * corner of the image would be (0, 0). And the bottom right corner would be (1, 1).
      * @param scale
      * @param focusX
@@ -396,8 +418,8 @@ public class TouchImageView extends ImageView {
 
     /**
      * Return the point at the center of the zoomed image. The PointF coordinates range
-     * in value between 0 and 1 and the focus point is denoted as a fraction from the left
-     * and top of the view. For example, the top left corner of the image would be (0, 0).
+     * in value between 0 and 1 and the focus point is denoted as a fraction from the left 
+     * and top of the view. For example, the top left corner of the image would be (0, 0). 
      * And the bottom right corner would be (1, 1).
      * @return PointF representing the scroll position of the zoomed image.
      */
@@ -417,7 +439,7 @@ public class TouchImageView extends ImageView {
 
     /**
      * Set the focus point of the zoomed image. The focus points are denoted as a fraction from the
-     * left and top of the view. The focus points can range in value between 0 and 1.
+     * left and top of the view. The focus points can range in value between 0 and 1. 
      * @param focusX
      * @param focusY
      */
@@ -426,7 +448,7 @@ public class TouchImageView extends ImageView {
     }
 
     /**
-     * Performs boundary checking and fixes the image matrix if it
+     * Performs boundary checking and fixes the image matrix if it 
      * is out of bounds.
      */
     private void fixTrans() {
@@ -446,7 +468,7 @@ public class TouchImageView extends ImageView {
      * When transitioning from zooming from focus to zoom from center (or vice versa)
      * the image can become unaligned within the view. This is apparent when zooming
      * quickly. When the content size is less than the view size, the content will often
-     * be centered incorrectly within the view. fixScaleTrans first calls fixTrans() and
+     * be centered incorrectly within the view. fixScaleTrans first calls fixTrans() and 
      * then makes sure the image is centered correctly within the view.
      */
     private void fixScaleTrans() {
@@ -499,13 +521,15 @@ public class TouchImageView extends ImageView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         Drawable drawable = getDrawable();
-        if (drawable == null || drawable.getIntrinsicWidth() == 0 || drawable.getIntrinsicHeight() == 0) {
-            setMeasuredDimension(0, 0);
-            return;
-        }
+//        if (drawable == null || drawable.getIntrinsicWidth() == 0 || drawable.getIntrinsicHeight()    == 0) {
+////            setMeasuredDimension(0, 0);
+//
+//          super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//          return;
+//        }
 
-        int drawableWidth = drawable.getIntrinsicWidth();
-        int drawableHeight = drawable.getIntrinsicHeight();
+        int drawableWidth = drawable == null ? 0 : drawable.getIntrinsicWidth();
+        int drawableHeight =  drawable == null ? 0 : drawable.getIntrinsicHeight();
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
@@ -667,7 +691,7 @@ public class TouchImageView extends ImageView {
     }
 
     /**
-     * After rotating, the matrix needs to be translated. This function finds the area of image
+     * After rotating, the matrix needs to be translated. This function finds the area of image 
      * which was previously centered and adjusts translations so that is again the center, post-rotation.
      *
      * @param axis Matrix.MTRANS_X or Matrix.MTRANS_Y
@@ -783,7 +807,10 @@ public class TouchImageView extends ImageView {
 
         @Override
         public boolean onDoubleTapEvent(MotionEvent e) {
-            return doubleTapListener != null && doubleTapListener.onDoubleTapEvent(e);
+            if(doubleTapListener != null) {
+                return doubleTapListener.onDoubleTapEvent(e);
+            }
+            return false;
         }
     }
 
@@ -909,7 +936,6 @@ public class TouchImageView extends ImageView {
     }
 
     private void scaleImage(double deltaScale, float focusX, float focusY, boolean stretchImageToSuper) {
-
         float lowerScale, upperScale;
         if (stretchImageToSuper) {
             lowerScale = superMinScale;
@@ -1036,7 +1062,7 @@ public class TouchImageView extends ImageView {
     }
 
     /**
-     * This function will transform the coordinates in the touch event to the coordinate
+     * This function will transform the coordinates in the touch event to the coordinate 
      * system of the drawable that the imageview contain
      * @param x x-coordinate of touch event
      * @param y y-coordinate of touch event
@@ -1160,6 +1186,7 @@ public class TouchImageView extends ImageView {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private class CompatScroller {
         Scroller scroller;
         OverScroller overScroller;
@@ -1226,6 +1253,7 @@ public class TouchImageView extends ImageView {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void compatPostOnAnimation(Runnable runnable) {
         if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN) {
             postOnAnimation(runnable);

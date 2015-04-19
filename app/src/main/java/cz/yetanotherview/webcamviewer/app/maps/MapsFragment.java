@@ -36,7 +36,7 @@ import cz.yetanotherview.webcamviewer.app.R;
 
 public class MapsFragment extends Fragment {
 
-    MapView mMapView;
+    private MapView mMapView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

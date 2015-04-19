@@ -35,11 +35,6 @@ public class SelectionDialog extends DialogFragment {
             R.drawable.icon_all_imported, R.drawable.icon_latest};
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

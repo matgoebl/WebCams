@@ -101,6 +101,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     private List<Category> allCategories;
     private Category allWebCamsCategory;
     private RecyclerView mRecyclerView;
+    private StaggeredGridLayoutManager mLayoutManager;
     private View mEmptyView, shadowView;
     private ImageView mMoveView;
     private TextView mMoveTextView;
@@ -279,7 +280,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         else if(numberOfColumns == 2 && mOrientation == 2) {
             mLayoutId = 3;
         }
-        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(mLayoutId, StaggeredGridLayoutManager.VERTICAL);
+        mLayoutManager = new StaggeredGridLayoutManager(mLayoutId, StaggeredGridLayoutManager.VERTICAL);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.cardList);
         mRecyclerView.setHasFixedSize(true);
@@ -372,6 +373,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
             @Override
             public void onDismiss(Snackbar snackbar) {
+                floatingActionsMenu.animate().translationYBy(snackbar.getHeight());
             }
 
             @Override
@@ -380,12 +382,11 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
             @Override
             public void onDismissed(Snackbar snackbar) {
-                floatingActionsMenu.animate().translationYBy(snackbar.getHeight());
             }
         };
     }
 
-    public void hideShadowView(View view) {
+    public void hideShadowView() {
         shadowView.animate()
                 .setDuration(400)
                 .alpha(0.0f)
@@ -795,17 +796,17 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         } else new SendToInbox().sendToInbox(this, webCam, false);
     }
 
-    public void showSelectionDialog(View view) {
+    public void showSelectionDialog() {
         new SelectionDialog().show(getFragmentManager(), "SelectionDialog");
         hideAfterDelay();
     }
 
-    public void showAddDialog(View view) {
+    public void showAddDialog() {
         AddDialog.newInstance(this).show(getFragmentManager(), "AddDialog");
         hideAfterDelay();
     }
 
-    public void showSuggestionDialog(View view) {
+    public void showSuggestionDialog() {
         new SuggestionDialog().show(getFragmentManager(), "SuggestionDialog");
         hideAfterDelay();
     }
@@ -978,11 +979,10 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                 MenuInflater inflater = mode.getMenuInflater();
                 inflater.inflate(R.menu.move_menu, menu);
                 mode.setTitle(R.string.move);
-                if (!simpleList) {
-                    mMoveView.setColorFilter(getResources().getColor(R.color.move));
+                if (simpleList && !imagesOnOff) {
+                    mMoveTextView.setTextColor(getResources().getColor(R.color.move));
                 }
-                else mMoveTextView.setTextColor(getResources().getColor(R.color.move));
-
+                else mMoveView.setColorFilter(getResources().getColor(R.color.move));
                 tempView.setVisibility(View.VISIBLE);
                 return true;
             }
@@ -992,18 +992,22 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
             }
 
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
                 switch (item.getItemId()) {
                     case R.id.up:
                         mAdapter.moveItemUp(mAdapter.getItemAt(pos));
+                        mLayoutManager.scrollToPosition(0);
                         if (pos > 0) {
                             pos = pos - 1;
                         }
+                        mLayoutManager.scrollToPositionWithOffset(pos,0);
                         return true;
                     case R.id.down:
                         mAdapter.moveItemDown(mAdapter.getItemAt(pos));
                         if (pos < (mAdapter.getItemCount() - 1)) {
                             pos = pos + 1;
                         }
+                        mLayoutManager.scrollToPositionWithOffset(pos,0);
                         return true;
                     case R.id.done:
                         sortOrder = "position";
@@ -1017,10 +1021,10 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
             public void onDestroyActionMode(ActionMode mode) {
                 mActionMode = null;
-                if (!simpleList) {
-                    mMoveView.clearColorFilter();
+                if (simpleList && !imagesOnOff) {
+                    mMoveTextView.setTextColor(getResources().getColor(R.color.primary));
                 }
-                else mMoveTextView.setTextColor(getResources().getColor(R.color.primary));
+                else  mMoveView.clearColorFilter();
                 tempView.setVisibility(View.GONE);
             }
         });

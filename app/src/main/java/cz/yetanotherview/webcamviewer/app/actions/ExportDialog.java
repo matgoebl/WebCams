@@ -161,7 +161,7 @@ public class ExportDialog extends DialogFragment {
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public void newFile(String fileName) {
+    private void newFile(String fileName) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
 
         intent.addCategory(Intent.CATEGORY_OPENABLE);

@@ -51,14 +51,13 @@ public class SendToInbox {
         return null;
     }
 
-    public class sendToInboxBackgroundTask extends AsyncTask<Void, Void, Void> {
+    private class sendToInboxBackgroundTask extends AsyncTask<Void, Void, Void> {
 
         protected Void doInBackground(Void... voids) {
 
             try {
                 String url = Utils.JSON_FILE_URL_SEND_TO_APPROVAL;
-                URL mUrl = new URL(url);
-                HttpURLConnection urlConn = (HttpURLConnection) mUrl.openConnection();
+                HttpURLConnection urlConn = (HttpURLConnection) new URL(url).openConnection();
                 urlConn.connect();
                 Assert.assertEquals(HttpURLConnection.HTTP_OK, urlConn.getResponseCode());
 

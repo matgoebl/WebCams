@@ -109,8 +109,7 @@ public class SaveDialog extends DialogFragment {
         protected String doInBackground(Void... params) {
 
             try {
-                URL mUrl = new URL(url);
-                HttpURLConnection urlConn = (HttpURLConnection) mUrl.openConnection();
+                HttpURLConnection urlConn = (HttpURLConnection) new URL(url).openConnection();
                 urlConn.connect();
                 Assert.assertEquals(HttpURLConnection.HTTP_OK, urlConn.getResponseCode());
 

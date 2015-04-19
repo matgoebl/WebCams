@@ -90,11 +90,8 @@
 <string name="reset_last_check_message">"Sicher, dass du die beliebten und neuen WebCams auf den letzten Checkpoint zurücksetzen willst?"</string>
 <string name="community_list">"Gemeinschaftsliste"</string>
 <string name="submit_for_approval">"Sende diese WebCam zur Freischaltung"</string>
-<string name="send_via_email">"E-Mail senden ..."</string>
-<string name="no_email_clients_installed">"Es gibt keinen installierten E-Mail-Client."</string>
 <string name="import_webcams_now">"IMPORTE WEBCAMS JETZT!"</string>
 <string name="show_me_help">"HILFE ANZEIGEN"</string>
-<string name="oops">"Oops!"</string>
 <string name="also_delete_all_categories">"Auch alle erstellten Kategorien löschen?"</string>
 <string name="import_selected">"IMPORT AUSGEWÄHLT"</string>
 <string name="selected">"Ausgewählt"</string>
@@ -137,7 +134,6 @@
 <string name="no_coordinates_summary">"Diese WebCam enthälte keine Informationen über ihre Position (Koordinaten können im Bearbeitungsdialog hinzugefügt werden)."</string>
 <string name="images_on">"Bilder an"</string>
 <string name="images_off">"Bilder aus"</string>
-<string name="donate">"Spenden"</string>
 <string name="drawer_open">"Öffnen navigation schublade"</string>
 <string name="drawer_close">"Schließen navigation schublade"</string>
 <string name="selecting_by_name">"Auswahl nach Name"</string>
@@ -219,4 +215,6 @@
 <string name="email_hint">"ich@beispiel.de"</string>
 <string name="send">"Senden"</string>
 <string name="sent">"Gesendet!"</string>
+<string name="appearance">"Aussehen"</string>
+<string name="select_webcam">"Wähle WebCam"</string>
 </resources>

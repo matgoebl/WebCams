@@ -120,7 +120,7 @@ public class FullScreenFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (latitude != 0 || longitude != 0) {
-                    ((FullScreenActivity) getActivity()).replaceFragments(true);
+                    ((FullScreenActivity) getActivity()).replaceFragments();
                 }
                 else {
                     new NoCoordinatesDialog().show(getFragmentManager(), "NoCoordinatesDialog");
@@ -174,7 +174,6 @@ public class FullScreenFragment extends Fragment {
 
     private void initDiaporamaAdapter() {
         diaporamaAdapter = new DiaporamaAdapter(touchImageView);
-        diaporamaAdapter.setPlaceholder(R.drawable.placeholder);
         diaporamaAdapter.setAnimationDuration(0);
     }
 

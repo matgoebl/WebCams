@@ -96,10 +96,6 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
         };
     }
 
-    public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
-    }
-
     @Override
     public int getCount() {
         return webCamList.size();

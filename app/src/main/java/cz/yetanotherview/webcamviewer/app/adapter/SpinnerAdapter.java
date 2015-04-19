@@ -53,7 +53,7 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
         return getCustomView(position, parent);
     }
 
-    public View getCustomView(int position, ViewGroup parent) {
+    private View getCustomView(int position, ViewGroup parent) {
         LayoutInflater inflater = activity.getLayoutInflater();
         View row = inflater.inflate(R.layout.spinner_item, parent, false);
         TextView label = (TextView)row.findViewById(R.id.spinner_text);

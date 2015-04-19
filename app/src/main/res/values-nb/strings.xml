@@ -92,11 +92,8 @@
 <string name="reset_last_check_message">"Er du sikker på at du vil tilbakestille til siste sjekkpunkt for Populære og Nyeste webkamera?"</string>
 <string name="community_list">"Samfunnsliste"</string>
 <string name="submit_for_approval">"Send inn webkamera for godkjennelse"</string>
-<string name="send_via_email">"Send vi a e-post..."</string>
-<string name="no_email_clients_installed">"Ingen e-post-klienter installert."</string>
 <string name="import_webcams_now">"IMPORTÉR WEBKAMERA NÅ!"</string>
 <string name="show_me_help">"VIS MEG HJELP"</string>
-<string name="oops">"Oops!"</string>
 <string name="also_delete_all_categories">"Slett også alle opprettede kategorier?"</string>
 <string name="import_selected">"IMPORTÉR VALGTE"</string>
 <string name="selected">"Valgte"</string>
@@ -139,7 +136,6 @@
 <string name="no_coordinates_summary">"Dette webkameraet inneholder ikke informasjon om lokasjon (koordinater kan legges til i Rediger-dialogen)."</string>
 <string name="images_on">"Forhåndsvisning på"</string>
 <string name="images_off">"Forhåndsvisning av"</string>
-<string name="donate">"Donere"</string>
 <string name="drawer_open">"Åpen navigasjon skuff"</string>
 <string name="drawer_close">"Lukk navigasjons skuff"</string>
 <string name="selecting_by_name">"Velg etter Navn"</string>
@@ -223,4 +219,6 @@
 <string name="email_hint">"meg@eksempel.com"</string>
 <string name="send">"Send"</string>
 <string name="sent">"Sendt!"</string>
+<string name="appearance">"Utseende"</string>
+<string name="select_webcam">"Velg webkamera"</string>
 </resources>

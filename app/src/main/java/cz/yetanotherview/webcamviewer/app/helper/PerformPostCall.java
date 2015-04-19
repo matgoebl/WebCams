@@ -37,12 +37,9 @@ public class PerformPostCall {
     public String performPostCall(String requestURL,
                                   HashMap<String, String> postDataParams) {
 
-        URL url;
         String response = "";
         try {
-            url = new URL(requestURL);
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            HttpURLConnection conn = (HttpURLConnection) new URL(requestURL).openConnection();
             conn.setReadTimeout(15000);
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("POST");

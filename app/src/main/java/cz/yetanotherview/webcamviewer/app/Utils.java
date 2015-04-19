@@ -149,7 +149,7 @@ public class Utils {
     /**
      * Round double
      */
-    public static double roundDouble(double value, int places) {
+    private static double roundDouble(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
         BigDecimal bd = new BigDecimal(value);

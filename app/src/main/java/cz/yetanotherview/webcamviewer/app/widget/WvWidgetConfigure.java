@@ -27,7 +27,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.List;
 
@@ -43,8 +44,9 @@ public class WvWidgetConfigure extends Activity implements ColorChooserDialog.Ca
     private static final String PREFS_NAME
             = "cz.yetanotherview.webcamviewer.app_widgets";
     private static final String PREF_PREFIX_KEY = "widget_";
-    static int selectedColorIndex = 0;
-    static int selectedColorIndex2 = 2;
+    private static int selectedColorIndex = 0;
+    private static int selectedColorIndex2 = 2;
+    private ImageView text_color_icon, background_color_icon;
 
     private static Context context;
 
@@ -74,8 +76,12 @@ public class WvWidgetConfigure extends Activity implements ColorChooserDialog.Ca
 
         setContentView(R.layout.widget_configure);
         View mEmptyView = findViewById(R.id.empty_text);
-        Button textColorButton = (Button) findViewById(R.id.text_color);
-        Button backgroundColorButton = (Button) findViewById(R.id.background_color);
+        LinearLayout textColorButton = (LinearLayout) findViewById(R.id.text_color);
+        LinearLayout backgroundColorButton = (LinearLayout) findViewById(R.id.background_color);
+        text_color_icon = (ImageView) findViewById(R.id.text_color_icon);
+        text_color_icon.setColorFilter(getResources().getColor(R.color.white));
+        background_color_icon = (ImageView) findViewById(R.id.background_color_icon);
+        background_color_icon.setColorFilter(getResources().getColor(R.color.widget_background));
 
         context = this;
 
@@ -139,13 +145,13 @@ public class WvWidgetConfigure extends Activity implements ColorChooserDialog.Ca
         new ColorChooserDialog().show(this, preselected, fromTextButton);
     }
 
-    public static void saveSelectedPref(Context context, int appWidgetId, String key, String value) {
+    private static void saveSelectedPref(Context context, int appWidgetId, String key, String value) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putString(PREF_PREFIX_KEY + key + appWidgetId, value);
         prefs.apply();
     }
 
-    public static void saveSelectedColor(Context context, int appWidgetId, String key, int color) {
+    private static void saveSelectedColor(Context context, int appWidgetId, String key, int color) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putInt(PREF_PREFIX_KEY + key + appWidgetId, color);
         prefs.apply();
@@ -176,10 +182,12 @@ public class WvWidgetConfigure extends Activity implements ColorChooserDialog.Ca
         if (fromTextButton) {
             selectedColorIndex = index;
             saveSelectedColor(context, mAppWidgetId, "textColor", color);
+            text_color_icon.setColorFilter(color);
         }
         else {
             selectedColorIndex2 = index;
             saveSelectedColor(context, mAppWidgetId, "backgroundColor", color);
+            background_color_icon.setColorFilter(color);
         }
     }
 }

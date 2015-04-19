@@ -109,7 +109,7 @@ public class SuggestionDialog extends DialogFragment {
         return dialog;
     }
 
-    class createSuggestion extends AsyncTask<String, String, String> {
+    private class createSuggestion extends AsyncTask<String, String, String> {
 
         protected String doInBackground(String... args) {
 
@@ -117,8 +117,7 @@ public class SuggestionDialog extends DialogFragment {
             String reason = "New Suggestion";
 
             try {
-                URL mUrl = new URL(url);
-                HttpURLConnection urlConn = (HttpURLConnection) mUrl.openConnection();
+                HttpURLConnection urlConn = (HttpURLConnection) new URL(url).openConnection();
                 urlConn.connect();
                 Assert.assertEquals(HttpURLConnection.HTTP_OK, urlConn.getResponseCode());
 

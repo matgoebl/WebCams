@@ -90,11 +90,8 @@
 <string name="reset_last_check_message">"Naozaj chcete obnoviť kontrolu dostupnosti pre Populárne a Najnovšie WebKamery?"</string>
 <string name="community_list">"Komunitné zoznam"</string>
 <string name="submit_for_approval">"Odoslať túto WebKameru na schválenie"</string>
-<string name="send_via_email">"Odoslať e-mailom ..."</string>
-<string name="no_email_clients_installed">"Nie je nainštalovaný žiadny e-mailový klient."</string>
 <string name="import_webcams_now">"IMPORTOVAŤ WEBKAMERY TERAZ!"</string>
 <string name="show_me_help">"ZOBRAZIŤ POMOCNÍKA"</string>
-<string name="oops">"Och!"</string>
 <string name="also_delete_all_categories">"Zmazať tiež všetky vytvorené kategórie?"</string>
 <string name="import_selected">"IMPORTOVAŤ VYBRANÉ"</string>
 <string name="selected">"Vybrané"</string>
@@ -137,7 +134,6 @@
 <string name="no_coordinates_summary">"Táto WebKamera neobsahuje informácie o polohe (súradnice môžete pridať priamo v editačnom okne)."</string>
 <string name="images_on">"S náhľadmi"</string>
 <string name="images_off">"Bez náhľadov"</string>
-<string name="donate">"Podporiť"</string>
 <string name="drawer_open">"Otvoriť vysúvacie menu"</string>
 <string name="drawer_close">"Zavrieť vysúvacie menu"</string>
 <string name="selecting_by_name">"Výber podľa názvu"</string>
@@ -219,4 +215,6 @@
 <string name="email_hint">"horvath@zoznam.sk"</string>
 <string name="send">"Odoslať"</string>
 <string name="sent">"Odoslané!"</string>
+<string name="appearance">"Vzhľad"</string>
+<string name="select_webcam">"Vyberte WebKameru"</string>
 </resources>

@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
@@ -40,7 +41,7 @@ import cz.yetanotherview.webcamviewer.app.Utils;
 
 public class WvWidgetProvider extends AppWidgetProvider {
 
-    public static final String WIDGET_BUTTON = "cz.yetanotherview.webcamviewer.app.widget.WIDGET_BUTTON";
+    private static final String WIDGET_BUTTON = "cz.yetanotherview.webcamviewer.app.widget.WIDGET_BUTTON";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
@@ -124,6 +125,7 @@ public class WvWidgetProvider extends AppWidgetProvider {
                     @Override public boolean onException(
                             Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
                         TARGETS.remove(appWidgetId);
+                        remoteViews.setViewVisibility(R.id.wRefreshInfoText, View.VISIBLE);
                         return false;
                     }
                     @Override public boolean onResourceReady(
@@ -132,6 +134,7 @@ public class WvWidgetProvider extends AppWidgetProvider {
                         TARGETS.remove(appWidgetId);
                         remoteViews.setTextViewText(R.id.wTime,
                                 Utils.getCustomDateString(Utils.getPattern(context)));
+                        remoteViews.setViewVisibility(R.id.wRefreshInfoText, View.GONE);
                         return false;
                     }
                 })

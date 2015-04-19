@@ -107,12 +107,12 @@ public class DiaporamaAdapter {
 
     public <T> void loadNextImage(@NonNull T model, @NonNull StringSignature stringSignature) {
         if (firstTime) {
-            Glide.with(mContext).load(model).asBitmap().signature(stringSignature)
+            Glide.with(mContext).load(model).asBitmap().fitCenter().signature(stringSignature)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(mCurrentTarget);
             firstTime = false;       }
         else {
             Glide.get(mContext).clearMemory();
-            Glide.with(mContext).load(model).asBitmap().signature(stringSignature).into(mCurrentTarget);
+            Glide.with(mContext).load(model).asBitmap().fitCenter().signature(stringSignature).into(mCurrentTarget);
         }
     }
 

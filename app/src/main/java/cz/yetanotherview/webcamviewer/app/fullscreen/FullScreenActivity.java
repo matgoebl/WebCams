@@ -81,26 +81,14 @@ public class FullScreenActivity extends Activity {
         }
     }
 
-    public void replaceFragments(boolean fromImageView) {
-
+    public void replaceFragments() {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        if (fromImageView) {
-            if (mapsFragment == null) {
-                mapsFragment = new MapsFragment();
-            }
-            transaction.replace(R.id.full_screen_container, mapsFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+        if (mapsFragment == null) {
+            mapsFragment = new MapsFragment();
         }
-        else {
-            if (fullScreenFragment == null) {
-                fullScreenFragment = new FullScreenFragment();
-            }
-            transaction.replace(R.id.full_screen_container, fullScreenFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        }
+        transaction.replace(R.id.full_screen_container, mapsFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
