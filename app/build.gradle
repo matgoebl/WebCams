@@ -8,8 +8,8 @@ android {
         applicationId "cz.yetanotherview.webcamviewer.app"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 59
-        versionName "2.2.0 rc6"
+        versionCode 60
+        versionName "2.2.0 rc7"
     }
     buildTypes {
         release {
@@ -33,7 +33,7 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.5.2'
     compile 'com.getbase:floatingactionbutton:1.9.0'
     compile 'com.afollestad:material-dialogs:0.7.2.4'
-    compile 'com.nispok:snackbar:2.10.6'
+    compile 'com.nispok:snackbar:2.10.7'
     compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:0.7.3@aar'){
         transitive=true
     }

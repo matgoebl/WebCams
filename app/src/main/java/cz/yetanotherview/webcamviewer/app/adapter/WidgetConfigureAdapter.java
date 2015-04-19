@@ -55,6 +55,7 @@ public class WidgetConfigureAdapter extends RecyclerView.Adapter<WidgetConfigure
                 .load(webCam.getUrl())
                 .centerCrop()
                 .crossFade()
+                .placeholder(R.drawable.placeholder_small)
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(widgetConfigureViewHolder.vImage);

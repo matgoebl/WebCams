@@ -386,7 +386,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         };
     }
 
-    public void hideShadowView() {
+    public void hideShadowView(View view) {
         shadowView.animate()
                 .setDuration(400)
                 .alpha(0.0f)
@@ -796,17 +796,17 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         } else new SendToInbox().sendToInbox(this, webCam, false);
     }
 
-    public void showSelectionDialog() {
+    public void showSelectionDialog(View view) {
         new SelectionDialog().show(getFragmentManager(), "SelectionDialog");
         hideAfterDelay();
     }
 
-    public void showAddDialog() {
+    public void showAddDialog(View view) {
         AddDialog.newInstance(this).show(getFragmentManager(), "AddDialog");
         hideAfterDelay();
     }
 
-    public void showSuggestionDialog() {
+    public void showSuggestionDialog(View view) {
         new SuggestionDialog().show(getFragmentManager(), "SuggestionDialog");
         hideAfterDelay();
     }

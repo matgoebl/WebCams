@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -141,6 +142,9 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
                 webcamViewHolder.vImage.setMaxHeight(Utils.getImageHeight(mContext, mLayoutId));
             }
 
+            webcamViewHolder.vName.setShadowLayer(0,0,0,0);
+            webcamViewHolder.vName.setTextColor(mContext.getResources().getColor(R.color.hyperlink));
+            webcamViewHolder.vLayout.setBackgroundColor(mContext.getResources().getColor(R.color.card_text_background));
             webcamViewHolder.vImage.setImageResource(Utils.getRandomImage());
         }
     }
@@ -186,6 +190,7 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
         protected ImageView vImage;
         protected ImageButton vButton;
 
+        protected RelativeLayout vLayout;
         protected ProgressBar vProgress;
 
         public WebCamViewHolder(View itemLayoutView) {
@@ -195,6 +200,7 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
             vImage = (ImageView) itemLayoutView.findViewById(R.id.imageView);
             vButton = (ImageButton) itemLayoutView.findViewById(R.id.action_edit);
 
+            vLayout = (RelativeLayout) itemLayoutView.findViewById(R.id.InnerRelativeLayout);
             vProgress = (ProgressBar) itemLayoutView.findViewById(R.id.loadingProgressBar);
 
 

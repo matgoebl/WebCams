@@ -30,4 +30,6 @@
     <color name="tint">#0288D1</color>
     <color name="widget_background">#5F5F5F</color>
 
+    <color name="card_text_background">#dcffffff</color>
+
 </resources>
