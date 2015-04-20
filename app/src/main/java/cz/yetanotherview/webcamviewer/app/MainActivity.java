@@ -96,20 +96,22 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     protected Object mActionMode;
 
     private DatabaseHelper db;
-    private WebCam webCam;
+    private WebCam webCam, webCamToDelete;
+    private long[] webCamToDelete_category_ids;
     private List<WebCam> allWebCams;
     private List<Category> allCategories;
     private Category allWebCamsCategory;
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
-    private View mEmptyView, shadowView;
+    private View mEmptyView, mEmptySearchView, shadowView;
     private ImageView mMoveView;
     private TextView mMoveTextView;
     private WebCamAdapter mAdapter;
     private float zoom;
-    private int numberOfColumns, mOrientation, selectedCategory, autoRefreshInterval, mPosition;
+    private int numberOfColumns, mOrientation, selectedCategory, autoRefreshInterval, mPosition,
+            webCamToDeletePosition;
     private boolean firstRun, fullScreen, autoRefresh, autoRefreshFullScreenOnly, screenAlwaysOn,
-            notUndo, imagesOnOff, simpleList;
+            imagesOnOff, simpleList;
     private String allWebCamsString, allWebCamsTitle, selectedCategoryName, mStringSignature;
     private String sortOrder = Utils.defaultSortOrder;
     private FloatingActionsMenu floatingActionsMenu;
@@ -136,6 +138,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         // Inflating main layout
         setContentView(R.layout.activity_main);
         mEmptyView = findViewById(R.id.empty);
+        mEmptySearchView = findViewById(R.id.search_empty);
 
         // Auto Refreshing
         if (autoRefresh && !autoRefreshFullScreenOnly) {
@@ -415,6 +418,14 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         }
     }
 
+    private void checkSearchViewIsEmpty () {
+        if (mAdapter.getItemCount() == 0) {
+            mEmptySearchView.setVisibility(View.VISIBLE);
+        } else {
+            mEmptySearchView.setVisibility(View.GONE);
+        }
+    }
+
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
 
         @Override
@@ -515,7 +526,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
             @Override
             public boolean onQueryTextChange(String newText) {
                 mAdapter.filter(newText);
-                checkAdapterIsEmpty();
+                checkSearchViewIsEmpty();
                 return true;
             }
         });
@@ -880,10 +891,20 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
     @Override
     public void webCamDeleted(final WebCam wc, final int position) {
-        notUndo = true;
+        webCamToDelete = wc;
+        webCamToDelete_category_ids = db.getWebCamCategoriesIds(webCamToDelete.getId());
+        webCamToDeletePosition = position;
 
         if (mAdapter != null && mAdapter.getItemCount() > 0) {
-            mAdapter.removeItem(mAdapter.getItemAt(position));
+            mAdapter.removeItem(mAdapter.getItemAt(webCamToDeletePosition));
+
+            synchronized (sDataLock) {
+                db.deleteWebCam(webCamToDelete.getId());
+                db.closeDB();
+            }
+            BackupManager backupManager = new BackupManager(getApplicationContext());
+            backupManager.dataChanged();
+            reInitializeDrawerListAdapter();
         }
 
         checkAdapterIsEmpty();
@@ -897,10 +918,15 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                         .actionListener(new ActionClickListener() {
                             @Override
                             public void onActionClicked(Snackbar snackbar) {
-                                mAdapter.addItem(position, wc);
+                                mAdapter.addItem(webCamToDeletePosition, webCamToDelete);
+                                synchronized (sDataLock) {
+                                    db.undoDeleteWebCam(webCamToDelete, webCamToDelete_category_ids);
+                                    db.closeDB();
+                                }
+                                BackupManager backupManager = new BackupManager(getApplicationContext());
+                                backupManager.dataChanged();
                                 checkAdapterIsEmpty();
                                 reInitializeDrawerListAdapter();
-                                notUndo = false;
                                 floatingActionsMenu.animate().translationYBy(snackbar.getHeight());
                             }
                         })
@@ -911,12 +937,10 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                             }
 
                             @Override
-                            public void onShowByReplace(Snackbar snackbar) {
-                            }
+                            public void onShowByReplace(Snackbar snackbar) {}
 
                             @Override
-                            public void onShown(Snackbar snackbar) {
-                            }
+                            public void onShown(Snackbar snackbar) {}
 
                             @Override
                             public void onDismiss(Snackbar snackbar) {
@@ -924,43 +948,11 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                             }
 
                             @Override
-                            public void onDismissByReplace(Snackbar snackbar) {
-                                if (notUndo) {
-                                    new deleteWebCamBackgroundTask().execute(wc.getId());
-                                }
-                            }
+                            public void onDismissByReplace(Snackbar snackbar) {}
 
                             @Override
-                            public void onDismissed(Snackbar snackbar) {
-                                if (notUndo) {
-                                    new deleteWebCamBackgroundTask().execute(wc.getId());
-                                }
-                            }
-                        })
-                , this);
-    }
-
-    private class deleteWebCamBackgroundTask extends AsyncTask<Long, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Long... longs) {
-
-            synchronized (sDataLock) {
-                db.deleteWebCam(longs[0]);
-                db.closeDB();
-            }
-            BackupManager backupManager = new BackupManager(getApplicationContext());
-            backupManager.dataChanged();
-            this.publishProgress();
-
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-            reInitializeDrawerListAdapter();
-        }
+                            public void onDismissed(Snackbar snackbar) {}
+                        }), this);
     }
 
     @Override

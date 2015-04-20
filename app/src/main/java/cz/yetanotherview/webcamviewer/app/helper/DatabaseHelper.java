@@ -377,6 +377,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * Undo Deleting a WebCam
+     */
+    public void undoDeleteWebCam(WebCam webCam, long[] category_ids) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_ID, webCam.getId());
+        values.put(KEY_UNI_ID, webCam.getUniId());
+        values.put(KEY_WEBCAM, webCam.getName());
+        values.put(KEY_WEBCAM_URL, webCam.getUrl());
+        values.put(KEY_POSITION, webCam.getPosition());
+        values.put(KEY_STATUS, webCam.getStatus());
+        values.put(KEY_LATITUDE, webCam.getLatitude());
+        values.put(KEY_LONGITUDE, webCam.getLongitude());
+        values.put(KEY_DATE_MODIFIED, webCam.getDateModifiedMillisecond());
+        values.put(KEY_CREATED_AT, getDateTime());
+
+        // insert row
+        long webCam_id = db.insert(TABLE_WEBCAM, null, values);
+
+        if (category_ids != null) {
+            // insert category_ids
+            for (long category_id : category_ids) {
+                createWebCamCategory(webCam_id, category_id);
+            }
+        }
+    }
+
+    /**
      * Delete all WebCams
      */
     public void deleteAllWebCams(boolean should_delete_all_categories) {

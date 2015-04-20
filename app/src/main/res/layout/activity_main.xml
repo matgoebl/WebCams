@@ -57,7 +57,16 @@
                     android:src="@drawable/background_blank"
                     android:layout_width="220dp"
                     android:layout_height="220dp"
-                    android:contentDescription="@string/image_description" />
+                    android:contentDescription="@string/image_description"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/search_empty"
+                    android:layout_gravity="center"
+                    android:src="@drawable/search_empty"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:visibility="gone"/>
 
                 <View
                     android:id="@+id/shadowView"

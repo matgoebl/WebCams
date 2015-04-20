@@ -59,6 +59,7 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
         CheckBox selCheckBox;
         ImageView selImageView;
         TextView selTextName;
+        TextView selTextTags;
         TextView selTextCountry;
     }
 
@@ -121,6 +122,7 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
             holder.selCheckBox = (CheckBox) convertView.findViewById(R.id.sel_checkbox);
             holder.selImageView = (ImageView) convertView.findViewById(R.id.sel_image);
             holder.selTextName = (TextView) convertView.findViewById(R.id.sel_text_name);
+            holder.selTextTags = (TextView) convertView.findViewById(R.id.sel_text_tags);
             holder.selTextCountry = (TextView) convertView.findViewById(R.id.sel_text_country);
             convertView.setTag(holder);
 
@@ -149,6 +151,7 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.selImageView);
         holder.selTextName.setText(webCam.getName());
+        holder.selTextTags.setText(webCam.getTags());
         holder.selTextCountry.setText("(" + new Locale("", webCam.getCountry()).getDisplayCountry() + ")");
         holder.selCheckBox.setTag(webCam);
 
