@@ -170,11 +170,17 @@ public class WebCam {
     }
 
     public long getDateModifiedMillisecond () {
-        return this.dateModified.getTime();
+        if (dateModified != null) {
+            return this.dateModified.getTime();
+        }
+        else return 0;
     }
 
     public long getDateModifiedFromDb() {
-        return this.dateModified.getTime();
+        if (dateModified != null) {
+            return this.dateModified.getTime();
+        }
+        else return 0;
     }
 
     public String getCreatedAt() {
