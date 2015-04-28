@@ -112,7 +112,7 @@
 <string name="action_sort_name">"Stigende etter navn"</string>
 <string name="action_sort_name_desc">"Synkende etter navn"</string>
 <string name="report_problem">"Rapportér et problem"</string>
-<string name="view">"Vis"</string>
+<string name="view">"Visning"</string>
 <string name="webcam_coordinates">"Koordinater"</string>
 <string name="hint_webcam_latitude">"50.770481"</string>
 <string name="hint_webcam_longitude">"14.209077"</string>
@@ -221,4 +221,16 @@
 <string name="sent">"Sendt!"</string>
 <string name="appearance">"Utseende"</string>
 <string name="select_webcam">"Velg webkamera"</string>
+<string name="live_streams">"Levende strømmer"</string>
+<string name="webcam_thumb_url">"Forhåndsvisningsadresse"</string>
+<string name="hint_webcam_thumb_url">"http://www.example.com/webcam/thumb.jpg"</string>
+<string name="image">"Image"</string>
+<string name="stream">"Stream"</string>
+<string name="buffering">"Buffering..."</string>
+<string name="error">"Error"</string>
+<string name="stream_error">"Sorry, this live stream cannot be played. Please check again the stream source in the Edit dialog window (is also possible that the WebCam is temporarily unavailable)."</string>
+<string name="something_is_wrong">"Something is wrong"</string>
+<string name="error_hw">"Error with hardware acceleration"</string>
+<string name="presentation">"Presentation"</string>
+<string name="manually_adding">"Manually adding"</string>
 </resources>

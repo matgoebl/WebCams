@@ -217,4 +217,16 @@
 <string name="sent">"Sent!"</string>
 <string name="appearance">"Appearance"</string>
 <string name="select_webcam">"Select WebCam"</string>
+<string name="live_streams">"Live Streams"</string>
+<string name="webcam_thumb_url">"Thumbnail web address"</string>
+<string name="hint_webcam_thumb_url">"http://www.example.com/webcam/thumb.jpg"</string>
+<string name="image">"Image"</string>
+<string name="stream">"Stream"</string>
+<string name="buffering">"Buffering..."</string>
+<string name="error">"Error"</string>
+<string name="stream_error">"Sorry, this live stream cannot be played. Please check again the stream source in the Edit dialog window (is also possible that the WebCam is temporarily unavailable)."</string>
+<string name="something_is_wrong">"Something is wrong"</string>
+<string name="error_hw">"Error with hardware acceleration"</string>
+<string name="presentation">"Presentation"</string>
+<string name="manually_adding">"Manually adding"</string>
 </resources>

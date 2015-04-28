@@ -23,12 +23,11 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -39,22 +38,21 @@ import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
+import cz.yetanotherview.webcamviewer.app.helper.OnTextChange;
 import cz.yetanotherview.webcamviewer.app.helper.WebCamListener;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 /**
- * Input dialog fragment
+ * Add dialog fragment
  */
-public class AddDialog extends DialogFragment {
+public class AddDialog extends DialogFragment implements View.OnClickListener {
 
-    private EditText mWebCamName;
-    private EditText mWebCamUrl;
-    private EditText mWebCamLatitude;
-    private EditText mWebCamLongitude;
+    private EditText mWebCamName, mWebCamUrl, mWebCamThumbUrl, mWebCamLatitude, mWebCamLongitude;
+    private double latitude, longitude;
     private WebCam webCam;
     private WebCamListener mOnAddListener;
-    private View positiveAction;
+    private TextView mWebCamThumbUrlTitle;
 
     private List<Category> allCategories;
     private Category category;
@@ -64,6 +62,7 @@ public class AddDialog extends DialogFragment {
     private Integer[] whichSelected;
     private long[] category_ids;
 
+    private RadioButton liveStream;
     private CheckBox shareCheckBox;
 
     public AddDialog() {
@@ -103,29 +102,14 @@ public class AddDialog extends DialogFragment {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         boolean shareIsChecked = false;
-
-                        String latitudeStr = mWebCamLatitude.getText().toString().trim();
-                        double latitude;
-                        if (latitudeStr.isEmpty()) {
-                            latitude = 0.0;
-                        }
-                        else latitude = Double.parseDouble(latitudeStr);
-
-                        String longitudeStr = mWebCamLongitude.getText().toString().trim();
-                        double longitude;
-                        if (longitudeStr.isEmpty()) {
-                            longitude = 0.0;
-                        }
-                        else longitude = Double.parseDouble(longitudeStr);
+                        getAndCheckLatLong();
 
                         webCam = new WebCam(
+                                liveStream.isChecked(),
                                 mWebCamName.getText().toString().trim(),
                                 mWebCamUrl.getText().toString().trim(),
-                                0,
-                                0,
-                                latitude,
-                                longitude,
-                                new Date());
+                                mWebCamThumbUrl.getText().toString().trim(),
+                                0, 0, latitude, longitude, new Date());
 
                         if (shareCheckBox.isChecked()) {
                             shareIsChecked = true;
@@ -134,7 +118,6 @@ public class AddDialog extends DialogFragment {
                         if (mOnAddListener != null) {
                             mOnAddListener.webCamAdded(webCam, category_ids, shareIsChecked);
                         }
-
                     }
 
                     @Override
@@ -143,6 +126,10 @@ public class AddDialog extends DialogFragment {
                         startActivity(browserIntent);
                     }
                 }).build();
+
+        RadioButton stillImage = (RadioButton) dialog.getCustomView().findViewById(R.id.radioStillImage);
+        stillImage.setChecked(true);
+        liveStream = (RadioButton) dialog.getCustomView().findViewById(R.id.radioLiveStream);
 
         TextView shareCheckBoxTextView = (TextView) dialog.getCustomView().findViewById(R.id.shareCheckBoxTextView);
         shareCheckBoxTextView.setVisibility(View.VISIBLE);
@@ -153,6 +140,9 @@ public class AddDialog extends DialogFragment {
         mWebCamName.requestFocus();
 
         mWebCamUrl = (EditText) dialog.getCustomView().findViewById(R.id.webcam_url);
+
+        mWebCamThumbUrlTitle = (TextView) dialog.getCustomView().findViewById(R.id.webcam_thumb_url_title);
+        mWebCamThumbUrl = (EditText) dialog.getCustomView().findViewById(R.id.webcam_thumb_url);
 
         mWebCamLatitude = (EditText) dialog.getCustomView().findViewById(R.id.webcam_latitude);
         mWebCamLongitude = (EditText) dialog.getCustomView().findViewById(R.id.webcam_longitude);
@@ -206,26 +196,48 @@ public class AddDialog extends DialogFragment {
             });
         }
 
-        positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
+        View positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
+        mWebCamUrl.addTextChangedListener(new OnTextChange(positiveAction));
 
-        mWebCamUrl.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                positiveAction.setEnabled(s.toString().trim().length() > 0);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        stillImage.setOnClickListener(this);
+        liveStream.setOnClickListener(this);
 
         dialog.show();
         positiveAction.setEnabled(false);
 
         return dialog;
+    }
+
+    @Override
+    public void onClick(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+        switch (view.getId()) {
+            case R.id.radioStillImage:
+                if (checked) {
+                    mWebCamThumbUrlTitle.setVisibility(View.GONE);
+                    mWebCamThumbUrl.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.radioLiveStream:
+                if (checked) {
+                    mWebCamThumbUrlTitle.setVisibility(View.VISIBLE);
+                    mWebCamThumbUrl.setVisibility(View.VISIBLE);
+                }
+                break;
+        }
+    }
+
+    private void getAndCheckLatLong() {
+        String latitudeStr = mWebCamLatitude.getText().toString().trim();
+        if (latitudeStr.isEmpty()) {
+            latitude = 0.0;
+        }
+        else latitude = Double.parseDouble(latitudeStr);
+
+        String longitudeStr = mWebCamLongitude.getText().toString().trim();
+        if (longitudeStr.isEmpty()) {
+            longitude = 0.0;
+        }
+        else longitude = Double.parseDouble(longitudeStr);
     }
 }

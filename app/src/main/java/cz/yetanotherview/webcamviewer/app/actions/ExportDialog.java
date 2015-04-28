@@ -28,8 +28,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -49,11 +47,11 @@ import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.Utils;
 import cz.yetanotherview.webcamviewer.app.adapter.SpinnerAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
+import cz.yetanotherview.webcamviewer.app.helper.OnTextChange;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class ExportDialog extends DialogFragment {
 
-    private View positiveAction;
     private EditText input;
     private List<WebCam> allWebCams;
     private MaterialDialog dialog;
@@ -107,20 +105,8 @@ public class ExportDialog extends DialogFragment {
             spinner = (Spinner) dialog.getCustomView().findViewById(R.id.backup_spinner);
             spinner.setAdapter(new SpinnerAdapter(getActivity(), R.layout.spinner_item, backUpValues));
 
-            positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
-
-            input.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    positiveAction.setEnabled(s.toString().trim().length() > 0);
-                }
-                @Override
-                public void afterTextChanged(Editable s) {
-                }
-            });
+            View positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
+            input.addTextChangedListener(new OnTextChange(positiveAction));
         }
         else dialog = new MaterialDialog.Builder(getActivity())
                 .title(R.string.nothing_to_export)

@@ -109,7 +109,12 @@ public class WvWidgetConfigure extends Activity implements ColorChooserDialog.Ca
                 WebCam selWebCam = allWebCams.get(position);
 
                 saveSelectedPref(context, mAppWidgetId, "name", selWebCam.getName());
-                saveSelectedPref(context, mAppWidgetId, "url", selWebCam.getUrl());
+                String url;
+                if (selWebCam.isStream()) {
+                    url = selWebCam.getThumbUrl();
+                }
+                else url = selWebCam.getUrl();
+                saveSelectedPref(context, mAppWidgetId, "url", url);
 
                 setResult(RESULT_OK, mResult);
                 finish(); // finalize configuration

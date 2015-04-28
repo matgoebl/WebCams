@@ -41,14 +41,13 @@ public class SendToInbox {
     private Boolean fromCommunityList;
     private Activity mActivity;
 
-    public Void sendToInbox(Activity activity, WebCam webCam, Boolean fromCommunityList) {
+    public void sendToInbox(Activity activity, WebCam webCam, Boolean fromCommunityList) {
 
         this.webCam = webCam;
         this.fromCommunityList = fromCommunityList;
         this.mActivity = activity;
 
         new sendToInboxBackgroundTask().execute();
-        return null;
     }
 
     private class sendToInboxBackgroundTask extends AsyncTask<Void, Void, Void> {
@@ -70,8 +69,12 @@ public class SendToInbox {
                     postDataParams.put("subject", "New WebCam for approval");
                     postDataParams.put("webCamUniId", "none");
                 }
+                postDataParams.put("isStream", String.valueOf(webCam.isStream()));
                 postDataParams.put("webCamName", webCam.getName());
                 postDataParams.put("webCamUrl", webCam.getUrl());
+                if (webCam.isStream()) {
+                    postDataParams.put("webCamThumbUrl", webCam.getThumbUrl());
+                }
                 postDataParams.put("webCamLatitude", String.valueOf(webCam.getLatitude()));
                 postDataParams.put("webCamLongitude", String.valueOf(webCam.getLongitude()));
 

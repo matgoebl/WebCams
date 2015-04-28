@@ -184,7 +184,10 @@ public class JsonFetcherDialog extends DialogFragment {
                     case 0:
                         url = new URL(Utils.JSON_FILE_URL_POPULAR);
                         break;
-                    case 7:
+                    case 6:
+                        url = new URL(Utils.JSON_FILE_URL_LIVE_STREAMS);
+                        break;
+                    case 8:
                         url = new URL(Utils.JSON_FILE_URL_LATEST);
                         break;
                     default:
@@ -208,7 +211,7 @@ public class JsonFetcherDialog extends DialogFragment {
 
                     // Swap dialogs
                     maxProgressValue = importWebCams.size();
-                    if (selection == 0 || selection == 6 || selection == 7) {
+                    if (selection == 0 || selection == 6 || selection == 7 || selection == 8) {
                         swapProgressDialog();
                     }
 
@@ -376,6 +379,44 @@ public class JsonFetcherDialog extends DialogFragment {
 
                             noNewWebCams = false;
                             synchronized (sDataLock) {
+                                long categoryLiveStreams = db.createCategory(new Category("@drawable/icon_live_streams",
+                                        getString(R.string.live_streams) + " " + Utils.getDateString()));
+                                for (WebCam webCam : importWebCams) {
+                                    if (allWebCams.size() != 0) {
+                                        boolean found = false;
+                                        for (WebCam allWebCam : allWebCams) {
+                                            if (webCam.getUniId() == allWebCam.getUniId()) {
+                                                if (webCam.getDateModifiedMillisecond() == allWebCam.getDateModifiedFromDb()) {
+                                                    db.createWebCamCategory(allWebCam.getId(), categoryLiveStreams);
+                                                    duplicityWebCams++;
+                                                }
+                                                else {
+                                                    db.updateWebCamFromJson(allWebCam, webCam, categoryLiveStreams);
+                                                    updatedWebCams++;
+                                                }
+                                                found = true;
+                                            }
+                                        }
+                                        if (!found) {
+                                            db.createWebCam(webCam, new long[]{categoryLiveStreams});
+                                            newWebCams++;
+                                        }
+                                    }
+                                    else {
+                                        db.createWebCam(webCam, new long[]{categoryLiveStreams});
+                                        newWebCams++;
+                                    }
+                                    progressUpdate();
+                                }
+                                showResult();
+                            }
+                            db.closeDB();
+                            backupManager.dataChanged();
+                        }
+                        else if (selection == 7) {
+
+                            noNewWebCams = false;
+                            synchronized (sDataLock) {
                                 long categoryAll = db.createCategory(new Category("@drawable/icon_all_imported",
                                         getString(R.string.all) + " " + Utils.getDateString()));
                                 for (WebCam webCam : importWebCams) {
@@ -403,16 +444,14 @@ public class JsonFetcherDialog extends DialogFragment {
                                         db.createWebCam(webCam, new long[]{categoryAll});
                                         newWebCams++;
                                     }
-
                                     progressUpdate();
                                 }
-
                                 showResult();
                             }
                             db.closeDB();
                             backupManager.dataChanged();
                         }
-                        else if (selection == 7) {
+                        else if (selection == 8) {
 
                             synchronized (sDataLock) {
                                 long lastFetchLatest = preferences.getLong("pref_last_fetch_latest", 0);
@@ -491,7 +530,7 @@ public class JsonFetcherDialog extends DialogFragment {
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
 
-                if (selection == 0 || selection == 6 || selection == 7) {
+                if (selection == 0 || selection == 6 || selection == 7 || selection == 8) {
                     initDialog.dismiss();
                 }
                 progressDialog = new MaterialDialog.Builder(mActivity)

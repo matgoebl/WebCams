@@ -217,4 +217,16 @@
 <string name="sent">"Odesláno!"</string>
 <string name="appearance">"Vzhled"</string>
 <string name="select_webcam">"Vyberte WebKameru"</string>
+<string name="live_streams">"Živé přenosy"</string>
+<string name="webcam_thumb_url">"Webová adresa náhledu"</string>
+<string name="hint_webcam_thumb_url">"http://www.domena.cz/webkamera/nahled.jpg"</string>
+<string name="image">"Obrázek"</string>
+<string name="stream">"Živý přenos"</string>
+<string name="buffering">"Načítání do vyrovnávací paměti..."</string>
+<string name="error">"Chyba"</string>
+<string name="stream_error">"Je nám líto, ale tento živý přenos nelze spustit. Prosím zkontrolujte znovu URL adresu v editačním okně (je také možné, že WebKamera jen není dočasně k dispozici)."</string>
+<string name="something_is_wrong">"Něco je špatně"</string>
+<string name="error_hw">"Chyba při použití hardwarové akcelerace"</string>
+<string name="presentation">"Prezentace"</string>
+<string name="manually_adding">"Ruční přidávání"</string>
 </resources>

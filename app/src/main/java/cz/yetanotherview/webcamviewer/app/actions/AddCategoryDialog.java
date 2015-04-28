@@ -25,8 +25,6 @@ import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -41,6 +39,7 @@ import com.nispok.snackbar.Snackbar;
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.adapter.IconAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
+import cz.yetanotherview.webcamviewer.app.helper.OnTextChange;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.Icons;
 
@@ -49,12 +48,9 @@ public class AddCategoryDialog extends DialogFragment {
     // Object for intrinsic lock
     public static final Object sDataLock = new Object();
 
-    private String inputName;
-    private View positiveAction;
+    private String inputName, iconPath;
     private EditText input;
     private Category category;
-
-    private String iconPath;
     private Icons icons;
     private ImageView category_icon;
 
@@ -136,20 +132,8 @@ public class AddCategoryDialog extends DialogFragment {
         input.requestFocus();
         input.setHint(R.string.new_category_hint);
 
-        positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
-
-        input.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                positiveAction.setEnabled(s.toString().trim().length() > 0);
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        View positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
+        input.addTextChangedListener(new OnTextChange(positiveAction));
         positiveAction.setEnabled(false);
 
         return dialog;

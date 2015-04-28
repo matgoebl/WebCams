@@ -34,7 +34,6 @@
             <ImageView
                 style="@style/MainImageView"
                 android:id="@+id/imageView"
-                android:scaleType="centerCrop"
                 android:visibility="gone"
                 android:contentDescription="@string/image_description" />
 

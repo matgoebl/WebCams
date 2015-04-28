@@ -122,10 +122,16 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
 
         if (imageOn) {
             webcamViewHolder.vProgress.setVisibility(View.VISIBLE);
+            webcamViewHolder.vPlay.setVisibility(View.GONE);
             if (webcamViewHolder.vImage.getWidth() == 0) {
                 webcamViewHolder.vImage.setMinimumHeight(Utils.getImageHeight(mContext, mLayoutId));
             }
-            loadImages(webcamViewHolder, webCam.getUrl());
+            if (webCam.isStream()) {
+                loadImages(webcamViewHolder, webCam.isStream(), webCam.getThumbUrl());
+            }
+            else {
+                loadImages(webcamViewHolder, webCam.isStream(), webCam.getUrl());
+            }
         }
         else if (simpleList){
             webcamViewHolder.vProgress.setVisibility(View.GONE);
@@ -146,10 +152,17 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
             webcamViewHolder.vName.setTextColor(mContext.getResources().getColor(R.color.hyperlink));
             webcamViewHolder.vLayout.setBackgroundColor(mContext.getResources().getColor(R.color.card_text_background));
             webcamViewHolder.vImage.setImageResource(Utils.getRandomImage());
+
+            if (webCam.isStream()) {
+                webcamViewHolder.vPlay.setVisibility(View.VISIBLE);
+            }
+            else {
+                webcamViewHolder.vPlay.setVisibility(View.GONE);
+            }
         }
     }
 
-    private void loadImages(final WebCamViewHolder webcamViewHolder, String source) {
+    private void loadImages(final WebCamViewHolder webcamViewHolder, final boolean isStream, String source) {
 
         if (mLayoutId == 1) {
             Glide.with(mContext)
@@ -163,6 +176,10 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
                         public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
                             super.onResourceReady(drawable, anim);
                             webcamViewHolder.vProgress.setVisibility(View.GONE);
+                            if (isStream) {
+                                webcamViewHolder.vPlay.setVisibility(View.VISIBLE);
+                            }
+                            else webcamViewHolder.vPlay.setVisibility(View.GONE);
                         }
                     });
         }
@@ -178,6 +195,10 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
                         public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
                             super.onResourceReady(drawable, anim);
                             webcamViewHolder.vProgress.setVisibility(View.GONE);
+                            if (isStream) {
+                                webcamViewHolder.vPlay.setVisibility(View.VISIBLE);
+                            }
+                            else webcamViewHolder.vPlay.setVisibility(View.GONE);
                         }
                     });
         }
@@ -188,6 +209,7 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
         protected TextView vNumber;
         protected TextView vName;
         protected ImageView vImage;
+        protected ImageView vPlay;
         protected ImageButton vButton;
 
         protected RelativeLayout vLayout;
@@ -198,6 +220,7 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
             vNumber = (TextView) itemLayoutView.findViewById(R.id.numberTextView);
             vName = (TextView) itemLayoutView.findViewById(R.id.titleTextView);
             vImage = (ImageView) itemLayoutView.findViewById(R.id.imageView);
+            vPlay = (ImageView) itemLayoutView.findViewById(R.id.playOverlay);
             vButton = (ImageButton) itemLayoutView.findViewById(R.id.action_edit);
 
             vLayout = (RelativeLayout) itemLayoutView.findViewById(R.id.InnerRelativeLayout);
@@ -272,7 +295,7 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
     }
 
     public interface ClickListener {
-        public void onClick(View v, int position, boolean isEditClick, boolean isLongClick, ImageView imageView, TextView textView);
+        void onClick(View v, int position, boolean isEditClick, boolean isLongClick, ImageView imageView, TextView textView);
     }
 
     public void setClickListener(ClickListener clickListener) {
@@ -335,5 +358,10 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
     public void refreshViewImages(StringSignature stringSignature) {
         mStringSignature = stringSignature;
         notifyDataSetChanged();
+    }
+
+    public void refreshSelectedImage(int position, StringSignature stringSignature) {
+        mStringSignature = stringSignature;
+        notifyItemChanged(position);
     }
 }

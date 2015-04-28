@@ -23,8 +23,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.backup.BackupManager;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -40,6 +38,7 @@ import java.util.List;
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.adapter.IconAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
+import cz.yetanotherview.webcamviewer.app.helper.OnTextChange;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.Icons;
 
@@ -48,18 +47,14 @@ public class EditCategoryDialog extends DialogFragment {
     // Object for intrinsic lock
     public static final Object sDataLock = new Object();
 
-    private String inputName;
+    private String inputName, iconPath;
     private View positiveAction;
     private EditText input;
     private Category category;
     private List<Category> allCategories;
-
-    private String iconPath;
     private Icons icons;
     private ImageView category_icon;
-
-    private MaterialDialog dialog;
-    private MaterialDialog gridDialog;
+    private MaterialDialog dialog, gridDialog;
     private DatabaseHelper db;
     private Activity mActivity;
 
@@ -114,6 +109,9 @@ public class EditCategoryDialog extends DialogFragment {
                     public void onPositive(MaterialDialog dialog) {
                         inputName = input.getText().toString().trim();
                         synchronized (EditCategoryDialog.sDataLock) {
+                            if (iconPath == null) {
+                                iconPath = category.getCategoryIcon();
+                            }
                             category.setCategoryIcon(iconPath);
                             category.setCategoryName(inputName);
                             db.updateCategory(category);
@@ -163,19 +161,7 @@ public class EditCategoryDialog extends DialogFragment {
         input.setText(category.getCategoryName());
 
         positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
-
-        input.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                positiveAction.setEnabled(s.toString().trim().length() > 0);
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        input.addTextChangedListener(new OnTextChange(positiveAction));
 
         dialog.show();
         positiveAction.setEnabled(false);

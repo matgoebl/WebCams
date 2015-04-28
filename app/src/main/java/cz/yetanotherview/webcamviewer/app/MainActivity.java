@@ -27,7 +27,6 @@ import android.app.backup.BackupManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,8 +36,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -82,14 +81,16 @@ import cz.yetanotherview.webcamviewer.app.actions.simple.NoCoordinatesDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.CategoryAdapter;
 import cz.yetanotherview.webcamviewer.app.fullscreen.FullScreenActivity;
 import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
+import cz.yetanotherview.webcamviewer.app.stream.LiveStreamActivity;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
+import cz.yetanotherview.webcamviewer.app.helper.ImmersiveMode;
 import cz.yetanotherview.webcamviewer.app.helper.SendToInbox;
 import cz.yetanotherview.webcamviewer.app.helper.WebCamListener;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
-public class MainActivity extends ActionBarActivity implements WebCamListener, JsonFetcherDialog.ReloadInterface, SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity implements WebCamListener, JsonFetcherDialog.ReloadInterface, SwipeRefreshLayout.OnRefreshListener {
 
     // Object for intrinsic lock
     public static final Object sDataLock = new Object();
@@ -147,7 +148,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
         // Go FullScreen only on KitKat and up
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && fullScreen) {
-            goFullScreen();
+            new ImmersiveMode().goFullScreen(this);
         }
 
         // First run
@@ -312,14 +313,12 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                     mMoveView = imageView;
                     mMoveTextView = textView;
                     showOptionsDialog(position);
-                }
-                else if (isLongClick) {
+                } else if (isLongClick) {
                     mMoveView = imageView;
                     mMoveTextView = textView;
                     mPosition = position;
                     moveItem();
-                }
-                else showImageFullscreen(position, false);
+                } else showImageFullscreen(position, false);
             }
         });
 
@@ -435,10 +434,10 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
             reInitializeDrawerListAdapter();
 
             if (selectedCategoryName.contains(allWebCamsString)) {
-                getSupportActionBar().setTitle(allWebCamsTitle);
+                mToolbar.setTitle(allWebCamsTitle);
             }
             else {
-                getSupportActionBar().setTitle(selectedCategoryName);
+                mToolbar.setTitle(selectedCategoryName);
             }
             mDrawerLayout.closeDrawers();
         }
@@ -607,7 +606,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                 break;
 
             case R.id.menu_help:
-                Intent helpIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://youtu.be/Xcp0j2vwbxI"));
+                Intent helpIntent = new Intent(this, HelpActivity.class);
                 startActivity(helpIntent);
                 break;
 
@@ -713,30 +712,39 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
     }
 
     private void showImageFullscreen(int position, boolean map) {
+        Intent intent;
         webCam = (WebCam) mAdapter.getItem(position);
 
-        Intent intent = new Intent(this, FullScreenActivity.class);
-        intent.putExtra("signature", mStringSignature);
-        intent.putExtra("map", map);
-        intent.putExtra("name", webCam.getName());
-        intent.putExtra("url", webCam.getUrl());
-        intent.putExtra("latitude", webCam.getLatitude());
-        intent.putExtra("longitude", webCam.getLongitude());
-        intent.putExtra("zoom", zoom);
-        intent.putExtra("fullScreen", fullScreen);
-        intent.putExtra("autoRefresh", autoRefresh);
-        intent.putExtra("interval", autoRefreshInterval);
-        intent.putExtra("screenAlwaysOn", screenAlwaysOn);
-
-        if (!map){
+        if (webCam.isStream() && !map) {
+            intent = new Intent(this, LiveStreamActivity.class);
+            intent.putExtra("url", webCam.getUrl());
+            intent.putExtra("fullScreen", fullScreen);
             startActivity(intent);
         }
         else {
-            if (webCam.getLatitude() != 0 || webCam.getLongitude() != 0) {
+            intent = new Intent(this, FullScreenActivity.class);
+            intent.putExtra("signature", mStringSignature);
+            intent.putExtra("map", map);
+            intent.putExtra("name", webCam.getName());
+            intent.putExtra("url", webCam.getUrl());
+            intent.putExtra("latitude", webCam.getLatitude());
+            intent.putExtra("longitude", webCam.getLongitude());
+            intent.putExtra("zoom", zoom);
+            intent.putExtra("fullScreen", fullScreen);
+            intent.putExtra("autoRefresh", autoRefresh);
+            intent.putExtra("interval", autoRefreshInterval);
+            intent.putExtra("screenAlwaysOn", screenAlwaysOn);
+
+            if (!map){
                 startActivity(intent);
             }
             else {
-                new NoCoordinatesDialog().show(getFragmentManager(), "NoCoordinatesDialog");
+                if (webCam.getLatitude() != 0 || webCam.getLongitude() != 0) {
+                    startActivity(intent);
+                }
+                else {
+                    new NoCoordinatesDialog().show(getFragmentManager(), "NoCoordinatesDialog");
+                }
             }
         }
     }
@@ -746,10 +754,10 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
         String[] options_values = getResources().getStringArray(R.array.opt_values);
         if (webCam.getUniId() != 0) {
-            options_values[7] = getString(R.string.report_problem);
+            options_values[8] = getString(R.string.report_problem);
         }
         else {
-            options_values[7] = getString(R.string.submit_to_appr);
+            options_values[8] = getString(R.string.submit_to_appr);
         }
 
         dialog = new MaterialDialog.Builder(this)
@@ -757,45 +765,52 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        Bundle bundle = new Bundle();
                         switch (which) {
                             case 0:
-                                showEditDialog(position);
+                                refreshSelected(position);
                                 break;
                             case 1:
-                                webCamDeleted(webCam, position);
+                                showEditDialog(position);
                                 break;
                             case 2:
+                                webCamDeleted(webCam, position);
+                                break;
+                            case 3:
                                 mPosition = position;
                                 moveItem();
                                 break;
-                            case 3:
+                            case 4:
                                 showImageFullscreen(position, false);
                                 break;
-                            case 4:
+                            case 5:
                                 SaveDialog saveDialog = new SaveDialog();
-                                Bundle saveDialogBundle = new Bundle();
-                                saveDialogBundle.putString("name", webCam.getName());
-                                saveDialogBundle.putString("url", webCam.getUrl());
-                                saveDialog.setArguments(saveDialogBundle);
+                                bundle.putString("name", webCam.getName());
+                                if (webCam.isStream()) {
+                                    bundle.putString("url", webCam.getThumbUrl());
+                                }
+                                else bundle.putString("url", webCam.getUrl());
+                                saveDialog.setArguments(bundle);
                                 saveDialog.show(getFragmentManager(), "SaveDialog");
                                 break;
-                            case 5:
+                            case 6:
                                 ShareDialog shareDialog = new ShareDialog();
-                                Bundle shareDialogBundle = new Bundle();
-                                shareDialogBundle.putString("url", webCam.getUrl());
-                                shareDialog.setArguments(shareDialogBundle);
+                                if (webCam.isStream()) {
+                                    bundle.putString("url", webCam.getThumbUrl());
+                                }
+                                else bundle.putString("url", webCam.getUrl());
+                                shareDialog.setArguments(bundle);
                                 shareDialog.show(getFragmentManager(), "ShareDialog");
                                 break;
-                            case 6:
+                            case 7:
                                 showImageFullscreen(position, true);
                                 break;
-                            case 7:
+                            case 8:
                                 isFromCommunityOrNot();
                                 break;
                             default:
                                 break;
                         }
-
                     }
                 })
                 .show();
@@ -937,10 +952,12 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                             }
 
                             @Override
-                            public void onShowByReplace(Snackbar snackbar) {}
+                            public void onShowByReplace(Snackbar snackbar) {
+                            }
 
                             @Override
-                            public void onShown(Snackbar snackbar) {}
+                            public void onShown(Snackbar snackbar) {
+                            }
 
                             @Override
                             public void onDismiss(Snackbar snackbar) {
@@ -948,7 +965,8 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                             }
 
                             @Override
-                            public void onDismissByReplace(Snackbar snackbar) {}
+                            public void onDismissByReplace(Snackbar snackbar) {
+                            }
 
                             @Override
                             public void onDismissed(Snackbar snackbar) {}
@@ -967,14 +985,14 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
 
             int pos = mPosition;
             View tempView = findViewById(R.id.tempView);
+
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 MenuInflater inflater = mode.getMenuInflater();
                 inflater.inflate(R.menu.move_menu, menu);
                 mode.setTitle(R.string.move);
                 if (simpleList && !imagesOnOff) {
                     mMoveTextView.setTextColor(getResources().getColor(R.color.move));
-                }
-                else mMoveView.setColorFilter(getResources().getColor(R.color.move));
+                } else mMoveView.setColorFilter(getResources().getColor(R.color.move));
                 tempView.setVisibility(View.VISIBLE);
                 return true;
             }
@@ -992,14 +1010,14 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                         if (pos > 0) {
                             pos = pos - 1;
                         }
-                        mLayoutManager.scrollToPositionWithOffset(pos,0);
+                        mLayoutManager.scrollToPositionWithOffset(pos, 0);
                         return true;
                     case R.id.down:
                         mAdapter.moveItemDown(mAdapter.getItemAt(pos));
                         if (pos < (mAdapter.getItemCount() - 1)) {
                             pos = pos + 1;
                         }
-                        mLayoutManager.scrollToPositionWithOffset(pos,0);
+                        mLayoutManager.scrollToPositionWithOffset(pos, 0);
                         return true;
                     case R.id.done:
                         sortOrder = "position";
@@ -1015,8 +1033,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                 mActionMode = null;
                 if (simpleList && !imagesOnOff) {
                     mMoveTextView.setTextColor(getResources().getColor(R.color.primary));
-                }
-                else  mMoveView.clearColorFilter();
+                } else mMoveView.clearColorFilter();
                 tempView.setVisibility(View.GONE);
             }
         });
@@ -1070,7 +1087,7 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                          .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
                          .eventListener(eventListener)
                  , this);
-    }
+     }
 
     private void nothingToRefresh() {
         SnackbarManager.show(
@@ -1107,6 +1124,11 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
         }
     }
 
+    private void refreshSelected(int position) {
+        mStringSignature = UUID.randomUUID().toString();
+        mAdapter.refreshSelectedImage(position, new StringSignature(mStringSignature));
+    }
+
     private void autoRefreshTimer(int interval) {
         final Handler handler = new Handler();
         Timer timer = new Timer();
@@ -1138,15 +1160,6 @@ public class MainActivity extends ActionBarActivity implements WebCamListener, J
                     | View.SYSTEM_UI_FLAG_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
-    }
-
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    private void goFullScreen() {
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
     private void loadPref(){

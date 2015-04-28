@@ -54,11 +54,13 @@ public class Utils {
     public static String extension = ".wcv";
     public static String dateTimeFormat = "yyyy-MM-dd HH:mm:ss, zzzz";
 
-    public static final String JSON_FILE_URL_ALL = "http://api.yetanotherview.cz/api/v1/get_all_webcams.php";
-    public static final String JSON_FILE_URL_POPULAR = "http://api.yetanotherview.cz/api/v1/get_popular_webcams.php";
-    public static final String JSON_FILE_URL_LATEST = "http://api.yetanotherview.cz/api/v1/get_latest_webcams.php";
-    public static final String JSON_FILE_URL_SEND_TO_APPROVAL = "http://api.yetanotherview.cz/api/v1/send_to_approval.php";
-    public static final String JSON_FILE_URL_SEND_SUGGESTION = "http://api.yetanotherview.cz/api/v1/send_suggestion.php";
+    private static final String JSON_FILE_CORE = "http://api.yetanotherview.cz/api/v2/";
+    public static final String JSON_FILE_URL_ALL = JSON_FILE_CORE + "get_all_webcams.php";
+    public static final String JSON_FILE_URL_POPULAR = JSON_FILE_CORE +  "get_popular_webcams.php";
+    public static final String JSON_FILE_URL_LATEST = JSON_FILE_CORE + "get_latest_webcams.php";
+    public static final String JSON_FILE_URL_LIVE_STREAMS = JSON_FILE_CORE + "get_live_streams_webcams.php";
+    public static final String JSON_FILE_URL_SEND_TO_APPROVAL = JSON_FILE_CORE + "send_to_approval.php";
+    public static final String JSON_FILE_URL_SEND_SUGGESTION = JSON_FILE_CORE + "send_suggestion.php";
 
     /**
      * Get current date
@@ -236,7 +238,7 @@ public class Utils {
                 R.drawable.no_image_3, R.drawable.no_image_4, R.drawable.no_image_5,
                 R.drawable.no_image_6, R.drawable.no_image_7, R.drawable.no_image_8,
                 R.drawable.no_image_9, R.drawable.no_image_10, R.drawable.no_image_11};
-        int randomInt = r.nextInt(imgIds .length);
+        int randomInt = r.nextInt(imgIds.length);
 
         return imgIds[randomInt];
     }

@@ -21,11 +21,11 @@ package cz.yetanotherview.webcamviewer.app.actions;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -34,6 +34,7 @@ import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
+import cz.yetanotherview.webcamviewer.app.helper.OnTextChange;
 import cz.yetanotherview.webcamviewer.app.helper.WebCamListener;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
@@ -41,15 +42,13 @@ import cz.yetanotherview.webcamviewer.app.model.WebCam;
 /**
  * Edit dialog fragment
  */
-public class EditDialog extends DialogFragment {
+public class EditDialog extends DialogFragment implements View.OnClickListener {
 
-    private EditText mWebCamName;
-    private EditText mWebCamUrl;
-    private EditText mWebCamLatitude;
-    private EditText mWebCamLongitude;
+    private EditText mWebCamName, mWebCamUrl, mWebCamThumbUrl, mWebCamLatitude, mWebCamLongitude;
     private WebCam webCam;
     private WebCamListener mOnAddListener;
     private View positiveAction;
+    private TextView mWebCamThumbUrlTitle;
 
     private List<Category> allCategories;
     private Category category;
@@ -58,12 +57,9 @@ public class EditDialog extends DialogFragment {
     private String[] items;
     private long[] category_ids;
     private Integer[] checked;
+    private RadioButton liveStream;
 
-    private long id;
-    private int pos;
-    private int status;
-
-    private int position;
+    private int pos, status, position;
 
     public EditDialog() {
     }
@@ -82,7 +78,7 @@ public class EditDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         Bundle bundle = this.getArguments();
-        id = bundle.getLong("id", 0);
+        long id = bundle.getLong("id", 0);
         position = bundle.getInt("position", 0);
 
         DatabaseHelper db = new DatabaseHelper(getActivity());
@@ -129,8 +125,13 @@ public class EditDialog extends DialogFragment {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
+                        webCam.setIsStream(liveStream.isChecked());
                         webCam.setName(mWebCamName.getText().toString().trim());
                         webCam.setUrl(mWebCamUrl.getText().toString().trim());
+                        if (liveStream.isChecked()) {
+                            webCam.setThumbUrl(mWebCamThumbUrl.getText().toString().trim());
+                        }
+                        else webCam.setThumbUrl(webCam.getThumbUrl());
                         webCam.setPosition(pos);
                         webCam.setStatus(status);
                         webCam.setLatitude(Double.parseDouble(mWebCamLatitude.getText().toString().trim()));
@@ -148,12 +149,19 @@ public class EditDialog extends DialogFragment {
                     }
                 }).build();
 
+        RadioButton stillImage = (RadioButton) dialog.getCustomView().findViewById(R.id.radioStillImage);
+        liveStream = (RadioButton) dialog.getCustomView().findViewById(R.id.radioLiveStream);
+
         mWebCamName = (EditText) dialog.getCustomView().findViewById(R.id.webcam_name);
         mWebCamName.setText(webCam.getName());
         mWebCamName.requestFocus();
 
         mWebCamUrl = (EditText) dialog.getCustomView().findViewById(R.id.webcam_url);
         mWebCamUrl.setText(webCam.getUrl());
+
+        mWebCamThumbUrlTitle = (TextView) dialog.getCustomView().findViewById(R.id.webcam_thumb_url_title);
+        mWebCamThumbUrl = (EditText) dialog.getCustomView().findViewById(R.id.webcam_thumb_url);
+        mWebCamThumbUrl.setText(webCam.getThumbUrl());
 
         mWebCamLatitude = (EditText) dialog.getCustomView().findViewById(R.id.webcam_latitude);
         mWebCamLatitude.setText(String.valueOf(webCam.getLatitude()));
@@ -218,65 +226,46 @@ public class EditDialog extends DialogFragment {
 
         positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
 
-        mWebCamName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+        if (webCam.isStream()) {
+            liveStream.setChecked(true);
+            mWebCamThumbUrlTitle.setVisibility(View.VISIBLE);
+            mWebCamThumbUrl.setVisibility(View.VISIBLE);
+        }
+        else stillImage.setChecked(true);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                positiveAction.setEnabled(s.toString().trim().length() > 0);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-        mWebCamUrl.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                positiveAction.setEnabled(s.toString().trim().length() > 0);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-        mWebCamLatitude.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                positiveAction.setEnabled(s.toString().trim().length() > 0);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-        mWebCamLongitude.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                positiveAction.setEnabled(s.toString().trim().length() > 0);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        stillImage.setOnClickListener(this);
+        liveStream.setOnClickListener(this);
+        mWebCamName.addTextChangedListener(new OnTextChange(positiveAction));
+        mWebCamUrl.addTextChangedListener(new OnTextChange(positiveAction));
+        mWebCamThumbUrl.addTextChangedListener(new OnTextChange(positiveAction));
+        mWebCamLatitude.addTextChangedListener(new OnTextChange(positiveAction));
+        mWebCamLongitude.addTextChangedListener(new OnTextChange(positiveAction));
 
         positiveAction.setEnabled(false);
 
         return dialog;
+    }
+
+    @Override
+    public void onClick(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+        switch (view.getId()) {
+            case R.id.radioStillImage:
+                if (checked) {
+                    positiveAction.setEnabled(true);
+                    mWebCamThumbUrlTitle.setVisibility(View.GONE);
+                    mWebCamThumbUrl.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.radioLiveStream:
+                if (checked) {
+                    if (mWebCamThumbUrl.getText().toString().trim().length() != 0) {
+                        positiveAction.setEnabled(true);
+                    } else positiveAction.setEnabled(false);
+                    mWebCamThumbUrlTitle.setVisibility(View.VISIBLE);
+                    mWebCamThumbUrl.setVisibility(View.VISIBLE);
+                }
+                break;
+        }
     }
 }

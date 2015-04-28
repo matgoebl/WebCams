@@ -36,6 +36,7 @@
     </string-array>
 
     <string-array name="opt_values" translatable="false">
+        <item>@string/refresh</item>
         <item>@string/action_edit</item>
         <item>@string/action_delete</item>
         <item>@string/move</item>
@@ -53,6 +54,7 @@
         <item>@string/selecting_by_country</item>
         <item>@string/selecting_by_type</item>
         <item>@string/selecting_from_map</item>
+        <item>@string/live_streams</item>
         <item>@string/all_webcams</item>
         <item>@string/latest_webcams</item>
     </string-array>

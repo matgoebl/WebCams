@@ -101,7 +101,8 @@ public class SuggestionDialog extends DialogFragment {
                 } else {
                     mEmail.setVisibility(View.GONE);
                 }
-            }});
+            }
+        });
 
         mEmail = (EditText) dialog.getCustomView().findViewById(R.id.suggestion_email);
         mEmail.setHint(R.string.email_hint);

@@ -217,4 +217,16 @@
 <string name="sent">"Gesendet!"</string>
 <string name="appearance">"Aussehen"</string>
 <string name="select_webcam">"Wähle WebCam"</string>
+<string name="live_streams">"Live Streams"</string>
+<string name="webcam_thumb_url">"Vorschaubild Webadresse"</string>
+<string name="hint_webcam_thumb_url">"http://www.beispiel.de/webcam/vorschaubild.jpg"</string>
+<string name="image">"Bild"</string>
+<string name="stream">"Stream"</string>
+<string name="buffering">"Puffern…"</string>
+<string name="error">"Fehler"</string>
+<string name="stream_error">"Entschuldige, dieser Live Stream kann nicht abgespielt werden. Bitte kontrolliere nochmals die Streamquelle in dem Bearbeitendialogfenster (es könnte auch sein, dass die WebCam temporär nicht verfügbar ist)."</string>
+<string name="something_is_wrong">"Etwas ist falsch"</string>
+<string name="error_hw">"Fehler bei der Hardwarebeschleunigung"</string>
+<string name="presentation">"Präsentation"</string>
+<string name="manually_adding">"Manuelles Hinzufügen"</string>
 </resources>

@@ -40,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = DatabaseHelper.class.getName();
 
     // Database Version
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     // Database Name
     public static final String DATABASE_NAME = "webCamDatabase.db";
@@ -56,8 +56,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // WEBCAM Table - column names
     private static final String KEY_UNI_ID = "uni_id";
+    private static final String KEY_IS_STREAM = "is_stream";
     private static final String KEY_WEBCAM = "webcam_name";
     private static final String KEY_WEBCAM_URL = "webcam_url";
+    private static final String KEY_WEBCAM_THUMB_URL = "webcam_thumb_url";
     private static final String KEY_POSITION = "position";
     private static final String KEY_STATUS = "status";
     private static final String KEY_LATITUDE = "latitude";
@@ -75,8 +77,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Table Create Statements
     // WebCam table create statement
     private static final String CREATE_TABLE_WEBCAM = "CREATE TABLE IF NOT EXISTS "
-            + TABLE_WEBCAM + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_UNI_ID + " INTEGER," + KEY_WEBCAM
-            + " TEXT," + KEY_WEBCAM_URL + " TEXT," + KEY_POSITION + " INTEGER," + KEY_STATUS + " INTEGER,"
+            + TABLE_WEBCAM + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_UNI_ID + " INTEGER,"
+            + KEY_IS_STREAM + " INTEGER," + KEY_WEBCAM + " TEXT," + KEY_WEBCAM_URL + " TEXT,"
+            + KEY_WEBCAM_THUMB_URL + " TEXT,"  + KEY_POSITION + " INTEGER," + KEY_STATUS + " INTEGER,"
             + KEY_LATITUDE + " REAL,"  + KEY_LONGITUDE + " REAL," + KEY_DATE_MODIFIED + " INTEGER,"
             + KEY_CREATED_AT + " DATETIME" + ")";
 
@@ -97,8 +100,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-        // creating required tables
         db.execSQL(CREATE_TABLE_WEBCAM);
         db.execSQL(CREATE_TABLE_CATEGORY);
         db.execSQL(CREATE_TABLE_WEBCAM_CATEGORY);
@@ -117,6 +118,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     break;
                 case 6:
                     db.execSQL("ALTER TABLE " + TABLE_WEBCAM + " ADD COLUMN " + KEY_DATE_MODIFIED + " INTEGER");
+                    break;
+                case 7:
+                    db.execSQL("ALTER TABLE " + TABLE_WEBCAM + " ADD COLUMN " + KEY_IS_STREAM + " INTEGER");
+                    db.execSQL("ALTER TABLE " + TABLE_WEBCAM + " ADD COLUMN " + KEY_WEBCAM_THUMB_URL + " TEXT");
                     break;
             }
             upgradeTo++;
@@ -144,8 +149,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_UNI_ID, webCam.getUniId());
+        values.put(KEY_IS_STREAM, (webCam.isStream())? 1 : 0);
         values.put(KEY_WEBCAM, webCam.getName());
         values.put(KEY_WEBCAM_URL, webCam.getUrl());
+        values.put(KEY_WEBCAM_THUMB_URL, webCam.getThumbUrl());
         values.put(KEY_POSITION, webCam.getPosition());
         values.put(KEY_STATUS, webCam.getStatus());
         values.put(KEY_LATITUDE, webCam.getLatitude());
@@ -184,8 +191,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             do {
                 wc.setId(c.getLong(c.getColumnIndex(KEY_ID)));
                 wc.setUniId(c.getLong(c.getColumnIndex(KEY_UNI_ID)));
+                wc.setIsStream(c.getInt(c.getColumnIndex(KEY_IS_STREAM)) == 1);
                 wc.setName(c.getString(c.getColumnIndex(KEY_WEBCAM)));
                 wc.setUrl(c.getString(c.getColumnIndex(KEY_WEBCAM_URL)));
+                wc.setThumbUrl(c.getString(c.getColumnIndex(KEY_WEBCAM_THUMB_URL)));
                 wc.setPosition(c.getInt(c.getColumnIndex(KEY_POSITION)));
                 wc.setLatitude(c.getDouble(c.getColumnIndex(KEY_LATITUDE)));
                 wc.setLongitude(c.getDouble(c.getColumnIndex(KEY_LONGITUDE)));
@@ -217,8 +226,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 WebCam wc = new WebCam();
                 wc.setId(c.getLong(c.getColumnIndex(KEY_ID)));
                 wc.setUniId(c.getLong(c.getColumnIndex(KEY_UNI_ID)));
+                wc.setIsStream(c.getInt(c.getColumnIndex(KEY_IS_STREAM)) == 1);
                 wc.setName(c.getString(c.getColumnIndex(KEY_WEBCAM)));
                 wc.setUrl(c.getString(c.getColumnIndex(KEY_WEBCAM_URL)));
+                wc.setThumbUrl(c.getString(c.getColumnIndex(KEY_WEBCAM_THUMB_URL)));
                 wc.setPosition(c.getInt(c.getColumnIndex(KEY_POSITION)));
                 wc.setStatus(c.getInt(c.getColumnIndex(KEY_STATUS)));
                 wc.setLatitude(c.getDouble(c.getColumnIndex(KEY_LATITUDE)));
@@ -259,8 +270,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 // Care about this hack, zero value instead KEY_ID is important!
                 wc.setId(c.getLong(0));
                 wc.setUniId(c.getLong(c.getColumnIndex(KEY_UNI_ID)));
+                wc.setIsStream(c.getInt(c.getColumnIndex(KEY_IS_STREAM)) == 1);
                 wc.setName(c.getString(c.getColumnIndex(KEY_WEBCAM)));
                 wc.setUrl(c.getString(c.getColumnIndex(KEY_WEBCAM_URL)));
+                wc.setThumbUrl(c.getString(c.getColumnIndex(KEY_WEBCAM_THUMB_URL)));
                 wc.setPosition(c.getInt(c.getColumnIndex(KEY_POSITION)));
                 wc.setStatus(c.getInt(c.getColumnIndex(KEY_STATUS)));
                 wc.setLatitude(c.getDouble(c.getColumnIndex(KEY_LATITUDE)));
@@ -300,8 +313,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_IS_STREAM, (webCam.isStream())? 1 : 0);
         values.put(KEY_WEBCAM, webCam.getName());
         values.put(KEY_WEBCAM_URL, webCam.getUrl());
+        values.put(KEY_WEBCAM_THUMB_URL, webCam.getThumbUrl());
         values.put(KEY_POSITION, webCam.getPosition());
         values.put(KEY_STATUS, webCam.getStatus());
         values.put(KEY_LATITUDE, webCam.getLatitude());
@@ -333,8 +348,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_IS_STREAM, (newData.isStream())? 1 : 0);
         values.put(KEY_WEBCAM, newData.getName());
         values.put(KEY_WEBCAM_URL, newData.getUrl());
+        values.put(KEY_WEBCAM_THUMB_URL, newData.getThumbUrl());
         values.put(KEY_STATUS, newData.getStatus());
         values.put(KEY_LATITUDE, newData.getLatitude());
         values.put(KEY_LONGITUDE, newData.getLongitude());
@@ -385,8 +402,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_ID, webCam.getId());
         values.put(KEY_UNI_ID, webCam.getUniId());
+        values.put(KEY_IS_STREAM, (webCam.isStream())? 1 : 0);
         values.put(KEY_WEBCAM, webCam.getName());
         values.put(KEY_WEBCAM_URL, webCam.getUrl());
+        values.put(KEY_WEBCAM_THUMB_URL, webCam.getThumbUrl());
         values.put(KEY_POSITION, webCam.getPosition());
         values.put(KEY_STATUS, webCam.getStatus());
         values.put(KEY_LATITUDE, webCam.getLatitude());

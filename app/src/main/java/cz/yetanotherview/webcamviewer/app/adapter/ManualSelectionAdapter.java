@@ -141,9 +141,15 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
 
         WebCam webCam = webCamList.get(position);
 
+        String url;
+        if (webCam.isStream()) {
+            url = webCam.getThumbUrl();
+        }
+        else url = webCam.getUrl();
+
         holder.selCheckBox.setChecked(webCam.isSelected());
         Glide.with(context)
-                .load(webCam.getUrl())
+                .load(url)
                 .centerCrop()
                 .crossFade()
                 .placeholder(R.drawable.placeholder_small)

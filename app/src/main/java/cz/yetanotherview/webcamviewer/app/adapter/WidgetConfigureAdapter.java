@@ -51,8 +51,14 @@ public class WidgetConfigureAdapter extends RecyclerView.Adapter<WidgetConfigure
     public void onBindViewHolder(WidgetConfigureViewHolder widgetConfigureViewHolder, int i) {
         WebCam webCam = webCamList.get(i);
 
+        String url;
+        if (webCam.isStream()) {
+            url = webCam.getThumbUrl();
+        }
+        else url = webCam.getUrl();
+
         Glide.with(widgetConfigureViewHolder.vImage.getContext())
-                .load(webCam.getUrl())
+                .load(url)
                 .centerCrop()
                 .crossFade()
                 .placeholder(R.drawable.placeholder_small)
@@ -90,7 +96,7 @@ public class WidgetConfigureAdapter extends RecyclerView.Adapter<WidgetConfigure
     }
 
     public interface ClickListener {
-        public void onClick(View v, int position);
+        void onClick(View v, int position);
     }
 
     public void setClickListener(ClickListener clickListener) {

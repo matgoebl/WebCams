@@ -1,0 +1,12 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        style="@style/MainPlayOverlay"
+        android:id="@+id/playOverlay"
+        android:src="@drawable/play_overlay"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/image"
+        android:visibility="gone"/>
+
+</merge>

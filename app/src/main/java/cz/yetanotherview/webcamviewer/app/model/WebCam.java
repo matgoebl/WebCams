@@ -24,9 +24,11 @@ public class WebCam {
 
     private long id;
     private long uniId;
+    private boolean isStream;
     private String webCamName;
     private String webCamTags;
     private String webCamUrl;
+    private String webCamThumbUrl;
     private int position;
     private int status;
     private double latitude;
@@ -48,9 +50,12 @@ public class WebCam {
         this.status = status;
     }
 
-    public WebCam(String webCamName, String webCamUrl, int position, int status, double latitude, double longitude, Date dateModified) {
+    public WebCam(boolean isStream, String webCamName, String webCamUrl, String webCamThumbUrl,
+                  int position, int status, double latitude, double longitude, Date dateModified) {
+        this.isStream = isStream;
         this.webCamName = webCamName;
         this.webCamUrl = webCamUrl;
+        this.webCamThumbUrl = webCamThumbUrl;
         this.position = position;
         this.status = status;
         this.latitude = latitude;
@@ -75,6 +80,11 @@ public class WebCam {
         this.uniId = uniId;
     }
 
+    public void setIsStream(boolean isStream)
+    {
+        this.isStream = isStream;
+    }
+
     public void setName(String webCamName) {
         this.webCamName = webCamName;
     }
@@ -85,6 +95,10 @@ public class WebCam {
 
     public void setUrl(String webCamUrl) {
         this.webCamUrl = webCamUrl;
+    }
+
+    public void setThumbUrl(String webCamThumbUrl) {
+        this.webCamThumbUrl = webCamThumbUrl;
     }
 
     public void setPosition(int position) {
@@ -133,6 +147,11 @@ public class WebCam {
         return this.uniId;
     }
 
+    public boolean isStream()
+    {
+        return this.isStream;
+    }
+
     public String getName() {
         return this.webCamName;
     }
@@ -143,6 +162,10 @@ public class WebCam {
 
     public String getUrl() {
         return this.webCamUrl;
+    }
+
+    public String getThumbUrl() {
+        return this.webCamThumbUrl;
     }
 
     public int getPosition() {

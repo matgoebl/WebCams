@@ -21,6 +21,36 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/radioStillImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/middle_margin"
+            android:layout_marginEnd="@dimen/middle_margin"
+            android:text="@string/image"
+            android:drawableRight="@drawable/dialog_still_image"
+            android:drawableEnd="@drawable/dialog_still_image" />
+
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/radioLiveStream"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/middle_margin"
+            android:layout_marginStart="@dimen/middle_margin"
+            android:text="@string/stream"
+            android:drawableRight="@drawable/dialog_stream"
+            android:drawableEnd="@drawable/dialog_stream" />
+
+    </RadioGroup>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,8 +61,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_webcam_name"
-            android:layout_marginBottom="20dip"
-            android:layout_marginTop="5dip"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="2dp"
             android:inputType="textCapSentences"
             android:singleLine="true"
             android:imeOptions="actionNext"/>
@@ -47,11 +77,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_webcam_url"
-            android:layout_marginTop="5dip"
-            android:layout_marginBottom="20dip"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="10dp"
             android:inputType="textUri"
             android:singleLine="true"
             android:imeOptions="actionNext"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/webcam_thumb_url"
+        android:id="@+id/webcam_thumb_url_title"
+        android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/webcam_thumb_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_webcam_thumb_url"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="10dp"
+            android:inputType="textUri"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            android:visibility="gone"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -96,7 +145,7 @@
             android:paddingStart="@dimen/large_padding"
             android:paddingRight="@dimen/zero_padding"
             android:paddingEnd="@dimen/zero_padding"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -138,7 +187,7 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dip"
+        android:layout_marginTop="10dip"
         android:text="@string/community_list" />
 
         <CheckBox

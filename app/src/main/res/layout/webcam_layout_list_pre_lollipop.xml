@@ -30,6 +30,9 @@
             android:contentDescription="@string/image_description" />
 
         <include
+            layout="@layout/play_overlay"/>
+
+        <include
             layout="@layout/webcam_layout_parts"/>
 
         <View

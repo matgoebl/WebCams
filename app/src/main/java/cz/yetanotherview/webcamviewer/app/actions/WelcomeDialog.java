@@ -23,11 +23,11 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import cz.yetanotherview.webcamviewer.app.HelpActivity;
 import cz.yetanotherview.webcamviewer.app.R;
 
 public class WelcomeDialog extends DialogFragment {
@@ -62,13 +62,11 @@ public class WelcomeDialog extends DialogFragment {
                         DialogFragment selection = new SelectionDialog();
                         selection.show(getFragmentManager(), "SelectionDialog");
                     }
-
                     @Override
                     public void onNegative(MaterialDialog dialog) {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://youtu.be/Xcp0j2vwbxI"));
-                        startActivity(browserIntent);
+                        Intent helpIntent = new Intent(getActivity(), HelpActivity.class);
+                        startActivity(helpIntent);
                     }
-
                 })
                 .build();
     }
