@@ -201,13 +201,17 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
 
     private void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setToolbarTitle();
+        setSupportActionBar(mToolbar);
+    }
+
+    private void setToolbarTitle() {
         if (selectedCategoryName.contains(allWebCamsString)) {
             mToolbar.setTitle(allWebCamsTitle);
         }
         else {
             mToolbar.setTitle(selectedCategoryName);
         }
-        setSupportActionBar(mToolbar);
     }
 
     private void loadCategories() {
@@ -432,30 +436,30 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
             selectedCategory = position;
             reInitializeRecyclerViewAdapter(position);
             reInitializeDrawerListAdapter();
-
-            if (selectedCategoryName.contains(allWebCamsString)) {
-                mToolbar.setTitle(allWebCamsTitle);
-            }
-            else {
-                mToolbar.setTitle(selectedCategoryName);
-            }
+            setToolbarTitle();
             mDrawerLayout.closeDrawers();
         }
     }
 
     private void reInitializeRecyclerViewAdapter(int position) {
+        Category category;
+        if (position == 0) {
+            selectedCategoryName = allWebCamsString;
+        }
+        else {
+            category = allCategories.get(position - 1);
+            selectedCategoryName = category.getCategoryName();
+        }
         if (db.getWebCamCount() != 0) {
             allWebCams.clear();
             if (position == 0) {
                 allWebCams = db.getAllWebCams(sortOrder);
                 mAdapter.swapData(allWebCams);
-                selectedCategoryName = allWebCamsString;
             }
             else {
-                Category category = allCategories.get(position - 1);
+                category = allCategories.get(position - 1);
                 allWebCams = db.getAllWebCamsByCategory(category.getId(),sortOrder);
                 mAdapter.swapData(allWebCams);
-                selectedCategoryName = category.getCategoryName();
             }
             db.closeDB();
             saveToPref();
@@ -601,8 +605,6 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, SettingsActivity.class);
                 startActivityForResult(intent, 0);
-                selectedCategoryName = allWebCamsString;
-                saveToPref();
                 break;
 
             case R.id.menu_help:

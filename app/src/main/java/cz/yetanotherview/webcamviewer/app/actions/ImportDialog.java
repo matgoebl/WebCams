@@ -200,7 +200,7 @@ public class ImportDialog extends DialogFragment {
         protected Long doInBackground(Boolean... booleans) {
 
             if (booleans[0]) {
-                db.deleteAllWebCams(true);
+                db.deleteAllWebCams();
                 db.closeDB();
             }
 

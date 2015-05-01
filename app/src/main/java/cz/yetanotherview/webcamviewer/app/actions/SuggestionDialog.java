@@ -31,6 +31,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nispok.snackbar.Snackbar;
 
@@ -44,15 +45,16 @@ import java.util.HashMap;
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.Utils;
 import cz.yetanotherview.webcamviewer.app.actions.simple.UnavailableDialog;
+import cz.yetanotherview.webcamviewer.app.helper.IsValidEmail;
+import cz.yetanotherview.webcamviewer.app.helper.OnTextChange;
 import cz.yetanotherview.webcamviewer.app.helper.PerformPostCall;
 
 public class SuggestionDialog extends DialogFragment {
 
-    private String inputSuggestion;
-    private String inputEmail;
-    private EditText mSuggestion;
-    private EditText mEmail;
-    
+    private String inputSuggestion, inputEmail;
+    private EditText mSuggestion, mEmail;
+    private View positiveAction;
+
     private Activity mActivity;
 
     @Override
@@ -66,7 +68,7 @@ public class SuggestionDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         MaterialDialog dialog = new MaterialDialog.Builder(mActivity)
-                    .title(R.string.submit_suggestion)
+                .title(R.string.submit_suggestion)
                 .customView(R.layout.suggestion_layout, false)
                 .positiveText(R.string.send)
                 .showListener(new DialogInterface.OnShowListener() {
@@ -98,14 +100,28 @@ public class SuggestionDialog extends DialogFragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     mEmail.setVisibility(View.VISIBLE);
+                    if (mEmail.getText().toString().isEmpty()) {
+                        positiveAction.setEnabled(false);
+                    }
+                    else positiveAction.setEnabled(true);
+                    mEmail.addTextChangedListener(new IsValidEmail(positiveAction));
                 } else {
                     mEmail.setVisibility(View.GONE);
+                    if (!mSuggestion.getText().toString().isEmpty()) {
+                        positiveAction.setEnabled(true);
+                    }
+                    else positiveAction.setEnabled(false);
+                    mEmail.removeTextChangedListener(new IsValidEmail(positiveAction));
                 }
             }
         });
 
         mEmail = (EditText) dialog.getCustomView().findViewById(R.id.suggestion_email);
         mEmail.setHint(R.string.email_hint);
+
+        positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
+        mSuggestion.addTextChangedListener(new OnTextChange(positiveAction));
+        positiveAction.setEnabled(false);
 
         return dialog;
     }

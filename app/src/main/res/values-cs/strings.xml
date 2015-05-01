@@ -224,7 +224,7 @@
 <string name="stream">"Živý přenos"</string>
 <string name="buffering">"Načítání do vyrovnávací paměti..."</string>
 <string name="error">"Chyba"</string>
-<string name="stream_error">"Je nám líto, ale tento živý přenos nelze spustit. Prosím zkontrolujte znovu URL adresu v editačním okně (je také možné, že WebKamera jen není dočasně k dispozici)."</string>
+<string name="stream_error">"Je nám líto, ale tento živý přenos nelze spustit. Prosím zkontrolujte znovu URL adresu v editačním okně (je také možné, že WebKamera je dočasně nedostupná)."</string>
 <string name="something_is_wrong">"Něco je špatně"</string>
 <string name="error_hw">"Chyba při použití hardwarové akcelerace"</string>
 <string name="presentation">"Prezentace"</string>

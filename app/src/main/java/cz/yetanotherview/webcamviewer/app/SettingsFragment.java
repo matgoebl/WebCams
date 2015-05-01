@@ -71,10 +71,9 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
 
-        // Enable immersive mode only on Kitkat and up
+        // Enable immersive mode setting only on Kitkat and up
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getPreferenceScreen().findPreference("pref_full_screen").setEnabled(true);
         }
@@ -98,13 +97,10 @@ public class SettingsFragment extends PreferenceFragment {
         cleanCacheAndTmpFolder();
         showAbout();
 
-        // Main activity sorting hack
         sharedPref = getPreferenceManager().getSharedPreferences();
-        sharedPref.edit().putInt("pref_selected_category", 0).apply();
     }
 
     private void setAutoRefreshInterval() {
-        // Auto Refresh Interval OnPreferenceClickListener
         Preference pref_auto_refresh_interval = findPreference("pref_auto_refresh_interval");
         pref_auto_refresh_interval.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -126,7 +122,7 @@ public class SettingsFragment extends PreferenceFragment {
                 seekBar = (SeekBar) dialog.getCustomView().findViewById(R.id.seekbar_seek);
                 seekBarText = (TextView) dialog.getCustomView().findViewById(R.id.seekbar_text);
 
-                seekBarCorrection = 1;
+                seekBarCorrection = 5;
                 seekBar.setMax(359);
                 seekBarProgress = (sharedPref.getInt("pref_auto_refresh_interval", 30000) / 1000);
                 seekBar.setProgress(seekBarProgress - seekBarCorrection);
@@ -160,7 +156,6 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void setAutoHideListener() {
-        // Auto Hide Preference Listener
         preferenceCategory = (PreferenceCategory)findPreference("pref_category_general");
         CheckBoxPreference prefA = (CheckBoxPreference)findPreference("pref_auto_refresh");
 
@@ -178,7 +173,7 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
-                boolean switchedOn = (Boolean)newValue;
+                boolean switchedOn = (Boolean) newValue;
                 if (switchedOn) {
                     preferenceCategory.addPreference(prefAutoRefreshFullScreen);
                     preferenceCategory.addPreference(prefAutoRefreshInterval);
@@ -194,7 +189,6 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void categoryAddEditDelete() {
-        // Category Add/Edit/Delete OnPreferenceClickListener
         Preference pref_category_add_edit_delete = findPreference("pref_category_add_edit_delete");
         pref_category_add_edit_delete.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference activity_preference) {
@@ -212,16 +206,13 @@ public class SettingsFragment extends PreferenceFragment {
                                         if (which == 0) {
                                             dialogFragment = new AddCategoryDialog();
                                             dialogFragment.show(getFragmentManager(), "AddCategoryDialog");
-                                        }
-                                        else if (which == 1) {
+                                        } else if (which == 1) {
                                             allCategories = db.getAllCategories();
                                             if (allCategories.size() > 0) {
                                                 dialogFragment = new EditCategoryDialog();
                                                 dialogFragment.show(getFragmentManager(), "EditCategoryDialog");
-                                            }
-                                            else noCategoriesFound();
-                                        }
-                                        else {
+                                            } else noCategoriesFound();
+                                        } else {
                                             allCategories = db.getAllCategories();
                                             String[] items = new String[allCategories.size()];
                                             int count = 0;
@@ -250,8 +241,7 @@ public class SettingsFragment extends PreferenceFragment {
                                                         })
                                                         .positiveText(R.string.choose)
                                                         .show();
-                                            }
-                                            else noCategoriesFound();
+                                            } else noCategoriesFound();
                                         }
 
                                         dialog.dismiss();
@@ -307,6 +297,7 @@ public class SettingsFragment extends PreferenceFragment {
                 BackupManager backupManager = new BackupManager(getActivity());
                 backupManager.dataChanged();
             }
+            saveToPref();
 
             showDeletedSnackBar();
             return null;
@@ -314,7 +305,6 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void deleteSelectedWebCams() {
-        // Delete selected OnPreferenceClickListener
         Preference pref_delete_selected = findPreference("pref_delete_selected");
         pref_delete_selected.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -383,7 +373,6 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void deleteAllWebCams() {
-        // Delete all OnPreferenceClickListener
         Preference pref_delete_all = findPreference("pref_delete_all");
         pref_delete_all.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -396,7 +385,8 @@ public class SettingsFragment extends PreferenceFragment {
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
-                                deleteAlsoCategoriesDialog();
+                                showIndeterminateProgress();
+                                new deleteAlsoCategoriesBackgroundTask().execute();
                             }
                         })
                         .show();
@@ -406,48 +396,19 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
-    private void deleteAlsoCategoriesDialog (){
-
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.pref_delete_all_webcams)
-                .content(R.string.also_delete_all_categories)
-                .positiveText(R.string.Yes)
-                .negativeText(R.string.No)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        showIndeterminateProgress();
-                        new deleteAlsoCategoriesBackgroundTask().execute(true);
-                    }
-
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        showIndeterminateProgress();
-                        new deleteAlsoCategoriesBackgroundTask().execute(false);
-                    }
-                })
-                .show();
-    }
-
-    private class deleteAlsoCategoriesBackgroundTask extends AsyncTask<Boolean, Void, Void> {
+    private class deleteAlsoCategoriesBackgroundTask extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected Void doInBackground(Boolean... booleans) {
+        protected Void doInBackground(Void... voids) {
 
-            Boolean alsoCategories = booleans[0];
             synchronized (SettingsFragment.sDataLock) {
-                if (alsoCategories) {
-                    db.deleteAllWebCams(true);
-                }
-                else {
-                    db.deleteAllWebCams(false);
-                }
+                db.deleteAllWebCams();
                 db.closeDB();
-                sharedPref.edit().putLong("pref_last_fetch_popular", 0).apply();
-                sharedPref.edit().putLong("pref_last_fetch_latest", 0).apply();
             }
             BackupManager backupManager = new BackupManager(getActivity());
             backupManager.dataChanged();
+
+            saveToPref();
 
             showDeletedSnackBar();
             return null;
@@ -455,7 +416,6 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void exportToExt() {
-        // Export to Ext OnPreferenceClickListener
         Preference pref_export_to_ext = findPreference("pref_export_to_ext");
         pref_export_to_ext.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -467,7 +427,6 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void importFromExt() {
-        // Import from Ext OnPreferenceClickListener
         Preference pref_import_from_ext = findPreference("pref_import_from_ext");
         pref_import_from_ext.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -479,7 +438,6 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void setZoom() {
-        // setZoom OnPreferenceClickListener
         Preference pref_zoom = findPreference("pref_zoom");
         pref_zoom.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -534,7 +492,6 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void resetLastCheck() {
-        // Reset last check OnPreferenceClickListener
         Preference pref_reset_last_check = findPreference("pref_reset_last_check");
         pref_reset_last_check.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -565,7 +522,6 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void cleanCacheAndTmpFolder() {
-        // Clean Cache and Tmp folder OnPreferenceClickListener
         Preference pref_clean_cache_and_tmp = findPreference("pref_clean_cache_and_tmp");
         pref_clean_cache_and_tmp.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -590,8 +546,16 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
+    private void saveToPref() {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putLong("pref_last_fetch_popular", 0);
+        editor.putLong("pref_last_fetch_latest", 0);
+        editor.putInt("pref_selected_category", 0);
+        editor.putString("pref_selected_category_name", getString(R.string.app_name));
+        editor.apply();
+    }
+
     private void showAbout() {
-        // About OnPreferenceClickListener
         Preference pref_about = findPreference("pref_about");
         pref_about.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
