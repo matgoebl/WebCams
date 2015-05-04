@@ -152,6 +152,7 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
                 .load(url)
                 .centerCrop()
                 .crossFade()
+                .error(R.drawable.error)
                 .placeholder(R.drawable.placeholder_small)
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

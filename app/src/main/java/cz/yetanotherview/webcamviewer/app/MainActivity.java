@@ -81,6 +81,7 @@ import cz.yetanotherview.webcamviewer.app.actions.simple.NoCoordinatesDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.CategoryAdapter;
 import cz.yetanotherview.webcamviewer.app.fullscreen.FullScreenActivity;
 import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
+import cz.yetanotherview.webcamviewer.app.helper.ClearImageCache;
 import cz.yetanotherview.webcamviewer.app.stream.LiveStreamActivity;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.ImmersiveMode;
@@ -196,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Utils.clearImageCache(getApplicationContext());
+        new ClearImageCache(this).execute();
     }
 
     private void initToolbar() {

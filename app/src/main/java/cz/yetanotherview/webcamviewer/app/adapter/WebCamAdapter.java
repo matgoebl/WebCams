@@ -33,8 +33,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.signature.StringSignature;
 
 import java.util.ArrayList;
@@ -119,6 +119,7 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
     public void onBindViewHolder(WebCamViewHolder webcamViewHolder, int position) {
         WebCam webCam = webCamItems.get(position);
         webcamViewHolder.vName.setText(webCam.getName());
+        webcamViewHolder.vError.setVisibility(View.GONE);
 
         if (imageOn) {
             webcamViewHolder.vProgress.setVisibility(View.VISIBLE);
@@ -171,17 +172,27 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
                     .crossFade()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .signature(mStringSignature)
-                    .into(new GlideDrawableImageViewTarget(webcamViewHolder.vImage) {
+                    .listener(new RequestListener<String, GlideDrawable>() {
                         @Override
-                        public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
-                            super.onResourceReady(drawable, anim);
+                        public boolean onException(Exception e, String model,
+                                                   Target<GlideDrawable> target, boolean isFirstResource) {
                             webcamViewHolder.vProgress.setVisibility(View.GONE);
+                            webcamViewHolder.vError.setVisibility(View.VISIBLE);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
+                                                       boolean isFromMemoryCache, boolean isFirstResource) {
+                            webcamViewHolder.vProgress.setVisibility(View.GONE);
+                            webcamViewHolder.vError.setVisibility(View.GONE);
                             if (isStream) {
                                 webcamViewHolder.vPlay.setVisibility(View.VISIBLE);
-                            }
-                            else webcamViewHolder.vPlay.setVisibility(View.GONE);
+                            } else webcamViewHolder.vPlay.setVisibility(View.GONE);
+                            return false;
                         }
-                    });
+                    })
+                    .into(webcamViewHolder.vImage);
         }
         else {
             Glide.with(mContext)
@@ -190,17 +201,27 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
                     .crossFade()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .signature(mStringSignature)
-                    .into(new GlideDrawableImageViewTarget(webcamViewHolder.vImage) {
+                    .listener(new RequestListener<String, GlideDrawable>() {
                         @Override
-                        public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
-                            super.onResourceReady(drawable, anim);
+                        public boolean onException(Exception e, String model,
+                                                   Target<GlideDrawable> target, boolean isFirstResource) {
                             webcamViewHolder.vProgress.setVisibility(View.GONE);
+                            webcamViewHolder.vError.setVisibility(View.VISIBLE);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
+                                                       boolean isFromMemoryCache, boolean isFirstResource) {
+                            webcamViewHolder.vProgress.setVisibility(View.GONE);
+                            webcamViewHolder.vError.setVisibility(View.GONE);
                             if (isStream) {
                                 webcamViewHolder.vPlay.setVisibility(View.VISIBLE);
-                            }
-                            else webcamViewHolder.vPlay.setVisibility(View.GONE);
+                            } else webcamViewHolder.vPlay.setVisibility(View.GONE);
+                            return false;
                         }
-                    });
+                    })
+                    .into(webcamViewHolder.vImage);
         }
     }
 
@@ -211,6 +232,7 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
         protected ImageView vImage;
         protected ImageView vPlay;
         protected ImageButton vButton;
+        protected ImageView vError;
 
         protected RelativeLayout vLayout;
         protected ProgressBar vProgress;
@@ -222,6 +244,7 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
             vImage = (ImageView) itemLayoutView.findViewById(R.id.imageView);
             vPlay = (ImageView) itemLayoutView.findViewById(R.id.playOverlay);
             vButton = (ImageButton) itemLayoutView.findViewById(R.id.action_edit);
+            vError = (ImageView) itemLayoutView.findViewById(R.id.action_error);
 
             vLayout = (RelativeLayout) itemLayoutView.findViewById(R.id.InnerRelativeLayout);
             vProgress = (ProgressBar) itemLayoutView.findViewById(R.id.loadingProgressBar);

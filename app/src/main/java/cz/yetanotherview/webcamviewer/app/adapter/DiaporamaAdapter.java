@@ -9,6 +9,7 @@ import android.graphics.drawable.TransitionDrawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 
@@ -16,7 +17,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.request.Request;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.bumptech.glide.signature.StringSignature;
 
@@ -37,6 +40,7 @@ public class DiaporamaAdapter {
 
     @NonNull
     private final ImageView mImageView;
+    private final ImageView mErrorImage;
 
     private final Context mContext;
 
@@ -59,8 +63,8 @@ public class DiaporamaAdapter {
      *
      * @param imageView the imageView where the images will be loaded
      */
-    public DiaporamaAdapter(final @NonNull ImageView imageView) {
-        this(imageView, -1, -1);
+    public DiaporamaAdapter(final @NonNull ImageView imageView, final ImageView errorImage) {
+        this(imageView, errorImage, -1, -1);
         firstTime = true;
     }
 
@@ -70,9 +74,11 @@ public class DiaporamaAdapter {
      * @param placeholderResId  the drawableResId to use or {@code -1} if you don't want to display one.
      */
     public DiaporamaAdapter(final @NonNull ImageView imageView,
+                            final ImageView errorImage,
                             final int animationDuration,
                             final @DrawableRes int placeholderResId) {
         mImageView = imageView;
+        mErrorImage = errorImage;
         mContext = imageView.getContext();
 
         mCurrentTarget = new DiaporamaViewTarget(mImageView);
@@ -107,12 +113,51 @@ public class DiaporamaAdapter {
 
     public <T> void loadNextImage(@NonNull T model, @NonNull StringSignature stringSignature) {
         if (firstTime) {
-            Glide.with(mContext).load(model).asBitmap().fitCenter().signature(stringSignature)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(mCurrentTarget);
+            Glide.with(mContext)
+                    .load(model)
+                    .asBitmap()
+                    .fitCenter()
+                    .signature(stringSignature)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .listener(new RequestListener<T, Bitmap>() {
+                        @Override
+                        public boolean onException(Exception e, T model, Target<Bitmap> target, boolean isFirstResource) {
+                            mErrorImage.setVisibility(View.VISIBLE);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, T model, Target<Bitmap> target,
+                                                       boolean isFromMemoryCache, boolean isFirstResource) {
+                            mErrorImage.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
+                    .into(mCurrentTarget);
             firstTime = false;       }
         else {
             Glide.get(mContext).clearMemory();
-            Glide.with(mContext).load(model).asBitmap().fitCenter().signature(stringSignature).into(mCurrentTarget);
+            Glide.with(mContext)
+                    .load(model)
+                    .asBitmap()
+                    .fitCenter()
+                    .signature(stringSignature)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .listener(new RequestListener<T, Bitmap>() {
+                        @Override
+                        public boolean onException(Exception e, T model, Target<Bitmap> target, boolean isFirstResource) {
+                            mErrorImage.setVisibility(View.VISIBLE);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, T model, Target<Bitmap> target,
+                                                       boolean isFromMemoryCache, boolean isFirstResource) {
+                            mErrorImage.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
+                    .into(mCurrentTarget);
         }
     }
 

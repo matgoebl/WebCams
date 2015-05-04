@@ -202,16 +202,16 @@
 <string name="sent">"送信しました!"</string>
 <string name="appearance">"外観"</string>
 <string name="select_webcam">"セレクトウェブカム"</string>
-<string name="live_streams">"Live Streams"</string>
-<string name="webcam_thumb_url">"Thumbnail web address"</string>
+<string name="live_streams">"ライブストリーム"</string>
+<string name="webcam_thumb_url">"サムネイル ウェブアドレス"</string>
 <string name="hint_webcam_thumb_url">"http://www.example.com/webcam/thumb.jpg"</string>
-<string name="image">"Image"</string>
-<string name="stream">"Stream"</string>
-<string name="buffering">"Buffering..."</string>
-<string name="error">"Error"</string>
-<string name="stream_error">"Sorry, this live stream cannot be played. Please check again the stream source in the Edit dialog window (is also possible that the WebCam is temporarily unavailable)."</string>
-<string name="something_is_wrong">"Something is wrong"</string>
-<string name="error_hw">"Error with hardware acceleration"</string>
-<string name="presentation">"Presentation"</string>
-<string name="manually_adding">"Manually adding"</string>
+<string name="image">"画像"</string>
+<string name="stream">"ストリーム"</string>
+<string name="buffering">"バッファー中"</string>
+<string name="error">"エラー"</string>
+<string name="stream_error">"申し訳ありませんが、このライブストリームを再生できません。編集ダイアログウィンドウのストリームソースを再確認してください（ウェブカメラが一時的に利用できない可能性もあります）。"</string>
+<string name="something_is_wrong">"何か問題が発生しました"</string>
+<string name="error_hw">"ハードウェアアクセラレーションでエラー"</string>
+<string name="presentation">"プレゼンテーション"</string>
+<string name="manually_adding">"手動で追加"</string>
 </resources>

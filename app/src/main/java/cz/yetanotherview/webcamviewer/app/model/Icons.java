@@ -58,8 +58,4 @@ public class Icons {
     public int[] getIconsIds() {
         return this.iconIds;
     }
-
-    public int getIconsCount() {
-        return this.iconIds.length;
-    }
 }

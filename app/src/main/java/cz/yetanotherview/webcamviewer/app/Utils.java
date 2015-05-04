@@ -30,8 +30,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
-import com.bumptech.glide.Glide;
-
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -188,19 +186,6 @@ public class Utils {
                 }
             }
         } catch (Exception ignored) {}
-    }
-
-    /**
-     * Clear image cache
-     */
-    public static void clearImageCache(Context context){
-        File cacheDir = Glide.getPhotoCacheDir(context, "image_manager_disk_cache");
-        Log.d("", String.valueOf(cacheDir));
-        if (cacheDir.isDirectory()){
-            for (File child : cacheDir.listFiles()){
-                child.delete();
-            }
-        }
     }
 
     /**

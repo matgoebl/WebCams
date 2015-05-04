@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.signature.StringSignature;
@@ -48,6 +49,7 @@ public class FullScreenFragment extends Fragment {
     private View view;
     private RelativeLayout mButtonsLayout;
     private TouchImageView touchImageView;
+    private ImageView errorImageView;
     private Animation fadeOut;
     private String signature;
     private StringSignature stringSignature;
@@ -115,6 +117,8 @@ public class FullScreenFragment extends Fragment {
         touchImageView.setMaxZoom(zoom);
         touchImageView.setOnClickListener(touchImageViewsListener);
 
+        errorImageView = (ImageView) view.findViewById(R.id.action_error_full);
+
         ImageButton mapButton = (ImageButton) view.findViewById(R.id.maps_button);
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,7 +177,7 @@ public class FullScreenFragment extends Fragment {
     }
 
     private void initDiaporamaAdapter() {
-        diaporamaAdapter = new DiaporamaAdapter(touchImageView);
+        diaporamaAdapter = new DiaporamaAdapter(touchImageView, errorImageView);
         diaporamaAdapter.setAnimationDuration(0);
     }
 

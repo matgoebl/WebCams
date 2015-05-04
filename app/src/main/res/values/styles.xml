@@ -80,6 +80,8 @@
     </style>
 
     <style name="EditImageButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:adjustViewBounds">true</item>
         <item name="android:elevation">2dp</item>
         <item name="android:layout_alignParentTop">true</item>
@@ -87,6 +89,18 @@
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:src">@drawable/ic_action_navigation_more_vert</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="ErrorImage">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">@dimen/large_margin</item>
+        <item name="android:layout_marginRight">@dimen/large_margin</item>
+        <item name="android:src">@drawable/error</item>
+        <item name="android:visibility">gone</item>
     </style>
 
     <style name="CardTitle">

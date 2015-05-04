@@ -27,6 +27,7 @@
     <dimen name="big_margin">14dp</dimen>
     <dimen name="bigger_margin">16dp</dimen>
     <dimen name="huge_margin">20dp</dimen>
+    <dimen name="large_margin">40dp</dimen>
 
     <dimen name="icon_selector">40dp</dimen>
 

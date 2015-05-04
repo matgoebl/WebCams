@@ -61,6 +61,7 @@ public class WidgetConfigureAdapter extends RecyclerView.Adapter<WidgetConfigure
                 .load(url)
                 .centerCrop()
                 .crossFade()
+                .error(R.drawable.error)
                 .placeholder(R.drawable.placeholder_small)
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

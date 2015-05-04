@@ -490,7 +490,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Updating a category
      */
-    public int updateCategory(Category category) {
+    public void updateCategory(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -498,7 +498,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_CATEGORY_NAME, category.getCategoryName());
 
         // updating row
-        return db.update(TABLE_CATEGORY, values, KEY_ID + " = ?",
+        db.update(TABLE_CATEGORY, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(category.getId()) });
     }
 
@@ -602,7 +602,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Creating WebCam_category
      */
-    public long createWebCamCategory(long webCam_id, long category_id) {
+    public void createWebCamCategory(long webCam_id, long category_id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -610,7 +610,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_CATEGORY_ID, category_id);
         values.put(KEY_CREATED_AT, getDateTime());
 
-        return db.insert(TABLE_WEBCAM_CATEGORY, null, values);
+        db.insert(TABLE_WEBCAM_CATEGORY, null, values);
     }
 
     /**

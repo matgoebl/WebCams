@@ -28,6 +28,10 @@
         android:layout_height="match_parent"
         android:background="@color/black"/>
 
+    <ImageView
+        style="@style/ErrorImage"
+        android:id="@+id/action_error_full" />
+
         <RelativeLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="horizontal"
