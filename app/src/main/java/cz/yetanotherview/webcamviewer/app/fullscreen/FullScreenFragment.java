@@ -20,7 +20,6 @@ package cz.yetanotherview.webcamviewer.app.fullscreen;
 
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -46,21 +45,18 @@ import cz.yetanotherview.webcamviewer.app.adapter.DiaporamaAdapter;
 
 public class FullScreenFragment extends Fragment {
 
+    private Bundle bundle;
     private View view;
     private RelativeLayout mButtonsLayout;
     private TouchImageView touchImageView;
     private ImageView errorImageView;
     private Animation fadeOut;
-    private String signature;
+    private String signature, name, url;
     private StringSignature stringSignature;
-    private String name;
-    private String url;
     private float zoom;
-    private double latitude;
-    private double longitude;
-    private boolean autoRefresh;
+    private double latitude, longitude;
+    private boolean autoRefresh, fullScreen;
     private int autoRefreshInterval;
-    private boolean fullScreen;
     private ImageButton backButton;
     private DiaporamaAdapter diaporamaAdapter;
 
@@ -69,16 +65,16 @@ public class FullScreenFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.full_screen_layout, container, false);
 
-        Intent intent = getActivity().getIntent();
-        signature = intent.getExtras().getString("signature");
-        name = intent.getExtras().getString("name");
-        url = intent.getExtras().getString("url");
-        zoom = intent.getExtras().getFloat("zoom");
-        autoRefresh = intent.getExtras().getBoolean("autoRefresh");
-        autoRefreshInterval = intent.getExtras().getInt("interval");
-        latitude = intent.getExtras().getDouble("latitude");
-        longitude = intent.getExtras().getDouble("longitude");
-        fullScreen = intent.getExtras().getBoolean("fullScreen");
+        bundle = getActivity().getIntent().getExtras();
+        signature = bundle.getString("signature");
+        name = bundle.getString("name");
+        url = bundle.getString("url");
+        zoom = bundle.getFloat("zoom");
+        autoRefresh = bundle.getBoolean("autoRefresh");
+        autoRefreshInterval = bundle.getInt("interval");
+        latitude = bundle.getDouble("latitude");
+        longitude = bundle.getDouble("longitude");
+        fullScreen = bundle.getBoolean("fullScreen");
 
         stringSignature = new StringSignature(signature);
 

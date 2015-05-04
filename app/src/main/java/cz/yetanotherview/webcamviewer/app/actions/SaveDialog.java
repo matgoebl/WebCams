@@ -20,19 +20,13 @@ package cz.yetanotherview.webcamviewer.app.actions;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import junit.framework.Assert;
-
 import java.io.File;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -40,6 +34,8 @@ import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.actions.simple.UnavailableDialog;
+import cz.yetanotherview.webcamviewer.app.helper.ConnectionTester;
+import cz.yetanotherview.webcamviewer.app.listener.ConnectionTesterListener;
 
 public class SaveDialog extends DialogFragment {
 
@@ -51,7 +47,7 @@ public class SaveDialog extends DialogFragment {
     private String name;
     private String url;
 
-    private MaterialDialog dialog;
+    private MaterialDialog materialDialog;
 
     public SaveDialog() {
         parentFolder = Environment.getExternalStorageDirectory();
@@ -66,7 +62,7 @@ public class SaveDialog extends DialogFragment {
         name = bundle.getString("name", "");
         url = bundle.getString("url", "");
 
-        dialog = new MaterialDialog.Builder(getActivity())
+        materialDialog = new MaterialDialog.Builder(getActivity())
                 .title(parentFolder.getAbsolutePath())
                 .items(getContentsArray())
                 .itemsCallback(new MaterialDialog.ListCallback() {
@@ -88,7 +84,24 @@ public class SaveDialog extends DialogFragment {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        new ConnectionTester().execute();
+                        new ConnectionTester(url, new ConnectionTesterListener() {
+                            @Override
+                            public void connectionStatus(boolean result) {
+                                if (result) {
+                                    materialDialog.dismiss();
+                                    DialogFragment saveProgressDialog = new SaveProgressDialog();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("name", name);
+                                    bundle.putString("url", url);
+                                    bundle.putString("path", parentFolder.getAbsolutePath());
+                                    saveProgressDialog.setArguments(bundle);
+                                    saveProgressDialog.show(getFragmentManager(), "SaveProgressDialog");
+                                } else {
+                                    materialDialog.dismiss();
+                                    new UnavailableDialog().show(getFragmentManager(), "UnavailableDialog");
+                                }
+                            }
+                        }).execute();
                     }
 
                     @Override
@@ -100,34 +113,7 @@ public class SaveDialog extends DialogFragment {
                 .positiveText(R.string.choose)
                 .negativeText(android.R.string.cancel)
                 .build();
-        return dialog;
-    }
-
-    private class ConnectionTester extends AsyncTask<Void, Void, String> {
-
-        @Override
-        protected String doInBackground(Void... params) {
-
-            try {
-                HttpURLConnection urlConn = (HttpURLConnection) new URL(url).openConnection();
-                urlConn.connect();
-                Assert.assertEquals(HttpURLConnection.HTTP_OK, urlConn.getResponseCode());
-
-                continueOnUiThread();
-            }
-            catch (IOException e) {
-                System.err.println("Error creating HTTP connection");
-
-                this.publishProgress();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-            new UnavailableDialog().show(getFragmentManager(), "UnavailableDialog");
-        }
+        return materialDialog;
     }
 
     private static class FolderSorter implements Comparator<File> {
@@ -154,21 +140,5 @@ public class SaveDialog extends DialogFragment {
         }
         Collections.sort(results, new FolderSorter());
         return results.toArray(new File[results.size()]);
-    }
-
-    private void continueOnUiThread() {
-
-        getActivity().runOnUiThread(new Runnable() {
-            public void run() {
-                dialog.dismiss();
-                DialogFragment saveProgressDialog = new SaveProgressDialog();
-                Bundle bundle = new Bundle();
-                bundle.putString("name", name);
-                bundle.putString("url", url);
-                bundle.putString("path", parentFolder.getAbsolutePath());
-                saveProgressDialog.setArguments(bundle);
-                saveProgressDialog.show(getFragmentManager(), "SaveProgressDialog");
-            }
-        });
     }
 }

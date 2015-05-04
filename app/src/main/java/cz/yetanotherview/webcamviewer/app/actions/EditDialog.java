@@ -35,7 +35,7 @@ import java.util.List;
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.OnTextChange;
-import cz.yetanotherview.webcamviewer.app.helper.WebCamListener;
+import cz.yetanotherview.webcamviewer.app.listener.WebCamListener;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
@@ -237,7 +237,6 @@ public class EditDialog extends DialogFragment implements View.OnClickListener {
         liveStream.setOnClickListener(this);
         mWebCamName.addTextChangedListener(new OnTextChange(positiveAction));
         mWebCamUrl.addTextChangedListener(new OnTextChange(positiveAction));
-        mWebCamThumbUrl.addTextChangedListener(new OnTextChange(positiveAction));
         mWebCamLatitude.addTextChangedListener(new OnTextChange(positiveAction));
         mWebCamLongitude.addTextChangedListener(new OnTextChange(positiveAction));
 

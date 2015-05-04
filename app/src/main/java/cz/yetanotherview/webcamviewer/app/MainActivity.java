@@ -86,7 +86,7 @@ import cz.yetanotherview.webcamviewer.app.stream.LiveStreamActivity;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.ImmersiveMode;
 import cz.yetanotherview.webcamviewer.app.helper.SendToInbox;
-import cz.yetanotherview.webcamviewer.app.helper.WebCamListener;
+import cz.yetanotherview.webcamviewer.app.listener.WebCamListener;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
@@ -270,9 +270,6 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     private void initRecyclerView() {

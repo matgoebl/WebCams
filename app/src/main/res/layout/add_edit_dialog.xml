@@ -35,7 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/middle_margin"
             android:layout_marginEnd="@dimen/middle_margin"
-            android:text="@string/image"
+            android:text="@string/picture"
+            android:singleLine="true"
             android:drawableRight="@drawable/dialog_still_image"
             android:drawableEnd="@drawable/dialog_still_image" />
 
@@ -46,6 +47,7 @@
             android:layout_marginLeft="@dimen/middle_margin"
             android:layout_marginStart="@dimen/middle_margin"
             android:text="@string/stream"
+            android:singleLine="true"
             android:drawableRight="@drawable/dialog_stream"
             android:drawableEnd="@drawable/dialog_stream" />
 

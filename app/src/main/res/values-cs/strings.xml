@@ -92,7 +92,6 @@
 <string name="submit_for_approval">"Odeslat tuto WebKameru ke schválení"</string>
 <string name="import_webcams_now">"IMPORTOVAT WEBKAMERY NYNÍ!"</string>
 <string name="show_me_help">"ZOBRAZIT NÁPOVĚDU"</string>
-<string name="also_delete_all_categories">"Smazat také všechny vytvořené kategorie?"</string>
 <string name="import_selected">"IMPORTOVAT VYBRANÉ"</string>
 <string name="selected">"Vybrané"</string>
 <string name="pref_screen_always_on">"Ponechat obrazovku zapnutou"</string>
@@ -224,9 +223,13 @@
 <string name="stream">"Živý přenos"</string>
 <string name="buffering">"Načítání do vyrovnávací paměti..."</string>
 <string name="error">"Chyba"</string>
-<string name="stream_error">"Je nám líto, ale tento živý přenos nelze spustit. Prosím zkontrolujte znovu URL adresu v editačním okně (je také možné, že WebKamera je dočasně nedostupná)."</string>
 <string name="something_is_wrong">"Něco je špatně"</string>
 <string name="error_hw">"Chyba při použití hardwarové akcelerace"</string>
 <string name="presentation">"Prezentace"</string>
 <string name="manually_adding">"Ruční přidávání"</string>
+<string name="picture">"Snímek"</string>
+<string name="stream_error_description">"Je nám líto, ale tento živý přenos nelze spustit. Možné příčiny:"</string>
+<string name="stream_error_0">"Nejste připojeni k Internetu."</string>
+<string name="stream_error_1">"Stream server je dočasně nedostupný."</string>
+<string name="stream_error_2">"Zadaná URL adresa není správná (lze zkontrolovat v Editačním okně)."</string>
 </resources>

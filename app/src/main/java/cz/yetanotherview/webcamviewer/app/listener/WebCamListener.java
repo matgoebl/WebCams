@@ -16,7 +16,7 @@
 * *****************************************************************************
 */
 
-package cz.yetanotherview.webcamviewer.app.helper;
+package cz.yetanotherview.webcamviewer.app.listener;
 
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 

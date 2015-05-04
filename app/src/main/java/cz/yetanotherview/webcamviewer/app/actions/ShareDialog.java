@@ -29,21 +29,19 @@ import android.os.Bundle;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import junit.framework.Assert;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.Utils;
 import cz.yetanotherview.webcamviewer.app.actions.simple.UnavailableDialog;
+import cz.yetanotherview.webcamviewer.app.helper.ConnectionTester;
+import cz.yetanotherview.webcamviewer.app.listener.ConnectionTesterListener;
 
 public class ShareDialog extends DialogFragment {
 
@@ -66,7 +64,17 @@ public class ShareDialog extends DialogFragment {
                 .build();
 
         createFolders();
-        new ConnectionTester().execute();
+        new ConnectionTester(url, new ConnectionTesterListener() {
+            @Override
+            public void connectionStatus(boolean result) {
+                if (result) {
+                    new ShareImage().execute();
+                } else {
+                    mProgressDialog.dismiss();
+                    new UnavailableDialog().show(getFragmentManager(), "UnavailableDialog");
+                }
+            }
+        }).execute();
 
         return mProgressDialog;
     }
@@ -79,34 +87,6 @@ public class ShareDialog extends DialogFragment {
         }
         if (!tmpFolder.exists()) {
             tmpFolder.mkdir();
-        }
-    }
-
-    private class ConnectionTester extends AsyncTask<Void, Void, String> {
-
-        @Override
-        protected String doInBackground(Void... params) {
-
-            try {
-                HttpURLConnection urlConn = (HttpURLConnection) new URL(url).openConnection();
-                urlConn.connect();
-                Assert.assertEquals(HttpURLConnection.HTTP_OK, urlConn.getResponseCode());
-
-                new ShareImage().execute();
-            }
-            catch (IOException e) {
-                System.err.println("Error creating HTTP connection");
-
-                mProgressDialog.dismiss();
-                this.publishProgress();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-            new UnavailableDialog().show(getFragmentManager(), "UnavailableDialog");
         }
     }
 

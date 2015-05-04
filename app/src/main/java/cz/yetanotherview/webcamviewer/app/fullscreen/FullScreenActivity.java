@@ -20,7 +20,6 @@ package cz.yetanotherview.webcamviewer.app.fullscreen;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -39,10 +38,10 @@ public class FullScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.full_screen_container);
 
-        Intent intent = getIntent();
-        boolean map = intent.getExtras().getBoolean("map");
-        boolean fullScreen = intent.getExtras().getBoolean("fullScreen");
-        boolean screenAlwaysOn = intent.getExtras().getBoolean("screenAlwaysOn");
+        Bundle bundle = getIntent().getExtras();
+        boolean map = bundle.getBoolean("map");
+        boolean fullScreen = bundle.getBoolean("fullScreen");
+        boolean screenAlwaysOn = bundle.getBoolean("screenAlwaysOn");
 
         // Go FullScreen only on KitKat and up
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && fullScreen) {
@@ -64,13 +63,13 @@ public class FullScreenActivity extends Activity {
             }
             if (!map) {
                 fullScreenFragment = new FullScreenFragment();
-                fullScreenFragment.setArguments(getIntent().getExtras());
+                fullScreenFragment.setArguments(bundle);
                 getFragmentManager().beginTransaction()
                         .add(R.id.full_screen_container, fullScreenFragment).commit();
             }
             else {
                 mapsFragment = new MapsFragment();
-                mapsFragment.setArguments(getIntent().getExtras());
+                mapsFragment.setArguments(bundle);
                 getFragmentManager().beginTransaction()
                         .add(R.id.full_screen_container, mapsFragment).commit();
             }

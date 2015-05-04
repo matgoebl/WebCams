@@ -298,9 +298,15 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
     }
 
     private void streamError() {
+
+        String errorMessage = getString(R.string.stream_error_description) + "\n\n"
+                + "• " + getString(R.string.stream_error_0) + "\n"
+                + "• " + getString(R.string.stream_error_1) + "\n"
+                + "• " + getString(R.string.stream_error_2) + "\n";
+
         new MaterialDialog.Builder(this)
                 .title(R.string.something_is_wrong)
-                .content(R.string.stream_error)
+                .content(errorMessage)
                 .positiveText(android.R.string.ok)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
