@@ -84,6 +84,10 @@ public class BackupAgent extends BackupAgentHelper {
         synchronized (EditCategoryDialog.sDataLock) {
             super.onBackup(oldState, data, newState);
         }
+
+        synchronized (DeleteAllWebCams.sDataLock) {
+            super.onBackup(oldState, data, newState);
+        }
     }
 
     @Override
@@ -113,6 +117,9 @@ public class BackupAgent extends BackupAgentHelper {
         synchronized (EditCategoryDialog.sDataLock) {
             super.onRestore(data, appVersionCode, newState);
         }
-    }
 
+        synchronized (DeleteAllWebCams.sDataLock) {
+            super.onRestore(data, appVersionCode, newState);
+        }
+    }
 }

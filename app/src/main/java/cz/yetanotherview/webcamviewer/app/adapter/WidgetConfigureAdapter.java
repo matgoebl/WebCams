@@ -31,6 +31,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.helper.HttpHeader;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class WidgetConfigureAdapter extends RecyclerView.Adapter<WidgetConfigureAdapter.WidgetConfigureViewHolder> {
@@ -58,7 +59,7 @@ public class WidgetConfigureAdapter extends RecyclerView.Adapter<WidgetConfigure
         else url = webCam.getUrl();
 
         Glide.with(widgetConfigureViewHolder.vImage.getContext())
-                .load(url)
+                .load(HttpHeader.getUrl(url))
                 .centerCrop()
                 .crossFade()
                 .error(R.drawable.error)

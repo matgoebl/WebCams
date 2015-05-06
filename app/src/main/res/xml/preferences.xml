@@ -26,24 +26,28 @@
         android:enabled="false"
         android:checked="false"
         android:title="@string/pref_full_screen"
+        android:icon="@drawable/settings_immersive_mode"
         android:summary="@string/pref_full_screen_summ" />
 
     <CheckBoxPreference
         android:key="pref_screen_always_on"
         android:checked="false"
         android:title="@string/pref_screen_always_on"
+        android:icon="@drawable/settings_power"
         android:summary="@string/pref_screen_always_on_summary" />
 
     <CheckBoxPreference
         android:key="pref_simple_list"
         android:checked="false"
         android:title="@string/simple_listview"
+        android:icon="@drawable/settings_simple_list"
         android:summary="@string/simple_listview_summary" />
 
     <CheckBoxPreference
         android:key="pref_auto_refresh"
         android:checked="false"
         android:title="@string/pref_auto_refresh"
+        android:icon="@drawable/settings_auto_refresh"
         android:summary="@string/pref_auto_refresh_summary" />
 
         <CheckBoxPreference
@@ -51,12 +55,14 @@
             android:key="pref_auto_refresh_fullscreen"
             android:checked="false"
             android:title="@string/auto_refresh_fullscreen"
+            android:icon="@drawable/settings_auto_refresh_fullscreen"
             android:summary="@string/auto_refresh_fullscreen_summary" />
 
         <Preference
             android:dependency="pref_auto_refresh"
             android:key="pref_auto_refresh_interval"
             android:title="@string/auto_refresh_interval"
+            android:icon="@drawable/settings_auto_refresh_interval"
             android:summary="@string/auto_refresh_interval_summary" />
 
     </PreferenceCategory>
@@ -74,11 +80,13 @@
         <Preference
             android:key="pref_delete_selected"
             android:title="@string/delete_webcams"
+            android:icon="@drawable/settings_delete_selected"
             android:summary="@string/delete_webcams_summary" />
 
         <Preference
             android:key="pref_delete_all"
             android:title="@string/pref_delete_all_webcams"
+            android:icon="@drawable/settings_delete_all"
             android:summary="@string/pref_delete_all_summ" />
 
     </PreferenceCategory>
@@ -88,11 +96,13 @@
         <Preference
             android:key="pref_export_to_ext"
             android:title="@string/pref_backup"
+            android:icon="@drawable/settings_backup"
             android:summary="@string/pref_backup_summary" />
 
         <Preference
             android:key="pref_import_from_ext"
             android:title="@string/pref_restore"
+            android:icon="@drawable/settings_restore"
             android:summary="@string/pref_restore_summary" />
 
     </PreferenceCategory>
@@ -102,21 +112,31 @@
         <Preference
             android:key="pref_reset_last_check"
             android:title="@string/pref_reset_last_check"
+            android:icon="@drawable/settings_reset_last_check"
             android:summary="@string/pref_reset_last_check_summary" />
 
         <Preference
             android:key="pref_clean_cache_and_tmp"
             android:title="@string/pref_clear_cache_and_tmp"
+            android:icon="@drawable/settings_clear_cache_and_tmp"
             android:summary="@string/pref_clear_cache_and_tmp_summary" />
 
         <Preference
             android:key="pref_zoom"
             android:title="@string/pref_zoom"
+            android:icon="@drawable/settings_zoom"
             android:summary="@string/pref_zoom_summary" />
 
         <Preference
+            android:key="pref_translators"
+            android:title="Translators"
+            android:icon="@drawable/settings_translators"
+            android:summary="People who are involved in the translations"/>
+
+        <Preference
             android:key="pref_about"
-            android:title="@string/action_menu_about"/>
+            android:title="@string/action_menu_about"
+            android:icon="@drawable/settings_about" />
 
     </PreferenceCategory>
 </PreferenceScreen>

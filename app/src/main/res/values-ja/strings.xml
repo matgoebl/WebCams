@@ -77,7 +77,6 @@
 <string name="submit_for_approval">"承認のためこのウェブカムを送信"</string>
 <string name="import_webcams_now">"今すぐウェブカムをインポート!"</string>
 <string name="show_me_help">"ヘルプを表示"</string>
-<string name="also_delete_all_categories">"作成済のカテゴリーもすべて削除しますか?"</string>
 <string name="import_selected">"選択済をインポート"</string>
 <string name="selected">"選択済"</string>
 <string name="pref_screen_always_on">"画面をオンのままにする"</string>
@@ -209,9 +208,13 @@
 <string name="stream">"ストリーム"</string>
 <string name="buffering">"バッファー中"</string>
 <string name="error">"エラー"</string>
-<string name="stream_error">"申し訳ありませんが、このライブストリームを再生できません。編集ダイアログウィンドウのストリームソースを再確認してください（ウェブカメラが一時的に利用できない可能性もあります）。"</string>
 <string name="something_is_wrong">"何か問題が発生しました"</string>
 <string name="error_hw">"ハードウェアアクセラレーションでエラー"</string>
 <string name="presentation">"プレゼンテーション"</string>
 <string name="manually_adding">"手動で追加"</string>
+<string name="picture">"Picture"</string>
+<string name="stream_error_description">"Sorry, this live stream cannot be played. The possible causes:"</string>
+<string name="stream_error_0">"You are not connected to the Internet."</string>
+<string name="stream_error_1">"The stream server is temporarily unavailable."</string>
+<string name="stream_error_2">"The entered stream source is wrong (can be checked in the Edit dialog window)."</string>
 </resources>

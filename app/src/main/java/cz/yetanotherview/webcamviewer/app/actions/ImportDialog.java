@@ -50,6 +50,7 @@ import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.Utils;
 import cz.yetanotherview.webcamviewer.app.adapter.ListButtonAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
+import cz.yetanotherview.webcamviewer.app.helper.DeleteAllWebCams;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
@@ -85,6 +86,7 @@ public class ImportDialog extends DialogFragment {
         importDialog = new MaterialDialog.Builder(mActivity)
                 .title(R.string.backups)
                 .customView(R.layout.import_dialog, false)
+                .iconRes(R.drawable.settings_restore)
                 .build();
 
         listButtonAdapter = new ListButtonAdapter(mActivity, Utils.getFiles(Utils.folderWCVPath));
@@ -200,8 +202,7 @@ public class ImportDialog extends DialogFragment {
         protected Long doInBackground(Boolean... booleans) {
 
             if (booleans[0]) {
-                db.deleteAllWebCams();
-                db.closeDB();
+                DeleteAllWebCams.execute(mActivity.getApplicationContext());
             }
 
             try {

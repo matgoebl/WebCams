@@ -26,11 +26,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.*;
 
@@ -38,6 +38,7 @@ import java.util.*;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.helper.HttpHeader;
 
 public class WvWidgetProvider extends AppWidgetProvider {
 
@@ -112,29 +113,30 @@ public class WvWidgetProvider extends AppWidgetProvider {
         AppWidgetTarget target = TARGETS.get(appWidgetId);
         if (target == null) {
             target = new AppWidgetTarget(context, remoteViews, R.id.wImage,
-                    400, 400, new int[] {appWidgetId});
+                    500, 500, new int[] {appWidgetId});
             TARGETS.put(appWidgetId, target);
         }
 
         Glide.with(context)
-                .load(url)
+                .load(HttpHeader.getUrl(url))
                 .asBitmap()
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .listener(new RequestListener<String, Bitmap>() {
-                    @Override public boolean onException(
-                            Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
+                .listener(new RequestListener<GlideUrl, Bitmap>() {
+                    @Override
+                    public boolean onException(
+                            Exception e, GlideUrl model, Target<Bitmap> target, boolean isFirstResource) {
                         TARGETS.remove(appWidgetId);
-                        remoteViews.setViewVisibility(R.id.wRefreshInfoText, View.VISIBLE);
                         return false;
                     }
-                    @Override public boolean onResourceReady(
-                            Bitmap resource, String model, Target<Bitmap> target,
+
+                    @Override
+                    public boolean onResourceReady(
+                            Bitmap resource, GlideUrl model, Target<Bitmap> target,
                             boolean isFromMemoryCache, boolean isFirstResource) {
                         TARGETS.remove(appWidgetId);
                         remoteViews.setTextViewText(R.id.wTime,
                                 Utils.getCustomDateString(Utils.getPattern(context)));
-                        remoteViews.setViewVisibility(R.id.wRefreshInfoText, View.GONE);
                         return false;
                     }
                 })

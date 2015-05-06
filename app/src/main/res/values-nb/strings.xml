@@ -94,7 +94,6 @@
 <string name="submit_for_approval">"Send inn webkamera for godkjennelse"</string>
 <string name="import_webcams_now">"IMPORTÉR WEBKAMERA NÅ!"</string>
 <string name="show_me_help">"VIS MEG HJELP"</string>
-<string name="also_delete_all_categories">"Slett også alle opprettede kategorier?"</string>
 <string name="import_selected">"IMPORTÉR VALGTE"</string>
 <string name="selected">"Valgte"</string>
 <string name="pref_screen_always_on">"Hold skjerm på"</string>
@@ -228,9 +227,13 @@
 <string name="stream">"Stream"</string>
 <string name="buffering">"Buffering..."</string>
 <string name="error">"Error"</string>
-<string name="stream_error">"Sorry, this live stream cannot be played. Please check again the stream source in the Edit dialog window (is also possible that the WebCam is temporarily unavailable)."</string>
 <string name="something_is_wrong">"Something is wrong"</string>
 <string name="error_hw">"Error with hardware acceleration"</string>
 <string name="presentation">"Presentation"</string>
 <string name="manually_adding">"Manually adding"</string>
+<string name="picture">"Picture"</string>
+<string name="stream_error_description">"Sorry, this live stream cannot be played. The possible causes:"</string>
+<string name="stream_error_0">"You are not connected to the Internet."</string>
+<string name="stream_error_1">"The stream server is temporarily unavailable."</string>
+<string name="stream_error_2">"The entered stream source is wrong (can be checked in the Edit dialog window)."</string>
 </resources>

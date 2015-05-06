@@ -24,12 +24,13 @@
         android:id="@+id/category_icon"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_width="@dimen/icon_selector"
-        android:layout_height="@dimen/icon_selector"
+        android:layout_width="@dimen/icon_selector_change"
+        android:layout_height="@dimen/icon_selector_change"
+        android:padding="@dimen/middle_padding"
         android:layout_marginRight="10dp"
         android:layout_marginEnd="10dp"
-        android:tint="@color/tint"
-        android:background="?android:attr/selectableItemBackground"/>
+        android:tint="@color/primary"
+        android:background="@drawable/icon_change_background"/>
 
     <EditText
         android:id="@+id/category_name"

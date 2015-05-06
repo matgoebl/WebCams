@@ -42,6 +42,7 @@ import cz.yetanotherview.webcamviewer.app.actions.SaveDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ShareDialog;
 import cz.yetanotherview.webcamviewer.app.actions.simple.NoCoordinatesDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.DiaporamaAdapter;
+import cz.yetanotherview.webcamviewer.app.helper.HttpHeader;
 
 public class FullScreenFragment extends Fragment {
 
@@ -220,6 +221,6 @@ public class FullScreenFragment extends Fragment {
     }
 
     private void loadImage() {
-        diaporamaAdapter.loadNextImage(url, stringSignature);
+        diaporamaAdapter.loadNextImage(HttpHeader.getUrl(url), stringSignature);
     }
 }

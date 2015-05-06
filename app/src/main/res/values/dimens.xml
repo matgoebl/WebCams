@@ -30,5 +30,6 @@
     <dimen name="large_margin">40dp</dimen>
 
     <dimen name="icon_selector">40dp</dimen>
+    <dimen name="icon_selector_change">50dp</dimen>
 
 </resources>

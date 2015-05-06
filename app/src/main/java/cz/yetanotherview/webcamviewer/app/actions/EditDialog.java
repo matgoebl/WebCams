@@ -237,6 +237,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener {
         liveStream.setOnClickListener(this);
         mWebCamName.addTextChangedListener(new OnTextChange(positiveAction));
         mWebCamUrl.addTextChangedListener(new OnTextChange(positiveAction));
+        mWebCamThumbUrl.addTextChangedListener(new OnTextChange(positiveAction));
         mWebCamLatitude.addTextChangedListener(new OnTextChange(positiveAction));
         mWebCamLongitude.addTextChangedListener(new OnTextChange(positiveAction));
 

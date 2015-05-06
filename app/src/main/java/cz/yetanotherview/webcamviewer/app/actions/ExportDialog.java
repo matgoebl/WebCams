@@ -73,6 +73,7 @@ public class ExportDialog extends DialogFragment {
                     .positiveText(android.R.string.ok)
                     .negativeText(android.R.string.cancel)
                     .autoDismiss(false)
+                    .iconRes(R.drawable.settings_backup)
                     .callback(new MaterialDialog.ButtonCallback() {
                         @Override
                         public void onPositive(MaterialDialog dialog) {

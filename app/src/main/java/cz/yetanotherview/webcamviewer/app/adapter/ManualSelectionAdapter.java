@@ -39,6 +39,7 @@ import java.util.Locale;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.helper.HttpHeader;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
@@ -149,7 +150,7 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
 
         holder.selCheckBox.setChecked(webCam.isSelected());
         Glide.with(context)
-                .load(url)
+                .load(HttpHeader.getUrl(url))
                 .centerCrop()
                 .crossFade()
                 .error(R.drawable.error)

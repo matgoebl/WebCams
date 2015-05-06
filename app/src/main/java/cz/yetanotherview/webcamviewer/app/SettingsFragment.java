@@ -20,6 +20,7 @@ package cz.yetanotherview.webcamviewer.app;
 
 import android.app.DialogFragment;
 import android.app.backup.BackupManager;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -46,6 +47,7 @@ import cz.yetanotherview.webcamviewer.app.actions.ExportDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ImportDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.SelectionAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
+import cz.yetanotherview.webcamviewer.app.helper.DeleteAllWebCams;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
@@ -54,6 +56,7 @@ public class SettingsFragment extends PreferenceFragment {
     // Object for intrinsic lock
     public static final Object sDataLock = new Object();
 
+    private Context context;
     private List<Category> allCategories;
     private List<WebCam> allWebCams;
     private Integer[] whichDelete;
@@ -72,13 +75,14 @@ public class SettingsFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.preferences);
+        context = getActivity().getApplicationContext();
 
         // Enable immersive mode setting only on Kitkat and up
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getPreferenceScreen().findPreference("pref_full_screen").setEnabled(true);
         }
 
-        db = new DatabaseHelper(getActivity().getApplicationContext());
+        db = new DatabaseHelper(context);
         actionColor = getResources().getColor(R.color.yellow);
 
         setAutoRefreshInterval();
@@ -109,6 +113,7 @@ public class SettingsFragment extends PreferenceFragment {
                         .title(R.string.auto_refresh_interval)
                         .customView(R.layout.seekbar_dialog, false)
                         .positiveText(R.string.dialog_positive_text)
+                        .iconRes(R.drawable.settings_auto_refresh_interval)
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
@@ -322,6 +327,7 @@ public class SettingsFragment extends PreferenceFragment {
                     new MaterialDialog.Builder(getActivity())
                             .title(R.string.app_name)
                             .items(items)
+                            .iconRes(R.drawable.settings_delete_selected)
                             .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
                                 @Override
                                 public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
@@ -339,7 +345,7 @@ public class SettingsFragment extends PreferenceFragment {
                             })
                             .positiveText(R.string.choose)
                             .show();
-                } else Snackbar.with(getActivity().getApplicationContext())
+                } else Snackbar.with(context)
                         .text(R.string.list_is_empty)
                         .actionLabel(R.string.dismiss)
                         .actionColor(actionColor)
@@ -382,6 +388,7 @@ public class SettingsFragment extends PreferenceFragment {
                         .content(R.string.are_you_sure)
                         .positiveText(R.string.Yes)
                         .negativeText(R.string.No)
+                        .iconRes(R.drawable.settings_delete_all)
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
@@ -401,15 +408,7 @@ public class SettingsFragment extends PreferenceFragment {
         @Override
         protected Void doInBackground(Void... voids) {
 
-            synchronized (SettingsFragment.sDataLock) {
-                db.deleteAllWebCams();
-                db.closeDB();
-            }
-            BackupManager backupManager = new BackupManager(getActivity());
-            backupManager.dataChanged();
-
-            saveToPref();
-
+            DeleteAllWebCams.execute(context);
             showDeletedSnackBar();
             return null;
         }
@@ -446,6 +445,7 @@ public class SettingsFragment extends PreferenceFragment {
                         .title(R.string.pref_zoom)
                         .customView(R.layout.seekbar_dialog, false)
                         .positiveText(R.string.dialog_positive_text)
+                        .iconRes(R.drawable.settings_zoom)
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
@@ -501,13 +501,14 @@ public class SettingsFragment extends PreferenceFragment {
                         .content(R.string.reset_last_check_message)
                         .positiveText(R.string.Yes)
                         .negativeText(R.string.No)
+                        .iconRes(R.drawable.settings_reset_last_check)
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
                                 sharedPref.edit().putLong("pref_last_fetch_popular", 0).apply();
                                 sharedPref.edit().putLong("pref_last_fetch_latest", 0).apply();
 
-                                Snackbar.with(getActivity().getApplicationContext())
+                                Snackbar.with(context)
                                         .text(R.string.done)
                                         .actionLabel(R.string.dismiss)
                                         .actionColor(actionColor)
@@ -531,10 +532,11 @@ public class SettingsFragment extends PreferenceFragment {
                         .content(R.string.are_you_sure)
                         .positiveText(R.string.Yes)
                         .negativeText(R.string.No)
+                        .iconRes(R.drawable.settings_clear_cache_and_tmp)
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
-                                Utils.deleteCache(getActivity().getApplicationContext());
+                                Utils.deleteCache(context);
 
                                 deleteDone();
                             }
@@ -588,7 +590,7 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void noCategoriesFound() {
-        Snackbar.with(getActivity().getApplicationContext())
+        Snackbar.with(context)
                 .text(R.string.no_categories_found)
                 .actionLabel(R.string.dismiss)
                 .actionColor(actionColor)
@@ -596,7 +598,7 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void deleteDone() {
-        Snackbar.with(getActivity().getApplicationContext())
+        Snackbar.with(context)
                 .text(R.string.action_deleted)
                 .actionLabel(R.string.dismiss)
                 .actionColor(actionColor)
@@ -604,7 +606,7 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void saveDone() {
-        Snackbar.with(getActivity().getApplicationContext())
+        Snackbar.with(context)
                 .text(R.string.dialog_positive_toast_message)
                 .actionLabel(R.string.dismiss)
                 .actionColor(actionColor)

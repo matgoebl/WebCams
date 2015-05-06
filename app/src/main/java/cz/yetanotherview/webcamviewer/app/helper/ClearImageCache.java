@@ -32,8 +32,9 @@ public class ClearImageCache extends AsyncTask<Void, Void, Long> {
 
     @Override
     protected Long doInBackground(Void... voids) {
-        Glide.get(mContext).clearDiskCache();
+        if (Glide.getPhotoCacheDir(mContext) != null) {
+            Glide.get(mContext).clearDiskCache();
+        }
         return null;
     }
-
 }
