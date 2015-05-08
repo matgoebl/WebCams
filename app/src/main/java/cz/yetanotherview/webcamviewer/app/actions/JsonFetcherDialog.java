@@ -29,8 +29,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.res.ResourcesCompat;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -72,8 +70,10 @@ import cz.yetanotherview.webcamviewer.app.adapter.ManualSelectionAdapter;
 import cz.yetanotherview.webcamviewer.app.adapter.TypeAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.CountryNameComparator;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
+import cz.yetanotherview.webcamviewer.app.helper.OnFilterTextChange;
 import cz.yetanotherview.webcamviewer.app.helper.TypeNameComparator;
 import cz.yetanotherview.webcamviewer.app.helper.WebCamNameComparator;
+import cz.yetanotherview.webcamviewer.app.listener.SeekBarChangeListener;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.Country;
 import cz.yetanotherview.webcamviewer.app.model.Icons;
@@ -99,7 +99,7 @@ public class JsonFetcherDialog extends DialogFragment {
     private boolean lastFetchNewWebCams = false;
     private float selectedDistance;
     private long lastFetchLatest;
-    private String importProgress, units, countryCode;
+    private String importProgress, units, countryCode, countryName;
     private EditText filterBox;
     private ManualSelectionAdapter manualSelectionAdapter;
     private ReloadInterface mListener;
@@ -372,7 +372,8 @@ public class JsonFetcherDialog extends DialogFragment {
                                 @Override
                                 public void onPositive(MaterialDialog dialog) {
 
-                                    new nearSelectionBackgroundTask().execute();
+                                    selectedDistance = (seekBar.getProgress() + seekBarCorrection) * 1000;
+                                    new backgroundTask().execute();
                                     swapProgressDialog();
                                 }
                             })
@@ -394,41 +395,14 @@ public class JsonFetcherDialog extends DialogFragment {
                     seekBar.setProgress(seekBarProgress - seekBarCorrection);
                     seekBarText.setText((seekBar.getProgress() + seekBarCorrection) + units);
 
-                    seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                        int val = seekBar.getProgress();
-
-                        @Override
-                        public void onStopTrackingTouch(SeekBar seekBar) {
-                            seekBarProgress = val;
-                        }
-
-                        @Override
-                        public void onStartTrackingTouch(SeekBar seekBar) {
-                        }
-
-                        @Override
-                        public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-                            val = progressValue + seekBarCorrection;
-                            seekBarText.setText(val + units);
-                        }
-                    });
+                    seekBar.setOnSeekBarChangeListener(new SeekBarChangeListener(seekBar, seekBarText,
+                            seekBarCorrection, units));
 
                     initDialog.dismiss();
                     dialog.show();
                 }
             }
         });
-    }
-
-    private class nearSelectionBackgroundTask extends AsyncTask<String, Integer, Long> {
-
-        @Override
-        protected Long doInBackground(String... texts) {
-            selectedDistance = seekBarProgress * 1000;
-            proceed(new Category("@drawable/icon_nearby",
-                            mActivity.getString(R.string.nearby) + " " + Utils.getDateString()));
-            return null;
-        }
     }
 
     private void handleManualSelection() {
@@ -443,7 +417,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
 
-                                new manualSelectionBackgroundTask().execute();
+                                new backgroundTask().execute();
                                 swapProgressDialog();
                             }
 
@@ -457,40 +431,12 @@ public class JsonFetcherDialog extends DialogFragment {
                 manualSelectionList.setAdapter(manualSelectionAdapter);
 
                 filterBox = (EditText) dialog.getCustomView().findViewById(R.id.ms_filter);
-                filterBox.addTextChangedListener(new TextWatcher() {
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        String text = s.toString().trim().toLowerCase(Locale.getDefault());
-                        manualSelectionAdapter.getFilter().filter(text);
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count,
-                                                  int after) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-                });
+                filterBox.addTextChangedListener(new OnFilterTextChange(manualSelectionAdapter));
 
                 initDialog.dismiss();
                 dialog.show();
             }
         });
-    }
-
-    private class manualSelectionBackgroundTask extends AsyncTask<String, Integer, Long> {
-
-        @Override
-        protected Long doInBackground(String... texts) {
-
-            proceed(new Category("@drawable/icon_selected",
-                    mActivity.getString(R.string.selected) + " " + Utils.getDateString()));
-            return null;
-        }
     }
 
     private void handleCountrySelection() {
@@ -505,7 +451,9 @@ public class JsonFetcherDialog extends DialogFragment {
                                     @Override
                                     public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                                         Country country = countryList.get(which);
-                                        new countrySelectionBackgroundTask().execute(country.getCountryCode(),country.getCountryName());
+                                        countryCode = country.getCountryCode();
+                                        countryName = country.getCountryName();
+                                        new backgroundTask().execute();
                                         dialog.dismiss();
                                         swapProgressDialog();
                                     }
@@ -516,18 +464,6 @@ public class JsonFetcherDialog extends DialogFragment {
                 dialog.show();
             }
         });
-    }
-
-    private class countrySelectionBackgroundTask extends AsyncTask<String, Integer, Long> {
-
-        @Override
-        protected Long doInBackground(String... texts) {
-
-            countryCode = texts[0];
-            proceed(new Category("@drawable/icon_country",
-                    texts[1] + " " + Utils.getDateString()));
-            return null;
-        }
     }
 
     private void handleTypeSelection() {
@@ -541,8 +477,8 @@ public class JsonFetcherDialog extends DialogFragment {
                                 new MaterialDialog.ListCallback() {
                                     @Override
                                     public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                                        Type type = typeList.get(which);
-                                        new typeSelectionBackgroundTask().execute(type);
+                                        type = typeList.get(which);
+                                        new backgroundTask().execute();
                                         dialog.dismiss();
                                         swapProgressDialog();
                                     }
@@ -553,18 +489,6 @@ public class JsonFetcherDialog extends DialogFragment {
                 dialog.show();
             }
         });
-    }
-
-    private class typeSelectionBackgroundTask extends AsyncTask<Type, Integer, Long> {
-
-        @Override
-        protected Long doInBackground(Type... types) {
-
-            type = types[0];
-            proceed(new Category("@drawable/icon_" + types[0].getIconName(), types[0].getTypeName() +
-                    " " + Utils.getDateString()));
-            return null;
-        }
     }
 
     private void handleMapSelection() {
@@ -579,7 +503,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
 
-                                new mapSelectionBackgroundTask().execute();
+                                new backgroundTask().execute();
                                 swapProgressDialog();
                             }
 
@@ -643,22 +567,43 @@ public class JsonFetcherDialog extends DialogFragment {
         });
     }
 
-    private class mapSelectionBackgroundTask extends AsyncTask<String, Integer, Long> {
+    private class backgroundTask extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected Long doInBackground(String... texts) {
+        protected Void doInBackground(Void... voids) {
 
-            List<WebCam> tempList = new ArrayList<>();
-            for (Marker marker : markers) {
-                if (selMarkers.contains(marker)) {
-                    WebCam webCam = importWebCams.get(markers.indexOf(marker));
-                    tempList.add(webCam);
-                }
+            switch (selection) {
+                case 1:
+                    proceed(new Category("@drawable/icon_nearby",
+                            mActivity.getString(R.string.nearby) + " " + Utils.getDateString()));
+                    break;
+                case 2:
+                    proceed(new Category("@drawable/icon_selected",
+                            mActivity.getString(R.string.selected) + " " + Utils.getDateString()));
+                    break;
+                case 3:
+                    proceed(new Category("@drawable/icon_country",
+                            countryName + " " + Utils.getDateString()));
+                    break;
+                case 4:
+                    proceed(new Category("@drawable/icon_" + type.getIconName(), type.getTypeName() +
+                            " " + Utils.getDateString()));
+                    break;
+                case 5:
+                    List<WebCam> tempList = new ArrayList<>();
+                    for (Marker marker : markers) {
+                        if (selMarkers.contains(marker)) {
+                            WebCam webCam = importWebCams.get(markers.indexOf(marker));
+                            tempList.add(webCam);
+                        }
+                    }
+                    importWebCams = tempList;
+
+                    proceed(new Category("@drawable/icon_map", mActivity.getString(R.string.from_map) + " " +
+                            Utils.getDateString()));
+                    break;
             }
-            importWebCams = tempList;
 
-            proceed(new Category("@drawable/icon_map", mActivity.getString(R.string.from_map) + " " +
-                    Utils.getDateString()));
             return null;
         }
     }

@@ -32,7 +32,6 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.view.View;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -48,6 +47,7 @@ import cz.yetanotherview.webcamviewer.app.actions.ImportDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.SelectionAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.DeleteAllWebCams;
+import cz.yetanotherview.webcamviewer.app.listener.SeekBarChangeListener;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
@@ -64,6 +64,7 @@ public class SettingsFragment extends PreferenceFragment {
     private SeekBar seekBar;
     private TextView seekBarText;
     private int seekBarProgress, seekBarCorrection, actionColor;
+    private String units;
     private DatabaseHelper db;
     private SharedPreferences sharedPref;
     private Preference prefAutoRefreshFullScreen, prefAutoRefreshInterval;
@@ -117,7 +118,8 @@ public class SettingsFragment extends PreferenceFragment {
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
-                                sharedPref.edit().putInt("pref_auto_refresh_interval", seekBarProgress * 1000).apply();
+                                sharedPref.edit().putInt("pref_auto_refresh_interval",
+                                        (seekBar.getProgress() + seekBarCorrection) * 1000).apply();
 
                                 saveDone();
                             }
@@ -127,31 +129,15 @@ public class SettingsFragment extends PreferenceFragment {
                 seekBar = (SeekBar) dialog.getCustomView().findViewById(R.id.seekbar_seek);
                 seekBarText = (TextView) dialog.getCustomView().findViewById(R.id.seekbar_text);
 
+                units = "s";
                 seekBarCorrection = 5;
                 seekBar.setMax(359);
                 seekBarProgress = (sharedPref.getInt("pref_auto_refresh_interval", 30000) / 1000);
                 seekBar.setProgress(seekBarProgress - seekBarCorrection);
-                seekBarText.setText((seekBar.getProgress() + seekBarCorrection) + "s");
+                seekBarText.setText((seekBar.getProgress() + seekBarCorrection) + units);
 
-                seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-                    int val = seekBar.getProgress();
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                        seekBarProgress = val;
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-
-                    }
-
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-                        val = progressValue + seekBarCorrection;
-                        seekBarText.setText(val + "s");
-                    }
-                });
+                seekBar.setOnSeekBarChangeListener(new SeekBarChangeListener(seekBar, seekBarText,
+                        seekBarCorrection, units));
 
                 dialog.show();
 
@@ -449,7 +435,8 @@ public class SettingsFragment extends PreferenceFragment {
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
-                                sharedPref.edit().putFloat("pref_zoom", seekBarProgress).apply();
+                                sharedPref.edit().putFloat("pref_zoom", seekBar.getProgress()
+                                        + seekBarCorrection).apply();
 
                                 saveDone();
                             }
@@ -459,30 +446,15 @@ public class SettingsFragment extends PreferenceFragment {
                 seekBar = (SeekBar) dialog.getCustomView().findViewById(R.id.seekbar_seek);
                 seekBarText = (TextView) dialog.getCustomView().findViewById(R.id.seekbar_text);
 
+                units = "x " + getString(R.string.zoom_small);
                 seekBarCorrection = 1;
                 seekBar.setMax(3);
                 seekBarProgress = Math.round(sharedPref.getFloat("pref_zoom", 2));
                 seekBar.setProgress(seekBarProgress - seekBarCorrection);
-                seekBarText.setText((seekBar.getProgress() + seekBarCorrection) + "x " + getString(R.string.zoom_small));
+                seekBarText.setText((seekBar.getProgress() + seekBarCorrection) + units);
 
-                seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-                    int val = seekBar.getProgress();
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                        seekBarProgress = val;
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                    }
-
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-                        val = progressValue + seekBarCorrection;
-                        seekBarText.setText(val + "x " + getString(R.string.zoom_small));
-                    }
-                });
+                seekBar.setOnSeekBarChangeListener(new SeekBarChangeListener(seekBar, seekBarText,
+                        seekBarCorrection, units));
 
                 dialog.show();
 

@@ -57,8 +57,6 @@
 <string name="category_array_choose">"Zvoľte kategórie"</string>
 <string name="all_webcams">"Všetky WebKamery"</string>
 <string name="pref_import_from_server">"Import zo servera"</string>
-<string name="auto_refresh_fullscreen">"Iba v zobrazení na celú obrazovku"</string>
-<string name="auto_refresh_fullscreen_summary">"Povoliť automatické obnovenie iba v režime zobrazenia WebKamery na celú obrazovku"</string>
 <string name="also_delete_webcams">"Zmazať tiež WebKamery, ktoré sa nachádza iba v tejto kategórii?"</string>
 <string name="imported">"Importované"</string>
 <string name="nothing_to_export">"Niet čo exportovať"</string>
@@ -232,4 +230,15 @@
 <string name="stream_error_0">"Nie ste pripojení k Internetu."</string>
 <string name="stream_error_1">"Stream server je dočasne nedostupný."</string>
 <string name="stream_error_2">"Zadaná URL adresa nie je správna (možno skontrolovať v Editačnom okne)."</string>
+<string name="interval">"Interval"</string>
+<string name="auto_refresh_maximized">"Iba pri maximalizácii"</string>
+<string name="auto_refresh_maximized_summary">"Povoliť automatické obnovenie iba pri maximalizovaná zobrazení"</string>
+<string name="restore">"Obnoviť"</string>
+<string name="restore_summary_part1">"Chcete zlúčiť aktuálne záznamy sa záznamy zo záložného súboru"</string>
+<string name="merge">"Zlúčiť"</string>
+<string name="restore_summary_part2">"alebo aktuálne záznamy pred importom zmazať?"</string>
+<string name="nothing_selected">"Nič na import"</string>
+<string name="nothing_selected_summary">"V predchádzajúcom importu dialógu nebolo nič vybraté."</string>
+<string name="incompatible_file">"Nekompatibilné súbor"</string>
+<string name="incompatible_file_summary">"Bol vybraný nekompatibilné súbor."</string>
 </resources>
