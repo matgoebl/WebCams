@@ -252,6 +252,7 @@ public class SettingsFragment extends PreferenceFragment {
                     .content(R.string.also_delete_webcams)
                     .positiveText(R.string.Yes)
                     .negativeText(R.string.No)
+                    .iconRes(R.drawable.warning)
                     .callback(new MaterialDialog.ButtonCallback() {
                         @Override
                         public void onPositive(MaterialDialog dialog) {

@@ -34,6 +34,7 @@
 
     <EditText
         android:id="@+id/category_name"
+        style="@style/DialogContent"
         android:layout_toRightOf="@id/category_icon"
         android:layout_toEndOf="@id/category_icon"
         android:layout_width="match_parent"

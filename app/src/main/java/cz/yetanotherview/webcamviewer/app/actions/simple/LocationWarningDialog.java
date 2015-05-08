@@ -39,6 +39,7 @@ public class LocationWarningDialog extends DialogFragment {
                 .content(R.string.no_location_description)
                 .neutralText(R.string.location_settings)
                 .positiveText(android.R.string.ok)
+                .iconRes(R.drawable.warning)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onNeutral(MaterialDialog dialog) {

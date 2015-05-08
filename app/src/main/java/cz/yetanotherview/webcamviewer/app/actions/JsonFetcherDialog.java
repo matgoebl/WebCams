@@ -733,6 +733,7 @@ public class JsonFetcherDialog extends DialogFragment {
                 .title(R.string.no_nearby_webcams)
                 .content(R.string.no_nearby_webcams_summary)
                 .positiveText(android.R.string.ok)
+                .iconRes(R.drawable.warning)
                 .show();
     }
 
@@ -741,6 +742,7 @@ public class JsonFetcherDialog extends DialogFragment {
                 .title(R.string.nothing_selected)
                 .content(R.string.nothing_selected_summary)
                 .positiveText(android.R.string.ok)
+                .iconRes(R.drawable.warning)
                 .show();
     }
 
@@ -749,6 +751,7 @@ public class JsonFetcherDialog extends DialogFragment {
                 .title(R.string.no_new_webcams)
                 .content(R.string.no_new_webcams_summary)
                 .positiveText(android.R.string.ok)
+                .iconRes(R.drawable.warning)
                 .show();
     }
 }

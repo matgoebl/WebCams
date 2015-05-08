@@ -113,6 +113,7 @@ public class ExportDialog extends DialogFragment {
                 .title(R.string.nothing_to_export)
                 .content(R.string.nothing_to_export_summary)
                 .positiveText(android.R.string.ok)
+                .iconRes(R.drawable.warning)
                 .build();
 
         return dialog;

@@ -359,6 +359,7 @@ public class ImportDialog extends DialogFragment {
                 .title(R.string.incompatible_file)
                 .content(R.string.incompatible_file_summary)
                 .positiveText(android.R.string.ok)
+                .iconRes(R.drawable.warning)
                 .show();
     }
 }

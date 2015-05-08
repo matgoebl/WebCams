@@ -39,6 +39,7 @@ android:orientation="vertical">
 
         <EditText
             android:id="@+id/input_name"
+            style="@style/DialogContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/big_margin"

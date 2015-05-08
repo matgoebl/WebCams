@@ -27,6 +27,7 @@
 
     <EditText
         android:id="@+id/suggestion_input"
+        style="@style/DialogContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textCapSentences"
@@ -42,6 +43,7 @@
 
     <EditText
         android:id="@+id/suggestion_email"
+        style="@style/DialogContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"

@@ -36,6 +36,7 @@ public class UnavailableDialog extends DialogFragment {
                 .title(R.string.server_unavailable)
                 .content(R.string.server_unavailable_summary)
                 .positiveText(android.R.string.ok)
+                .iconRes(R.drawable.warning)
                 .build();
     }
 }

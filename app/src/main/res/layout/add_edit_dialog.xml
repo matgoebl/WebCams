@@ -60,6 +60,7 @@
 
         <EditText
             android:id="@+id/webcam_name"
+            style="@style/DialogContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_webcam_name"
@@ -76,6 +77,7 @@
 
         <EditText
             android:id="@+id/webcam_url"
+            style="@style/DialogContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_webcam_url"
@@ -94,6 +96,7 @@
 
         <EditText
             android:id="@+id/webcam_thumb_url"
+            style="@style/DialogContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_webcam_thumb_url"
@@ -129,6 +132,7 @@
 
             <EditText
                 android:id="@+id/webcam_latitude"
+                style="@style/DialogContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_webcam_latitude"
@@ -159,6 +163,7 @@
 
             <EditText
                 android:id="@+id/webcam_longitude"
+                style="@style/DialogContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_webcam_longitude"
@@ -194,6 +199,7 @@
 
         <CheckBox
             android:id="@+id/shareCheckBox"
+            style="@style/DialogContent"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

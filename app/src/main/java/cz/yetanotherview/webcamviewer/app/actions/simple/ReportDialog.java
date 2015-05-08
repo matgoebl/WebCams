@@ -21,6 +21,7 @@ package cz.yetanotherview.webcamviewer.app.actions.simple;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -32,14 +33,42 @@ public class ReportDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle bundle = this.getArguments();
-        return new MaterialDialog.Builder(getActivity())
+        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                 .title(R.string.report)
-                .content(getActivity().getString(R.string.import_successfully) + "\n\n"
-                        + getActivity().getString(R.string.new_webcams) + " " + bundle.getInt("newWebCams", 0)
-                        + "\n" + getActivity().getString(R.string.reassigned) + " " + bundle.getInt("duplicityWebCams", 0)
-                        + "\n" + getActivity().getString(R.string.updated) + " " + bundle.getInt("updatedWebCams", 0))
+                .customView(R.layout.report_dialog, true)
                 .positiveText(android.R.string.ok)
+                .iconRes(R.drawable.settings_about)
                 .build();
+
+        Bundle bundle = this.getArguments();
+        int newWebCams = bundle.getInt("newWebCams", 0);
+        int duplicityWebCams = bundle.getInt("duplicityWebCams", 0);
+        int updatedWebCams = bundle.getInt("updatedWebCams", 0);
+
+        TextView newWebCamsTvText, newWebCamsTv, duplicityWebCamsTvText, duplicityWebCamsTv,
+                updatedWebCamsTvText, updatedWebCamsTv;
+        newWebCamsTvText = (TextView) dialog.getCustomView().findViewById(R.id.report_newWebCams_text);
+        newWebCamsTv = (TextView) dialog.getCustomView().findViewById(R.id.report_newWebCams);
+        newWebCamsTv.setText(String.valueOf(newWebCams));
+        if (newWebCams != 0) {
+            newWebCamsTvText.setTextColor(getResources().getColor(R.color.primary));
+            newWebCamsTv.setTextColor(getResources().getColor(R.color.primary));
+        }
+        duplicityWebCamsTvText = (TextView) dialog.getCustomView().findViewById(R.id.report_duplicityWebCams_text);
+        duplicityWebCamsTv = (TextView) dialog.getCustomView().findViewById(R.id.report_duplicityWebCams);
+        duplicityWebCamsTv.setText(String.valueOf(duplicityWebCams));
+        if (duplicityWebCams != 0) {
+            duplicityWebCamsTvText.setTextColor(getResources().getColor(R.color.orange));
+            duplicityWebCamsTv.setTextColor(getResources().getColor(R.color.orange));
+        }
+        updatedWebCamsTvText = (TextView) dialog.getCustomView().findViewById(R.id.report_updatedWebCams_text);
+        updatedWebCamsTv = (TextView) dialog.getCustomView().findViewById(R.id.report_updatedWebCams);
+        updatedWebCamsTv.setText(String.valueOf(updatedWebCams));
+        if (updatedWebCams != 0) {
+            updatedWebCamsTvText.setTextColor(getResources().getColor(R.color.blue));
+            updatedWebCamsTv.setTextColor(getResources().getColor(R.color.blue));
+        }
+
+        return dialog;
     }
 }

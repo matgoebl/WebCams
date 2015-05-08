@@ -10,6 +10,8 @@
 
     <color name="white">#ffffffff</color>
     <color name="yellow">#ffeb3b</color>
+    <color name="orange">#EF6C00</color>
+    <color name="blue">#1565C0</color>
 
     <color name="black">#000000</color>
     <color name="grey">#cecece</color>

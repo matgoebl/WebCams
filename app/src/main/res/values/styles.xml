@@ -138,6 +138,11 @@
         <item name="android:textSize">17sp</item>
     </style>
 
+    <style name="DialogContent">
+        <item name="android:textSize">@dimen/md_content_textsize</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+    </style>
+
     <style name="cursorColor" parent="Widget.AppCompat.Light.AutoCompleteTextView">
         <item name="android:textCursorDrawable">@null</item>
     </style>

@@ -36,6 +36,7 @@ public class NoCoordinatesDialog extends DialogFragment {
                 .title(R.string.no_coordinates)
                 .content(R.string.no_coordinates_summary)
                 .positiveText(android.R.string.ok)
+                .iconRes(R.drawable.warning)
                 .build();
     }
 }

@@ -315,6 +315,7 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
                 .title(R.string.something_is_wrong)
                 .content(errorMessage)
                 .positiveText(android.R.string.ok)
+                .iconRes(R.drawable.warning)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
