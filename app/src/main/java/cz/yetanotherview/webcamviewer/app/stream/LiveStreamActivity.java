@@ -19,6 +19,7 @@
 package cz.yetanotherview.webcamviewer.app.stream;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -87,6 +88,12 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
         dialog = new MaterialDialog.Builder(this)
                 .content(R.string.buffering)
                 .progress(true, 0)
+                .cancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        finish();
+                    }
+                })
                 .show();
     }
 

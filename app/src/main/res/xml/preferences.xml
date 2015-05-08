@@ -54,9 +54,9 @@
             android:dependency="pref_auto_refresh"
             android:key="pref_auto_refresh_fullscreen"
             android:checked="false"
-            android:title="@string/auto_refresh_fullscreen"
+            android:title="@string/auto_refresh_maximized"
             android:icon="@drawable/settings_auto_refresh_fullscreen"
-            android:summary="@string/auto_refresh_fullscreen_summary" />
+            android:summary="@string/auto_refresh_maximized_summary" />
 
         <Preference
             android:dependency="pref_auto_refresh"

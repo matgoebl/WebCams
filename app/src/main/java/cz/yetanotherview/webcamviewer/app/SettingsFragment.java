@@ -110,7 +110,7 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
 
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                        .title(R.string.auto_refresh_interval)
+                        .title(R.string.interval)
                         .customView(R.layout.seekbar_dialog, false)
                         .positiveText(R.string.dialog_positive_text)
                         .iconRes(R.drawable.settings_auto_refresh_interval)
@@ -325,7 +325,7 @@ public class SettingsFragment extends PreferenceFragment {
 
                 if (allWebCams.size() > 0) {
                     new MaterialDialog.Builder(getActivity())
-                            .title(R.string.app_name)
+                            .title(R.string.delete_webcams)
                             .items(items)
                             .iconRes(R.drawable.settings_delete_selected)
                             .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {

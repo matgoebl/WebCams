@@ -100,36 +100,27 @@ public class ImportDialog extends DialogFragment {
             public void onItemClick(AdapterView<?> list, View view, int position, long id) {
 
                 selectedFile = listButtonAdapter.getItem(position);
-                new MaterialDialog.Builder(mActivity)
-                        .title(R.string.are_you_sure)
-                        .content(R.string.restore_confirm)
-                        .positiveText(android.R.string.ok)
+                importDialog.dismiss();
+                String restore_summary = getString(R.string.restore_summary_part1) + " \'" +
+                        selectedFile.getName() + "\' " + getString(R.string.restore_summary_part2);
+                importDialog = new MaterialDialog.Builder(mActivity)
+                        .title(R.string.restore)
+                        .content(restore_summary)
+                        .positiveText(R.string.merge)
                         .negativeText(android.R.string.cancel)
+                        .neutralText(R.string.action_delete)
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
-                                importDialog.dismiss();
-                                importDialog = new MaterialDialog.Builder(mActivity)
-                                        .title(getString(R.string.pref_delete_all_webcams) + "?")
-                                        .content(R.string.import_summary)
-                                        .positiveText(R.string.Yes)
-                                        .negativeText(R.string.No)
-                                        .callback(new MaterialDialog.ButtonCallback() {
-                                            @Override
-                                            public void onPositive(MaterialDialog dialog) {
-                                                new importJsonBackgroundTask().execute(true, true);
-                                            }
-                                            @Override
-                                            public void onNegative(MaterialDialog dialog) {
-                                                new importJsonBackgroundTask().execute(false, true);
-                                            }
-                                        })
-                                        .show();
+                                new importJsonBackgroundTask().execute(false, true);
+                            }
+                            @Override
+                            public void onNeutral(MaterialDialog dialog) {
+                                new importJsonBackgroundTask().execute(true, true);
                             }
                         })
                         .show();
             }
-
         });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -147,7 +138,7 @@ public class ImportDialog extends DialogFragment {
             fakeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> list, View view, int position, long id) {
-                    openFile();
+                    openFile(); // ToDo: The same dialog like when import from local storage!
                 }
 
             });
@@ -224,9 +215,9 @@ public class ImportDialog extends DialogFragment {
                 maxProgressValue = allWebCams.size();
                 showProgressDialog();
 
-                long categoryFromCurrentDate = db.createCategory(new Category("@drawable/icon_imported",
-                        mActivity.getString(R.string.imported) + " " + Utils.getDateString()));
                 synchronized (sDataLock) {
+                    long categoryFromCurrentDate = db.createCategory(new Category("@drawable/icon_imported",
+                            mActivity.getString(R.string.imported) + " " + Utils.getDateString()));
                     for(WebCam webCam : allWebCams) {
                         db.createWebCam(webCam, new long[] {categoryFromCurrentDate});
                         progressUpdate();

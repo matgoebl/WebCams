@@ -57,8 +57,6 @@
 <string name="category_array_choose">"Choose categories"</string>
 <string name="all_webcams">"All WebCams"</string>
 <string name="pref_import_from_server">"Import from Server"</string>
-<string name="auto_refresh_fullscreen">"Only in Full Screen view"</string>
-<string name="auto_refresh_fullscreen_summary">"Enable auto refresh only in full-screen view"</string>
 <string name="also_delete_webcams">"Also delete WebCams that are only in this category?"</string>
 <string name="imported">"Imported"</string>
 <string name="nothing_to_export">"Nothing to export"</string>
@@ -232,4 +230,13 @@
 <string name="stream_error_0">"You are not connected to the Internet."</string>
 <string name="stream_error_1">"The stream server is temporarily unavailable."</string>
 <string name="stream_error_2">"The entered stream source is wrong (can be checked in the Edit dialog window)."</string>
+<string name="interval">"Interval"</string>
+<string name="auto_refresh_maximized">"Only if is maximized"</string>
+<string name="auto_refresh_maximized_summary">"Enable auto refresh only in maximized view"</string>
+<string name="restore">"Restore"</string>
+<string name="restore_summary_part1">"Merge entries from the backup file"</string>
+<string name="merge">"Merge"</string>
+<string name="restore_summary_part2">"with current WebCams entries or delete current entries during restore?"</string>
+<string name="nothing_selected">"Nothing selected"</string>
+<string name="nothing_selected_summary">"Nothing was selected in the previous import dialog window."</string>
 </resources>
