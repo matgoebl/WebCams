@@ -238,7 +238,8 @@
 <string name="merge">"Merge"</string>
 <string name="restore_summary_part2">"with current WebCams entries or delete current entries during restore?"</string>
 <string name="nothing_selected">"Nothing selected"</string>
-<string name="nothing_selected_summary">"Nothing was selected in the previous import dialog window."</string>
+<string name="nothing_selected_summary">"Nothing was selected in the previous dialog window."</string>
 <string name="incompatible_file">"Incompatible file"</string>
 <string name="incompatible_file_summary">"Incompatible backup file was selected."</string>
+<string name="enter_name">"Enter name"</string>
 </resources>

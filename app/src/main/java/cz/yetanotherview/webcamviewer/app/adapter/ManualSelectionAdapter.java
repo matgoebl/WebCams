@@ -19,6 +19,7 @@
 package cz.yetanotherview.webcamviewer.app.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -54,9 +55,7 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
         this.webCamList = webCamList;
     }
 
-
-    public class ViewHolder
-    {
+    public class ViewHolder {
         CheckBox selCheckBox;
         ImageView selImageView;
         TextView selTextName;
@@ -76,11 +75,18 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
                 if (constraint != null) {
                     if (origList != null && origList.size() > 0) {
                         for (final WebCam g : origList) {
-                            String strippedNameAndCountry = Utils.getNameStrippedAccents(g.getName() + " " + g.getTags() + " " + new Locale("", g.getCountry()).getDisplayCountry());
+                            String strippedNameAndCountry;
+                            if (g.getCountry() != null) {
+                                strippedNameAndCountry = Utils.getNameStrippedAccents(g.getName() +
+                                        " " + g.getTags() + " " + new Locale("", g.getCountry()).getDisplayCountry());
+                            }
+                            else {
+                                strippedNameAndCountry = Utils.getNameStrippedAccents(g.getName());
+                            }
                             String strippedInput = Utils.getNameStrippedAccents(constraint.toString().trim());
-                            if (strippedNameAndCountry.toLowerCase()
-                                    .contains(strippedInput))
+                            if (strippedNameAndCountry.toLowerCase().contains(strippedInput)) {
                                 results.add(g);
+                            }
                         }
                     }
                     oReturn.values = results;
@@ -101,6 +107,16 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
     @Override
     public int getCount() {
         return webCamList.size();
+    }
+
+    public int getCheckedCount() {
+        List<WebCam> tempList = new ArrayList<>();
+        for (WebCam webCam : webCamList) {
+            if (webCam.isSelected()) {
+                tempList.add(webCam);
+            }
+        }
+        return tempList.size();
     }
 
     @Override
@@ -159,8 +175,16 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.selImageView);
         holder.selTextName.setText(webCam.getName());
-        holder.selTextTags.setText(webCam.getTags());
-        holder.selTextCountry.setText("(" + new Locale("", webCam.getCountry()).getDisplayCountry() + ")");
+        if (webCam.getCountry() != null) {
+            holder.selTextCountry.setText("(" + new Locale("", webCam.getCountry()).getDisplayCountry() + ")");
+            holder.selTextTags.setText(webCam.getTags());
+        }
+        else {
+            holder.selTextCountry.setVisibility(View.GONE);
+            holder.selTextTags.setVisibility(View.GONE);
+            holder.selTextName.setSingleLine(false);
+            holder.selTextName.setTypeface(null, Typeface.NORMAL);
+        }
         holder.selCheckBox.setTag(webCam);
 
         return convertView;

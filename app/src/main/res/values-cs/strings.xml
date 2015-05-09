@@ -238,7 +238,8 @@
 <string name="merge">"Sloučit"</string>
 <string name="restore_summary_part2">"nebo aktuální záznamy před importem smazat?"</string>
 <string name="nothing_selected">"Nic k importu"</string>
-<string name="nothing_selected_summary">"V předchozím importu dialogu nebylo nic vybráno."</string>
+<string name="nothing_selected_summary">"V předchozím dialogu nebylo nic vybráno."</string>
 <string name="incompatible_file">"Nekompatibilní soubor"</string>
 <string name="incompatible_file_summary">"Byl vybrán nekompatibilní soubor."</string>
+<string name="enter_name">"Zadejte název"</string>
 </resources>

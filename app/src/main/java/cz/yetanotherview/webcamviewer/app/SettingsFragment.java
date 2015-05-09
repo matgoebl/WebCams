@@ -31,6 +31,8 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -44,9 +46,12 @@ import cz.yetanotherview.webcamviewer.app.actions.AddCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.actions.EditCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ExportDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ImportDialog;
+import cz.yetanotherview.webcamviewer.app.actions.simple.NothingSelectedDialog;
+import cz.yetanotherview.webcamviewer.app.adapter.ManualSelectionAdapter;
 import cz.yetanotherview.webcamviewer.app.adapter.SelectionAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.DeleteAllWebCams;
+import cz.yetanotherview.webcamviewer.app.helper.OnFilterTextChange;
 import cz.yetanotherview.webcamviewer.app.listener.SeekBarChangeListener;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
@@ -70,6 +75,8 @@ public class SettingsFragment extends PreferenceFragment {
     private Preference prefAutoRefreshFullScreen, prefAutoRefreshInterval;
     private PreferenceCategory preferenceCategory;
     private DialogFragment dialogFragment;
+    private ManualSelectionAdapter manualSelectionAdapter;
+    private EditText filterBox;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -302,36 +309,37 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
 
                 allWebCams = db.getAllWebCams(Utils.defaultSortOrder);
-
-                String[] items = new String[allWebCams.size()];
-                int count = 0;
-                for (WebCam webCam : allWebCams) {
-                    items[count] = webCam.getName();
-                    count++;
-                }
-
                 if (allWebCams.size() > 0) {
-                    new MaterialDialog.Builder(getActivity())
+                    MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                             .title(R.string.delete_webcams)
-                            .items(items)
+                            .customView(R.layout.manual_selection_dialog, false)
+                            .positiveText(R.string.choose)
                             .iconRes(R.drawable.settings_delete_selected)
-                            .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
+                            .callback(new MaterialDialog.ButtonCallback() {
                                 @Override
-                                public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                                public void onPositive(MaterialDialog dialog) {
 
-                                    whichDelete = which;
-                                    if (whichDelete != null) {
-                                        if (whichDelete.length != 0) {
-                                            showIndeterminateProgress();
-                                            new deleteSelectedWebCamsBackgroundTask().execute();
-                                        }
+                                    if (manualSelectionAdapter.getCheckedCount() != 0) {
+                                        showIndeterminateProgress();
+                                        new deleteSelectedWebCamsBackgroundTask().execute();
                                     }
-
-                                    return true;
+                                    else new NothingSelectedDialog().show(getFragmentManager(),
+                                            "NothingSelectedDialog");
                                 }
                             })
-                            .positiveText(R.string.choose)
-                            .show();
+                            .build();
+
+                    ListView manualSelectionList = (ListView) dialog.getCustomView().findViewById(R.id.filtered_list_view);
+                    manualSelectionList.setEmptyView(dialog.getCustomView().findViewById(R.id.empty_info_text));
+                    manualSelectionAdapter = new ManualSelectionAdapter(getActivity(), allWebCams);
+                    manualSelectionList.setAdapter(manualSelectionAdapter);
+
+                    filterBox = (EditText) dialog.getCustomView().findViewById(R.id.ms_filter);
+                    filterBox.setHint(R.string.enter_name);
+                    filterBox.addTextChangedListener(new OnFilterTextChange(manualSelectionAdapter));
+
+                    dialog.show();
+
                 } else Snackbar.with(context)
                         .text(R.string.list_is_empty)
                         .actionLabel(R.string.dismiss)
@@ -348,17 +356,16 @@ public class SettingsFragment extends PreferenceFragment {
         @Override
         protected Void doInBackground(Integer... integers) {
 
-            if (whichDelete != null && whichDelete.length != 0) {
-                synchronized (SettingsFragment.sDataLock) {
-                    for (Integer aWhich : whichDelete) {
-                        WebCam deleteWebCam = allWebCams.get(aWhich);
+            synchronized (SettingsFragment.sDataLock) {
+                for (WebCam deleteWebCam : allWebCams) {
+                    if (deleteWebCam.isSelected()) {
                         db.deleteWebCam(deleteWebCam.getId());
                     }
-                    db.closeDB();
-                }
-                BackupManager backupManager = new BackupManager(getActivity());
-                backupManager.dataChanged();
+                 }
+                db.closeDB();
             }
+            BackupManager backupManager = new BackupManager(getActivity());
+            backupManager.dataChanged();
 
             showDeletedSnackBar();
             return null;
@@ -380,7 +387,7 @@ public class SettingsFragment extends PreferenceFragment {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
                                 showIndeterminateProgress();
-                                new deleteAlsoCategoriesBackgroundTask().execute();
+                                new deleteAllBackgroundTask().execute();
                             }
                         })
                         .show();
@@ -390,7 +397,7 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
-    private class deleteAlsoCategoriesBackgroundTask extends AsyncTask<Void, Void, Void> {
+    private class deleteAllBackgroundTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {

@@ -63,6 +63,7 @@ import java.util.Locale;
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.Utils;
 import cz.yetanotherview.webcamviewer.app.actions.simple.LocationWarningDialog;
+import cz.yetanotherview.webcamviewer.app.actions.simple.NothingSelectedDialog;
 import cz.yetanotherview.webcamviewer.app.actions.simple.ReportDialog;
 import cz.yetanotherview.webcamviewer.app.actions.simple.UnavailableDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.CountryAdapter;
@@ -710,7 +711,7 @@ public class JsonFetcherDialog extends DialogFragment {
                         noNearbyWebCamsDialog();
                     }
                     else if (selection == 2 || selection == 5) {
-                        nothingSelectedDialog();
+                        new NothingSelectedDialog().show(mActivity.getFragmentManager(), "NothingSelectedDialog");
                     }
                     else noNewWebCamsDialog();
                 }
@@ -732,15 +733,6 @@ public class JsonFetcherDialog extends DialogFragment {
         new MaterialDialog.Builder(mActivity)
                 .title(R.string.no_nearby_webcams)
                 .content(R.string.no_nearby_webcams_summary)
-                .positiveText(android.R.string.ok)
-                .iconRes(R.drawable.warning)
-                .show();
-    }
-
-    private void nothingSelectedDialog() {
-        new MaterialDialog.Builder(mActivity)
-                .title(R.string.nothing_selected)
-                .content(R.string.nothing_selected_summary)
                 .positiveText(android.R.string.ok)
                 .iconRes(R.drawable.warning)
                 .show();
