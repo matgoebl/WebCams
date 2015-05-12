@@ -79,7 +79,7 @@
 <string name="import_done">"Import Successful!"</string>
 <string name="import_progress">"Importing in progress and searching for possible duplicates."</string>
 <string name="report">"Report"</string>
-<string name="import_successfully">"Import was successfully completed! Check Navigation Drawer on the left side."</string>
+<string name="import_successfully">"Import was successfully completed!"</string>
 <string name="new_webcams">"New WebCams:"</string>
 <string name="reassigned">"Reassigned:"</string>
 <string name="other">"Other"</string>
@@ -242,4 +242,6 @@
 <string name="incompatible_file">"Incompatible file"</string>
 <string name="incompatible_file_summary">"Incompatible backup file was selected."</string>
 <string name="enter_name">"Enter name"</string>
+<string name="all_webcams_confirmation_part1">"Community database now contains"</string>
+<string name="all_webcams_confirmation_part2">"WebCams."</string>
 </resources>

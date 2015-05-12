@@ -6,7 +6,6 @@
     <color name="primary_dark">#33691e</color>
     <color name="accent">@color/primary</color>
     <color name="hyperlink">#689f38</color>
-    <color name="primary_light">#b84d8531</color>
 
     <color name="white">#ffffffff</color>
     <color name="yellow">#ffeb3b</color>
@@ -33,5 +32,8 @@
     <color name="widget_background">#5F5F5F</color>
 
     <color name="card_text_background">#dcffffff</color>
+
+    <drawable name="selected_gray">#11000000</drawable>
+    <drawable name="pressed_gray">#22000000</drawable>
 
 </resources>

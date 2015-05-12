@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Application theme. -->
     <style name="AppTheme" parent="AppTheme.Base">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
 
         <item name="android:navigationBarColor">@color/primary</item>
 
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
+        <item name="android:windowBackground">@color/white</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
         <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
 
+    </style>
+
+    <style name="NoTransparentStatusBar" parent="AppTheme.Base">
+        <item name="android:statusBarColor">@color/primary_dark</item>
     </style>
 
     <style name="SeekBar">

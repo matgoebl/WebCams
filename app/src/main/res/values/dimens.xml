@@ -1,7 +1,6 @@
 <resources>
 
-    <dimen name="navdrawer_width">290dp</dimen>
-    <dimen name="navdrawer_image_height">145dp</dimen>
+    <dimen name="navigation_drawer_width">320dp</dimen>
 
     <!-- Card margin -->
     <dimen name="margin_top_bottom">12dp</dimen>

@@ -26,17 +26,14 @@ import android.app.SearchManager;
 import android.app.backup.BackupManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -48,9 +45,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -62,7 +57,6 @@ import com.nispok.snackbar.SnackbarManager;
 import com.nispok.snackbar.listeners.ActionClickListener;
 import com.nispok.snackbar.listeners.EventListener;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -78,7 +72,8 @@ import cz.yetanotherview.webcamviewer.app.actions.SuggestionDialog;
 import cz.yetanotherview.webcamviewer.app.actions.WelcomeDialog;
 import cz.yetanotherview.webcamviewer.app.actions.simple.LocationWarningDialog;
 import cz.yetanotherview.webcamviewer.app.actions.simple.NoCoordinatesDialog;
-import cz.yetanotherview.webcamviewer.app.adapter.CategoryAdapter;
+import cz.yetanotherview.webcamviewer.app.drawer.NavigationDrawerCallbacks;
+import cz.yetanotherview.webcamviewer.app.drawer.NavigationDrawerFragment;
 import cz.yetanotherview.webcamviewer.app.fullscreen.FullScreenActivity;
 import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.ClearImageCache;
@@ -87,11 +82,11 @@ import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.ImmersiveMode;
 import cz.yetanotherview.webcamviewer.app.helper.SendToInbox;
 import cz.yetanotherview.webcamviewer.app.listener.WebCamListener;
-import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
-public class MainActivity extends AppCompatActivity implements WebCamListener, JsonFetcherDialog.ReloadInterface, SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks, WebCamListener,
+        JsonFetcherDialog.ReloadInterface, SwipeRefreshLayout.OnRefreshListener {
 
     // Object for intrinsic lock
     public static final Object sDataLock = new Object();
@@ -101,8 +96,6 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
     private WebCam webCam, webCamToDelete;
     private long[] webCamToDelete_category_ids;
     private List<WebCam> allWebCams;
-    private List<Category> allCategories;
-    private Category allWebCamsCategory;
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
     private View mEmptyView, mEmptySearchView, shadowView;
@@ -112,29 +105,25 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
     private float zoom;
     private int numberOfColumns, mOrientation, selectedCategory, autoRefreshInterval, mPosition,
             webCamToDeletePosition;
+    private long selectedCategoryId;
     private boolean firstRun, fullScreen, autoRefresh, autoRefreshFullScreenOnly, screenAlwaysOn,
             imagesOnOff, simpleList;
-    private String allWebCamsString, allWebCamsTitle, selectedCategoryName, mStringSignature;
+    private String mStringSignature;
     private String sortOrder = Utils.defaultSortOrder;
     private FloatingActionsMenu floatingActionsMenu;
-    private ListView mDrawerList;
-    private DrawerLayout mDrawerLayout;
-    private CategoryAdapter mArrayAdapter;
-    private ActionBarDrawerToggle mDrawerToggle;
     private SwipeRefreshLayout swipeLayout;
     private Toolbar mToolbar;
     private MaterialDialog dialog;
     private MenuItem searchItem;
     private SearchView searchView;
     private EventListener eventListener;
+    private NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // loading saved preferences
-        allWebCamsString = getString(R.string.all_webcams);
-        allWebCamsTitle = getString(R.string.app_name);
         loadPref();
 
         // Inflating main layout
@@ -179,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
 
         // Other core init
         initToolbar();
-        loadCategories();
         initDrawer();
         initRecyclerView();
         initFab();
@@ -202,74 +190,15 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
 
     private void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setToolbarTitle();
         setSupportActionBar(mToolbar);
     }
 
-    private void setToolbarTitle() {
-        if (selectedCategoryName.contains(allWebCamsString)) {
-            mToolbar.setTitle(allWebCamsTitle);
-        }
-        else {
-            mToolbar.setTitle(selectedCategoryName);
-        }
-    }
-
-    private void loadCategories() {
-        allCategories = db.getAllCategories();
-        for (Category category : allCategories) {
-            category.setCount(db.getCategoryItemsCount(category.getId()));
-        }
-
-        allWebCamsCategory = new Category();
-        allWebCamsCategory.setCategoryIcon("@drawable/icon_all");
-        allWebCamsCategory.setCategoryName(allWebCamsString);
-        allWebCamsCategory.setCount(db.getWebCamCount());
-        db.closeDB();
-    }
-
     private void initDrawer() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        mDrawerList = (ListView) findViewById(R.id.drawer);
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getFragmentManager().findFragmentById(R.id.fragment_drawer);
 
-
-        if (mDrawerList != null) {
-            ArrayList<Category> arrayOfCategories = new ArrayList<>();
-            mArrayAdapter = new CategoryAdapter(this, arrayOfCategories);
-
-            mArrayAdapter.add(allWebCamsCategory);
-            mArrayAdapter.addAll(allCategories);
-
-            mDrawerList.setAdapter(mArrayAdapter);
-            mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        }
-        db.closeDB();
-
-        if (selectedCategoryName.contains(allWebCamsString)) {
-            mDrawerList.setItemChecked(0, true);
-        }
-        else {
-            mDrawerList.setItemChecked(selectedCategory, true);
-        }
-
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                mToolbar, R.string.drawer_open, R.string.drawer_close) {
-
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                invalidateOptionsMenu();
-            }
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
-            }
-        };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
     }
 
     private void initRecyclerView() {
@@ -295,12 +224,9 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
         mRecyclerView.setLayoutManager(mLayoutManager);
         if (selectedCategory == 0) {
             allWebCams = db.getAllWebCams(sortOrder);
-            selectedCategoryName = allWebCamsString;
         }
         else {
-            Category category = allCategories.get(selectedCategory - 1);
-            allWebCams = db.getAllWebCamsByCategory(category.getId(),sortOrder);
-            selectedCategoryName = category.getCategoryName();
+            allWebCams = db.getAllWebCamsByCategory(selectedCategoryId, sortOrder);
         }
         db.closeDB();
 
@@ -331,7 +257,8 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
         floatingActionsMenu = (FloatingActionsMenu) findViewById(R.id.fab);
         shadowView = findViewById(R.id.shadowView);
 
-        FloatingActionsMenu.OnFloatingActionsMenuUpdateListener listener = new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+        FloatingActionsMenu.OnFloatingActionsMenuUpdateListener listener =
+                new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
             @Override
             public void onMenuExpanded() {
                 shadowView.animate()
@@ -427,36 +354,23 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
         }
     }
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectedCategory = position;
-            reInitializeRecyclerViewAdapter(position);
-            reInitializeDrawerListAdapter();
-            setToolbarTitle();
-            mDrawerLayout.closeDrawers();
+    @Override
+    public void onNavigationDrawerItemSelected(int position, long categoryId) {
+        selectedCategory = position;
+        selectedCategoryId = categoryId;
+        if (mAdapter != null) {
+            reInitializeRecyclerViewAdapter();
         }
     }
 
-    private void reInitializeRecyclerViewAdapter(int position) {
-        Category category;
-        if (position == 0) {
-            selectedCategoryName = allWebCamsString;
-        }
-        else {
-            category = allCategories.get(position - 1);
-            selectedCategoryName = category.getCategoryName();
-        }
+    private void reInitializeRecyclerViewAdapter() {
         if (db.getWebCamCount() != 0) {
-            allWebCams.clear();
-            if (position == 0) {
+            if (selectedCategory == 0) {
                 allWebCams = db.getAllWebCams(sortOrder);
                 mAdapter.swapData(allWebCams);
             }
             else {
-                category = allCategories.get(position - 1);
-                allWebCams = db.getAllWebCamsByCategory(category.getId(),sortOrder);
+                allWebCams = db.getAllWebCamsByCategory(selectedCategoryId, sortOrder);
                 mAdapter.swapData(allWebCams);
             }
             db.closeDB();
@@ -466,25 +380,7 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
     }
 
     private void reInitializeDrawerListAdapter() {
-        int checked = mDrawerList.getCheckedItemPosition();
-        loadCategories();
-        mArrayAdapter.clear();
-        mArrayAdapter.add(allWebCamsCategory);
-        mArrayAdapter.addAll(allCategories);
-        mDrawerList.setAdapter(mArrayAdapter);
-        mDrawerList.setItemChecked(checked, true);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        mNavigationDrawerFragment.reloadData();
     }
 
     @Override
@@ -553,10 +449,6 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
 
         switch (item.getItemId()) {
 
@@ -698,7 +590,7 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
                             default:
                                 break;
                         }
-                        reInitializeRecyclerViewAdapter(selectedCategory);
+                        reInitializeRecyclerViewAdapter();
 
                         return true;
                     }
@@ -898,7 +790,7 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
         BackupManager backupManager = new BackupManager(this);
         backupManager.dataChanged();
 
-        mAdapter.modifyItem(position,wc);
+        mAdapter.modifyItem(position, wc);
         reInitializeDrawerListAdapter();
 
         saveDone();
@@ -975,8 +867,9 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
 
     @Override
     public void invokeReload() {
-        reInitializeRecyclerViewAdapter(selectedCategory);
+        reInitializeRecyclerViewAdapter();
         reInitializeDrawerListAdapter();
+        mNavigationDrawerFragment.openDrawer();
     }
 
     private void moveItem() {
@@ -1139,9 +1032,7 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
                     public void run() {
                         try {
                             refresh(true);
-                        } catch (Exception e) {
-                            // Auto-generated catch block
-                        }
+                        } catch (Exception ignored) {}
                     }
                 });
             }
@@ -1172,8 +1063,6 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
         autoRefreshInterval = preferences.getInt("pref_auto_refresh_interval", 30000);
         autoRefreshFullScreenOnly = preferences.getBoolean("pref_auto_refresh_fullscreen", false);
         zoom = preferences.getFloat("pref_zoom", 2);
-        selectedCategory = preferences.getInt("pref_selected_category", 0);
-        selectedCategoryName = preferences.getString("pref_selected_category_name", allWebCamsString);
         screenAlwaysOn = preferences.getBoolean("pref_screen_always_on", false);
         simpleList = preferences.getBoolean("pref_simple_list", false);
     }
@@ -1184,8 +1073,6 @@ public class MainActivity extends AppCompatActivity implements WebCamListener, J
         editor.putBoolean("pref_first_run", firstRun);
         editor.putInt("number_of_columns", numberOfColumns);
         editor.putBoolean("pref_images_on_off", imagesOnOff);
-        editor.putInt("pref_selected_category", selectedCategory);
-        editor.putString("pref_selected_category_name", selectedCategoryName);
         editor.apply();
     }
 }

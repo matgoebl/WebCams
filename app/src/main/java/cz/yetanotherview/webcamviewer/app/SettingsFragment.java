@@ -532,8 +532,6 @@ public class SettingsFragment extends PreferenceFragment {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putLong("pref_last_fetch_popular", 0);
         editor.putLong("pref_last_fetch_latest", 0);
-        editor.putInt("pref_selected_category", 0);
-        editor.putString("pref_selected_category_name", getString(R.string.app_name));
         editor.apply();
     }
 

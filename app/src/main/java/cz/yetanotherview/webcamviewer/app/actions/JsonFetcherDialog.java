@@ -202,7 +202,7 @@ public class JsonFetcherDialog extends DialogFragment {
 
                     // Swap dialogs
                     maxProgressValue = importWebCams.size();
-                    if (selection == 0 || selection == 6 || selection == 7 || selection == 8) {
+                    if (selection == 0 || selection == 6 || selection == 8) {
                         swapProgressDialog();
                     }
 
@@ -303,8 +303,7 @@ public class JsonFetcherDialog extends DialogFragment {
                                     getString(R.string.live_streams) + " " + Utils.getDateString()));
                         }
                         else if (selection == 7) {
-                            proceed(new Category("@drawable/icon_all_imported",
-                                    getString(R.string.all) + " " + Utils.getDateString()));
+                            handleAll();
                         }
                         else if (selection == 8) {
                             lastFetchLatest = preferences.getLong("pref_last_fetch_latest", 0);
@@ -372,7 +371,6 @@ public class JsonFetcherDialog extends DialogFragment {
                             .callback(new MaterialDialog.ButtonCallback() {
                                 @Override
                                 public void onPositive(MaterialDialog dialog) {
-
                                     selectedDistance = (seekBar.getProgress() + seekBarCorrection) * 1000;
                                     new backgroundTask().execute();
                                     swapProgressDialog();
@@ -417,7 +415,6 @@ public class JsonFetcherDialog extends DialogFragment {
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
-
                                 new backgroundTask().execute();
                                 swapProgressDialog();
                             }
@@ -503,7 +500,6 @@ public class JsonFetcherDialog extends DialogFragment {
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
-
                                 new backgroundTask().execute();
                                 swapProgressDialog();
                             }
@@ -568,6 +564,36 @@ public class JsonFetcherDialog extends DialogFragment {
         });
     }
 
+    private void handleAll() {
+
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+
+                int count = importWebCams.size();
+                String content = getString(R.string.all_webcams_confirmation_part1) + " " + count + " " +
+                        getString(R.string.all_webcams_confirmation_part2) + " " + getString(R.string.are_you_sure);
+                new MaterialDialog.Builder(mActivity)
+                        .title(R.string.all_webcams)
+                        .content(content)
+                        .positiveText(R.string.Yes)
+                        .negativeText(R.string.No)
+                        .iconRes(R.drawable.warning)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                new backgroundTask().execute();
+                                swapProgressDialog();
+                            }
+                            @Override
+                            public void onNegative(MaterialDialog dialog) {
+                                initDialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
+        });
+    }
+
     private class backgroundTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -602,6 +628,10 @@ public class JsonFetcherDialog extends DialogFragment {
 
                     proceed(new Category("@drawable/icon_map", mActivity.getString(R.string.from_map) + " " +
                             Utils.getDateString()));
+                    break;
+                case 7:
+                    proceed(new Category("@drawable/icon_all_imported",
+                            getString(R.string.all) + " " + Utils.getDateString()));
                     break;
             }
 
@@ -743,7 +773,7 @@ public class JsonFetcherDialog extends DialogFragment {
                 .title(R.string.no_new_webcams)
                 .content(R.string.no_new_webcams_summary)
                 .positiveText(android.R.string.ok)
-                .iconRes(R.drawable.warning)
+                .iconRes(R.drawable.settings_about)
                 .show();
     }
 }
