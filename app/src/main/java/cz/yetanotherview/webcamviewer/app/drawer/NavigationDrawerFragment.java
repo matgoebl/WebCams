@@ -32,11 +32,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.actions.AddCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.NavigationDrawerAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.model.Category;
@@ -46,7 +48,7 @@ import cz.yetanotherview.webcamviewer.app.model.Category;
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class NavigationDrawerFragment extends Fragment implements NavigationDrawerCallbacks {
+public class NavigationDrawerFragment extends Fragment implements NavigationDrawerCallbacks, View.OnClickListener {
 
     /**
      * Remember the position of the selected item.
@@ -118,6 +120,10 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mDrawerAdapter.setNavigationDrawerCallbacks(this);
         mDrawerList.setAdapter(mDrawerAdapter);
         selectItem(mCurrentSelectedPosition);
+
+        RelativeLayout addCategoryLayout = (RelativeLayout) view.findViewById(R.id.add_category_layout);
+        addCategoryLayout.setOnClickListener(this);
+
         return view;
     }
 
@@ -231,6 +237,15 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
     public void closeDrawer() {
         mDrawerLayout.closeDrawer(mFragmentContainerView);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.add_category_layout:
+                new AddCategoryDialog().show(getFragmentManager(), "AddCategoryDialog");
+                break;
+        }
     }
 
     @Override

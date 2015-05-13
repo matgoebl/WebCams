@@ -18,10 +18,11 @@
 
     <dimen name="progress_padding">44dp</dimen>
 
-    <dimen name="main_margin">8dp</dimen>
     <dimen name="tiny_margin">2dp</dimen>
     <dimen name="main_small_margin">3dp</dimen>
     <dimen name="main_middle_margin">4dp</dimen>
+    <dimen name="seven_margin">7dp</dimen>
+    <dimen name="main_margin">8dp</dimen>
     <dimen name="middle_margin">10dp</dimen>
     <dimen name="big_margin">14dp</dimen>
     <dimen name="bigger_margin">16dp</dimen>

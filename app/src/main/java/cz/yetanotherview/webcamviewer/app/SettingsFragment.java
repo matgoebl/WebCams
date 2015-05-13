@@ -30,7 +30,6 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -42,18 +41,14 @@ import com.nispok.snackbar.Snackbar;
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.actions.AboutDialog;
-import cz.yetanotherview.webcamviewer.app.actions.AddCategoryDialog;
-import cz.yetanotherview.webcamviewer.app.actions.EditCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ExportDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ImportDialog;
 import cz.yetanotherview.webcamviewer.app.actions.simple.NothingSelectedDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.ManualSelectionAdapter;
-import cz.yetanotherview.webcamviewer.app.adapter.SelectionAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.DeleteAllWebCams;
 import cz.yetanotherview.webcamviewer.app.helper.OnFilterTextChange;
 import cz.yetanotherview.webcamviewer.app.listener.SeekBarChangeListener;
-import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class SettingsFragment extends PreferenceFragment {
@@ -62,9 +57,7 @@ public class SettingsFragment extends PreferenceFragment {
     public static final Object sDataLock = new Object();
 
     private Context context;
-    private List<Category> allCategories;
     private List<WebCam> allWebCams;
-    private Integer[] whichDelete;
     private MaterialDialog indeterminateProgress;
     private SeekBar seekBar;
     private TextView seekBarText;
@@ -95,8 +88,6 @@ public class SettingsFragment extends PreferenceFragment {
 
         setAutoRefreshInterval();
         setAutoHideListener();
-
-        categoryAddEditDelete();
 
         deleteSelectedWebCams();
         deleteAllWebCams();
@@ -184,123 +175,6 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
-    }
-
-    private void categoryAddEditDelete() {
-        Preference pref_category_add_edit_delete = findPreference("pref_category_add_edit_delete");
-        pref_category_add_edit_delete.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference activity_preference) {
-
-                int[] mIcons = {R.drawable.icon_add, R.drawable.icon_edit, R.drawable.icon_delete};
-                new MaterialDialog.Builder(getActivity())
-                        .items(R.array.add_edit_delete)
-                        .title(R.string.pref_category_add_edit_delete)
-                        .adapter(new SelectionAdapter(getActivity(), R.array.add_edit_delete, mIcons),
-                                new MaterialDialog.ListCallback() {
-                                    @Override
-                                    public void onSelection(MaterialDialog dialog, View itemView,
-                                                            int which, CharSequence text) {
-
-                                        if (which == 0) {
-                                            dialogFragment = new AddCategoryDialog();
-                                            dialogFragment.show(getFragmentManager(), "AddCategoryDialog");
-                                        } else if (which == 1) {
-                                            allCategories = db.getAllCategories();
-                                            if (allCategories.size() > 0) {
-                                                dialogFragment = new EditCategoryDialog();
-                                                dialogFragment.show(getFragmentManager(), "EditCategoryDialog");
-                                            } else noCategoriesFound();
-                                        } else {
-                                            allCategories = db.getAllCategories();
-                                            String[] items = new String[allCategories.size()];
-                                            int count = 0;
-                                            for (Category category : allCategories) {
-                                                items[count] = category.getCategoryName();
-                                                count++;
-                                            }
-
-                                            if (allCategories.size() > 0) {
-                                                new MaterialDialog.Builder(getActivity())
-                                                        .title(R.string.webcam_category)
-                                                        .items(items)
-                                                        .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
-                                                            @Override
-                                                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-
-                                                                whichDelete = which;
-                                                                if (whichDelete != null) {
-                                                                    if (whichDelete.length != 0) {
-                                                                        categoryDeleteAlsoWebCamsDialog();
-                                                                    }
-                                                                }
-
-                                                                return true;
-                                                            }
-                                                        })
-                                                        .positiveText(R.string.choose)
-                                                        .show();
-                                            } else noCategoriesFound();
-                                        }
-
-                                        dialog.dismiss();
-                                    }
-                                })
-                        .show();
-
-                return true;
-            }
-        });
-    }
-
-    private void categoryDeleteAlsoWebCamsDialog (){
-
-            new MaterialDialog.Builder(getActivity())
-                    .title(R.string.action_delete)
-                    .content(R.string.also_delete_webcams)
-                    .positiveText(R.string.Yes)
-                    .negativeText(R.string.No)
-                    .iconRes(R.drawable.warning)
-                    .callback(new MaterialDialog.ButtonCallback() {
-                        @Override
-                        public void onPositive(MaterialDialog dialog) {
-                            showIndeterminateProgress();
-                            new deleteAlsoWebCamsBackgroundTask().execute(true);
-                        }
-
-                        @Override
-                        public void onNegative(MaterialDialog dialog) {
-                            showIndeterminateProgress();
-                            new deleteAlsoWebCamsBackgroundTask().execute(false);
-                        }
-                    })
-                    .show();
-    }
-
-    private class deleteAlsoWebCamsBackgroundTask extends AsyncTask<Boolean, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Boolean... booleans) {
-
-            Boolean alsoWebCams = booleans[0];
-            if (whichDelete != null && whichDelete.length != 0) {
-                synchronized (SettingsFragment.sDataLock) {
-                    for (Integer aWhich : whichDelete) {
-                        Category deleteCategory = allCategories.get(aWhich);
-                        if (alsoWebCams) {
-                            db.deleteCategory(deleteCategory.getId(), true);
-                        }
-                        else db.deleteCategory(deleteCategory.getId(), false);
-                    }
-                    db.closeDB();
-                }
-                BackupManager backupManager = new BackupManager(getActivity());
-                backupManager.dataChanged();
-            }
-            saveToPref();
-
-            showDeletedSnackBar();
-            return null;
-        }
     }
 
     private void deleteSelectedWebCams() {
@@ -528,13 +402,6 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
-    private void saveToPref() {
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putLong("pref_last_fetch_popular", 0);
-        editor.putLong("pref_last_fetch_latest", 0);
-        editor.apply();
-    }
-
     private void showAbout() {
         Preference pref_about = findPreference("pref_about");
         pref_about.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -565,14 +432,6 @@ public class SettingsFragment extends PreferenceFragment {
 
             }
         });
-    }
-
-    private void noCategoriesFound() {
-        Snackbar.with(context)
-                .text(R.string.no_categories_found)
-                .actionLabel(R.string.dismiss)
-                .actionColor(actionColor)
-                .show(getActivity());
     }
 
     private void deleteDone() {

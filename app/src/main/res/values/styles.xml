@@ -150,4 +150,12 @@
         <item name="android:textColor">@color/very_dark_grey</item>
     </style>
 
+    <style name="drawer_separator">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/white_separator</item>
+        <item name="android:layout_marginTop">@dimen/seven_margin</item>
+        <item name="android:layout_marginBottom">@dimen/seven_margin</item>
+    </style>
+
 </resources>

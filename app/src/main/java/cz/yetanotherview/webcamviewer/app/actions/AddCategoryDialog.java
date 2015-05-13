@@ -34,10 +34,10 @@ import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.nispok.snackbar.Snackbar;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.adapter.IconAdapter;
+import cz.yetanotherview.webcamviewer.app.drawer.NavigationDrawerFragment;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.OnTextChange;
 import cz.yetanotherview.webcamviewer.app.model.Category;
@@ -97,7 +97,9 @@ public class AddCategoryDialog extends DialogFragment {
                         BackupManager backupManager = new BackupManager(mActivity);
                         backupManager.dataChanged();
 
-                        saveDone();
+                        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
+                                getFragmentManager().findFragmentById(R.id.fragment_drawer);
+                        mNavigationDrawerFragment.reloadData();
                     }
                 })
                 .build();
@@ -137,13 +139,5 @@ public class AddCategoryDialog extends DialogFragment {
         positiveAction.setEnabled(false);
 
         return dialog;
-    }
-
-    private void saveDone() {
-        Snackbar.with(mActivity.getApplicationContext())
-                .text(R.string.dialog_positive_toast_message)
-                .actionLabel(R.string.dismiss)
-                .actionColor(mActivity.getResources().getColor(R.color.yellow))
-                .show(mActivity);
     }
 }

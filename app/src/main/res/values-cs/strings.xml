@@ -79,7 +79,7 @@
 <string name="import_done">"Import byl úspěšný!"</string>
 <string name="import_progress">"Probíhá importování WebKamer a zároveň hledání možných duplicit."</string>
 <string name="report">"Zpráva"</string>
-<string name="import_successfully">"Import byl úspěšně dokončen! Zkontrolujte navigační lištu na levé straně."</string>
+<string name="import_successfully">"Import byl úspěšně dokončen!"</string>
 <string name="new_webcams">"Nové WebKamery:"</string>
 <string name="reassigned">"Převedeno:"</string>
 <string name="other">"Ostatní"</string>
@@ -242,4 +242,6 @@
 <string name="incompatible_file">"Nekompatibilní soubor"</string>
 <string name="incompatible_file_summary">"Byl vybrán nekompatibilní soubor."</string>
 <string name="enter_name">"Zadejte název"</string>
+<string name="all_webcams_confirmation_part1">"Komunitní databáze nyní obsahuje"</string>
+<string name="all_webcams_confirmation_part2">"WebKamer."</string>
 </resources>

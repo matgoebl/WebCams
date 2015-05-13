@@ -67,14 +67,6 @@
 
     </PreferenceCategory>
     <PreferenceCategory
-        android:title="@string/webcam_category">
-
-        <Preference
-            android:key="pref_category_add_edit_delete"
-            android:title="@string/pref_category_add_edit_delete"
-            android:summary="@string/pref_category_add_edit_delete_summary" />
-    </PreferenceCategory>
-    <PreferenceCategory
         android:title="@string/pref_web_cams">
 
         <Preference
