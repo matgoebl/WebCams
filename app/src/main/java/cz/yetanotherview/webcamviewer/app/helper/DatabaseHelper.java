@@ -458,6 +458,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * get single Category
+     */
+    public Category getCategory(long categoryId) {
+        Category category = new Category();
+
+        String selectQuery = "SELECT * FROM " + TABLE_CATEGORY + " WHERE "
+                + KEY_ID + " = " + categoryId;
+
+        Log.d(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()) {
+            do {
+                category.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                category.setCategoryIcon(c.getString(c.getColumnIndex(KEY_CATEGORY_ICON)));
+                category.setCategoryName(c.getString(c.getColumnIndex(KEY_CATEGORY_NAME)));
+            } while (c.moveToNext());
+        }
+        c.close();
+
+        return category;
+    }
+
+    /**
      * getting all categories
      * */
     public List<Category> getAllCategories() {

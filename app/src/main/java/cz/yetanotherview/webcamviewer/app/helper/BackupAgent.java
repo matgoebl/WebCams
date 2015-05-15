@@ -31,6 +31,7 @@ import java.io.IOException;
 import cz.yetanotherview.webcamviewer.app.MainActivity;
 import cz.yetanotherview.webcamviewer.app.SettingsFragment;
 import cz.yetanotherview.webcamviewer.app.actions.AddCategoryDialog;
+import cz.yetanotherview.webcamviewer.app.actions.DeleteCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.actions.EditCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ImportDialog;
 import cz.yetanotherview.webcamviewer.app.actions.JsonFetcherDialog;
@@ -85,6 +86,10 @@ public class BackupAgent extends BackupAgentHelper {
             super.onBackup(oldState, data, newState);
         }
 
+        synchronized (DeleteCategoryDialog.sDataLock) {
+            super.onBackup(oldState, data, newState);
+        }
+
         synchronized (DeleteAllWebCams.sDataLock) {
             super.onBackup(oldState, data, newState);
         }
@@ -115,6 +120,10 @@ public class BackupAgent extends BackupAgentHelper {
         }
 
         synchronized (EditCategoryDialog.sDataLock) {
+            super.onRestore(data, appVersionCode, newState);
+        }
+
+        synchronized (DeleteCategoryDialog.sDataLock) {
             super.onRestore(data, appVersionCode, newState);
         }
 

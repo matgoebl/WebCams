@@ -42,9 +42,6 @@
 <string name="category_array_choose">"カテゴリーを選択"</string>
 <string name="all_webcams">"すべてのウェブカム"</string>
 <string name="pref_import_from_server">"サーバーからインポート"</string>
-<string name="auto_refresh_fullscreen">"全画面表示のみ"</string>
-<string name="auto_refresh_fullscreen_summary">"全画面表示時のみ自動リフレッシュを有効にします"</string>
-<string name="also_delete_webcams">"このカテゴリーのウェブカムも同時に削除しますか?"</string>
 <string name="imported">"インポートしました"</string>
 <string name="nothing_to_export">"エクスポート対象がありません"</string>
 <string name="nothing_to_export_summary">"初めにデータベースにウェブカムを作成する必要があります。"</string>
@@ -66,7 +63,7 @@
 <string name="import_done">"正常にインポートしました!"</string>
 <string name="import_progress">"インポート処理中です。重複の可能性も確認しています。"</string>
 <string name="report">"レポート"</string>
-<string name="import_successfully">"インポートが正常に完了しました! 左側のナビゲーションドロワーを確認してください。"</string>
+<string name="import_successfully">"インポートが正常に完了しました!"</string>
 <string name="new_webcams">"新しいウェブカム"</string>
 <string name="reassigned">"再割り当て:"</string>
 <string name="other">"その他"</string>
@@ -212,9 +209,23 @@
 <string name="error_hw">"ハードウェアアクセラレーションでエラー"</string>
 <string name="presentation">"プレゼンテーション"</string>
 <string name="manually_adding">"手動で追加"</string>
-<string name="picture">"Picture"</string>
-<string name="stream_error_description">"Sorry, this live stream cannot be played. The possible causes:"</string>
-<string name="stream_error_0">"You are not connected to the Internet."</string>
-<string name="stream_error_1">"The stream server is temporarily unavailable."</string>
-<string name="stream_error_2">"The entered stream source is wrong (can be checked in the Edit dialog window)."</string>
+<string name="picture">"写真"</string>
+<string name="stream_error_description">"申し訳ありません。このライブストリームを再生することができません。考えられる原因:"</string>
+<string name="stream_error_0">"インターネットに接続していません。"</string>
+<string name="stream_error_1">"ストリームサーバーが一時的に利用できません。"</string>
+<string name="stream_error_2">"入力されたストリームソースが正しくありません（編集ダイアログウインドウで確認してください）。"</string>
+<string name="interval">"間隔"</string>
+<string name="auto_refresh_maximized">"最大化した場合のみ"</string>
+<string name="auto_refresh_maximized_summary">"最大表示でのみ自動リフレッシュを有効にします"</string>
+<string name="restore">"復元"</string>
+<string name="restore_summary_part1">"バックアップファイルからエントリーをマージします"</string>
+<string name="merge">"マージ"</string>
+<string name="restore_summary_part2">"現在のウェブカムのエントリーとマージ、または復元時に現在のエントリーを削除しますか?"</string>
+<string name="nothing_selected">"選択されていません"</string>
+<string name="nothing_selected_summary">"前のインポート ダイアログ ウインドウで何も選択されませんでした。"</string>
+<string name="incompatible_file">"互換性のないファイル"</string>
+<string name="incompatible_file_summary">"互換性のないバックアップファイルが選択されました。"</string>
+<string name="enter_name">"名前を入力してください"</string>
+<string name="all_webcams_confirmation_part1">"コミュニティデータベースを含めました"</string>
+<string name="all_webcams_confirmation_part2">"ウェブカム"</string>
 </resources>

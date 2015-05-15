@@ -119,6 +119,20 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
         return tempList.size();
     }
 
+    public void setAllChecked() {
+        for (WebCam webCam : webCamList) {
+            webCam.setSelected(true);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void setAllUnChecked() {
+        for (WebCam webCam : webCamList) {
+            webCam.setSelected(false);
+        }
+        notifyDataSetChanged();
+    }
+
     @Override
     public Object getItem(int position) {
         return webCamList.get(position);
@@ -143,7 +157,7 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
             holder.selTextCountry = (TextView) convertView.findViewById(R.id.sel_text_country);
             convertView.setTag(holder);
 
-            holder.selCheckBox.setOnClickListener( new OnClickListener() {
+            holder.selCheckBox.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     CheckBox cb = (CheckBox) v;

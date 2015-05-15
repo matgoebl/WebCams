@@ -97,9 +97,7 @@ public class AddCategoryDialog extends DialogFragment {
                         BackupManager backupManager = new BackupManager(mActivity);
                         backupManager.dataChanged();
 
-                        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
-                                getFragmentManager().findFragmentById(R.id.fragment_drawer);
-                        mNavigationDrawerFragment.reloadData();
+                        reloadDrawer();
                     }
                 })
                 .build();
@@ -139,5 +137,13 @@ public class AddCategoryDialog extends DialogFragment {
         positiveAction.setEnabled(false);
 
         return dialog;
+    }
+
+    private void reloadDrawer() {
+        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getFragmentManager().findFragmentById(R.id.fragment_drawer);
+        if (mNavigationDrawerFragment != null) {
+            mNavigationDrawerFragment.reloadData();
+        }
     }
 }

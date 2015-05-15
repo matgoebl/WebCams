@@ -57,7 +57,6 @@
 <string name="category_array_choose">"Choose categories"</string>
 <string name="all_webcams">"All WebCams"</string>
 <string name="pref_import_from_server">"Import from Server"</string>
-<string name="also_delete_webcams">"Also delete WebCams that are only in this category?"</string>
 <string name="imported">"Imported"</string>
 <string name="nothing_to_export">"Nothing to export"</string>
 <string name="nothing_to_export_summary">"You must first create some WebCams in your database."</string>

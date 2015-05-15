@@ -31,12 +31,10 @@ import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.nispok.snackbar.Snackbar;
-
-import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.adapter.IconAdapter;
+import cz.yetanotherview.webcamviewer.app.drawer.NavigationDrawerFragment;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.OnTextChange;
 import cz.yetanotherview.webcamviewer.app.model.Category;
@@ -48,13 +46,13 @@ public class EditCategoryDialog extends DialogFragment {
     public static final Object sDataLock = new Object();
 
     private String inputName, iconPath;
+    private int position;
     private View positiveAction;
     private EditText input;
     private Category category;
-    private List<Category> allCategories;
     private Icons icons;
     private ImageView category_icon;
-    private MaterialDialog dialog, gridDialog;
+    private MaterialDialog gridDialog;
     private DatabaseHelper db;
     private Activity mActivity;
 
@@ -68,38 +66,14 @@ public class EditCategoryDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Bundle bundle = this.getArguments();
+        position = bundle.getInt("position", 0);
+        long categoryId = bundle.getLong("categoryId", 0);
+
         db = new DatabaseHelper(mActivity);
-        allCategories = db.getAllCategories();
+        category = db.getCategory(categoryId);
 
-        String[] items = new String[allCategories.size()];
-        int count = 0;
-        for (Category category : allCategories) {
-            items[count] = category.getCategoryName();
-            count++;
-        }
-
-        dialog = new MaterialDialog.Builder(mActivity)
-                .title(R.string.webcam_category)
-                .items(items)
-                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        if (which >= 0) {
-                            category = allCategories.get(which);
-                            categoryEditDialog();
-                        }
-                        return true;
-                    }
-                })
-                .positiveText(R.string.choose)
-                .build();
-
-        return dialog;
-    }
-
-    private void categoryEditDialog() {
-
-        dialog = new MaterialDialog.Builder(mActivity)
+        MaterialDialog dialog = new MaterialDialog.Builder(mActivity)
                 .title(R.string.edit_category)
                 .customView(R.layout.add_edit_category_dialog, true)
                 .positiveText(R.string.dialog_positive_text)
@@ -114,13 +88,14 @@ public class EditCategoryDialog extends DialogFragment {
                             }
                             category.setCategoryIcon(iconPath);
                             category.setCategoryName(inputName);
+                            category.setCount(db.getCategoryItemsCount(category.getId()));
                             db.updateCategory(category);
                             db.closeDB();
                         }
                         BackupManager backupManager = new BackupManager(mActivity);
                         backupManager.dataChanged();
 
-                        saveDone();
+                        notifyDrawer();
                     }
                 }).build();
 
@@ -163,15 +138,16 @@ public class EditCategoryDialog extends DialogFragment {
         positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
         input.addTextChangedListener(new OnTextChange(positiveAction));
 
-        dialog.show();
         positiveAction.setEnabled(false);
+
+        return dialog;
     }
 
-    private void saveDone() {
-        Snackbar.with(mActivity.getApplicationContext())
-                .text(R.string.dialog_positive_toast_message)
-                .actionLabel(R.string.dismiss)
-                .actionColor(mActivity.getResources().getColor(R.color.yellow))
-                .show(mActivity);
+    private void notifyDrawer() {
+        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getFragmentManager().findFragmentById(R.id.fragment_drawer);
+        if (mNavigationDrawerFragment != null) {
+            mNavigationDrawerFragment.editData(position, category);
+        }
     }
 }

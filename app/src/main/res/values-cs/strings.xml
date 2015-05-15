@@ -57,7 +57,6 @@
 <string name="category_array_choose">"Zvolte kategorie"</string>
 <string name="all_webcams">"Všechny WebKamery"</string>
 <string name="pref_import_from_server">"Import ze serveru"</string>
-<string name="also_delete_webcams">"Smazat také Webkamery, které se nachází pouze v této kategorii?"</string>
 <string name="imported">"Importováno"</string>
 <string name="nothing_to_export">"Není co exportovat"</string>
 <string name="nothing_to_export_summary">"Nejprve musíte vytvořit nějaké WebKamery."</string>

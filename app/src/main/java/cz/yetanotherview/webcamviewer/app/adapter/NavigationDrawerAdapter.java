@@ -39,6 +39,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     private NavigationDrawerCallbacks mNavigationDrawerCallbacks;
     private View mSelectedView;
     private int mSelectedPosition;
+    private ClickListener clickListener;
 
     public NavigationDrawerAdapter(List<Category> data) {
         mData = data;
@@ -49,9 +50,21 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     }
 
     @Override
-    public NavigationDrawerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return 0;
+        }
+        else return 1;
+    }
+
+    @Override
+    public NavigationDrawerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int index) {
         context = viewGroup.getContext();
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.drawer_list_item, viewGroup, false);
+        View v;
+        if (index == 0) {
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.drawer_list_item_zero, viewGroup, false);
+        }
+        else v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.drawer_list_item, viewGroup, false);
         final ViewHolder viewHolder = new ViewHolder(v);
         viewHolder.itemView.setClickable(true);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -104,8 +117,24 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         notifyDataSetChanged();
     }
 
-    public Object getItem(int location) {
-        return mData.get(location);
+    public Object getItem(int position) {
+        return mData.get(position);
+    }
+
+    private long getCategoryIdFromPosition(int position) {
+        return mData.get(position).getId();
+    }
+
+    public void modifyItem(int position, Category category) {
+        mData.set(position, category);
+        notifyItemChanged(position);
+    }
+
+    public void removeItem(int position, int allCount) {
+        mData.remove(position);
+        notifyItemRemoved(position);
+        mData.get(0).setCount(allCount);
+        notifyItemChanged(0);
     }
 
     @Override
@@ -113,16 +142,35 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         return mData != null ? mData.size() : 0;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView categoryIcon;
         public TextView categoryName;
         public TextView categoryCount;
+        public ImageView categoryOptions;
 
         public ViewHolder(View itemView) {
             super(itemView);
             categoryIcon = (ImageView) itemView.findViewById(R.id.categoryIcon);
             categoryName = (TextView) itemView.findViewById(R.id.categoryName);
             categoryCount = (TextView) itemView.findViewById(R.id.categoryCount);
+            categoryOptions = (ImageView) itemView.findViewById(R.id.categoryOptions);
+
+            if (categoryOptions != null) {
+                categoryOptions.setOnClickListener(this);
+            }
         }
+
+        @Override
+        public void onClick(View view) {
+            clickListener.onClick(view, getAdapterPosition(), getCategoryIdFromPosition(getAdapterPosition()));
+        }
+    }
+
+    public interface ClickListener {
+        void onClick(View v, int position, long categoryId);
+    }
+
+    public void setClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 }

@@ -22,28 +22,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/ms_filter"
+    <RelativeLayout
+        android:id="@+id/ms_filter_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/tiny_margin"
-        android:layout_marginStart="@dimen/tiny_margin"
-        android:layout_marginRight="@dimen/tiny_margin"
-        android:layout_marginEnd="@dimen/tiny_margin"
-        android:layout_marginBottom="@dimen/main_middle_margin"
-        android:inputType="text"
-        android:singleLine="true"
-        android:imeOptions="actionDone"
-        android:hint="@string/enter_place_or_country">
+        android:layout_height="wrap_content">
 
-        <requestFocus />
-    </EditText>
+        <EditText
+            android:id="@+id/ms_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/chkAll"
+            android:layout_toStartOf="@+id/chkAll"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginLeft="@dimen/five_margin"
+            android:layout_marginStart="@dimen/five_margin"
+            android:layout_marginBottom="@dimen/main_middle_margin"
+            android:inputType="text"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:hint="@string/enter_place_or_country">
+
+            <requestFocus />
+        </EditText>
+
+        <CheckBox
+            android:id="@+id/chkAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/main_margin"
+            android:layout_marginEnd="@dimen/main_margin"
+            android:text="@string/all"/>
+
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/filtered_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ms_filter" />
+        android:layout_below="@id/ms_filter_container" />
 
     <TextView
         android:id="@+id/empty_info_text"

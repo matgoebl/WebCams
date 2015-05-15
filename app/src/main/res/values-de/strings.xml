@@ -57,9 +57,6 @@
 <string name="category_array_choose">"Kategorien wählen"</string>
 <string name="all_webcams">"Alle WebCams"</string>
 <string name="pref_import_from_server">"Import vom Server"</string>
-<string name="auto_refresh_fullscreen">"Nur in der Vollbildansicht"</string>
-<string name="auto_refresh_fullscreen_summary">"Aktiviere automatische Aktualisierung nur in der Vollbildansicht"</string>
-<string name="also_delete_webcams">"Auch WebCams löschen, die nur in dieser Kategorie sind?"</string>
 <string name="imported">"Importiert"</string>
 <string name="nothing_to_export">"Nichts zu exportieren"</string>
 <string name="nothing_to_export_summary">"Du musst zunächst einige WebCams in der Datenbank erstellen."</string>
@@ -81,7 +78,7 @@
 <string name="import_done">"Import erfolgreich!"</string>
 <string name="import_progress">"Import und Suche nach möglichen Duplikaten läuft."</string>
 <string name="report">"Bericht"</string>
-<string name="import_successfully">"Import erfolgreich abgeschlossen! Überprüfe die Navigationsleiste auf der linken Seite."</string>
+<string name="import_successfully">"Import erfolgreich abgeschlossen!"</string>
 <string name="new_webcams">"Neue WebCams:"</string>
 <string name="reassigned">"Konvertierte:"</string>
 <string name="other">"Andere"</string>
@@ -227,9 +224,23 @@
 <string name="error_hw">"Fehler bei der Hardwarebeschleunigung"</string>
 <string name="presentation">"Präsentation"</string>
 <string name="manually_adding">"Manuelles Hinzufügen"</string>
-<string name="picture">"Picture"</string>
-<string name="stream_error_description">"Sorry, this live stream cannot be played. The possible causes:"</string>
-<string name="stream_error_0">"You are not connected to the Internet."</string>
-<string name="stream_error_1">"The stream server is temporarily unavailable."</string>
-<string name="stream_error_2">"The entered stream source is wrong (can be checked in the Edit dialog window)."</string>
+<string name="picture">"Bild"</string>
+<string name="stream_error_description">"Entschuldige, dieser Stream kann nicht abgespielt werden. Mögliche Ursachen:"</string>
+<string name="stream_error_0">"Du bist nicht mit dem Internet verbunden."</string>
+<string name="stream_error_1">"Der Streamserver ist momentan nicht erreichbar."</string>
+<string name="stream_error_2">"Die eingegebene Streamquelle ist falsch (kann im Bearbeitendialog überprüft werden)."</string>
+<string name="interval">"Intervall"</string>
+<string name="auto_refresh_maximized">"Nur wenn es maximiert ist"</string>
+<string name="auto_refresh_maximized_summary">"Aktiviere automatisches Aktualisieren nur in maximierter Ansicht"</string>
+<string name="restore">"Wiederherstellen"</string>
+<string name="restore_summary_part1">"Führe Einträge der Backupdatei"</string>
+<string name="merge">"Zusammenführen"</string>
+<string name="restore_summary_part2">"mit aktuellen WebCams Einträgen zusammen oder sollen aktuelle Einträge vorher entfernt werden?"</string>
+<string name="nothing_selected">"Nichts ausgewählt"</string>
+<string name="nothing_selected_summary">"Im vorherigen Dialog wurde nichts ausgewählt."</string>
+<string name="incompatible_file">"Inkompatible Datei"</string>
+<string name="incompatible_file_summary">"Inkompatible Backupdatei wurde ausgewählt."</string>
+<string name="enter_name">"Namen eingeben"</string>
+<string name="all_webcams_confirmation_part1">"Gemeinschaftsdatenbank enthält jetzt"</string>
+<string name="all_webcams_confirmation_part2">"WebCams."</string>
 </resources>

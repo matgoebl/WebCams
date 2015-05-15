@@ -31,6 +31,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -431,6 +432,18 @@ public class JsonFetcherDialog extends DialogFragment {
                 filterBox = (EditText) dialog.getCustomView().findViewById(R.id.ms_filter);
                 filterBox.addTextChangedListener(new OnFilterTextChange(manualSelectionAdapter));
 
+                CheckBox chkAll = (CheckBox) dialog.getCustomView().findViewById(R.id.chkAll);
+                chkAll.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        CheckBox chk = (CheckBox) v;
+                        if (chk.isChecked()) {
+                            manualSelectionAdapter.setAllChecked();
+                        } else manualSelectionAdapter.setAllUnChecked();
+                    }
+                });
+
                 initDialog.dismiss();
                 dialog.show();
             }
@@ -576,7 +589,7 @@ public class JsonFetcherDialog extends DialogFragment {
                         .title(R.string.all_webcams)
                         .content(content)
                         .positiveText(R.string.Yes)
-                        .negativeText(R.string.No)
+                        .negativeText(android.R.string.cancel)
                         .iconRes(R.drawable.warning)
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override

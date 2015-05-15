@@ -57,7 +57,6 @@
 <string name="category_array_choose">"Zvoľte kategórie"</string>
 <string name="all_webcams">"Všetky WebKamery"</string>
 <string name="pref_import_from_server">"Import zo servera"</string>
-<string name="also_delete_webcams">"Zmazať tiež WebKamery, ktoré sa nachádza iba v tejto kategórii?"</string>
 <string name="imported">"Importované"</string>
 <string name="nothing_to_export">"Niet čo exportovať"</string>
 <string name="nothing_to_export_summary">"Najprv musíte vytvoriť nejaké WebKamery."</string>
@@ -243,5 +242,5 @@
 <string name="incompatible_file_summary">"Bol vybraný nekompatibilné súbor."</string>
 <string name="enter_name">"Zadajte názov"</string>
 <string name="all_webcams_confirmation_part1">"Komunitný databáza teraz obsahuje"</string>
-<string name="all_webcams_confirmation_part2">"WebKamier."</string>
+<string name="all_webcams_confirmation_part2">"WebKamer."</string>
 </resources>

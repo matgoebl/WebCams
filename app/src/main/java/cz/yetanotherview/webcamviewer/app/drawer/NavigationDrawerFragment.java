@@ -19,6 +19,7 @@
 package cz.yetanotherview.webcamviewer.app.drawer;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -30,8 +31,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -39,6 +42,8 @@ import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.actions.AddCategoryDialog;
+import cz.yetanotherview.webcamviewer.app.actions.DeleteCategoryDialog;
+import cz.yetanotherview.webcamviewer.app.actions.EditCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.NavigationDrawerAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.model.Category;
@@ -79,6 +84,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     private View mFragmentContainerView;
 
     private int mCurrentSelectedPosition = 0;
+    private int mClickedPosition;
+    private long mClickedCategoryId;
     private String mCurrentSelectedName;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
@@ -119,7 +126,16 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mDrawerAdapter = new NavigationDrawerAdapter(navigationItems);
         mDrawerAdapter.setNavigationDrawerCallbacks(this);
         mDrawerList.setAdapter(mDrawerAdapter);
-        selectItem(mCurrentSelectedPosition);
+        selectItem(mCurrentSelectedPosition, true);
+
+        mDrawerAdapter.setClickListener(new NavigationDrawerAdapter.ClickListener() {
+            @Override
+            public void onClick(View v, int position, long categoryId) {
+                mClickedPosition = position;
+                mClickedCategoryId = categoryId;
+                showMenuPopup(v);
+            }
+        });
 
         RelativeLayout addCategoryLayout = (RelativeLayout) view.findViewById(R.id.add_category_layout);
         addCategoryLayout.setOnClickListener(this);
@@ -129,7 +145,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
     @Override
     public void onNavigationDrawerItemSelected(int position, long categoryId) {
-        selectItem(position);
+        selectItem(position, true);
     }
 
     public List<Category> getCategories() {
@@ -140,6 +156,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         }
 
         Category allWebCamsCategory = new Category();
+        allWebCamsCategory.setId(-1);
         allWebCamsCategory.setCategoryIcon("@drawable/icon_all");
         allWebCamsCategory.setCategoryName(allWebCamsString);
         allWebCamsCategory.setCount(db.getWebCamCount());
@@ -208,7 +225,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
     }
 
-    private void selectItem(int position) {
+    private void selectItem(int position, boolean closeDrawer) {
         Category category = (Category) mDrawerAdapter.getItem(position);
         mCurrentSelectedPosition = position;
         mCurrentSelectedName = category.getCategoryName();
@@ -217,7 +234,9 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
                 mToolbar.setTitle(getString(R.string.app_name));
             }
             else mToolbar.setTitle(category.getCategoryName());
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
+            if (closeDrawer) {
+                mDrawerLayout.closeDrawer(mFragmentContainerView);
+            }
         }
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position, category.getId());
@@ -228,7 +247,15 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     public void reloadData() {
         navigationItems = getCategories();
         mDrawerAdapter.swapData(navigationItems);
-        //selectItem(mCurrentSelectedPosition);
+    }
+
+    public void editData(int position, Category category) {
+        mDrawerAdapter.modifyItem(position, category);
+    }
+
+    public void deleteData(int position) {
+        mDrawerAdapter.removeItem(position, db.getWebCamCount());
+        selectItem(0, false);
     }
 
     public void openDrawer() {
@@ -247,6 +274,49 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
                 break;
         }
     }
+
+    private void showMenuPopup(View v) {
+        PopupMenu popup = new PopupMenu(getActivity(), v);
+        popup.getMenuInflater().inflate(R.menu.edit_delete_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_edit:
+                        showEditCategoryDialog();
+                        return true;
+                    case R.id.menu_delete:
+                        showDeleteCategoryDialog();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        popup.show();
+    }
+
+    private void showEditCategoryDialog() {
+        DialogFragment dialogFragment = new EditCategoryDialog();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("position", mClickedPosition);
+        bundle.putLong("categoryId", mClickedCategoryId);
+        dialogFragment.setArguments(bundle);
+
+        dialogFragment.show(getFragmentManager(), "EditCategoryDialog");
+    }
+
+    private void showDeleteCategoryDialog() {
+        DialogFragment dialogFragment = new DeleteCategoryDialog();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("position", mClickedPosition);
+        bundle.putLong("categoryId", mClickedCategoryId);
+        dialogFragment.setArguments(bundle);
+
+        dialogFragment.show(getFragmentManager(), "DeleteCategoryDialog");
+    }
+
 
     @Override
     public void onAttach(Activity activity) {

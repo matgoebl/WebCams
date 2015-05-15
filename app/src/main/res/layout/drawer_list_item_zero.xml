@@ -29,27 +29,13 @@
         android:id="@+id/categoryCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/categoryOptions"
-        android:layout_toStartOf="@+id/categoryOptions"
+        android:layout_marginRight="@dimen/huge_margin"
+        android:layout_marginEnd="@dimen/huge_margin"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:padding="0dp"
         android:textStyle="bold"
         android:textColor="@color/drawer_item_text" />
-
-    <ImageView
-        android:id="@+id/categoryOptions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginRight="3dp"
-        android:layout_marginEnd="3dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:background="@drawable/row_selector_list_dots"
-        android:clickable="true"
-        android:src="@drawable/ic_action_drawer_dots"
-        android:contentDescription="@string/image" />
 
 </RelativeLayout>

@@ -30,6 +30,8 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -69,6 +71,7 @@ public class SettingsFragment extends PreferenceFragment {
     private PreferenceCategory preferenceCategory;
     private DialogFragment dialogFragment;
     private ManualSelectionAdapter manualSelectionAdapter;
+    private ListView manualSelectionList;
     private EditText filterBox;
 
     @Override
@@ -196,14 +199,13 @@ public class SettingsFragment extends PreferenceFragment {
                                     if (manualSelectionAdapter.getCheckedCount() != 0) {
                                         showIndeterminateProgress();
                                         new deleteSelectedWebCamsBackgroundTask().execute();
-                                    }
-                                    else new NothingSelectedDialog().show(getFragmentManager(),
+                                    } else new NothingSelectedDialog().show(getFragmentManager(),
                                             "NothingSelectedDialog");
                                 }
                             })
                             .build();
 
-                    ListView manualSelectionList = (ListView) dialog.getCustomView().findViewById(R.id.filtered_list_view);
+                    manualSelectionList = (ListView) dialog.getCustomView().findViewById(R.id.filtered_list_view);
                     manualSelectionList.setEmptyView(dialog.getCustomView().findViewById(R.id.empty_info_text));
                     manualSelectionAdapter = new ManualSelectionAdapter(getActivity(), allWebCams);
                     manualSelectionList.setAdapter(manualSelectionAdapter);
@@ -212,13 +214,21 @@ public class SettingsFragment extends PreferenceFragment {
                     filterBox.setHint(R.string.enter_name);
                     filterBox.addTextChangedListener(new OnFilterTextChange(manualSelectionAdapter));
 
+                    CheckBox chkAll = (CheckBox) dialog.getCustomView().findViewById(R.id.chkAll);
+                    chkAll.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            CheckBox chk = (CheckBox) v;
+                            if (chk.isChecked()) {
+                                manualSelectionAdapter.setAllChecked();
+                            } else manualSelectionAdapter.setAllUnChecked();
+                        }
+                    });
+
                     dialog.show();
 
-                } else Snackbar.with(context)
-                        .text(R.string.list_is_empty)
-                        .actionLabel(R.string.dismiss)
-                        .actionColor(actionColor)
-                        .show(getActivity());
+                } else listIsEmpty();
 
                 return true;
             }
@@ -235,7 +245,10 @@ public class SettingsFragment extends PreferenceFragment {
                     if (deleteWebCam.isSelected()) {
                         db.deleteWebCam(deleteWebCam.getId());
                     }
-                 }
+                }
+                if (db.getWebCamCount() == 0) {
+                    DeleteAllWebCams.execute(context);
+                }
                 db.closeDB();
             }
             BackupManager backupManager = new BackupManager(getActivity());
@@ -251,20 +264,22 @@ public class SettingsFragment extends PreferenceFragment {
         pref_delete_all.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
 
-                new MaterialDialog.Builder(getActivity())
-                        .title(R.string.pref_delete_all_webcams)
-                        .content(R.string.are_you_sure)
-                        .positiveText(R.string.Yes)
-                        .negativeText(R.string.No)
-                        .iconRes(R.drawable.settings_delete_all)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                showIndeterminateProgress();
-                                new deleteAllBackgroundTask().execute();
-                            }
-                        })
-                        .show();
+                if (db.getWebCamCount() > 0) {
+                    new MaterialDialog.Builder(getActivity())
+                            .title(R.string.pref_delete_all_webcams)
+                            .content(R.string.are_you_sure)
+                            .positiveText(R.string.Yes)
+                            .negativeText(android.R.string.cancel)
+                            .iconRes(R.drawable.settings_delete_all)
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
+                                    showIndeterminateProgress();
+                                    new deleteAllBackgroundTask().execute();
+                                }
+                            })
+                            .show();
+                } else listIsEmpty();
 
                 return true;
             }
@@ -385,13 +400,12 @@ public class SettingsFragment extends PreferenceFragment {
                         .title(R.string.pref_clear_cache_and_tmp)
                         .content(R.string.are_you_sure)
                         .positiveText(R.string.Yes)
-                        .negativeText(R.string.No)
+                        .negativeText(android.R.string.cancel)
                         .iconRes(R.drawable.settings_clear_cache_and_tmp)
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
                                 Utils.deleteCache(context);
-
                                 deleteDone();
                             }
                         })
@@ -432,6 +446,14 @@ public class SettingsFragment extends PreferenceFragment {
 
             }
         });
+    }
+
+    private void listIsEmpty() {
+        Snackbar.with(context)
+                .text(R.string.list_is_empty)
+                .actionLabel(R.string.dismiss)
+                .actionColor(actionColor)
+                .show(getActivity());
     }
 
     private void deleteDone() {
