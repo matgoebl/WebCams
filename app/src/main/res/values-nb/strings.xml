@@ -62,7 +62,6 @@
 <string name="imported">"Importert"</string>
 <string name="nothing_to_export">"Ingen ting å eksportere"</string>
 <string name="nothing_to_export_summary">"Du må først opprette noen webkameraer i databasen din."</string>
-<string name="import_summary">"Slett alle webkameraer fra databasen før import?"</string>
 <string name="importing_from_server">"Importerer fra server"</string>
 <string name="please_wait">"Vennligst vent..."</string>
 <string name="server_unavailable">"Serveren er utilgjengelig"</string>
@@ -102,7 +101,6 @@
 <string name="done">"Ferdig"</string>
 <string name="enter_place_or_country">"Skriv inn et sted eller land"</string>
 <string name="welcome_to_version">"Velkommen til den nye versjonen"</string>
-<string name="no_categories_found">"Ingen kategorier funnet"</string>
 <string name="action_sort_date">"Stigende etter dato"</string>
 <string name="action_sort_date_desc">"Synkende etter dato"</string>
 <string name="action_sort_name">"Stigende etter navn"</string>
@@ -194,8 +192,6 @@
 <string name="latitude">"Breddegrad:"</string>
 <string name="longitude">"Lengdegrad:"</string>
 <string name="action_new">"Legg til"</string>
-<string name="pref_category_add_edit_delete">"Behandle"</string>
-<string name="pref_category_add_edit_delete_summary">"Legg til, rediger og slett kategorier"</string>
 <string name="backup_name">"Sikkerhetskopi-navn"</string>
 <string name="rename">"Omdøp"</string>
 <string name="backups">"Sikkerhetskopier"</string>
@@ -203,7 +199,6 @@
 <!-- Need some context to translate this correctly. -->
 <string name="browse">"Bla..."</string>
 <string name="restore_progress">"Importerer fra den valgte filen"</string>
-<string name="restore_confirm">"Denne handlingen endrer på databasen din med kameraer fra sikkerhetskopien."</string>
 <string name="no_backups">"Ingen sikkerhetskopier på denne lagringsenheten"</string>
 <string name="nothing_to_show">"Ingen ting å vise"</string>
 <string name="widget_refresh_info">"Laster, vennligst vent..."</string>
@@ -247,4 +242,5 @@
 <string name="enter_name">"Skriv navn"</string>
 <string name="all_webcams_confirmation_part1">"Den brukerinnsamlede databasen inneholder nå"</string>
 <string name="all_webcams_confirmation_part2">"webkameraer."</string>
+<string name="delete_also_categories">"Do you want to delete also all categories?"</string>
 </resources>

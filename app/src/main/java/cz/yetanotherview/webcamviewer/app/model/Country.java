@@ -31,15 +31,6 @@ public class Country {
 
     }
 
-    public Country(String country_name) {
-        this.country_name = country_name;
-    }
-
-    public Country(long id, String country_name) {
-        this.id = id;
-        this.country_name = country_name;
-    }
-
     // setter
     public void setId(long id) {
         this.id = id;
@@ -76,10 +67,6 @@ public class Country {
 
     public String getCountryName() {
         return this.country_name;
-    }
-
-    public int getCount() {
-        return this.count;
     }
 
     public String getCountAsString() {

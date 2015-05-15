@@ -378,7 +378,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // updating row
         db.update(TABLE_WEBCAM, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(webCam.getId()) });
+                new String[]{String.valueOf(webCam.getId())});
     }
 
     /**
@@ -387,7 +387,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteWebCam(long webCam_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_WEBCAM, KEY_ID + " = ?",
-                new String[] { String.valueOf(webCam_id) });
+                new String[]{String.valueOf(webCam_id)});
 
         //remove all assigned categories
         deleteWebCamCategory(webCam_id);
@@ -427,7 +427,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Delete all WebCams
      */
-    public void deleteAllWebCams() {
+    public void deleteAllWebCams(boolean alsoCategories) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         //WebCams table
@@ -437,7 +437,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_WEBCAM_CATEGORY, null, null);
 
         //Category table
-        db.delete(TABLE_CATEGORY, null, null);
+        if (alsoCategories) {
+            db.delete(TABLE_CATEGORY, null, null);
+        }
     }
 
     // ------------------------ "categories" table methods ----------------//

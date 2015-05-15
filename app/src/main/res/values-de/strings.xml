@@ -60,7 +60,6 @@
 <string name="imported">"Importiert"</string>
 <string name="nothing_to_export">"Nichts zu exportieren"</string>
 <string name="nothing_to_export_summary">"Du musst zunächst einige WebCams in der Datenbank erstellen."</string>
-<string name="import_summary">"Vor dem Import alle WebCams aus der aktuellen Datenbank löschen?"</string>
 <string name="importing_from_server">"Importieren vom Server"</string>
 <string name="please_wait">"Bitte warten..."</string>
 <string name="server_unavailable">"Server ist nicht verfügbar"</string>
@@ -100,7 +99,6 @@
 <string name="done">"Erledigt"</string>
 <string name="enter_place_or_country">"Geben Sie einen Ort oder Land ein"</string>
 <string name="welcome_to_version">"Willkommen in der neuen Version"</string>
-<string name="no_categories_found">"Keine Kategorien gefunden"</string>
 <string name="action_sort_date">"Aufsteigend nach Datum"</string>
 <string name="action_sort_date_desc">"Absteigend nach Datum"</string>
 <string name="action_sort_name">"Aufsteigend nach Name"</string>
@@ -192,14 +190,11 @@
 <string name="latitude">"Breitengrad:"</string>
 <string name="longitude">"Längengrad:"</string>
 <string name="action_new">"Neu"</string>
-<string name="pref_category_add_edit_delete">"Verwalten"</string>
-<string name="pref_category_add_edit_delete_summary">"Hinzufügen, bearbeiten udn Löschen von Kategorien"</string>
 <string name="backup_name">"Sichere Name"</string>
 <string name="rename">"Umbenennen"</string>
 <string name="backups">"Sicherungen"</string>
 <string name="browse">"Durchsuchen…"</string>
 <string name="restore_progress">"Importieren der ausgewählten Datei"</string>
-<string name="restore_confirm">"Diese Aktion ändern den aktuellen Status deiner Datenbank und ersetzt sie mit den Einträgen der Sicherungsdatei"</string>
 <string name="no_backups">"Keine Sicherungen an diesem Speicherort"</string>
 <string name="nothing_to_show">"Nichts anzuzeigen"</string>
 <string name="widget_refresh_info">"Lädt, bitte warten..."</string>
@@ -243,4 +238,5 @@
 <string name="enter_name">"Namen eingeben"</string>
 <string name="all_webcams_confirmation_part1">"Gemeinschaftsdatenbank enthält jetzt"</string>
 <string name="all_webcams_confirmation_part2">"WebCams."</string>
+<string name="delete_also_categories">"Do you want to delete also all categories?"</string>
 </resources>

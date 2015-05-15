@@ -23,19 +23,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import cz.yetanotherview.webcamviewer.app.R;
-
 public class DeleteAllWebCams {
 
     // Object for intrinsic lock
     public static final Object sDataLock = new Object();
 
-    public static void execute(Context context) {
+    public static void execute(Context context, boolean alsoCategories) {
 
         DatabaseHelper db = new DatabaseHelper(context);
 
         synchronized (DeleteAllWebCams.sDataLock) {
-            db.deleteAllWebCams();
+            db.deleteAllWebCams(alsoCategories);
             db.closeDB();
         }
         BackupManager backupManager = new BackupManager(context);

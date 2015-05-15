@@ -27,16 +27,10 @@ public class Category {
 
     // constructors
     public Category() {
-
     }
 
     public Category(String category_icon, String category_name) {
         this.category_icon = category_icon;
-        this.category_name = category_name;
-    }
-
-    public Category(long id, String category_name) {
-        this.id = id;
         this.category_name = category_name;
     }
 
@@ -68,10 +62,6 @@ public class Category {
 
     public String getCategoryName() {
         return this.category_name;
-    }
-
-    public int getCount() {
-        return this.count;
     }
 
     public String getCountAsString() {

@@ -31,17 +31,6 @@ public class Type {
 
     }
 
-    public Type(String icon_name, String type_name) {
-        this.icon_name = icon_name;
-        this.type_name = type_name;
-    }
-
-    public Type(int id, String icon_name, String type_name) {
-        this.id = id;
-        this.icon_name = icon_name;
-        this.type_name = type_name;
-    }
-
     // setter
     public void setId(int id) {
         this.id = id;

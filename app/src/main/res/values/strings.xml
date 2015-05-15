@@ -60,7 +60,6 @@
 <string name="imported">"Imported"</string>
 <string name="nothing_to_export">"Nothing to export"</string>
 <string name="nothing_to_export_summary">"You must first create some WebCams in your database."</string>
-<string name="import_summary">"Delete all WebCams from the current database before importing?"</string>
 <string name="importing_from_server">"Importing from server"</string>
 <string name="please_wait">"Please wait..."</string>
 <string name="server_unavailable">"Server is unavailable"</string>
@@ -100,7 +99,6 @@
 <string name="done">"Done"</string>
 <string name="enter_place_or_country">"Enter a place or a country"</string>
 <string name="welcome_to_version">"Welcome to the new version"</string>
-<string name="no_categories_found">"No categories found"</string>
 <string name="action_sort_date">"Ascending by Date"</string>
 <string name="action_sort_date_desc">"Descending by Date"</string>
 <string name="action_sort_name">"Ascending by Name"</string>
@@ -192,14 +190,11 @@
 <string name="latitude">"Latitude:"</string>
 <string name="longitude">"Longitude:"</string>
 <string name="action_new">"Add"</string>
-<string name="pref_category_add_edit_delete">"Manage"</string>
-<string name="pref_category_add_edit_delete_summary">"Add, edit and delete categories"</string>
 <string name="backup_name">"Backup name"</string>
 <string name="rename">"Rename"</string>
 <string name="backups">"Backups"</string>
 <string name="browse">"Browse..."</string>
 <string name="restore_progress">"Importing from the selected file"</string>
-<string name="restore_confirm">"This action changes the current state of your database with entries from the backup file."</string>
 <string name="no_backups">"No backups in this location"</string>
 <string name="nothing_to_show">"Nothing to show"</string>
 <string name="widget_refresh_info">"Loading, please wait..."</string>
@@ -243,4 +238,5 @@
 <string name="enter_name">"Enter name"</string>
 <string name="all_webcams_confirmation_part1">"Community database now contains"</string>
 <string name="all_webcams_confirmation_part2">"WebCams."</string>
+<string name="delete_also_categories">"Do you want to delete also all categories?"</string>
 </resources>

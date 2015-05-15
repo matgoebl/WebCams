@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
     // Object for intrinsic lock
     public static final Object sDataLock = new Object();
-    protected Object mActionMode;
 
     private DatabaseHelper db;
     private WebCam webCam, webCamToDelete;
@@ -923,7 +922,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             }
 
             public void onDestroyActionMode(ActionMode mode) {
-                mActionMode = null;
                 if (simpleList && !imagesOnOff) {
                     mMoveTextView.setTextColor(getResources().getColor(R.color.primary));
                 } else mMoveView.clearColorFilter();

@@ -16,45 +16,39 @@
 ~ *****************************************************************************
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:orientation="vertical">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginRight="@dimen/big_margin"
+    android:layout_marginEnd="@dimen/big_margin"
+    android:layout_marginLeft="@dimen/big_margin"
+    android:layout_marginStart="@dimen/big_margin"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_marginRight="@dimen/big_margin"
-        android:layout_marginEnd="@dimen/big_margin"
-        android:layout_marginLeft="@dimen/big_margin"
-        android:layout_marginStart="@dimen/big_margin"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginLeft="3dip"
+        android:layout_marginStart="3dip"
+        android:text="@string/backup_name"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dip"
-            android:layout_marginStart="3dip"
-            android:text="@string/backup_name"/>
+    <EditText
+        android:id="@+id/input_name"
+        style="@style/DialogContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/big_margin"
+        android:inputType="textCapSentences"
+        android:singleLine="true"
+        android:imeOptions="actionDone"/>
 
-        <EditText
-            android:id="@+id/input_name"
-            style="@style/DialogContent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/big_margin"
-            android:inputType="textCapSentences"
-            android:singleLine="true"
-            android:imeOptions="actionDone"/>
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:drawSelectorOnTop="true"
-            android:spinnerMode="dropdown"
-            android:id="@+id/backup_spinner" />
-
-    </LinearLayout>
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawSelectorOnTop="true"
+        android:spinnerMode="dropdown"
+        android:id="@+id/backup_spinner" />
 
 </LinearLayout>

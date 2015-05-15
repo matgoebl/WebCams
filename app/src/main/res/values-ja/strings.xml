@@ -45,7 +45,6 @@
 <string name="imported">"インポートしました"</string>
 <string name="nothing_to_export">"エクスポート対象がありません"</string>
 <string name="nothing_to_export_summary">"初めにデータベースにウェブカムを作成する必要があります。"</string>
-<string name="import_summary">"インポートする前に、現在のデータベースに含まれるウェブカムをすべて削除しますか?"</string>
 <string name="importing_from_server">"サーバーからインポート中"</string>
 <string name="please_wait">"しばらくお待ちください..."</string>
 <string name="server_unavailable">"サーバーが利用できません"</string>
@@ -85,7 +84,6 @@
 <string name="done">"完了"</string>
 <string name="enter_place_or_country">"場所または国を入力してください"</string>
 <string name="welcome_to_version">"新しいバージョンにようこそ"</string>
-<string name="no_categories_found">"全くカテゴリはありません"</string>
 <string name="action_sort_date">"日によって昇順"</string>
 <string name="action_sort_date_desc">"日付によって降順"</string>
 <string name="action_sort_name">"名前による昇順"</string>
@@ -177,14 +175,11 @@
 <string name="latitude">"緯度"</string>
 <string name="longitude">"経度"</string>
 <string name="action_new">"追加"</string>
-<string name="pref_category_add_edit_delete">"管理"</string>
-<string name="pref_category_add_edit_delete_summary">"カテゴリーを追加、編集、および削除します"</string>
 <string name="backup_name">"バックアップ名"</string>
 <string name="rename">"名前を変更"</string>
 <string name="backups">"バックアップ"</string>
 <string name="browse">"閲覧..."</string>
 <string name="restore_progress">"選択したファイルからインポート中"</string>
-<string name="restore_confirm">"この操作はバックアップファイルのエントリーで現在のデータベースを変更します。"</string>
 <string name="no_backups">"この場所にバックアップはありません"</string>
 <string name="nothing_to_show">"表示するものはありません"</string>
 <string name="widget_refresh_info">"読み込み中、しばらくお待ちください..."</string>
@@ -228,4 +223,5 @@
 <string name="enter_name">"名前を入力してください"</string>
 <string name="all_webcams_confirmation_part1">"コミュニティデータベースを含めました"</string>
 <string name="all_webcams_confirmation_part2">"ウェブカム"</string>
+<string name="delete_also_categories">"Do you want to delete also all categories?"</string>
 </resources>

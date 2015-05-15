@@ -209,7 +209,7 @@ public class ImportDialog extends DialogFragment {
         protected Long doInBackground(Boolean... booleans) {
 
             if (booleans[0]) {
-                DeleteAllWebCams.execute(mActivity.getApplicationContext());
+                DeleteAllWebCams.execute(mActivity.getApplicationContext(), true);
             }
 
             try {

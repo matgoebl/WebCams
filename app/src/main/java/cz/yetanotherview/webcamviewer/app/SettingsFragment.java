@@ -247,7 +247,7 @@ public class SettingsFragment extends PreferenceFragment {
                     }
                 }
                 if (db.getWebCamCount() == 0) {
-                    DeleteAllWebCams.execute(context);
+                    DeleteAllWebCams.execute(context, false);
                 }
                 db.closeDB();
             }
@@ -267,15 +267,21 @@ public class SettingsFragment extends PreferenceFragment {
                 if (db.getWebCamCount() > 0) {
                     new MaterialDialog.Builder(getActivity())
                             .title(R.string.pref_delete_all_webcams)
-                            .content(R.string.are_you_sure)
+                            .content(R.string.delete_also_categories)
                             .positiveText(R.string.Yes)
-                            .negativeText(android.R.string.cancel)
+                            .negativeText(R.string.No)
+                            .neutralText(android.R.string.cancel)
                             .iconRes(R.drawable.settings_delete_all)
                             .callback(new MaterialDialog.ButtonCallback() {
                                 @Override
                                 public void onPositive(MaterialDialog dialog) {
                                     showIndeterminateProgress();
-                                    new deleteAllBackgroundTask().execute();
+                                    new deleteAllBackgroundTask().execute(true);
+                                }
+                                @Override
+                                public void onNegative(MaterialDialog dialog) {
+                                    showIndeterminateProgress();
+                                    new deleteAllBackgroundTask().execute(false);
                                 }
                             })
                             .show();
@@ -286,12 +292,12 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
-    private class deleteAllBackgroundTask extends AsyncTask<Void, Void, Void> {
+    private class deleteAllBackgroundTask extends AsyncTask<Boolean, Void, Void> {
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Void doInBackground(Boolean... booleans) {
 
-            DeleteAllWebCams.execute(context);
+            DeleteAllWebCams.execute(context, booleans[0]);
             showDeletedSnackBar();
             return null;
         }

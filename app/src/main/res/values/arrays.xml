@@ -95,10 +95,4 @@
         <item>@string/local_device</item>
     </string-array>
 
-    <string-array name="add_edit_delete">
-        <item>@string/action_new</item>
-        <item>@string/action_edit</item>
-        <item>@string/action_delete</item>
-    </string-array>
-
 </resources>

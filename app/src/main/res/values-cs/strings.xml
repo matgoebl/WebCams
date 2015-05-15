@@ -60,7 +60,6 @@
 <string name="imported">"Importováno"</string>
 <string name="nothing_to_export">"Není co exportovat"</string>
 <string name="nothing_to_export_summary">"Nejprve musíte vytvořit nějaké WebKamery."</string>
-<string name="import_summary">"Smazat před importem všechny WebKamery z aktuální databáze?"</string>
 <string name="importing_from_server">"Probíhá import ze serveru"</string>
 <string name="please_wait">"Čekejte prosím..."</string>
 <string name="server_unavailable">"Server je nedostupný"</string>
@@ -100,7 +99,6 @@
 <string name="done">"Hotovo"</string>
 <string name="enter_place_or_country">"Zadejte místo nebo zemi"</string>
 <string name="welcome_to_version">"Vítejte v nové verzi"</string>
-<string name="no_categories_found">"Nebyly nalezeny žádné kategorie"</string>
 <string name="action_sort_date">"Vzestupně dle data"</string>
 <string name="action_sort_date_desc">"Sestupně dle data"</string>
 <string name="action_sort_name">"Vzestupně dle názvu"</string>
@@ -192,14 +190,11 @@
 <string name="latitude">"Zeměpisná šířka:"</string>
 <string name="longitude">"Zeměpisná délka:"</string>
 <string name="action_new">"Přidat"</string>
-<string name="pref_category_add_edit_delete">"Spravovat"</string>
-<string name="pref_category_add_edit_delete_summary">"Přidat, editovat a mazat kategorie"</string>
 <string name="backup_name">"Název zálohy"</string>
 <string name="rename">"Přejmenovat"</string>
 <string name="backups">"Zálohy"</string>
 <string name="browse">"Procházet..."</string>
 <string name="restore_progress">"Importování z vybraného souboru"</string>
-<string name="restore_confirm">"Tato akce změní současný stav vaší databáze záznamy ze záložního souboru."</string>
 <string name="no_backups">"Žádné zálohy v tomto umístění"</string>
 <string name="nothing_to_show">"Nic k zobrazení"</string>
 <string name="widget_refresh_info">"Nahrávám, čekejte prosím..."</string>
@@ -243,4 +238,5 @@
 <string name="enter_name">"Zadejte název"</string>
 <string name="all_webcams_confirmation_part1">"Komunitní databáze nyní obsahuje"</string>
 <string name="all_webcams_confirmation_part2">"WebKamer."</string>
+<string name="delete_also_categories">"Chcete smazat také všechny vytvořené kategorie?"</string>
 </resources>
