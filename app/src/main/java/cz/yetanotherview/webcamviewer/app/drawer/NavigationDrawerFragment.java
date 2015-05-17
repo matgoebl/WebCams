@@ -21,10 +21,9 @@ package cz.yetanotherview.webcamviewer.app.drawer;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,33 +47,12 @@ import cz.yetanotherview.webcamviewer.app.adapter.NavigationDrawerAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 
-/**
- * Fragment used for managing interactions for and presentation of a navigation drawer.
- * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
- * design guidelines</a> for a complete explanation of the behaviors implemented here.
- */
 public class NavigationDrawerFragment extends Fragment implements NavigationDrawerCallbacks, View.OnClickListener {
 
-    /**
-     * Remember the position of the selected item.
-     */
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
     private static final String STATE_SELECTED_NAME = "selected_navigation_drawer_name";
 
-    /**
-     * Per the design guidelines, you should show the drawer on launch until the user manually
-     * expands it. This shared preference tracks this.
-     */
-    private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
-
-    /**
-     * A pointer to the current callbacks instance (the Activity).
-     */
     private NavigationDrawerCallbacks mCallbacks;
-
-    /**
-     * Helper component that ties the action bar to the navigation drawer.
-     */
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private List<Category> navigationItems;
     private NavigationDrawerAdapter mDrawerAdapter;
@@ -87,8 +65,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     private int mClickedPosition;
     private long mClickedCategoryId;
     private String mCurrentSelectedName;
-    private boolean mFromSavedInstanceState;
-    private boolean mUserLearnedDrawer;
     private DatabaseHelper db;
     private String allWebCamsString;
 
@@ -96,18 +72,12 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Read in the flag indicating whether or not the user has demonstrated awareness of the
-        // drawer. See PREF_USER_LEARNED_DRAWER for details.
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
-
         db = new DatabaseHelper(getActivity().getApplicationContext());
         allWebCamsString = getString(R.string.all_webcams);
 
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mCurrentSelectedName = savedInstanceState.getString(STATE_SELECTED_NAME);
-            mFromSavedInstanceState = true;
         }
         else mCurrentSelectedName = allWebCamsString;
     }
@@ -195,21 +165,10 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 if (!isAdded()) return;
-                if (!mUserLearnedDrawer) {
-                    mUserLearnedDrawer = true;
-                    SharedPreferences sp = PreferenceManager
-                            .getDefaultSharedPreferences(getActivity());
-                    sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
-                }
+
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
-
-        // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
-        // per the navigation drawer design guidelines.
-        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-            mDrawerLayout.openDrawer(mFragmentContainerView);
-        }
 
         // Defer code dependent on restoration of previous instance state.
         mDrawerLayout.post(new Runnable() {
@@ -259,7 +218,12 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     }
 
     public void openDrawer() {
-        mDrawerLayout.openDrawer(mFragmentContainerView);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mDrawerLayout.openDrawer(mFragmentContainerView);
+            }
+        }, 400);
     }
 
     public void closeDrawer() {

@@ -140,14 +140,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             new ImmersiveMode().goFullScreen(this);
         }
 
-        // First run
-        if (firstRun){
-            showWelcomeDialog();
-            // Save the state
-            firstRun = false;
-            saveToPref();
-        }
-
         // Screen Always on
         if (screenAlwaysOn){
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -171,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         initRecyclerView();
         initFab();
         initPullToRefresh();
+        initFirstRun();
     }
 
     @Override
@@ -335,6 +328,16 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(R.color.primary, R.color.swipe, R.color.yellow);
+    }
+
+    private void initFirstRun() {
+        if (firstRun){
+            showWelcomeDialog();
+            mNavigationDrawerFragment.openDrawer();
+            // Save the state
+            firstRun = false;
+            saveToPref();
+        }
     }
 
     private void checkAdapterIsEmpty () {
