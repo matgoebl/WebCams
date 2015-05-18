@@ -1,0 +1,197 @@
+<!--
+~ *******************************************************************************
+~ Copyright (c) 2013-2015 Tomas Valenta
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~ http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+~ *****************************************************************************
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/radioStillImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/middle_margin"
+            android:layout_marginEnd="@dimen/middle_margin"
+            android:text="@string/picture"
+            android:singleLine="true"
+            android:drawableRight="@drawable/dialog_still_image"
+            android:drawableEnd="@drawable/dialog_still_image" />
+
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/radioLiveStream"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/middle_margin"
+            android:layout_marginStart="@dimen/middle_margin"
+            android:text="@string/stream"
+            android:singleLine="true"
+            android:drawableRight="@drawable/dialog_stream"
+            android:drawableEnd="@drawable/dialog_stream" />
+
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/webcam_name" />
+
+        <EditText
+            android:id="@+id/webcam_name"
+            style="@style/DialogContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_webcam_name"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="2dp"
+            android:inputType="textCapSentences"
+            android:singleLine="true"
+            android:imeOptions="actionNext"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/webcam_url" />
+
+        <EditText
+            android:id="@+id/webcam_url"
+            style="@style/DialogContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_webcam_url"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="10dp"
+            android:inputType="textUri"
+            android:singleLine="true"
+            android:imeOptions="actionNext"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/webcam_thumb_url"
+        android:id="@+id/webcam_thumb_url_title"
+        android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/webcam_thumb_url"
+            style="@style/DialogContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_webcam_thumb_url"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="10dp"
+            android:inputType="textUri"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/main_middle_margin"
+        android:text="@string/webcam_coordinates" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/large_padding"
+            android:paddingStart="@dimen/large_padding"
+            android:paddingRight="@dimen/zero_padding"
+            android:paddingEnd="@dimen/zero_padding"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/big_padding"
+                android:layout_marginEnd="@dimen/big_padding"
+                android:text="@string/latitude" />
+
+            <EditText
+                android:id="@+id/webcam_latitude"
+                style="@style/DialogContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_webcam_latitude"
+                android:inputType="numberDecimal"
+                android:digits="0123456789.-"
+                android:maxLength="10"
+                android:singleLine="true"
+                android:imeOptions="actionNext" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/large_padding"
+            android:paddingStart="@dimen/large_padding"
+            android:paddingRight="@dimen/zero_padding"
+            android:paddingEnd="@dimen/zero_padding"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/big_padding"
+                android:layout_marginEnd="@dimen/big_padding"
+                android:text="@string/longitude" />
+
+            <EditText
+                android:id="@+id/webcam_longitude"
+                style="@style/DialogContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_webcam_longitude"
+                android:inputType="numberDecimal"
+                android:digits="0123456789.-"
+                android:maxLength="11"
+                android:singleLine="true"
+                android:imeOptions="actionDone"/>
+
+        </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/webcam_category" />
+
+        <TextView
+            android:id="@+id/webcam_category_button"
+            style="@style/DialogContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_action_category"
+            android:drawableStart="@drawable/ic_action_category"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/middle_padding"
+            android:layout_marginLeft="@dimen/middle_padding"
+            android:layout_marginStart="@dimen/middle_padding"
+            android:background="@drawable/row_selector"
+            android:singleLine="true"/>
+
+</LinearLayout>

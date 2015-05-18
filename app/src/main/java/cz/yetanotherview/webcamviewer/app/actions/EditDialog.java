@@ -22,17 +22,19 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.adapter.CategorySelectionAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.OnTextChange;
 import cz.yetanotherview.webcamviewer.app.listener.WebCamListener;
@@ -48,15 +50,12 @@ public class EditDialog extends DialogFragment implements View.OnClickListener {
     private WebCam webCam;
     private WebCamListener mOnAddListener;
     private View positiveAction;
-    private TextView mWebCamThumbUrlTitle;
-
+    private TextView mWebCamThumbUrlTitle, webCamCategoryButton;
+    private CategorySelectionAdapter categorySelectionAdapter;
+    private DatabaseHelper db;
+    private StringBuilder selectedCategoriesNames;
     private List<Category> allCategories;
-    private Category category;
-
-    private Button webCamCategoryButton;
-    private String[] items;
-    private long[] category_ids;
-    private Integer[] checked;
+    private List<Long> category_ids;
     private RadioButton liveStream;
 
     private int pos, status, position;
@@ -81,44 +80,30 @@ public class EditDialog extends DialogFragment implements View.OnClickListener {
         long id = bundle.getLong("id", 0);
         position = bundle.getInt("position", 0);
 
-        DatabaseHelper db = new DatabaseHelper(getActivity());
+        db = new DatabaseHelper(getActivity());
         webCam = db.getWebCam(id);
         allCategories = db.getAllCategories();
-        long[] webCam_category_ids = db.getWebCamCategoriesIds(webCam.getId());
-        category_ids = webCam_category_ids;
+        List<Long> webCam_category_ids = db.getWebCamCategoriesIds(webCam.getId());
+        selectedCategoriesNames = new StringBuilder();
+        for (Category category : allCategories) {
+            if (webCam_category_ids.contains(category.getId())) {
+                category.setSelected(true);
+
+                if (selectedCategoriesNames.length() > 0) {
+                    selectedCategoriesNames.append(", ");
+                }
+                selectedCategoriesNames.append(category.getCategoryName());
+            }
+        }
         db.closeDB();
+        category_ids = webCam_category_ids;
 
         pos = webCam.getPosition();
         status = webCam.getStatus();
 
-        long[] ids = new long[allCategories.size()];
-        items = new String[allCategories.size()];
-        int count = 0;
-        for (Category category : allCategories) {
-            ids [count] = category.getId();
-            items[count] = category.getCategoryName();
-            count++;
-        }
-
-        checked = new Integer[webCam_category_ids.length];
-        StringBuilder checkedNames = new StringBuilder();
-        int count2 = 0;
-        for (int i=0; i < ids.length; i++) {
-            for (long webCam_category_id : webCam_category_ids) {
-                if (ids[i] == webCam_category_id) {
-                    checkedNames.append("[");
-                    checkedNames.append(items[i]);
-                    checkedNames.append("] ");
-
-                    checked[count2] = i;
-                    count2++;
-                }
-            }
-        }
-
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                 .title(R.string.action_edit)
-                .customView(R.layout.add_edit_dialog, true)
+                .customView(R.layout.edit_webcam_dialog, true)
                 .positiveText(R.string.dialog_positive_text)
                 .negativeText(android.R.string.cancel)
                 .neutralText(R.string.action_delete)
@@ -169,60 +154,70 @@ public class EditDialog extends DialogFragment implements View.OnClickListener {
         mWebCamLongitude = (EditText) dialog.getCustomView().findViewById(R.id.webcam_longitude);
         mWebCamLongitude.setText(String.valueOf(webCam.getLongitude()));
 
-        webCamCategoryButton = (Button) dialog.getCustomView().findViewById(R.id.webcam_category_button);
-        if (allCategories.size() == 0 ) {
-            webCamCategoryButton.setText(R.string.category_array_empty);
+        webCamCategoryButton = (TextView) dialog.getCustomView().findViewById(R.id.webcam_category_button);
+
+        if (webCam_category_ids.size() == 0) {
+            webCamCategoryButton.setText(R.string.select_categories);
         }
         else {
-            if (webCam_category_ids.length == 0) {
-                webCamCategoryButton.setText(R.string.category_array_choose);
-            }
-            else webCamCategoryButton.setText(checkedNames);
-
-            webCamCategoryButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    new MaterialDialog.Builder(getActivity())
-                            .title(R.string.webcam_category)
-                            .items(items)
-                            .itemsCallbackMultiChoice(checked, new MaterialDialog.ListCallbackMultiChoice() {
-                                @Override
-                                public boolean onSelection(MaterialDialog multiDialog, Integer[] which, CharSequence[] text) {
-
-                                    if (which != null && which.length != 0) {
-                                        StringBuilder str = new StringBuilder();
-
-                                        category_ids = new long[which.length];
-                                        int count = 0;
-
-                                        for (Integer aWhich : which) {
-                                            category = allCategories.get(aWhich);
-
-                                            category_ids[count] = category.getId();
-                                            count++;
-
-                                            str.append("[");
-                                            str.append(category.getCategoryName());
-                                            str.append("] ");
-                                        }
-                                        webCamCategoryButton.setText(str);
-                                    } else {
-                                        category_ids = null;
-                                        webCamCategoryButton.setText(R.string.category_array_choose);
-                                    }
-                                    checked = which;
-                                    positiveAction.setEnabled(true);
-
-                                    return true;
-                                }
-                            })
-                            .positiveText(R.string.choose)
-                            .show();
-                }
-
-            });
+            webCamCategoryButton.setText(selectedCategoriesNames);
         }
+        webCamCategoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                        .title(R.string.webcam_category)
+                        .customView(R.layout.category_selection_dialog, false)
+                        .positiveText(R.string.dialog_positive_text)
+                        .negativeText(android.R.string.cancel)
+                        .neutralText(R.string.action_new)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                selectedCategoriesNames = new StringBuilder();
+                                category_ids = new ArrayList<>();
+                                for (Category category : allCategories) {
+                                    if (category.isSelected()) {
+                                        category_ids.add(category.getId());
+
+                                        if (selectedCategoriesNames.length() > 0) {
+                                            selectedCategoriesNames.append(", ");
+                                        }
+                                        selectedCategoriesNames.append(category.getCategoryName());
+                                    }
+                                }
+                                if (category_ids.size() == 0) {
+                                    webCamCategoryButton.setText(R.string.select_categories);
+                                }
+                                else {
+                                    webCamCategoryButton.setText(selectedCategoriesNames);
+                                }
+
+                                positiveAction.setEnabled(true);
+                                dialog.dismiss();
+                            }
+                            @Override
+                            public void onNegative(MaterialDialog dialog) {
+                                dialog.dismiss();
+                            }
+                            @Override
+                            public void onNeutral(MaterialDialog dialog) {
+                                new AddCategoryDialog().show(getFragmentManager(), "AddCategoryDialog");
+                            }
+                        })
+                        .autoDismiss(false)
+                        .build();
+
+                ListView categorySelectionList = (ListView) dialog.getCustomView().findViewById(R.id.category_list_view);
+                categorySelectionList.setEmptyView(dialog.getCustomView().findViewById(R.id.no_categories));
+                categorySelectionAdapter = new CategorySelectionAdapter(getActivity(), allCategories);
+                categorySelectionList.setAdapter(categorySelectionAdapter);
+
+                dialog.show();
+            }
+
+        });
 
         positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
 
@@ -244,6 +239,18 @@ public class EditDialog extends DialogFragment implements View.OnClickListener {
         positiveAction.setEnabled(false);
 
         return dialog;
+    }
+
+    public void addCategoryInAdapter(Category category) {
+        categorySelectionAdapter.addItem(categorySelectionAdapter.getCount(), category);
+    }
+
+    public void editCategoryInAdapter(int position, Category category) {
+        categorySelectionAdapter.modifyItem(position, category);
+    }
+
+    public void deleteCategoryInAdapter(int position) {
+        categorySelectionAdapter.removeItem(position);
     }
 
     @Override

@@ -208,6 +208,10 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mDrawerAdapter.swapData(navigationItems);
     }
 
+    public void addData(Category category) {
+        mDrawerAdapter.addItem(mDrawerAdapter.getItemCount(), category);
+    }
+
     public void editData(int position, Category category) {
         mDrawerAdapter.modifyItem(position, category);
     }

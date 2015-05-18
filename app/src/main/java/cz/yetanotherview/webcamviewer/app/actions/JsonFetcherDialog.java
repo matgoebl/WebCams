@@ -708,12 +708,12 @@ public class JsonFetcherDialog extends DialogFragment {
                             }
                         }
                         if (!found) {
-                            db.createWebCam(webCam, new long[]{newCategory});
+                            db.createWebCam(webCam, Collections.singletonList(newCategory));
                             newWebCams++;
                         }
                     }
                     else {
-                        db.createWebCam(webCam, new long[]{newCategory});
+                        db.createWebCam(webCam, Collections.singletonList(newCategory));
                         newWebCams++;
                     }
                 }

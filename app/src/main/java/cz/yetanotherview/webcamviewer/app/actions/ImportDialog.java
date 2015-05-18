@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
@@ -253,12 +254,12 @@ public class ImportDialog extends DialogFragment {
                                 }
                             }
                             if (!found) {
-                                db.createWebCam(webCam, new long[]{newCategory});
+                                db.createWebCam(webCam, Collections.singletonList(newCategory));
                                 newWebCams++;
                             }
                         }
                         else {
-                            db.createWebCam(webCam, new long[]{newCategory});
+                            db.createWebCam(webCam, Collections.singletonList(newCategory));
                             newWebCams++;
                         }
                         progressUpdate();

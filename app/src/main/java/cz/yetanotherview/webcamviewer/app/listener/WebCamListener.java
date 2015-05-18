@@ -18,10 +18,12 @@
 
 package cz.yetanotherview.webcamviewer.app.listener;
 
+import java.util.List;
+
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public interface WebCamListener {
-    void webCamAdded(WebCam webCam, long[] category_ids, boolean share);
-    void webCamEdited(int position, WebCam webCam, long[] category_ids);
+    void webCamAdded(WebCam webCam, List<Long> category_ids, boolean share);
+    void webCamEdited(int position, WebCam webCam, List<Long> category_ids);
     void webCamDeleted(WebCam webCam, int position);
 }

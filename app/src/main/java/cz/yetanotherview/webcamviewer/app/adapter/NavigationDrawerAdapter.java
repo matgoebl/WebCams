@@ -125,6 +125,11 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         return mData.get(position).getId();
     }
 
+    public void addItem(int position, Category category) {
+        mData.add(position, category);
+        notifyItemInserted(position);
+    }
+
     public void modifyItem(int position, Category category) {
         mData.set(position, category);
         notifyItemChanged(position);

@@ -144,7 +144,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Creating a webCam
      */
-    public long createWebCam(WebCam webCam, long[] category_ids) {
+    public long createWebCam(WebCam webCam, List<Long> category_ids) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -308,7 +308,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Updating a WebCam
      */
-    public void updateWebCam(WebCam webCam, long[] category_ids) {
+    public void updateWebCam(WebCam webCam, List<Long> category_ids) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -396,7 +396,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Undo Deleting a WebCam
      */
-    public void undoDeleteWebCam(WebCam webCam, long[] category_ids) {
+    public void undoDeleteWebCam(WebCam webCam, List<Long> category_ids) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -604,7 +604,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Getting WebCam categories Ids
      */
-    public long[] getWebCamCategoriesIds(long webCam_id) {
+    public List<Long> getWebCamCategoriesIds(long webCam_id) {
 
         String selectQuery = "SELECT * FROM " + TABLE_WEBCAM_CATEGORY + " WHERE "
                 + KEY_WEBCAM_ID + " = " + webCam_id;
@@ -613,13 +613,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
-        long[] categories_ids = new long[c.getCount()];
-        // looping through all rows and adding to list
-        int i = 0;
+        List<Long> categories_ids = new ArrayList<>();
         if (c.moveToFirst()) {
             do {
-                categories_ids[i] = c.getInt(c.getColumnIndex(KEY_CATEGORY_ID));
-                i++;
+                categories_ids.add(c.getLong(c.getColumnIndex(KEY_CATEGORY_ID)));
             } while (c.moveToNext());
         }
         c.close();

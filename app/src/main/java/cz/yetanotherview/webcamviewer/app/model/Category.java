@@ -24,6 +24,7 @@ public class Category {
     private String category_icon;
     private String category_name;
     private int count;
+    private boolean selected;
 
     // constructors
     public Category() {
@@ -51,6 +52,11 @@ public class Category {
         this.count = count;
     }
 
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+
     // getter
     public long getId() {
         return this.id;
@@ -66,5 +72,9 @@ public class Category {
 
     public String getCountAsString() {
         return String.valueOf(this.count);
+    }
+
+    public boolean isSelected() {
+        return this.selected;
     }
 }

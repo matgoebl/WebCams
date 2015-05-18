@@ -54,7 +54,6 @@
 <string name="auto_refresh_interval_summary">"Nastaviť interval automatickej aktualizácie v sekundách"</string>
 <string name="image_description">"Obrázok z WebKamery"</string>
 <string name="category_array_empty">"Neboli vytvorené žiadne kategórie"</string>
-<string name="category_array_choose">"Zvoľte kategórie"</string>
 <string name="all_webcams">"Všetky WebKamery"</string>
 <string name="pref_import_from_server">"Import zo servera"</string>
 <string name="imported">"Importované"</string>
@@ -239,4 +238,5 @@
 <string name="all_webcams_confirmation_part1">"Komunitný databáza teraz obsahuje"</string>
 <string name="all_webcams_confirmation_part2">"WebKamer."</string>
 <string name="delete_also_categories">"Chcete zmazať tiež všetky vytvorené kategórie?"</string>
+<string name="select_categories">"Vybrať kategórie"</string>
 </resources>

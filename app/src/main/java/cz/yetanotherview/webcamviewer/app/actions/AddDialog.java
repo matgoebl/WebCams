@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -34,13 +33,10 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.Date;
-import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
-import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.OnTextChange;
 import cz.yetanotherview.webcamviewer.app.listener.WebCamListener;
-import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 /**
@@ -53,14 +49,6 @@ public class AddDialog extends DialogFragment implements View.OnClickListener {
     private WebCam webCam;
     private WebCamListener mOnAddListener;
     private TextView mWebCamThumbUrlTitle;
-
-    private List<Category> allCategories;
-    private Category category;
-
-    private Button webCamCategoryButton;
-    private String[] items;
-    private Integer[] whichSelected;
-    private long[] category_ids;
 
     private RadioButton liveStream;
     private CheckBox shareCheckBox;
@@ -81,20 +69,9 @@ public class AddDialog extends DialogFragment implements View.OnClickListener {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        DatabaseHelper db = new DatabaseHelper(getActivity());
-        allCategories = db.getAllCategories();
-        db.closeDB();
-
-        items = new String[allCategories.size()];
-        int count = 0;
-        for (Category category : allCategories) {
-            items[count] = category.getCategoryName();
-            count++;
-        }
-
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                 .title(R.string.input_dialog_title)
-                .customView(R.layout.add_edit_dialog, true)
+                .customView(R.layout.add_webcam_dialog, true)
                 .positiveText(R.string.dialog_positive_text)
                 .negativeText(android.R.string.cancel)
                 .neutralText(R.string.how_to)
@@ -116,7 +93,7 @@ public class AddDialog extends DialogFragment implements View.OnClickListener {
                         }
 
                         if (mOnAddListener != null) {
-                            mOnAddListener.webCamAdded(webCam, category_ids, shareIsChecked);
+                            mOnAddListener.webCamAdded(webCam, null, shareIsChecked);
                         }
                     }
 
@@ -130,11 +107,7 @@ public class AddDialog extends DialogFragment implements View.OnClickListener {
         RadioButton stillImage = (RadioButton) dialog.getCustomView().findViewById(R.id.radioStillImage);
         stillImage.setChecked(true);
         liveStream = (RadioButton) dialog.getCustomView().findViewById(R.id.radioLiveStream);
-
-        TextView shareCheckBoxTextView = (TextView) dialog.getCustomView().findViewById(R.id.shareCheckBoxTextView);
-        shareCheckBoxTextView.setVisibility(View.VISIBLE);
         shareCheckBox = (CheckBox) dialog.getCustomView().findViewById(R.id.shareCheckBox);
-        shareCheckBox.setVisibility(View.VISIBLE);
 
         mWebCamName = (EditText) dialog.getCustomView().findViewById(R.id.webcam_name);
         mWebCamName.requestFocus();
@@ -146,55 +119,6 @@ public class AddDialog extends DialogFragment implements View.OnClickListener {
 
         mWebCamLatitude = (EditText) dialog.getCustomView().findViewById(R.id.webcam_latitude);
         mWebCamLongitude = (EditText) dialog.getCustomView().findViewById(R.id.webcam_longitude);
-
-        webCamCategoryButton = (Button) dialog.getCustomView().findViewById(R.id.webcam_category_button);
-        if (allCategories.size() == 0 ) {
-            webCamCategoryButton.setText(R.string.category_array_empty);
-        }
-        else {
-            webCamCategoryButton.setText(R.string.category_array_choose);
-            webCamCategoryButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    new MaterialDialog.Builder(getActivity())
-                            .title(R.string.webcam_category)
-                            .items(items)
-                            .itemsCallbackMultiChoice(whichSelected, new MaterialDialog.ListCallbackMultiChoice() {
-                                @Override
-                                public boolean onSelection(MaterialDialog multiDialog, Integer[] which, CharSequence[] text) {
-
-                                    whichSelected = which;
-
-                                    if (whichSelected != null && whichSelected.length != 0) {
-                                        StringBuilder str = new StringBuilder();
-
-                                        category_ids = new long[whichSelected.length];
-                                        int count = 0;
-
-                                        for (Integer aWhich : whichSelected) {
-                                            category = allCategories.get(aWhich);
-
-                                            category_ids[count] = category.getId();
-                                            count++;
-
-                                            str.append("[");
-                                            str.append(category.getCategoryName());
-                                            str.append("] ");
-                                        }
-                                        webCamCategoryButton.setText(str);
-                                    } else
-                                        webCamCategoryButton.setText(R.string.category_array_choose);
-
-                                    return true;
-                                }
-                            })
-                            .positiveText(R.string.choose)
-                            .show();
-                }
-
-            });
-        }
 
         View positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
         mWebCamUrl.addTextChangedListener(new OnTextChange(positiveAction));

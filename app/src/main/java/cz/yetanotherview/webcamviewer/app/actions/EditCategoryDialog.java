@@ -95,7 +95,7 @@ public class EditCategoryDialog extends DialogFragment {
                         BackupManager backupManager = new BackupManager(mActivity);
                         backupManager.dataChanged();
 
-                        notifyDrawer();
+                        reloadHost();
                     }
                 }).build();
 
@@ -143,11 +143,18 @@ public class EditCategoryDialog extends DialogFragment {
         return dialog;
     }
 
-    private void notifyDrawer() {
+    private void reloadHost() {
         NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.fragment_drawer);
         if (mNavigationDrawerFragment != null) {
             mNavigationDrawerFragment.editData(position, category);
+        }
+        EditDialog editDialog = (EditDialog) getFragmentManager().findFragmentByTag("EditDialog");
+        if (editDialog != null) {
+            editDialog.editCategoryInAdapter(position, category);
+            if (mNavigationDrawerFragment != null) {
+                mNavigationDrawerFragment.reloadData();
+            }
         }
     }
 }

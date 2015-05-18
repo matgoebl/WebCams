@@ -22,15 +22,11 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.backup.BackupManager;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import cz.yetanotherview.webcamviewer.app.R;
-import cz.yetanotherview.webcamviewer.app.Utils;
 import cz.yetanotherview.webcamviewer.app.drawer.NavigationDrawerFragment;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.model.Category;
@@ -41,7 +37,6 @@ public class DeleteCategoryDialog extends DialogFragment {
     public static final Object sDataLock = new Object();
 
     private Category category;
-    private MaterialDialog indeterminateProgress;
     private Activity mActivity;
     private DatabaseHelper db;
     private int position;
@@ -72,51 +67,30 @@ public class DeleteCategoryDialog extends DialogFragment {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        showIndeterminateProgress();
-                        new deleteAlsoWebCamsBackgroundTask().execute();
+                        synchronized (DeleteCategoryDialog.sDataLock) {
+                            db.deleteCategory(category.getId(), false);
+                            db.closeDB();
+                        }
+                        BackupManager backupManager = new BackupManager(mActivity);
+                        backupManager.dataChanged();
+                        reloadHost();
                     }
                 })
                 .build();
     }
 
-    private class deleteAlsoWebCamsBackgroundTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            synchronized (DeleteCategoryDialog.sDataLock) {
-                db.deleteCategory(category.getId(), false);
-                db.closeDB();
-            }
-            BackupManager backupManager = new BackupManager(mActivity);
-            backupManager.dataChanged();
-
-            continueOnUiThread();
-            return null;
-        }
-    }
-
-    private void showIndeterminateProgress() {
-        indeterminateProgress = new MaterialDialog.Builder(mActivity)
-                .content(R.string.please_wait)
-                .progress(true, 0)
-                .show();
-    }
-
-    private void continueOnUiThread() {
-        mActivity.runOnUiThread(new Runnable() {
-            public void run() {
-                indeterminateProgress.dismiss();
-                notifyDrawer();
-            }
-        });
-    }
-
-    private void notifyDrawer() {
+    private void reloadHost() {
         NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
                 mActivity.getFragmentManager().findFragmentById(R.id.fragment_drawer);
         if (mNavigationDrawerFragment != null) {
             mNavigationDrawerFragment.deleteData(position);
+        }
+        EditDialog editDialog = (EditDialog) getFragmentManager().findFragmentByTag("EditDialog");
+        if (editDialog != null) {
+            editDialog.deleteCategoryInAdapter(position);
+            if (mNavigationDrawerFragment != null) {
+                mNavigationDrawerFragment.reloadData();
+            }
         }
     }
 }

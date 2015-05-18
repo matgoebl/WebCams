@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
     private DatabaseHelper db;
     private WebCam webCam, webCamToDelete;
-    private long[] webCamToDelete_category_ids;
+    private List<Long> webCamToDelete_category_ids;
     private List<WebCam> allWebCams;
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
@@ -753,7 +753,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     }
 
     @Override
-    public void webCamAdded(WebCam wc, long[] category_ids, boolean share) {
+    public void webCamAdded(WebCam wc, List<Long> category_ids, boolean share) {
         synchronized (sDataLock) {
             if (category_ids != null) {
                 wc.setId(db.createWebCam(wc, category_ids));
@@ -779,7 +779,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     }
 
     @Override
-    public void webCamEdited(int position, WebCam wc, long[] category_ids) {
+    public void webCamEdited(int position, WebCam wc, List<Long> category_ids) {
         synchronized (sDataLock) {
             if (category_ids != null) {
                 db.updateWebCam(wc, category_ids);

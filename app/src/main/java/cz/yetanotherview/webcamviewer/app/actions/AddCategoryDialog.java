@@ -53,6 +53,7 @@ public class AddCategoryDialog extends DialogFragment {
     private Category category;
     private Icons icons;
     private ImageView category_icon;
+    private long createdCategoryId;
 
     private MaterialDialog gridDialog;
     private DatabaseHelper db;
@@ -91,13 +92,14 @@ public class AddCategoryDialog extends DialogFragment {
                                 iconPath = "@drawable/icon_manual";
                             }
                             category = new Category(iconPath, inputName);
-                            db.createCategory(category);
+                            createdCategoryId = db.createCategory(category);
+                            category.setId(createdCategoryId);
                             db.closeDB();
                         }
                         BackupManager backupManager = new BackupManager(mActivity);
                         backupManager.dataChanged();
 
-                        reloadDrawer();
+                        reloadHost();
                     }
                 })
                 .build();
@@ -139,11 +141,15 @@ public class AddCategoryDialog extends DialogFragment {
         return dialog;
     }
 
-    private void reloadDrawer() {
+    private void reloadHost() {
         NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.fragment_drawer);
         if (mNavigationDrawerFragment != null) {
-            mNavigationDrawerFragment.reloadData();
+            mNavigationDrawerFragment.addData(category);
+        }
+        EditDialog editDialog = (EditDialog) getFragmentManager().findFragmentByTag("EditDialog");
+        if (editDialog != null) {
+            editDialog.addCategoryInAdapter(category);
         }
     }
 }

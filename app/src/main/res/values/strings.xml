@@ -54,7 +54,6 @@
 <string name="auto_refresh_interval_summary">"Enter auto refreshing interval in seconds"</string>
 <string name="image_description">"WebCam image"</string>
 <string name="category_array_empty">"No categories created yet"</string>
-<string name="category_array_choose">"Choose categories"</string>
 <string name="all_webcams">"All WebCams"</string>
 <string name="pref_import_from_server">"Import from Server"</string>
 <string name="imported">"Imported"</string>
@@ -239,4 +238,5 @@
 <string name="all_webcams_confirmation_part1">"Community database now contains"</string>
 <string name="all_webcams_confirmation_part2">"WebCams."</string>
 <string name="delete_also_categories">"Do you want to delete also all categories?"</string>
+<string name="select_categories">"Select categories"</string>
 </resources>

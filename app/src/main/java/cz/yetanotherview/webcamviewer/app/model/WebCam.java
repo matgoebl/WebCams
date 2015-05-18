@@ -133,8 +133,7 @@ public class WebCam {
         this.created_at = created_at;
     }
 
-    public void setSelected(boolean selected)
-    {
+    public void setSelected(boolean selected) {
         this.selected = selected;
     }
 
@@ -210,8 +209,7 @@ public class WebCam {
         return this.created_at;
     }
 
-    public boolean isSelected()
-    {
+    public boolean isSelected() {
         return this.selected;
     }
 }

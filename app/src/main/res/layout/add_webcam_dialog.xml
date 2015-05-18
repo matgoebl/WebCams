@@ -178,20 +178,21 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/webcam_category" />
+        android:text="@string/webcam_category"
+        android:visibility="gone"/>
 
-        <Button
+        <TextView
             android:id="@+id/webcam_category_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/middle_padding"
             android:layout_marginLeft="@dimen/middle_padding"
             android:layout_marginStart="@dimen/middle_padding"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:visibility="gone"/>
 
     <TextView
         android:id="@+id/shareCheckBoxTextView"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
@@ -200,7 +201,6 @@
         <CheckBox
             android:id="@+id/shareCheckBox"
             style="@style/DialogContent"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/submit_for_approval"
