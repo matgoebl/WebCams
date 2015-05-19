@@ -21,14 +21,22 @@ package cz.yetanotherview.webcamviewer.app.actions;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.mapbox.mapboxsdk.api.ILatLng;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.overlay.Marker;
+import com.mapbox.mapboxsdk.views.MapView;
+import com.mapbox.mapboxsdk.views.MapViewListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +58,10 @@ public class EditDialog extends DialogFragment implements View.OnClickListener {
     private WebCam webCam;
     private WebCamListener mOnAddListener;
     private View positiveAction;
+    private MapView mMapView;
+    private Marker marker;
     private TextView mWebCamThumbUrlTitle, webCamCategoryButton;
     private CategorySelectionAdapter categorySelectionAdapter;
-    private DatabaseHelper db;
     private StringBuilder selectedCategoriesNames;
     private List<Category> allCategories;
     private List<Long> category_ids;
@@ -80,7 +89,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener {
         long id = bundle.getLong("id", 0);
         position = bundle.getInt("position", 0);
 
-        db = new DatabaseHelper(getActivity());
+        DatabaseHelper db = new DatabaseHelper(getActivity());
         webCam = db.getWebCam(id);
         allCategories = db.getAllCategories();
         List<Long> webCam_category_ids = db.getWebCamCategoriesIds(webCam.getId());
@@ -153,6 +162,69 @@ public class EditDialog extends DialogFragment implements View.OnClickListener {
 
         mWebCamLongitude = (EditText) dialog.getCustomView().findViewById(R.id.webcam_longitude);
         mWebCamLongitude.setText(String.valueOf(webCam.getLongitude()));
+
+        ImageView mWebCamCoordinatesMapSelector = (ImageView) dialog.getCustomView().findViewById(R.id.webcam_coordinates_map_selector);
+        mWebCamCoordinatesMapSelector.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                        .title(R.string.selecting_from_map)
+                        .customView(R.layout.maps_layout, false)
+                        .positiveText(R.string.dialog_positive_text)
+                        .negativeText(android.R.string.cancel)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                if (marker != null) {
+                                    LatLng latLng = marker.getPoint();
+                                    mWebCamLatitude.setText(String.valueOf(latLng.getLatitude()));
+                                    mWebCamLongitude.setText(String.valueOf(latLng.getLongitude()));
+                                }
+                            }
+                        })
+                        .build();
+
+                marker = null;
+                mMapView = (MapView) dialog.getCustomView().findViewById(R.id.mapView);
+                mMapView.setZoom(1);
+                mMapView.setDiskCacheEnabled(false);
+                mMapView.setMapViewListener(new MapViewListener() {
+                    @Override
+                    public void onShowMarker(MapView pMapView, Marker pMarker) {}
+
+                    @Override
+                    public void onHideMarker(MapView pMapView, Marker pMarker) {}
+
+                    @Override
+                    public void onTapMarker(MapView pMapView, Marker pMarker) {}
+
+                    @Override
+                    public void onLongPressMarker(MapView pMapView, Marker pMarker) {}
+
+                    @Override
+                    public void onTapMap(MapView pMapView, ILatLng pPosition) {
+                        if (marker != null) {
+                            mMapView.removeMarker(marker);
+                        }
+                        addMarker(new LatLng(pPosition.getLatitude(), pPosition.getLongitude()));
+                        Toast.makeText(getActivity(), String.valueOf(pPosition.getLatitude()) + ", " +
+                                String.valueOf(pPosition.getLongitude()), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onLongPressMap(MapView pMapView, ILatLng pPosition) {}
+
+                    private void addMarker(LatLng markerPosition) {
+                        marker = new Marker(mMapView, "", "", markerPosition);
+                        marker.setMarker(ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null));
+                        mMapView.addMarker(marker);
+                    }
+                });
+
+
+                dialog.show();
+            }
+        });
 
         webCamCategoryButton = (TextView) dialog.getCustomView().findViewById(R.id.webcam_category_button);
 

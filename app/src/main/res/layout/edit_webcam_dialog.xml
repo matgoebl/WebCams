@@ -116,63 +116,91 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/large_padding"
-            android:paddingStart="@dimen/large_padding"
-            android:paddingRight="@dimen/zero_padding"
-            android:paddingEnd="@dimen/zero_padding"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/big_padding"
-                android:layout_marginEnd="@dimen/big_padding"
-                android:text="@string/latitude" />
-
-            <EditText
-                android:id="@+id/webcam_latitude"
-                style="@style/DialogContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_webcam_latitude"
-                android:inputType="numberDecimal"
-                android:digits="0123456789.-"
-                android:maxLength="10"
-                android:singleLine="true"
-                android:imeOptions="actionNext" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/large_padding"
-            android:paddingStart="@dimen/large_padding"
-            android:paddingRight="@dimen/zero_padding"
-            android:paddingEnd="@dimen/zero_padding"
-            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/big_padding"
-                android:layout_marginEnd="@dimen/big_padding"
-                android:text="@string/longitude" />
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/webcam_longitude"
-                style="@style/DialogContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_webcam_longitude"
-                android:inputType="numberDecimal"
-                android:digits="0123456789.-"
-                android:maxLength="11"
-                android:singleLine="true"
-                android:imeOptions="actionDone"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/like_huge_padding"
+                    android:paddingStart="@dimen/like_huge_padding"
+                    android:paddingRight="@dimen/zero_padding"
+                    android:paddingEnd="@dimen/zero_padding"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/big_padding"
+                        android:layout_marginEnd="@dimen/big_padding"
+                        android:text="@string/latitude" />
+
+                    <EditText
+                        android:id="@+id/webcam_latitude"
+                        style="@style/DialogContent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_webcam_latitude"
+                        android:inputType="numberDecimal"
+                        android:digits="0123456789.-"
+                        android:maxLength="10"
+                        android:singleLine="true"
+                        android:imeOptions="actionNext" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/like_huge_padding"
+                    android:paddingStart="@dimen/like_huge_padding"
+                    android:paddingRight="@dimen/zero_padding"
+                    android:paddingEnd="@dimen/zero_padding"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/big_padding"
+                        android:layout_marginEnd="@dimen/big_padding"
+                        android:text="@string/longitude" />
+
+                    <EditText
+                        android:id="@+id/webcam_longitude"
+                        style="@style/DialogContent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_webcam_longitude"
+                        android:inputType="numberDecimal"
+                        android:digits="0123456789.-"
+                        android:maxLength="11"
+                        android:singleLine="true"
+                        android:imeOptions="actionDone"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/webcam_coordinates_map_selector"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_action_map"
+                        android:tint="@color/primary"
+                        android:background="@drawable/icon_change_background" />
+            </LinearLayout>
         </LinearLayout>
 
     <TextView
