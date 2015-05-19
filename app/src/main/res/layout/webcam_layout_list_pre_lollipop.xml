@@ -16,29 +16,40 @@
 ~ *****************************************************************************
 -->
 
-<RelativeLayout
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    card_view:cardCornerRadius="0dp"
+    card_view:contentPaddingLeft="-3dp"
+    card_view:contentPaddingRight="-3dp"
+    card_view:contentPaddingBottom="-1dp"
+    card_view:cardUseCompatPadding="false"
+    card_view:cardPreventCornerOverlap="false"
+    android:id="@+id/mainCard"
     style="@style/MainCardViewList">
 
-        <include
-            layout="@layout/loading_progress_bar"/>
-
-        <ImageView
-            style="@style/MainImageView"
-            android:id="@+id/imageView"
-            android:scaleType="centerCrop"
-            android:contentDescription="@string/image_description" />
-
-        <include
-            layout="@layout/play_overlay"/>
-
-        <include
-            layout="@layout/webcam_layout_parts"/>
-
-        <View
-            android:layout_alignBottom="@id/imageView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@drawable/pre_lollipop_drop_shadow" />
+            android:layout_height="match_parent">
 
-</RelativeLayout>
+            <include
+                layout="@layout/loading_progress_bar"/>
+
+            <ImageView
+                style="@style/MainImageView"
+                android:id="@+id/imageView"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/image_description" />
+
+            <include
+                layout="@layout/play_overlay"/>
+
+            <include
+                layout="@layout/webcam_layout_parts"/>
+
+        </RelativeLayout>
+
+        <include
+            layout="@layout/move_tint_layout"/>
+
+</android.support.v7.widget.CardView>

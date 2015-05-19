@@ -45,9 +45,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.signature.StringSignature;
@@ -97,9 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private List<WebCam> allWebCams;
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
-    private View mEmptyView, mEmptySearchView, shadowView;
-    private ImageView mMoveView;
-    private TextView mMoveTextView;
+    private View mEmptyView, mEmptySearchView, shadowView, mTintView;
     private WebCamAdapter mAdapter;
     private float zoom;
     private int numberOfColumns, mOrientation, selectedCategory, autoRefreshInterval, mPosition,
@@ -228,14 +224,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         mAdapter.setClickListener(new WebCamAdapter.ClickListener() {
 
             @Override
-            public void onClick(View view, int position, boolean isEditClick, boolean isLongClick, ImageView imageView, TextView textView) {
+            public void onClick(View view, int position, boolean isEditClick, boolean isLongClick, View tintView) {
                 if (isEditClick) {
-                    mMoveView = imageView;
-                    mMoveTextView = textView;
+                    mTintView = tintView;
                     showOptionsDialog(position);
                 } else if (isLongClick) {
-                    mMoveView = imageView;
-                    mMoveTextView = textView;
+                    mTintView = tintView;
                     mPosition = position;
                     moveItem();
                 } else showImageFullscreen(position, false);
@@ -885,9 +879,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 MenuInflater inflater = mode.getMenuInflater();
                 inflater.inflate(R.menu.move_menu, menu);
                 mode.setTitle(R.string.move);
-                if (simpleList && !imagesOnOff) {
-                    mMoveTextView.setTextColor(getResources().getColor(R.color.move));
-                } else mMoveView.setColorFilter(getResources().getColor(R.color.move));
+                mTintView.setVisibility(View.VISIBLE);
                 tempView.setVisibility(View.VISIBLE);
                 return true;
             }
@@ -925,9 +917,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             }
 
             public void onDestroyActionMode(ActionMode mode) {
-                if (simpleList && !imagesOnOff) {
-                    mMoveTextView.setTextColor(getResources().getColor(R.color.primary));
-                } else mMoveView.clearColorFilter();
+                mTintView.setVisibility(View.GONE);
                 tempView.setVisibility(View.GONE);
             }
         });

@@ -107,7 +107,12 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
                 else return new WebCamViewHolder(LayoutInflater.from(mContext).inflate(R.layout.webcam_layout_list, viewGroup, false));
             }
         }
-        else return new WebCamViewHolder(LayoutInflater.from(mContext).inflate(R.layout.webcam_layout_grid, viewGroup, false));
+        else {
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT_WATCH) {
+                return new WebCamViewHolder(LayoutInflater.from(mContext).inflate(R.layout.webcam_layout_grid_pre_lollipop, viewGroup, false));
+            }
+            else return new WebCamViewHolder(LayoutInflater.from(mContext).inflate(R.layout.webcam_layout_grid, viewGroup, false));
+        }
     }
 
     @Override
@@ -168,6 +173,7 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
         protected ImageView vPlay;
         protected ImageButton vButton;
         protected ImageView vError;
+        protected View vTint;
 
         protected RelativeLayout vLayout;
         protected ProgressBar vProgress;
@@ -180,6 +186,7 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
             vPlay = (ImageView) itemLayoutView.findViewById(R.id.playOverlay);
             vButton = (ImageButton) itemLayoutView.findViewById(R.id.action_edit);
             vError = (ImageView) itemLayoutView.findViewById(R.id.action_error);
+            vTint = itemLayoutView.findViewById(R.id.move_tint_view);
 
             vLayout = (RelativeLayout) itemLayoutView.findViewById(R.id.InnerRelativeLayout);
             vProgress = (ProgressBar) itemLayoutView.findViewById(R.id.loadingProgressBar);
@@ -239,21 +246,21 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
         @Override
         public void onClick(View v) {
             if (v instanceof ImageButton){
-                clickListener.onClick(v, getAdapterPosition(), true, false, vImage, vName);
+                clickListener.onClick(v, getAdapterPosition(), true, false, vTint);
             } else {
-                clickListener.onClick(v, getAdapterPosition(), false, false, vImage, vName);
+                clickListener.onClick(v, getAdapterPosition(), false, false, vTint);
             }
         }
 
         @Override
         public boolean onLongClick(View v) {
-            clickListener.onClick(v, getAdapterPosition(), false, true, vImage, vName);
+            clickListener.onClick(v, getAdapterPosition(), false, true, vTint);
             return true;
         }
     }
 
     public interface ClickListener {
-        void onClick(View v, int position, boolean isEditClick, boolean isLongClick, ImageView imageView, TextView textView);
+        void onClick(View v, int position, boolean isEditClick, boolean isLongClick, View tintview);
     }
 
     public void setClickListener(ClickListener clickListener) {

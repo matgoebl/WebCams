@@ -46,4 +46,7 @@
 
         </RelativeLayout>
 
+        <include
+            layout="@layout/move_tint_layout"/>
+
 </android.support.v7.widget.CardView>

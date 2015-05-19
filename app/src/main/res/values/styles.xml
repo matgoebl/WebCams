@@ -38,7 +38,7 @@
 
     <style name="MainCardViewGrid">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/main_margin</item>
         <item name="android:layout_marginLeft">@dimen/main_middle_margin</item>
         <item name="android:layout_marginStart">@dimen/main_middle_margin</item>
@@ -49,7 +49,7 @@
 
     <style name="MainCardViewSimple">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/main_small_margin</item>
         <item name="android:layout_marginBottom">@dimen/main_small_margin</item>
         <item name="android:layout_marginLeft">@dimen/small_padding</item>
@@ -61,14 +61,13 @@
 
     <style name="MainCardViewList">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/margin_top_bottom</item>
-        <item name="android:orientation">vertical</item>
     </style>
 
     <style name="MainImageView">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:adjustViewBounds">true</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_alignParentTop">true</item>

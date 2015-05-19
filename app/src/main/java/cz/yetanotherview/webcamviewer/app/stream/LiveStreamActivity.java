@@ -300,7 +300,7 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
     }
 
     private void showErrorDialog() {
-        dialog.dismiss();
+        dialogDismiss();
         streamError();
     }
 
