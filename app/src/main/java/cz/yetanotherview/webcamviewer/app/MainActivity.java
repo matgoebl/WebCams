@@ -341,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     }
 
     private void checkAdapterIsEmpty () {
-        if (mAdapter.getItemCount() == 0) {
+        if (mAdapter.getItemCount() == 0 && mEmptySearchView.getVisibility() == View.GONE) {
             mEmptyView.setVisibility(View.VISIBLE);
         } else {
             mEmptyView.setVisibility(View.GONE);
@@ -349,7 +349,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     }
 
     private void checkSearchViewIsEmpty () {
-        if (mAdapter.getItemCount() == 0) {
+        if (mAdapter.getItemCount() == 0 && mEmptyView.getVisibility() == View.GONE) {
             mEmptySearchView.setVisibility(View.VISIBLE);
         } else {
             mEmptySearchView.setVisibility(View.GONE);
