@@ -116,7 +116,7 @@ public class ImportDialog extends DialogFragment {
 
             ArrayAdapter<String> itemsAdapter =
                     new ArrayAdapter<>(mActivity, R.layout.simple_list_item,
-                            Arrays.asList(mActivity.getString(R.string.browse)));
+                            Collections.singletonList(mActivity.getString(R.string.browse)));
             ListView fakeList = (ListView) importDialog.getCustomView().findViewById(R.id.fake_list);
             fakeList.setVisibility(View.VISIBLE);
             fakeList.setAdapter(itemsAdapter);

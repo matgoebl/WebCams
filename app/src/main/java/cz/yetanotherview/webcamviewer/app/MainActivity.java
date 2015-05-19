@@ -962,17 +962,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 , this);
     }
 
-     private void refreshIsRunning() {
-         SnackbarManager.show(
-                 Snackbar.with(getApplicationContext())
-                         .text(R.string.refresh_is_running)
-                         .actionLabel(R.string.dismiss)
-                         .actionColor(getResources().getColor(R.color.yellow))
-                         .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
-                         .eventListener(eventListener)
-                 , this);
-     }
-
     private void nothingToRefresh() {
         SnackbarManager.show(
                 Snackbar.with(getApplicationContext())
@@ -1001,10 +990,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         mStringSignature = UUID.randomUUID().toString();
         mAdapter.refreshViewImages(new StringSignature(mStringSignature));
         if (!fromAutoRefresh) {
-            if (mAdapter.getItemCount() != 0) {
-                refreshIsRunning();
+            if (mAdapter.getItemCount() == 0) {
+                nothingToRefresh();
             }
-            else nothingToRefresh();
         }
     }
 
