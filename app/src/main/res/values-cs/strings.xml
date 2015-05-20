@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="app_name">"WebKamery"</string>
-<string name="about_body"><![CDATA[
-        <b>Autor: <a href="http://www.yetanotherview.cz">Tomáš Valenta</a></b><br>
-        <b>Zapojit se:</b> Zdrojové kódy jsou na <b><a href="https://github.com/TomasValenta/WebCamViewer">GitHubu</a></b><br>
-        Pro pomoc s překladem do vašeho jazyka použijte <b><a href="http://goo.gl/MUJqYZ">tento online nástroj</a></b>.<br>
-        <br>
-        <b>Velké díky patří těmto open source projektům:</b><br>
-        <b><a href="https://developer.android.com/tools/support-library/features.html">Support knihovny</a></b><i> od Google.</i><br>
-        <b><a href="https://github.com/afollestad/material-dialogs">Material Dialogy</a></b><i> od Aidan Follestad.</i><br>
-        <b><a href="https://github.com/bumptech/glide">Glide</a></b><i> od Bump.</i><br><br>
-        <b>Velké díky patří také těmto překladatelům:</b><br>
-        Japonština - <b><a href="mailto:naofum@gmail.com">Naofumi</a></b><br>
-        Němčina - <b><a href="http://blog.strubbl.de/">Sven Fischer</a></b><br>
-        Norština - <b><a href="http://0p.no/">Lars Falk-Petersen</a></b><br>
-        <br>
-        <b>Mé velké poděkování patří <a href="http://christianityinview.com/images/trinity.gif">Bohu</a>, rodině a přátelům. V neposlední řadě také <a href="https://plus.google.com/111192437899852242451/">Tomášovi Borovovi</a>, <a href="https://plus.google.com/104896455725487013630/">Radku Matouchovi</a></b> za veškerou pomoc + užitečné tipy.
-    ]]></string>
 <string name="action_menu_about">"O aplikaci"</string>
 <string name="action_settings">"Nastavení"</string>
 <string name="pref_general">"Obecné"</string>
@@ -263,4 +247,23 @@
 <string name="mapbox">"Mapbox"</string>
 <string name="jsoup">"jsoup"</string>
 <string name="jonathan_hedley">"Jonathan Hedley"</string>
+<string name="want_to_translate">"Chcete se zapojit?"</string>
+<string name="mat_vallo">"Mat Vallo"</string>
+<string name="tomas_valenta">"Tomáš Valenta"</string>
+<string name="sven_fischer">"Sven Fischer"</string>
+<string name="naofumi">"Naofumi"</string>
+<string name="falk_petersen">"Falk Petersen"</string>
+<string name="action_menu_about_summary">"Informace o aplikaci"</string>
+<string name="author">"Autor"</string>
+<string name="yet_another_view_tomas_valenta">"YetAnotherView - Tomáš Valenta"</string>
+<string name="contribute">"Zapojit se"</string>
+<string name="contribute_summary">"Kliknutím zobrazíte zdrojový kód na GitHubu"</string>
+<string name="google_plus_beta_community">"Google+ Beta Komunita"</string>
+<string name="google_plus_beta_community_summary">"Kliknutím otevřete stránku komunity na Google+"</string>
+<string name="special_thanks">"Velké díky patří také"</string>
+<string name="tomas_borov">"Tomáš Borov"</string>
+<string name="beta_tester">"Beta tester"</string>
+<string name="radek_matouch">"Radek Matouch"</string>
+<string name="code_helper">"Pomoc v kódu"</string>
+<string name="also_huge_thanks">"Mé velké poděkování patří Bohu, rodině a přátelům."</string>
 </resources>

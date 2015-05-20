@@ -19,7 +19,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/huge_padding"
     android:orientation="vertical">
 
     <LinearLayout
@@ -27,7 +26,7 @@
         style="@style/libraries_container">
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="horizontal">
 
             <ImageView
@@ -35,7 +34,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="vertical">
 
             <TextView
@@ -54,7 +53,6 @@
     </LinearLayout>
 
     <include
-        android:id="@+id/first_divider"
         layout="@layout/view_divider"/>
 
     <LinearLayout
@@ -62,7 +60,7 @@
         style="@style/libraries_container">
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="horizontal">
 
             <ImageView
@@ -70,7 +68,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="vertical">
 
             <TextView
@@ -89,7 +87,6 @@
     </LinearLayout>
 
     <include
-        android:id="@+id/first_divider"
         layout="@layout/view_divider"/>
 
     <LinearLayout
@@ -97,7 +94,7 @@
         style="@style/libraries_container">
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="horizontal">
 
             <ImageView
@@ -105,7 +102,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="vertical">
 
             <TextView
@@ -124,7 +121,6 @@
     </LinearLayout>
 
     <include
-        android:id="@+id/first_divider"
         layout="@layout/view_divider"/>
 
     <LinearLayout
@@ -132,7 +128,7 @@
         style="@style/libraries_container">
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="horizontal">
 
             <ImageView
@@ -140,7 +136,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="vertical">
 
             <TextView
@@ -159,7 +155,6 @@
     </LinearLayout>
 
     <include
-        android:id="@+id/first_divider"
         layout="@layout/view_divider"/>
 
     <LinearLayout
@@ -167,7 +162,7 @@
         style="@style/libraries_container">
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="horizontal">
 
             <ImageView
@@ -175,7 +170,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="vertical">
 
             <TextView
@@ -194,7 +189,6 @@
     </LinearLayout>
 
     <include
-        android:id="@+id/first_divider"
         layout="@layout/view_divider"/>
 
 
@@ -203,7 +197,7 @@
         style="@style/libraries_container">
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="horizontal">
 
             <ImageView
@@ -211,7 +205,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="vertical">
 
             <TextView
@@ -230,7 +224,6 @@
     </LinearLayout>
 
     <include
-        android:id="@+id/first_divider"
         layout="@layout/view_divider"/>
 
     <LinearLayout
@@ -238,7 +231,7 @@
         style="@style/libraries_container">
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="horizontal">
 
             <ImageView
@@ -246,7 +239,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="vertical">
 
             <TextView
@@ -265,7 +258,6 @@
     </LinearLayout>
 
     <include
-        android:id="@+id/first_divider"
         layout="@layout/view_divider"/>
 
     <LinearLayout
@@ -273,7 +265,7 @@
         style="@style/libraries_container">
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="horizontal">
 
             <ImageView
@@ -281,7 +273,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="vertical">
 
             <TextView
@@ -300,7 +292,6 @@
     </LinearLayout>
 
     <include
-        android:id="@+id/first_divider"
         layout="@layout/view_divider"/>
 
     <LinearLayout
@@ -308,7 +299,7 @@
         style="@style/libraries_container">
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="horizontal">
 
             <ImageView
@@ -316,7 +307,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/libraries_inner_container"
+            style="@style/inner_container"
             android:orientation="vertical">
 
             <TextView

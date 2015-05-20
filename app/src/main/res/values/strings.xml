@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="app_name">"WebCams"</string>
-<string name="about_body"><![CDATA[
-    <b>Author: <a href="http://www.yetanotherview.cz">Tomas Valenta</a></b><br>
-    <b>Contribute:</b> Source code on <b><a href="https://github.com/TomasValenta/WebCamViewer">GitHub</a></b><br>
-    For help translating into your language <b><a href="http://goo.gl/MUJqYZ">use this online tool</a></b>.<br>
-    <br>
-    <b>Special thanks to these open source tools:</b><br>
-    <b><a href="https://developer.android.com/tools/support-library/features.html">Support Libraries</a></b><i> by Google, Inc.</i><br>
-    <b><a href="https://github.com/afollestad/material-dialogs">Material Dialogs</a></b><i> by Aidan Follestad.</i><br>
-    <b><a href="https://github.com/bumptech/glide">Glide</a></b><i> by Bump, Inc.</i><br><br>
-    <b>Special thanks to these translators:</b><br>
-    German - <b><a href="http://blog.strubbl.de/">Sven Fischer</a></b><br>
-    Japanese - <b><a href="mailto:naofum@gmail.com">Naofumi</a></b><br>
-    Norwegian - <b><a href="http://0p.no/">Lars Falk-Petersen</a></b><br>
-    <br>
-    <b>Also a huge thanks to the <a href="http://christianityinview.com/images/trinity.gif">Trinity</a>, my family and friends. As well as, <a href="https://plus.google.com/111192437899852242451/">Tomas Borov</a>, <a href="https://plus.google.com/104896455725487013630/">Radek Matouch</a></b> for all of his help + useful tips.
-]]></string>
 <string name="action_menu_about">"About"</string>
 <string name="action_settings">"Settings"</string>
 <string name="pref_general">"General"</string>
@@ -263,4 +247,23 @@
 <string name="mapbox">"Mapbox"</string>
 <string name="jsoup">"jsoup"</string>
 <string name="jonathan_hedley">"Jonathan Hedley"</string>
+<string name="want_to_translate">"Want to translate?"</string>
+<string name="mat_vallo">"Mat Vallo"</string>
+<string name="tomas_valenta">"Tomáš Valenta"</string>
+<string name="sven_fischer">"Sven Fischer"</string>
+<string name="naofumi">"Naofumi"</string>
+<string name="falk_petersen">"Falk Petersen"</string>
+<string name="action_menu_about_summary">"Information about the application"</string>
+<string name="author">"Author"</string>
+<string name="yet_another_view_tomas_valenta">"YetAnotherView - Tomáš Valenta"</string>
+<string name="contribute">"Contribute"</string>
+<string name="contribute_summary">"Click to view the source code on GitHub"</string>
+<string name="google_plus_beta_community">"Google+ Beta Community"</string>
+<string name="google_plus_beta_community_summary">"Click to open the Google+ Community page"</string>
+<string name="special_thanks">"Special thanks to"</string>
+<string name="tomas_borov">"Tomáš Borov"</string>
+<string name="beta_tester">"Beta tester"</string>
+<string name="radek_matouch">"Radek Matouch"</string>
+<string name="code_helper">"Code helper"</string>
+<string name="also_huge_thanks">"Also a huge thanks to God, my family and friends!"</string>
 </resources>

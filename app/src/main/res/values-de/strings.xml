@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="app_name">"WebCams"</string>
-<string name="about_body"><![CDATA[
-    <b>Autor: <a href="http://www.yetanotherview.cz">Tomas Valenta</a></b><br>
-    <b>Beitragen:</b> Quellcode ist auf <b><a href="https://github.com/TomasValenta/WebCamViewer">GitHub</a></b><br>
-    Für Hilfe bei der Übersetzung in deine Sprache <b><a href="http://goo.gl/MUJqYZ">verwende dieses Online-Tool</a></b>.<br>
-    <br>
-    <b>Vielen Dank an diese Open-Source-Projekte:</b><br>
-    <b><a href="https://developer.android.com/tools/support-library/features.html">Support Libraries</a></b><i> von Google, Inc.</i><br>
-    <b><a href="https://github.com/afollestad/material-dialogs">Material Dialogs</a></b><i> von Aidan Follestad.</i><br>
-    <b><a href="https://github.com/bumptech/glide">Glide</a></b><i> von Bump, Inc.</i><br><br>
-    <b>Ein großes Dankeschön auch für die Übersetzer:</b><br>
-    Deutsch - <b><a href="http://blog.strubbl.de/">Sven Fischer</a></b><br>
-    Japanisch - <b><a href="mailto:naofum@gmail.com">Naofumi</a></b><br>
-    Norwegisch - <b><a href="http://0p.no/">Lars Falk-Petersen</a></b><br>
-    <br>
-    <b>Mein großer Dank an <a href="http://christianityinview.com/images/trinity.gif">Gott</a>, Familie und also Freunden. Und auch an <a href="https://plus.google.com/111192437899852242451/">Tomas Borov</a>, <a href="https://plus.google.com/104896455725487013630/">Radek Matouch</a></b> für all ihre Hilfe + die nützlichen Tipps.
-]]></string>
 <string name="action_menu_about">"Info"</string>
 <string name="action_settings">"Einstellungen"</string>
 <string name="pref_general">"Allgemeine Einstellungen"</string>
@@ -54,7 +38,6 @@
 <string name="auto_refresh_interval_summary">"Gib das automatische Aktualisierungsintervall in Sekunden ein"</string>
 <string name="image_description">"WebCam Bild"</string>
 <string name="category_array_empty">"Noch keine Kategorien erstellt"</string>
-<string name="category_array_choose">"Kategorien wählen"</string>
 <string name="all_webcams">"Alle WebCams"</string>
 <string name="pref_import_from_server">"Import vom Server"</string>
 <string name="imported">"Importiert"</string>
@@ -238,5 +221,49 @@
 <string name="enter_name">"Namen eingeben"</string>
 <string name="all_webcams_confirmation_part1">"Gemeinschaftsdatenbank enthält jetzt"</string>
 <string name="all_webcams_confirmation_part2">"WebCams."</string>
-<string name="delete_also_categories">"Do you want to delete also all categories?"</string>
+<string name="delete_also_categories"></string>
+<string name="select_categories"></string>
+<string name="pref_translators"></string>
+<string name="pref_translators_summary"></string>
+<string name="pref_libraries"></string>
+<string name="pref_libraries_summary"></string>
+<string name="support_libraries">"Support Libraries"</string>
+<string name="google_inc">"Google, Inc."</string>
+<string name="apache_license_version"></string>
+<string name="material_dialogs">"Material Dialogs"</string>
+<string name="aidan_follestad">"Aidan Follestad"</string>
+<string name="mit_license"></string>
+<string name="glide">"Glide"</string>
+<string name="bump_technologies">"Bump Technologies"</string>
+<string name="bsd_mit_apache"></string>
+<string name="lib_vlc">"libVLC"</string>
+<string name="videolan_organization"></string>
+<string name="gnu_lgpl">"GNU LGPLv2.1+"</string>
+<string name="gson">"Gson"</string>
+<string name="floating_action_button">"Floating Action Button"</string>
+<string name="base_lab">"BASE LAB"</string>
+<string name="snackbar">"Snackbar"</string>
+<string name="nispok">"nispok"</string>
+<string name="mapbox">"Mapbox"</string>
+<string name="jsoup">"jsoup"</string>
+<string name="jonathan_hedley">"Jonathan Hedley"</string>
+<string name="want_to_translate"></string>
+<string name="mat_vallo">"Mat Vallo"</string>
+<string name="tomas_valenta">"Tomáš Valenta"</string>
+<string name="sven_fischer">"Sven Fischer"</string>
+<string name="naofumi">"Naofumi"</string>
+<string name="falk_petersen">"Falk Petersen"</string>
+<string name="action_menu_about_summary"></string>
+<string name="author">"Autor"</string>
+<string name="yet_another_view_tomas_valenta">"YetAnotherView - Tomáš Valenta"</string>
+<string name="contribute">"Beitragen"</string>
+<string name="contribute_summary"></string>
+<string name="google_plus_beta_community"></string>
+<string name="google_plus_beta_community_summary"></string>
+<string name="special_thanks">"Ein großes Dankeschön auch für"</string>
+<string name="tomas_borov">"Tomáš Borov"</string>
+<string name="beta_tester"></string>
+<string name="radek_matouch">"Radek Matouch"</string>
+<string name="code_helper"></string>
+<string name="also_huge_thanks">"Mein großer Dank an Gott, Familie und also Freunden."</string>
 </resources>

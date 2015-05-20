@@ -53,6 +53,8 @@ public class Utils {
     public static String extension = ".wcv";
     public static String dateTimeFormat = "yyyy-MM-dd HH:mm:ss, zzzz";
 
+    public static final String YAV = "http://www.yetanotherview.cz/";
+
     public static final String SUPPORT_LIBRARIES_VERSION = "22.1.1";
     public static final String GLIDE_VERSION = "3.6.0";
     public static final String LIB_VLC_VERSION = "1.3.2";

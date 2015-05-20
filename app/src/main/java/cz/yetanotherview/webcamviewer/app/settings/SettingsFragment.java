@@ -43,8 +43,9 @@ import com.nispok.snackbar.Snackbar;
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.actions.simple.TranslatorsDialog;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
-import cz.yetanotherview.webcamviewer.app.actions.AboutDialog;
+import cz.yetanotherview.webcamviewer.app.actions.simple.AboutDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ExportDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ImportDialog;
 import cz.yetanotherview.webcamviewer.app.actions.simple.LibrariesDialog;
@@ -432,8 +433,8 @@ public class SettingsFragment extends PreferenceFragment {
         pref_translators.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
 
-                //dialogFragment = new AboutDialog();
-                //dialogFragment.show(getFragmentManager(), "AboutDialog");
+                dialogFragment = new TranslatorsDialog();
+                dialogFragment.show(getFragmentManager(), "TranslatorsDialog");
 
                 return true;
             }

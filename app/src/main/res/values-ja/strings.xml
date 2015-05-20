@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="app_name">"ウェブカム ビューアー"</string>
-<string name="about_body"><![CDATA[ <b>作者: <a href="http://www.yetanotherview.cz">Tomas Valenta</a></b><br> <b>貢献:</b> ソースコードは <b><a href="https://github.com/TomasValenta/WebCamViewer">GitHub</a></b><br> あなたの言語に翻訳の支援は <b><a href="http://goo.gl/MUJqYZ">このオンラインツールを使用してください</a></b>.<br> <br> <b>これらのオープンソースツールにとても感謝します:</b><br> <b><a href="https://developer.android.com/tools/support-library/features.html">Support Libraries</a></b><i> から Google, Inc.</i><br> <b><a href="https://github.com/afollestad/material-dialogs">Material Dialogs</a></b><i> から Aidan Follestad.</i><br> <b><a href="https://github.com/bumptech/glide">Glide</a></b><i> から Bump, Inc.</i><br><br> <b>これらの翻訳者にとても感謝します:</b><br> 日本語 - <b><a href="mailto:naofum@gmail.com">Naofumi</a></b><br> ノルウェーの <b><a href="http://0p.no/">Lars Falk-Petersen</a></b><br> ドイツ語 - <b><a href="http://blog.strubbl.de/">Sven Fischer</a></b><br> <br> <b>にも大きな感謝 <a href="http://christianityinview.com/images/trinity.gif">神</a>, 家族や友人。  また <a href="https://plus.google.com/111192437899852242451/">Tomas Borov</a>, <a href="https://plus.google.com/104896455725487013630/">Radek Matouch</a></b> いくつかの助け+便利なヒントについて. ]]></string>
 <string name="action_menu_about">"アプリについて"</string>
 <string name="action_settings">"設定"</string>
 <string name="pref_general">"全般"</string>
@@ -39,7 +38,6 @@
 <string name="auto_refresh_interval_summary">"自動リフレッシュ間隔を秒で入力してください"</string>
 <string name="image_description">"ウェブカム画像"</string>
 <string name="category_array_empty">"まだカテゴリーが作成されていません"</string>
-<string name="category_array_choose">"カテゴリーを選択"</string>
 <string name="all_webcams">"すべてのウェブカム"</string>
 <string name="pref_import_from_server">"サーバーからインポート"</string>
 <string name="imported">"インポートしました"</string>
@@ -223,5 +221,49 @@
 <string name="enter_name">"名前を入力してください"</string>
 <string name="all_webcams_confirmation_part1">"コミュニティデータベースを含めました"</string>
 <string name="all_webcams_confirmation_part2">"ウェブカム"</string>
-<string name="delete_also_categories">"Do you want to delete also all categories?"</string>
+<string name="delete_also_categories"></string>
+<string name="select_categories"></string>
+<string name="pref_translators"></string>
+<string name="pref_translators_summary"></string>
+<string name="pref_libraries"></string>
+<string name="pref_libraries_summary"></string>
+<string name="support_libraries">"Support Libraries"</string>
+<string name="google_inc">"Google, Inc."</string>
+<string name="apache_license_version"></string>
+<string name="material_dialogs">"Material Dialogs"</string>
+<string name="aidan_follestad">"Aidan Follestad"</string>
+<string name="mit_license"></string>
+<string name="glide">"Glide"</string>
+<string name="bump_technologies">"Bump Technologies"</string>
+<string name="bsd_mit_apache"></string>
+<string name="lib_vlc">"libVLC"</string>
+<string name="videolan_organization"></string>
+<string name="gnu_lgpl">"GNU LGPLv2.1+"</string>
+<string name="gson">"Gson"</string>
+<string name="floating_action_button">"Floating Action Button"</string>
+<string name="base_lab">"BASE LAB"</string>
+<string name="snackbar">"Snackbar"</string>
+<string name="nispok">"nispok"</string>
+<string name="mapbox">"Mapbox"</string>
+<string name="jsoup">"jsoup"</string>
+<string name="jonathan_hedley">"Jonathan Hedley"</string>
+<string name="want_to_translate"></string>
+<string name="mat_vallo">"Mat Vallo"</string>
+<string name="tomas_valenta">"Tomáš Valenta"</string>
+<string name="sven_fischer">"Sven Fischer"</string>
+<string name="naofumi">"Naofumi"</string>
+<string name="falk_petersen">"Falk Petersen"</string>
+<string name="action_menu_about_summary"></string>
+<string name="author">"作者"</string>
+<string name="yet_another_view_tomas_valenta">"YetAnotherView - Tomáš Valenta"</string>
+<string name="contribute">"貢献"</string>
+<string name="contribute_summary"></string>
+<string name="google_plus_beta_community"></string>
+<string name="google_plus_beta_community_summary"></string>
+<string name="special_thanks">"にとても感謝します"</string>
+<string name="tomas_borov">"Tomáš Borov"</string>
+<string name="beta_tester"></string>
+<string name="radek_matouch">"Radek Matouch"</string>
+<string name="code_helper"></string>
+<string name="also_huge_thanks">"にも大きな感謝 神, 家族や友人。"</string>
 </resources>

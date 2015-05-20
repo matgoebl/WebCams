@@ -20,10 +20,7 @@ package cz.yetanotherview.webcamviewer.app.actions.simple;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,6 +28,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
+import cz.yetanotherview.webcamviewer.app.listener.SimpleIntentOnClickListener;
 
 public class LibrariesDialog extends DialogFragment {
 
@@ -44,124 +42,60 @@ public class LibrariesDialog extends DialogFragment {
                 .positiveText(android.R.string.ok)
                 .build();
 
-        TextView mLibrariesTitleSupportLibraries = (TextView) dialog.getCustomView().findViewById(R.id.libraries_title_support_libraries);
-        mLibrariesTitleSupportLibraries.setText(getString(R.string.support_libraries) + " " + Utils.SUPPORT_LIBRARIES_VERSION);
+        initLibrary(dialog, R.id.libraries_title_support_libraries,
+                getString(R.string.support_libraries) + " " + Utils.SUPPORT_LIBRARIES_VERSION,
+                R.id.libraries_support_libraries_container,
+                new SimpleIntentOnClickListener(getActivity(),
+                        "http://developer.android.com/tools/support-library/index.html"));
 
-        LinearLayout mLibrariesSupportLibrariesContainer = (LinearLayout) dialog.getCustomView().findViewById(R.id.libraries_support_libraries_container);
-        mLibrariesSupportLibrariesContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://developer.android.com/tools/support-library/index.html"));
-                startActivity(i);
-            }
-        });
+        initLibrary(dialog, R.id.libraries_title_glide,
+                getString(R.string.glide) + " " + Utils.GLIDE_VERSION,
+                R.id.libraries_glide_container,
+                new SimpleIntentOnClickListener(getActivity(), "https://github.com/bumptech/glide"));
 
-        TextView mLibrariesTitleGlide = (TextView) dialog.getCustomView().findViewById(R.id.libraries_title_glide);
-        mLibrariesTitleGlide.setText(getString(R.string.glide) + " " + Utils.GLIDE_VERSION);
+        initLibrary(dialog, R.id.libraries_title_lib_vlc,
+                getString(R.string.lib_vlc) + " " + Utils.LIB_VLC_VERSION,
+                R.id.libraries_lib_vlc_container,
+                new SimpleIntentOnClickListener(getActivity(), "https://wiki.videolan.org/LibVLC/"));
 
-        LinearLayout mLibrariesGlideContainer = (LinearLayout) dialog.getCustomView().findViewById(R.id.libraries_glide_container);
-        mLibrariesGlideContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/bumptech/glide"));
-                startActivity(i);
-            }
-        });
+        initLibrary(dialog, R.id.libraries_title_material_dialogs,
+                getString(R.string.material_dialogs) + " " + Utils.MATERIAL_DIALOGS_VERSION,
+                R.id.libraries_material_dialogs_container,
+                new SimpleIntentOnClickListener(getActivity(), "https://github.com/afollestad/material-dialogs"));
 
-        TextView mLibrariesTitleLibVlc = (TextView) dialog.getCustomView().findViewById(R.id.libraries_title_lib_vlc);
-        mLibrariesTitleLibVlc.setText(getString(R.string.lib_vlc) + " " + Utils.LIB_VLC_VERSION);
+        initLibrary(dialog, R.id.libraries_title_gson,
+                getString(R.string.gson) + " " + Utils.GOOGLE_GSON_VERSION,
+                R.id.libraries_gson_container,
+                new SimpleIntentOnClickListener(getActivity(), "https://github.com/google/gson"));
 
-        LinearLayout mLibrariesLibVlcContainer = (LinearLayout) dialog.getCustomView().findViewById(R.id.libraries_lib_vlc_container);
-        mLibrariesLibVlcContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://wiki.videolan.org/LibVLC/"));
-                startActivity(i);
-            }
-        });
+        initLibrary(dialog, R.id.libraries_title_jsoup,
+                getString(R.string.jsoup) + " " + Utils.JSOUP_VERSION,
+                R.id.libraries_jsoup_container,
+                new SimpleIntentOnClickListener(getActivity(), "https://github.com/jhy/jsoup"));
 
-        TextView mLibrariesTitleMaterialDialogs = (TextView) dialog.getCustomView().findViewById(R.id.libraries_title_material_dialogs);
-        mLibrariesTitleMaterialDialogs.setText(getString(R.string.material_dialogs) + " " + Utils.MATERIAL_DIALOGS_VERSION);
+        initLibrary(dialog, R.id.libraries_title_mapbox,
+                getString(R.string.mapbox) + " " + Utils.MAPBOX_VERSION,
+                R.id.libraries_mapbox_container,
+                new SimpleIntentOnClickListener(getActivity(), "https://github.com/mapbox/mapbox-android-sdk"));
 
-        LinearLayout mLibrariesMaterialDialogsContainer = (LinearLayout) dialog.getCustomView().findViewById(R.id.libraries_material_dialogs_container);
-        mLibrariesMaterialDialogsContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/afollestad/material-dialogs"));
-                startActivity(i);
-            }
-        });
+        initLibrary(dialog, R.id.libraries_title_fab,
+                getString(R.string.floating_action_button) + " " + Utils.FAB_VERSION,
+                R.id.libraries_fab_container,
+                new SimpleIntentOnClickListener(getActivity(), "https://github.com/futuresimple/android-floating-action-button"));
 
-        TextView mLibrariesTitleGson = (TextView) dialog.getCustomView().findViewById(R.id.libraries_title_gson);
-        mLibrariesTitleGson.setText(getString(R.string.gson) + " " + Utils.GOOGLE_GSON_VERSION);
-
-        LinearLayout mLibrariesGsonContainer = (LinearLayout) dialog.getCustomView().findViewById(R.id.libraries_gson_container);
-        mLibrariesGsonContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/google/gson"));
-                startActivity(i);
-            }
-        });
-
-
-        TextView mLibrariesTitleJsoup = (TextView) dialog.getCustomView().findViewById(R.id.libraries_title_jsoup);
-        mLibrariesTitleJsoup.setText(getString(R.string.jsoup) + " " + Utils.JSOUP_VERSION);
-
-        LinearLayout mLibrariesJsoupContainer = (LinearLayout) dialog.getCustomView().findViewById(R.id.libraries_jsoup_container);
-        mLibrariesJsoupContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/jhy/jsoup"));
-                startActivity(i);
-            }
-        });
-
-        TextView mLibrariesTitleMapbox = (TextView) dialog.getCustomView().findViewById(R.id.libraries_title_mapbox);
-        mLibrariesTitleMapbox.setText(getString(R.string.mapbox) + " " + Utils.MAPBOX_VERSION);
-
-        LinearLayout mLibrariesMapboxContainer = (LinearLayout) dialog.getCustomView().findViewById(R.id.libraries_mapbox_container);
-        mLibrariesMapboxContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/mapbox/mapbox-android-sdk"));
-                startActivity(i);
-            }
-        });
-
-        TextView mLibrariesTitleFab = (TextView) dialog.getCustomView().findViewById(R.id.libraries_title_fab);
-        mLibrariesTitleFab.setText(getString(R.string.floating_action_button) + " " + Utils.FAB_VERSION);
-
-        LinearLayout mLibrariesFabContainer = (LinearLayout) dialog.getCustomView().findViewById(R.id.libraries_fab_container);
-        mLibrariesFabContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/futuresimple/android-floating-action-button"));
-                startActivity(i);
-            }
-        });
-
-        TextView mLibrariesTitleSnackbar = (TextView) dialog.getCustomView().findViewById(R.id.libraries_title_snackbar);
-        mLibrariesTitleSnackbar.setText(getString(R.string.snackbar) + " " + Utils.SNACKBAR_VERSION);
-
-        LinearLayout mLibrariesSnackbarContainer = (LinearLayout) dialog.getCustomView().findViewById(R.id.libraries_snackbar_container);
-        mLibrariesSnackbarContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/nispok/snackbar"));
-                startActivity(i);
-            }
-        });
+        initLibrary(dialog, R.id.libraries_title_snackbar,
+                getString(R.string.snackbar) + " " + Utils.SNACKBAR_VERSION,
+                R.id.libraries_snackbar_container,
+                new SimpleIntentOnClickListener(getActivity(), "https://github.com/nispok/snackbar"));
 
         return dialog;
+    }
+
+    private void initLibrary(MaterialDialog dialog, int libraries_title, String text, int libraries_container, SimpleIntentOnClickListener l) {
+        TextView mLibrariesTitle = (TextView) dialog.getCustomView().findViewById(libraries_title);
+        mLibrariesTitle.setText(text);
+
+        LinearLayout mLibrariesContainer = (LinearLayout) dialog.getCustomView().findViewById(libraries_container);
+        mLibrariesContainer.setOnClickListener(l);
     }
 }

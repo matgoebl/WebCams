@@ -3,8 +3,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_marginLeft="@dimen/larger_margin"
-        android:layout_marginStart="@dimen/larger_margin"
+        android:layout_marginLeft="70dp"
+        android:layout_marginStart="70dp"
         android:background="@android:color/darker_gray" />
 
 </merge>

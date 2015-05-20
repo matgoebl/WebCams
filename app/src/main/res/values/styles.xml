@@ -167,7 +167,7 @@
         <item name="android:paddingBottom">@dimen/twelve_padding</item>
     </style>
 
-    <style name="libraries_inner_container">
+    <style name="inner_container">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
@@ -194,6 +194,57 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/dark_grey</item>
+    </style>
+
+    <style name="translators_container">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">.50</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/row_selector</item>
+        <item name="android:paddingTop">@dimen/twelve_padding</item>
+        <item name="android:paddingBottom">@dimen/twelve_padding</item>
+    </style>
+
+    <style name="translators_flag">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:paddingRight">@dimen/small_padding</item>
+        <item name="android:paddingEnd">@dimen/small_padding</item>
+        <item name="android:paddingTop">@dimen/middle_padding</item>
+        <item name="android:paddingBottom">@dimen/middle_padding</item>
+    </style>
+
+    <style name="translators_name">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="translators_language">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
+
+    <style name="about_image">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_marginRight">@dimen/middle_margin</item>
+    </style>
+
+    <style name="about_image2">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginRight">@dimen/tiny_margin</item>
+        <item name="android:layout_marginEnd">@dimen/tiny_margin</item>
+        <item name="android:layout_marginTop">@dimen/tiny_margin</item>
+        <item name="android:layout_marginBottom">@dimen/tiny_margin</item>
     </style>
 
 </resources>
