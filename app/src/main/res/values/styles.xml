@@ -157,4 +157,43 @@
         <item name="android:layout_marginBottom">@dimen/seven_margin</item>
     </style>
 
+    <style name="libraries_container">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/row_selector</item>
+        <item name="android:paddingTop">@dimen/twelve_padding</item>
+        <item name="android:paddingBottom">@dimen/twelve_padding</item>
+    </style>
+
+    <style name="libraries_inner_container">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="libraries_image">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:src">@drawable/settings_libraries</item>
+        <item name="android:paddingRight">@dimen/more_than_big_padding</item>
+        <item name="android:paddingEnd">@dimen/more_than_big_padding</item>
+        <item name="android:paddingTop">@dimen/more_than_big_padding</item>
+        <item name="android:paddingBottom">@dimen/more_than_big_padding</item>
+    </style>
+
+    <style name="libraries_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="libraries_author_licence_and_version">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
+
 </resources>

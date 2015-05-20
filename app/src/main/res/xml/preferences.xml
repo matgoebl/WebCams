@@ -121,9 +121,15 @@
 
         <Preference
             android:key="pref_translators"
-            android:title="Translators"
+            android:title="@string/pref_translators"
             android:icon="@drawable/settings_translators"
-            android:summary="People who are involved in the translations"/>
+            android:summary="@string/pref_translators_summary"/>
+
+        <Preference
+            android:key="pref_libraries"
+            android:title="@string/pref_libraries"
+            android:icon="@drawable/settings_libraries"
+            android:summary="@string/pref_libraries_summary"/>
 
         <Preference
             android:key="pref_about"

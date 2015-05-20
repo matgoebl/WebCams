@@ -43,7 +43,7 @@ import java.net.URL;
 import java.util.HashMap;
 
 import cz.yetanotherview.webcamviewer.app.R;
-import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.actions.simple.UnavailableDialog;
 import cz.yetanotherview.webcamviewer.app.helper.IsValidEmail;
 import cz.yetanotherview.webcamviewer.app.helper.OnTextChange;

@@ -16,7 +16,7 @@
 * *****************************************************************************
 */
 
-package cz.yetanotherview.webcamviewer.app;
+package cz.yetanotherview.webcamviewer.app.help;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -25,6 +25,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+
+import cz.yetanotherview.webcamviewer.app.R;
 
 public class HelpActivity extends AppCompatActivity {
 

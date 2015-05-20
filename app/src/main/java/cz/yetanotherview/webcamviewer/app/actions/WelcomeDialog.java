@@ -27,7 +27,7 @@ import android.os.Bundle;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import cz.yetanotherview.webcamviewer.app.HelpActivity;
+import cz.yetanotherview.webcamviewer.app.help.HelpActivity;
 import cz.yetanotherview.webcamviewer.app.R;
 
 public class WelcomeDialog extends DialogFragment {

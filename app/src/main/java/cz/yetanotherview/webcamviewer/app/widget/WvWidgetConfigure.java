@@ -33,7 +33,7 @@ import android.widget.LinearLayout;
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
-import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.actions.ColorChooserDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.WidgetConfigureAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;

@@ -16,7 +16,7 @@
 * *****************************************************************************
 */
 
-package cz.yetanotherview.webcamviewer.app;
+package cz.yetanotherview.webcamviewer.app.helper;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
+import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
 
 public class Utils {
@@ -51,6 +52,16 @@ public class Utils {
     public static String folderWCVPathTmp = folderWCVPath + "Tmp/";
     public static String extension = ".wcv";
     public static String dateTimeFormat = "yyyy-MM-dd HH:mm:ss, zzzz";
+
+    public static final String SUPPORT_LIBRARIES_VERSION = "22.1.1";
+    public static final String GLIDE_VERSION = "3.6.0";
+    public static final String LIB_VLC_VERSION = "1.3.2";
+    public static final String MATERIAL_DIALOGS_VERSION = "0.7.4.1";
+    public static final String GOOGLE_GSON_VERSION = "2.3.1";
+    public static final String JSOUP_VERSION = "1.8.2";
+    public static final String MAPBOX_VERSION = "0.7.3";
+    public static final String FAB_VERSION = "1.9.0";
+    public static final String SNACKBAR_VERSION = "2.10.8";
 
     private static final String JSON_FILE_CORE = "http://api.yetanotherview.cz/api/v2/";
     public static final String JSON_FILE_URL_ALL = JSON_FILE_CORE + "get_all_webcams.php";

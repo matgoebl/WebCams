@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".settings.SettingsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/action_settings"
             android:theme="@style/NoTransparentStatusBar"
@@ -49,7 +49,7 @@
             android:parentActivityName=".MainActivity">
         </activity>
         <activity
-            android:name=".HelpActivity"
+            android:name=".help.HelpActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/action_menu_help"
             android:theme="@style/NoTransparentStatusBar"

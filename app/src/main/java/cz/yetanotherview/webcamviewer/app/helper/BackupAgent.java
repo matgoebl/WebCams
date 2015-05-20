@@ -29,7 +29,7 @@ import java.io.File;
 import java.io.IOException;
 
 import cz.yetanotherview.webcamviewer.app.MainActivity;
-import cz.yetanotherview.webcamviewer.app.SettingsFragment;
+import cz.yetanotherview.webcamviewer.app.settings.SettingsFragment;
 import cz.yetanotherview.webcamviewer.app.actions.AddCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.actions.DeleteCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.actions.EditCategoryDialog;

@@ -37,7 +37,7 @@ import com.bumptech.glide.request.target.*;
 import java.util.*;
 
 import cz.yetanotherview.webcamviewer.app.R;
-import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.helper.HttpHeader;
 
 public class WvWidgetProvider extends AppWidgetProvider {

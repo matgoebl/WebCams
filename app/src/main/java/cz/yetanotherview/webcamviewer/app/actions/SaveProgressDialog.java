@@ -34,7 +34,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import cz.yetanotherview.webcamviewer.app.R;
-import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.helper.Utils;
 
 public class SaveProgressDialog extends DialogFragment {
 

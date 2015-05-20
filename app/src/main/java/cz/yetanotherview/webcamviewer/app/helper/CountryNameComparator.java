@@ -20,7 +20,6 @@ package cz.yetanotherview.webcamviewer.app.helper;
 
 import java.util.Comparator;
 
-import cz.yetanotherview.webcamviewer.app.Utils;
 import cz.yetanotherview.webcamviewer.app.model.Country;
 
 public class CountryNameComparator implements Comparator<Country> {

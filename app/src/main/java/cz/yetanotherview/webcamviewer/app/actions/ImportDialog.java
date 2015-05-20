@@ -49,7 +49,7 @@ import java.util.Collections;
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
-import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.actions.simple.ReportDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.ListButtonAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
@@ -64,7 +64,6 @@ public class ImportDialog extends DialogFragment {
 
     private MaterialDialog importDialog;
     private File selectedFile;
-    private InputStream inputStream;
     private ListButtonAdapter listButtonAdapter;
     private List<WebCam> importWebCams;
 
@@ -146,7 +145,7 @@ public class ImportDialog extends DialogFragment {
             if (requestCode == OPEN_REQUEST_CODE) {
                 if (resultData != null) {
                     try {
-                        inputStream = mActivity.getContentResolver().openInputStream(resultData.getData());
+                        InputStream inputStream = mActivity.getContentResolver().openInputStream(resultData.getData());
                         try {
                             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
                                     inputStream));

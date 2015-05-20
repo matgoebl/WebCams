@@ -16,13 +16,16 @@
 * *****************************************************************************
 */
 
-package cz.yetanotherview.webcamviewer.app;
+package cz.yetanotherview.webcamviewer.app.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import cz.yetanotherview.webcamviewer.app.MainActivity;
+import cz.yetanotherview.webcamviewer.app.R;
 
 public class SettingsActivity extends AppCompatActivity {
 

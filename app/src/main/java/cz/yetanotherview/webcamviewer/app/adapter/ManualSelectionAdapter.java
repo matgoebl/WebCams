@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Locale;
 
 import cz.yetanotherview.webcamviewer.app.R;
-import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.helper.HttpHeader;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 

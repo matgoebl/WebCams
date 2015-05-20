@@ -74,7 +74,10 @@ import cz.yetanotherview.webcamviewer.app.drawer.NavigationDrawerCallbacks;
 import cz.yetanotherview.webcamviewer.app.drawer.NavigationDrawerFragment;
 import cz.yetanotherview.webcamviewer.app.fullscreen.FullScreenActivity;
 import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
+import cz.yetanotherview.webcamviewer.app.help.HelpActivity;
 import cz.yetanotherview.webcamviewer.app.helper.ClearImageCache;
+import cz.yetanotherview.webcamviewer.app.helper.Utils;
+import cz.yetanotherview.webcamviewer.app.settings.SettingsActivity;
 import cz.yetanotherview.webcamviewer.app.stream.LiveStreamActivity;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.ImmersiveMode;
@@ -838,24 +841,16 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                             public void onShow(Snackbar snackbar) {
                                 floatingActionsMenu.animate().translationYBy(-snackbar.getHeight());
                             }
-
                             @Override
-                            public void onShowByReplace(Snackbar snackbar) {
-                            }
-
+                            public void onShowByReplace(Snackbar snackbar) {}
                             @Override
-                            public void onShown(Snackbar snackbar) {
-                            }
-
+                            public void onShown(Snackbar snackbar) {}
                             @Override
                             public void onDismiss(Snackbar snackbar) {
                                 floatingActionsMenu.animate().translationYBy(snackbar.getHeight());
                             }
-
                             @Override
-                            public void onDismissByReplace(Snackbar snackbar) {
-                            }
-
+                            public void onDismissByReplace(Snackbar snackbar) {}
                             @Override
                             public void onDismissed(Snackbar snackbar) {}
                         }), this);

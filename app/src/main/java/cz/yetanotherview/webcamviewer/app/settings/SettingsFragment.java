@@ -16,7 +16,7 @@
 * *****************************************************************************
 */
 
-package cz.yetanotherview.webcamviewer.app;
+package cz.yetanotherview.webcamviewer.app.settings;
 
 import android.app.DialogFragment;
 import android.app.backup.BackupManager;
@@ -42,9 +42,12 @@ import com.nispok.snackbar.Snackbar;
 
 import java.util.List;
 
+import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.actions.AboutDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ExportDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ImportDialog;
+import cz.yetanotherview.webcamviewer.app.actions.simple.LibrariesDialog;
 import cz.yetanotherview.webcamviewer.app.actions.simple.NothingSelectedDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.ManualSelectionAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
@@ -101,6 +104,8 @@ public class SettingsFragment extends PreferenceFragment {
         setZoom();
         resetLastCheck();
         cleanCacheAndTmpFolder();
+        showTranslators();
+        showLibraries();
         showAbout();
 
         sharedPref = getPreferenceManager().getSharedPreferences();
@@ -416,6 +421,32 @@ public class SettingsFragment extends PreferenceFragment {
                             }
                         })
                         .show();
+
+                return true;
+            }
+        });
+    }
+
+    private void showTranslators() {
+        Preference pref_translators = findPreference("pref_translators");
+        pref_translators.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+
+                //dialogFragment = new AboutDialog();
+                //dialogFragment.show(getFragmentManager(), "AboutDialog");
+
+                return true;
+            }
+        });
+    }
+
+    private void showLibraries() {
+        Preference pref_libraries = findPreference("pref_libraries");
+        pref_libraries.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+
+                dialogFragment = new LibrariesDialog();
+                dialogFragment.show(getFragmentManager(), "LibrariesDialog");
 
                 return true;
             }

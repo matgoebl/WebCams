@@ -1,0 +1,337 @@
+<!--
+~ *******************************************************************************
+~ Copyright (c) 2013-2015 Tomas Valenta
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~ http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+~ *****************************************************************************
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/huge_padding"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/libraries_support_libraries_container"
+        style="@style/libraries_container">
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/libraries_image" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/libraries_title_support_libraries"
+                style="@style/libraries_title"/>
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/google_inc" />
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/apache_license_version" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/first_divider"
+        layout="@layout/view_divider"/>
+
+    <LinearLayout
+        android:id="@+id/libraries_glide_container"
+        style="@style/libraries_container">
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/libraries_image" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/libraries_title_glide"
+                style="@style/libraries_title"/>
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/bump_technologies" />
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/bsd_mit_apache" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/first_divider"
+        layout="@layout/view_divider"/>
+
+    <LinearLayout
+        android:id="@+id/libraries_lib_vlc_container"
+        style="@style/libraries_container">
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/libraries_image" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/libraries_title_lib_vlc"
+                style="@style/libraries_title"/>
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/videolan_organization" />
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/gnu_lgpl" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/first_divider"
+        layout="@layout/view_divider"/>
+
+    <LinearLayout
+        android:id="@+id/libraries_material_dialogs_container"
+        style="@style/libraries_container">
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/libraries_image" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/libraries_title_material_dialogs"
+                style="@style/libraries_title"/>
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/aidan_follestad" />
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/mit_license" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/first_divider"
+        layout="@layout/view_divider"/>
+
+    <LinearLayout
+        android:id="@+id/libraries_gson_container"
+        style="@style/libraries_container">
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/libraries_image" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/libraries_title_gson"
+                style="@style/libraries_title"/>
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/google_inc" />
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/apache_license_version" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/first_divider"
+        layout="@layout/view_divider"/>
+
+
+    <LinearLayout
+        android:id="@+id/libraries_jsoup_container"
+        style="@style/libraries_container">
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/libraries_image" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/libraries_title_jsoup"
+                style="@style/libraries_title"/>
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/jonathan_hedley" />
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/mit_license" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/first_divider"
+        layout="@layout/view_divider"/>
+
+    <LinearLayout
+        android:id="@+id/libraries_mapbox_container"
+        style="@style/libraries_container">
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/libraries_image" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/libraries_title_mapbox"
+                style="@style/libraries_title"/>
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/mapbox" />
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/apache_license_version" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/first_divider"
+        layout="@layout/view_divider"/>
+
+    <LinearLayout
+        android:id="@+id/libraries_fab_container"
+        style="@style/libraries_container">
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/libraries_image" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/libraries_title_fab"
+                style="@style/libraries_title"/>
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/base_lab" />
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/apache_license_version" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/first_divider"
+        layout="@layout/view_divider"/>
+
+    <LinearLayout
+        android:id="@+id/libraries_snackbar_container"
+        style="@style/libraries_container">
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/libraries_image" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/libraries_inner_container"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/libraries_title_snackbar"
+                style="@style/libraries_title"/>
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/nispok" />
+
+            <TextView
+                style="@style/libraries_author_licence_and_version"
+                android:text="@string/mit_license" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

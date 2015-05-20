@@ -34,7 +34,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import cz.yetanotherview.webcamviewer.app.R;
-import cz.yetanotherview.webcamviewer.app.Utils;
+import cz.yetanotherview.webcamviewer.app.helper.Utils;
 
 public class ListButtonAdapter extends ArrayAdapter<File> {
 
