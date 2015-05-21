@@ -22,18 +22,24 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.adapter.HelpAdapter;
+import cz.yetanotherview.webcamviewer.app.model.HelpItem;
 
 public class HelpActivity extends AppCompatActivity {
 
-    private Intent browserIntent;
-
-    private static final String mainVideo = "Xcp0j2vwbxI";
-    private static final String manuallyAdding = "liYtvXE0JTI";
+    private ActionBar actionBar;
+    private HelpAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,28 +48,41 @@ public class HelpActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_help);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        actionBar = getSupportActionBar();
+        initHomeButton();
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.helpRecyclerView);
+        List<HelpItem> helpData = new ArrayList<>();
+        helpData.add(new HelpItem(getString(R.string.presentation), R.drawable.help_preview_0, "Xcp0j2vwbxI"));
+        helpData.add(new HelpItem(getString(R.string.manually_adding),R.drawable.help_preview_1, "liYtvXE0JTI"));
+
+        mAdapter = new HelpAdapter(helpData);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mAdapter.setClickListener(new HelpAdapter.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                HelpItem helpItem = (HelpItem) mAdapter.getItem(position);
+                startIntent(helpItem.getVideoUrl());
+            }
+        });
     }
 
-    public void openMainVideo(View view) {
-        try {
-            browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" + mainVideo));
-            browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(browserIntent);
-        } catch(ActivityNotFoundException e) {
-            browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://youtu.be/" + mainVideo));
-            startActivity(browserIntent);
-        }
+    private void initHomeButton() {
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    public void openManuallyAdding(View view) {
+    private void startIntent(String videoUrl) {
+        Intent browserIntent;
+        String action = Intent.ACTION_VIEW;
         try {
-            browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" + manuallyAdding));
+            browserIntent = new Intent(action, Uri.parse("vnd.youtube://" + videoUrl));
             browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(browserIntent);
-        } catch(ActivityNotFoundException e) {
-            browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://youtu.be/" + manuallyAdding));
+        } catch (ActivityNotFoundException e) {
+            browserIntent = new Intent(action, Uri.parse("http://youtu.be/" + videoUrl));
             startActivity(browserIntent);
         }
     }

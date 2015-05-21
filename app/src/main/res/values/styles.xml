@@ -247,4 +247,36 @@
         <item name="android:layout_marginBottom">@dimen/tiny_margin</item>
     </style>
 
+    <style name="help_card_view">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">@dimen/middle_margin</item>
+    </style>
+
+    <style name="help_card_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">@dimen/middle_padding</item>
+    </style>
+
+    <style name="help_image_view">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="help_text_view">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/very_dark_grey</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_marginTop">@dimen/tiny_margin</item>
+        <item name="android:layout_marginLeft">@dimen/five_margin</item>
+        <item name="android:layout_marginStart">@dimen/five_margin</item>
+    </style>
+
 </resources>

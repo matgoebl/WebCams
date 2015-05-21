@@ -18,21 +18,26 @@
 
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <include
-        android:id="@+id/toolbar_help"
-        layout="@layout/toolbar"/>
+    <android.support.v7.widget.CardView
+        style="@style/help_card_view"
+        card_view:cardCornerRadius="4dp">
 
-        <cz.yetanotherview.webcamviewer.app.helper.AutofitRecyclerView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/helpRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar_help"
-            android:columnWidth="300dp"
-            android:clipToPadding="false"
-            android:scrollbars="vertical"/>
+        <LinearLayout
+            style="@style/help_card_layout">
+
+            <ImageView
+                android:id="@+id/help_image"
+                style="@style/help_image_view" />
+
+            <TextView
+                android:id="@+id/help_title"
+                style="@style/help_text_view" />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 </RelativeLayout>

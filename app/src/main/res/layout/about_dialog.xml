@@ -150,7 +150,8 @@
 
         <LinearLayout
             android:id="@+id/about_tomas_borov"
-            style="@style/translators_container">
+            style="@style/translators_container"
+            android:gravity="center_horizontal">
 
             <LinearLayout
                 style="@style/inner_container"
@@ -178,7 +179,8 @@
 
         <LinearLayout
             android:id="@+id/about_radek_matouch"
-            style="@style/translators_container">
+            style="@style/translators_container"
+            android:gravity="center_horizontal">
 
             <LinearLayout
                 style="@style/inner_container"
@@ -214,7 +216,8 @@
         android:paddingLeft="@dimen/big_padding"
         android:paddingStart="@dimen/big_padding"
         android:paddingRight="@dimen/big_padding"
-        android:paddingEnd="@dimen/big_padding">
+        android:paddingEnd="@dimen/big_padding"
+        android:gravity="center_horizontal">
 
             <TextView
                 style="@style/libraries_title"
