@@ -27,17 +27,20 @@
         style="@style/help_card_view"
         card_view:cardCornerRadius="4dp">
 
-        <LinearLayout
+        <RelativeLayout
             style="@style/help_card_layout">
 
             <ImageView
                 android:id="@+id/help_image"
                 style="@style/help_image_view" />
 
+            <include
+                layout="@layout/play_overlay"/>
+
             <TextView
                 android:id="@+id/help_title"
                 style="@style/help_text_view" />
 
-        </LinearLayout>
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

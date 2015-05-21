@@ -59,14 +59,17 @@ public class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ImageView imgViewIcon;
+        public ImageView playOverlay;
         public TextView txtViewTitle;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             imgViewIcon = (ImageView) itemLayoutView.findViewById(R.id.help_image);
+            playOverlay = (ImageView) itemLayoutView.findViewById(R.id.playOverlay);
             txtViewTitle = (TextView) itemLayoutView.findViewById(R.id.help_title);
 
             imgViewIcon.setOnClickListener(this);
+            playOverlay.setVisibility(View.VISIBLE);
         }
 
         @Override
