@@ -82,8 +82,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
 
         db = new DatabaseHelper(getActivity());
         webCam = db.getWebCam(id);
-        List<Integer> webCam_category_ids = db.getWebCamCategoriesIds(webCam.getId());
-        proceedAssigned(webCam_category_ids);
+        proceedAssigned(getIdsFromDb());
 
         pos = webCam.getPosition();
         status = webCam.getStatus();
@@ -162,7 +161,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
         });
 
         webCamCategoryButton = (TextView) dialog.getCustomView().findViewById(R.id.webcam_category_button);
-        if (webCam_category_ids.size() == 0) {
+        if (getIdsFromDb().size() == 0) {
             webCamCategoryButton.setText(R.string.select_categories);
         }
         else {
@@ -205,6 +204,12 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
         return dialog;
     }
 
+    private List<Integer> getIdsFromDb() {
+        List<Integer> webCam_category_ids = db.getWebCamCategoriesIds(webCam.getId());
+        db.closeDB();
+        return webCam_category_ids;
+    }
+
     private void proceedAssigned(List<Integer> new_webCam_category_ids) {
         List<Category> allCategories = db.getAllCategories();
         db.closeDB();
@@ -237,6 +242,10 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
             mLongitude = 0.0;
         }
         else mLongitude = Double.parseDouble(longitudeStr);
+
+        if (mLatitude + mLongitude == 0) {
+            mEmpty = true;
+        }
     }
 
     @Override
@@ -265,13 +274,23 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
     @Override
     public void onCategorySave(List<Integer> new_category_ids) {
         proceedAssigned(new_category_ids);
+        setText();
+        positiveAction.setEnabled(true);
+    }
+
+    @Override
+    public void onUpdate(List<Integer> new_category_ids) {
+        proceedAssigned(new_category_ids);
+        setText();
+    }
+
+    private void setText() {
         if (category_ids.size() == 0) {
             webCamCategoryButton.setText(R.string.select_categories);
         }
         else {
             webCamCategoryButton.setText(selectedCategoriesNames);
         }
-        positiveAction.setEnabled(true);
     }
 
     @Override

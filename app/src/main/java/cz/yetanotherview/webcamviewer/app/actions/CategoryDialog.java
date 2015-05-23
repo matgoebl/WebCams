@@ -38,12 +38,14 @@ public class CategoryDialog extends DialogFragment {
 
     private Activity mActivity;
     private Callback mCallback;
+    private DatabaseHelper db;
     private CategorySelectionAdapter categorySelectionAdapter;
     private List<Integer> category_ids;
     private List<Category> allCategories;
 
     public interface Callback {
         void onCategorySave(List<Integer> category_ids);
+        void onUpdate(List<Integer> category_ids);
     }
 
     public CategoryDialog() {
@@ -54,7 +56,7 @@ public class CategoryDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         category_ids = getArguments().getIntegerArrayList("category_ids");
-        DatabaseHelper db = new DatabaseHelper(mActivity);
+        db = new DatabaseHelper(mActivity);
         allCategories = db.getAllCategories();
         db.closeDB();
         if (category_ids != null) {
@@ -74,12 +76,7 @@ public class CategoryDialog extends DialogFragment {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        category_ids = new ArrayList<>();
-                        for (Category category : allCategories) {
-                            if (category.isSelected()) {
-                                category_ids.add(category.getId());
-                            }
-                        }
+                        assignIds();
                         mCallback.onCategorySave(category_ids);
                         dialog.dismiss();
                     }
@@ -103,6 +100,15 @@ public class CategoryDialog extends DialogFragment {
         return dialog;
     }
 
+    private void assignIds() {
+        category_ids = new ArrayList<>();
+        for (Category category : allCategories) {
+            if (category.isSelected()) {
+                category_ids.add(category.getId());
+            }
+        }
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -119,10 +125,15 @@ public class CategoryDialog extends DialogFragment {
     }
 
     public void editCategoryInAdapter(int position, Category category) {
+        assignIds();
+        mCallback.onUpdate(category_ids);
         categorySelectionAdapter.modifyItem(position, category);
     }
 
     public void deleteCategoryInAdapter(int position) {
+        allCategories = db.getAllCategories();
+        assignIds();
+        mCallback.onUpdate(category_ids);
         categorySelectionAdapter.removeItem(position);
     }
 }

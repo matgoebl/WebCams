@@ -428,6 +428,16 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
     @Override
     public void onCategorySave(List<Integer> new_category_ids) {
         proceedAssigned(new_category_ids);
+        setText();
+    }
+
+    @Override
+    public void onUpdate(List<Integer> new_category_ids) {
+        proceedAssigned(new_category_ids);
+        setText();
+    }
+
+    private void setText() {
         if (category_ids.size() == 0) {
             webCamCategoryButton.setText(R.string.select_categories);
         }
