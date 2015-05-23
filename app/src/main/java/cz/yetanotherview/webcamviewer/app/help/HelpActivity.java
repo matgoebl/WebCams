@@ -18,9 +18,6 @@
 
 package cz.yetanotherview.webcamviewer.app.help;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +31,8 @@ import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.adapter.HelpAdapter;
+import cz.yetanotherview.webcamviewer.app.helper.Utils;
+import cz.yetanotherview.webcamviewer.app.helper.YouTubeIntent;
 import cz.yetanotherview.webcamviewer.app.model.HelpItem;
 
 public class HelpActivity extends AppCompatActivity {
@@ -53,8 +52,8 @@ public class HelpActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.helpRecyclerView);
         List<HelpItem> helpData = new ArrayList<>();
-        helpData.add(new HelpItem(getString(R.string.presentation), R.drawable.help_preview_0, "Xcp0j2vwbxI"));
-        helpData.add(new HelpItem(getString(R.string.manually_adding),R.drawable.help_preview_1, "liYtvXE0JTI"));
+        helpData.add(new HelpItem(getString(R.string.presentation), R.drawable.help_preview_0, Utils.HELP_PRESENTATION_));
+        helpData.add(new HelpItem(getString(R.string.manually_adding),R.drawable.help_preview_1, Utils.HELP_MANUALLY_ADDING));
 
         mAdapter = new HelpAdapter(helpData);
         recyclerView.setHasFixedSize(true);
@@ -65,25 +64,12 @@ public class HelpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 HelpItem helpItem = (HelpItem) mAdapter.getItem(position);
-                startIntent(helpItem.getVideoUrl());
+                new YouTubeIntent(HelpActivity.this, helpItem.getVideoUrl()).open();
             }
         });
     }
 
     private void initHomeButton() {
         actionBar.setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void startIntent(String videoUrl) {
-        Intent browserIntent;
-        String action = Intent.ACTION_VIEW;
-        try {
-            browserIntent = new Intent(action, Uri.parse("vnd.youtube://" + videoUrl));
-            browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(browserIntent);
-        } catch (ActivityNotFoundException e) {
-            browserIntent = new Intent(action, Uri.parse("http://youtu.be/" + videoUrl));
-            startActivity(browserIntent);
-        }
     }
 }

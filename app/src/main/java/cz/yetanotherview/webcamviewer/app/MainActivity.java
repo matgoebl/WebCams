@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
     private DatabaseHelper db;
     private WebCam webCam, webCamToDelete;
-    private List<Long> webCamToDelete_category_ids;
+    private List<Integer> webCamToDelete_category_ids;
     private List<WebCam> allWebCams;
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
@@ -102,8 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private WebCamAdapter mAdapter;
     private float zoom;
     private int numberOfColumns, mOrientation, selectedCategory, autoRefreshInterval, mPosition,
-            webCamToDeletePosition;
-    private long selectedCategoryId;
+            webCamToDeletePosition, selectedCategoryId;
     private boolean firstRun, fullScreen, autoRefresh, autoRefreshFullScreenOnly, screenAlwaysOn,
             imagesOnOff, simpleList;
     private String mStringSignature;
@@ -354,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     }
 
     @Override
-    public void onNavigationDrawerItemSelected(int position, long categoryId) {
+    public void onNavigationDrawerItemSelected(int position, int categoryId) {
         selectedCategory = position;
         selectedCategoryId = categoryId;
         if (mAdapter != null) {
@@ -750,7 +749,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     }
 
     @Override
-    public void webCamAdded(WebCam wc, List<Long> category_ids, boolean share) {
+    public void webCamAdded(WebCam wc, List<Integer> category_ids, boolean share) {
         synchronized (sDataLock) {
             if (category_ids != null) {
                 wc.setId(db.createWebCam(wc, category_ids));
@@ -776,7 +775,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     }
 
     @Override
-    public void webCamEdited(int position, WebCam wc, List<Long> category_ids) {
+    public void webCamEdited(int position, WebCam wc, List<Integer> category_ids) {
         synchronized (sDataLock) {
             if (category_ids != null) {
                 db.updateWebCam(wc, category_ids);

@@ -121,7 +121,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         return mData.get(position);
     }
 
-    private long getCategoryIdFromPosition(int position) {
+    private int getCategoryIdFromPosition(int position) {
         return mData.get(position).getId();
     }
 
@@ -172,7 +172,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     }
 
     public interface ClickListener {
-        void onClick(View v, int position, long categoryId);
+        void onClick(View v, int position, int categoryId);
     }
 
     public void setClickListener(ClickListener clickListener) {

@@ -15,7 +15,7 @@
 <string name="webcam_url">"Webová adresa"</string>
 <string name="webcam_category">"Kategorie"</string>
 <string name="hint_webcam_name">"Moje WebKamera"</string>
-<string name="hint_webcam_url">"http://www.domena.cz/webkamera/kamera.jpg"</string>
+<string name="hint_webcam_url">"http://domena.cz/webkamera.jpg"</string>
 <string name="how_to">"Jak na to"</string>
 <string name="dialog_positive_text">"Uložit"</string>
 <string name="dialog_positive_toast_message">"Uloženo!"</string>
@@ -193,7 +193,7 @@
 <string name="select_webcam">"Vyberte WebKameru"</string>
 <string name="live_streams">"Živé přenosy"</string>
 <string name="webcam_thumb_url">"Webová adresa náhledu"</string>
-<string name="hint_webcam_thumb_url">"http://www.domena.cz/webkamera/nahled.jpg"</string>
+<string name="hint_webcam_thumb_url">"http://domena.cz/webkamera/nahled.jpg"</string>
 <string name="image">"Obrázek"</string>
 <string name="stream">"Živý přenos"</string>
 <string name="buffering">"Načítání do vyrovnávací paměti..."</string>
@@ -266,4 +266,12 @@
 <string name="radek_matouch">"Radek Matouch"</string>
 <string name="code_helper">"Pomoc v kódu"</string>
 <string name="also_huge_thanks">"Mé velké poděkování patří Bohu, rodině a přátelům."</string>
+<string name="hint_webcam_stream">"rtmp://domena.cz/stream/webkamera"</string>
+<string name="hint_webcam_analyze">"http://domena.cz/stranka-s-webkamerou.html"</string>
+<string name="dont_analyze">"Neanalyzovat, mám přímou URL!"</string>
+<string name="enter_page_for_analyzing">"Zadejte webovou adresu k analýze"</string>
+<string name="analyze">"Analyzovat"</string>
+<string name="next">"Další"</string>
+<string name="enter_direct_url">"Zadejte přímou URL"</string>
+<string name="analyzing">"Analyzuji"</string>
 </resources>

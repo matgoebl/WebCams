@@ -20,7 +20,7 @@ package cz.yetanotherview.webcamviewer.app.model;
 
 public class Category {
 
-    private long id;
+    private int id;
     private String category_icon;
     private String category_name;
     private int count;
@@ -36,7 +36,7 @@ public class Category {
     }
 
     // setter
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -58,7 +58,7 @@ public class Category {
 
 
     // getter
-    public long getId() {
+    public int getId() {
         return this.id;
     }
 

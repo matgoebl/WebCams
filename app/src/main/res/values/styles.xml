@@ -144,6 +144,7 @@
     <style name="DialogContent">
         <item name="android:textSize">@dimen/md_content_textsize</item>
         <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:textColorHint">@color/hint_gray</item>
     </style>
 
     <style name="cursorColor" parent="Widget.AppCompat.Light.AutoCompleteTextView">

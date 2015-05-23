@@ -234,7 +234,7 @@ public class ImportDialog extends DialogFragment {
                 updatedWebCams = 0;
 
                 synchronized (sDataLock) {
-                    long newCategory = db.createCategory(new Category("@drawable/icon_imported",
+                    int newCategory = db.createCategory(new Category("@drawable/icon_imported",
                             mActivity.getString(R.string.imported) + " " + Utils.getDateString()));
                     for (WebCam webCam : importWebCams) {
                         if (allWebCams.size() != 0) {

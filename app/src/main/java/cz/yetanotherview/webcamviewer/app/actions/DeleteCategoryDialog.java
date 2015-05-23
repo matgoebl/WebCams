@@ -53,7 +53,7 @@ public class DeleteCategoryDialog extends DialogFragment {
 
         Bundle bundle = this.getArguments();
         position = bundle.getInt("position", 0);
-        long categoryId = bundle.getLong("categoryId", 0);
+        int categoryId = bundle.getInt("categoryId", 0);
 
         db = new DatabaseHelper(mActivity);
         category = db.getCategory(categoryId);
@@ -85,9 +85,9 @@ public class DeleteCategoryDialog extends DialogFragment {
         if (mNavigationDrawerFragment != null) {
             mNavigationDrawerFragment.deleteData(position);
         }
-        EditDialog editDialog = (EditDialog) getFragmentManager().findFragmentByTag("EditDialog");
-        if (editDialog != null) {
-            editDialog.deleteCategoryInAdapter(position);
+        CategoryDialog categoryDialog = (CategoryDialog) getFragmentManager().findFragmentByTag("CategoryDialog");
+        if (categoryDialog != null) {
+            categoryDialog.deleteCategoryInAdapter(position);
             if (mNavigationDrawerFragment != null) {
                 mNavigationDrawerFragment.reloadData();
             }

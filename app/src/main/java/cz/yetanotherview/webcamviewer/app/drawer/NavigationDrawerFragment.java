@@ -62,8 +62,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     private View mFragmentContainerView;
 
     private int mCurrentSelectedPosition = 0;
-    private int mClickedPosition;
-    private long mClickedCategoryId;
+    private int mClickedPosition, mClickedCategoryId;
     private String mCurrentSelectedName;
     private DatabaseHelper db;
     private String allWebCamsString;
@@ -100,7 +99,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
         mDrawerAdapter.setClickListener(new NavigationDrawerAdapter.ClickListener() {
             @Override
-            public void onClick(View v, int position, long categoryId) {
+            public void onClick(View v, int position, int categoryId) {
                 mClickedPosition = position;
                 mClickedCategoryId = categoryId;
                 showMenuPopup(v);
@@ -114,7 +113,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     }
 
     @Override
-    public void onNavigationDrawerItemSelected(int position, long categoryId) {
+    public void onNavigationDrawerItemSelected(int position, int categoryId) {
         selectItem(position, true);
     }
 
@@ -268,7 +267,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
         Bundle bundle = new Bundle();
         bundle.putInt("position", mClickedPosition);
-        bundle.putLong("categoryId", mClickedCategoryId);
+        bundle.putInt("categoryId", mClickedCategoryId);
         dialogFragment.setArguments(bundle);
 
         dialogFragment.show(getFragmentManager(), "EditCategoryDialog");
@@ -279,7 +278,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
         Bundle bundle = new Bundle();
         bundle.putInt("position", mClickedPosition);
-        bundle.putLong("categoryId", mClickedCategoryId);
+        bundle.putInt("categoryId", mClickedCategoryId);
         dialogFragment.setArguments(bundle);
 
         dialogFragment.show(getFragmentManager(), "DeleteCategoryDialog");

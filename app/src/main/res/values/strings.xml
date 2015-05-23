@@ -15,7 +15,7 @@
 <string name="webcam_url">"Web address"</string>
 <string name="webcam_category">"Categories"</string>
 <string name="hint_webcam_name">"My WebCam"</string>
-<string name="hint_webcam_url">"http://www.example.com/webcam/cam.jpg"</string>
+<string name="hint_webcam_url">"http://example.com/webcam.jpg"</string>
 <string name="how_to">"How to"</string>
 <string name="dialog_positive_text">"Save"</string>
 <string name="dialog_positive_toast_message">"Saved!"</string>
@@ -193,7 +193,7 @@
 <string name="select_webcam">"Select WebCam"</string>
 <string name="live_streams">"Live Streams"</string>
 <string name="webcam_thumb_url">"Thumbnail web address"</string>
-<string name="hint_webcam_thumb_url">"http://www.example.com/webcam/thumb.jpg"</string>
+<string name="hint_webcam_thumb_url">"http://example.com/webcam/thumb.jpg"</string>
 <string name="image">"Image"</string>
 <string name="stream">"Stream"</string>
 <string name="buffering">"Buffering..."</string>
@@ -266,4 +266,12 @@
 <string name="radek_matouch">"Radek Matouch"</string>
 <string name="code_helper">"Code helper"</string>
 <string name="also_huge_thanks">"Also a huge thanks to God, my family and friends!"</string>
+<string name="hint_webcam_stream">"rtmp://example.com/live/cam"</string>
+<string name="hint_webcam_analyze">"http://example.com/page-cam.html"</string>
+<string name="dont_analyze">"Don't analyze, I have the direct URL!"</string>
+<string name="enter_page_for_analyzing">"Enter Web address for analyzing"</string>
+<string name="analyze">"Analyze"</string>
+<string name="next">"Next"</string>
+<string name="enter_direct_url">"Enter direct URL"</string>
+<string name="analyzing">"Analyzing"</string>
 </resources>

@@ -68,7 +68,7 @@ public class EditCategoryDialog extends DialogFragment {
 
         Bundle bundle = this.getArguments();
         position = bundle.getInt("position", 0);
-        long categoryId = bundle.getLong("categoryId", 0);
+        int categoryId = bundle.getInt("categoryId", 0);
 
         db = new DatabaseHelper(mActivity);
         category = db.getCategory(categoryId);
@@ -149,9 +149,9 @@ public class EditCategoryDialog extends DialogFragment {
         if (mNavigationDrawerFragment != null) {
             mNavigationDrawerFragment.editData(position, category);
         }
-        EditDialog editDialog = (EditDialog) getFragmentManager().findFragmentByTag("EditDialog");
-        if (editDialog != null) {
-            editDialog.editCategoryInAdapter(position, category);
+        CategoryDialog categoryDialog = (CategoryDialog) getFragmentManager().findFragmentByTag("CategoryDialog");
+        if (categoryDialog != null) {
+            categoryDialog.editCategoryInAdapter(position, category);
             if (mNavigationDrawerFragment != null) {
                 mNavigationDrawerFragment.reloadData();
             }

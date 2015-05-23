@@ -144,7 +144,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Creating a webCam
      */
-    public long createWebCam(WebCam webCam, List<Long> category_ids) {
+    public long createWebCam(WebCam webCam, List<Integer> category_ids) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -165,7 +165,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (category_ids != null) {
             // insert category_ids
-            for (long category_id : category_ids) {
+            for (int category_id : category_ids) {
                 createWebCamCategory(webCam_id, category_id);
             }
         }
@@ -249,7 +249,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * getting all WebCams under single category
      * */
-    public List<WebCam> getAllWebCamsByCategory(long category_id, String orderBy) {
+    public List<WebCam> getAllWebCamsByCategory(int category_id, String orderBy) {
 
         List<WebCam> webCams = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_WEBCAM + " td, "
@@ -308,7 +308,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Updating a WebCam
      */
-    public void updateWebCam(WebCam webCam, List<Long> category_ids) {
+    public void updateWebCam(WebCam webCam, List<Integer> category_ids) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -334,7 +334,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //assign new categories
         if (category_ids != null) {
             // insert category_ids
-            for (long category_id : category_ids) {
+            for (int category_id : category_ids) {
                 createWebCamCategory(webCam_id, category_id);
             }
         }
@@ -343,7 +343,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Updating a WebCam data from Json
      */
-    public void updateWebCamFromJson(WebCam currentWebCam, WebCam newData, long category_id) {
+    public void updateWebCamFromJson(WebCam currentWebCam, WebCam newData, int category_id) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -396,7 +396,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Undo Deleting a WebCam
      */
-    public void undoDeleteWebCam(WebCam webCam, List<Long> category_ids) {
+    public void undoDeleteWebCam(WebCam webCam, List<Integer> category_ids) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -418,7 +418,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (category_ids != null) {
             // insert category_ids
-            for (long category_id : category_ids) {
+            for (int category_id : category_ids) {
                 createWebCamCategory(webCam_id, category_id);
             }
         }
@@ -447,7 +447,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Creating category
      */
-    public long createCategory(Category category) {
+    public int createCategory(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -456,13 +456,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_CREATED_AT, getDateTime());
 
         // insert row
-        return db.insert(TABLE_CATEGORY, null, values);
+        return (int) db.insert(TABLE_CATEGORY, null, values);
     }
 
     /**
      * get single Category
      */
-    public Category getCategory(long categoryId) {
+    public Category getCategory(int categoryId) {
         Category category = new Category();
 
         String selectQuery = "SELECT * FROM " + TABLE_CATEGORY + " WHERE "
@@ -533,7 +533,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Deleting a category
      */
-    public void deleteCategory(long categoryId, boolean should_delete_all_category_WebCams) {
+    public void deleteCategory(int categoryId, boolean should_delete_all_category_WebCams) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         // before deleting category
@@ -583,7 +583,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Getting Category items count
      */
-    public int getCategoryItemsCount(long categoryId) {
+    public int getCategoryItemsCount(int categoryId) {
 
         String selectQuery = "SELECT * FROM " + TABLE_WEBCAM + " td, "
                 + TABLE_CATEGORY + " tg, " + TABLE_WEBCAM_CATEGORY + " tt WHERE tg."
@@ -604,7 +604,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Getting WebCam categories Ids
      */
-    public List<Long> getWebCamCategoriesIds(long webCam_id) {
+    public List<Integer> getWebCamCategoriesIds(long webCam_id) {
 
         String selectQuery = "SELECT * FROM " + TABLE_WEBCAM_CATEGORY + " WHERE "
                 + KEY_WEBCAM_ID + " = " + webCam_id;
@@ -613,10 +613,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
-        List<Long> categories_ids = new ArrayList<>();
+        List<Integer> categories_ids = new ArrayList<>();
         if (c.moveToFirst()) {
             do {
-                categories_ids.add(c.getLong(c.getColumnIndex(KEY_CATEGORY_ID)));
+                categories_ids.add(c.getInt(c.getColumnIndex(KEY_CATEGORY_ID)));
             } while (c.moveToNext());
         }
         c.close();
@@ -627,7 +627,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Creating WebCam_category
      */
-    public void createWebCamCategory(long webCam_id, long category_id) {
+    public void createWebCamCategory(long webCam_id, int category_id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();

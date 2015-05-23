@@ -1,0 +1,48 @@
+/*
+* ******************************************************************************
+* Copyright (c) 2013-2015 Tomas Valenta.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* *****************************************************************************
+*/
+
+package cz.yetanotherview.webcamviewer.app.helper;
+
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+
+public class YouTubeIntent {
+
+    private Activity activity;
+    private String videoUrl;
+
+    public YouTubeIntent(Activity activity, String videoUrl) {
+        this.activity = activity;
+        this.videoUrl = videoUrl;
+    }
+
+    public void open() {
+        Intent browserIntent;
+        String action = Intent.ACTION_VIEW;
+        try {
+            browserIntent = new Intent(action, Uri.parse("vnd.youtube://" + videoUrl));
+            browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity.startActivity(browserIntent);
+        } catch (ActivityNotFoundException e) {
+            browserIntent = new Intent(action, Uri.parse("http://youtu.be/" + videoUrl));
+            activity.startActivity(browserIntent);
+        }
+    }
+}

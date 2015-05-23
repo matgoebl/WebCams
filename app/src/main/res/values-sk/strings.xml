@@ -15,7 +15,7 @@
 <string name="webcam_url">"Webová adresa"</string>
 <string name="webcam_category">"Kategórie"</string>
 <string name="hint_webcam_name">"Moje WebKamera"</string>
-<string name="hint_webcam_url">"http://www.domena.sk/webkamera/kamera.jpg"</string>
+<string name="hint_webcam_url">"http://domena.sk/webkamera.jpg"</string>
 <string name="how_to">"Ako na to"</string>
 <string name="dialog_positive_text">"Uložiť"</string>
 <string name="dialog_positive_toast_message">"Uložené!"</string>
@@ -193,7 +193,7 @@
 <string name="select_webcam">"Vyberte WebKameru"</string>
 <string name="live_streams">"Živé prenosy"</string>
 <string name="webcam_thumb_url">"Webová adresa náhľadu"</string>
-<string name="hint_webcam_thumb_url">"http://www.domena.sk/webkamera/nahlad.jpg"</string>
+<string name="hint_webcam_thumb_url">"http://domena.sk/webkamera/nahlad.jpg"</string>
 <string name="image">"Obrázok"</string>
 <string name="stream">"Živý prenos"</string>
 <string name="buffering">"Načítanie do vyrovnávacej pamäte ..."</string>
@@ -266,4 +266,12 @@
 <string name="radek_matouch">"Radek Matouch"</string>
 <string name="code_helper">"Pomoc v kóde"</string>
 <string name="also_huge_thanks">"Moje veľké poďakovanie patrí Bohu, rodine a priateľom."</string>
+<string name="hint_webcam_stream">"rtmp://domena.sk/stream/webkamera"</string>
+<string name="hint_webcam_analyze">"http://domena.sk/stranka-s-webkamerou.html"</string>
+<string name="dont_analyze">"Neanalyzovať, mám priamu URL!"</string>
+<string name="enter_page_for_analyzing">"Zadajte webovú adresu na analýzu"</string>
+<string name="analyze">"Analyzovať"</string>
+<string name="next">"Ďalšie"</string>
+<string name="enter_direct_url">"Zadajte priamu URL"</string>
+<string name="analyzing">"Analyzujem"</string>
 </resources>

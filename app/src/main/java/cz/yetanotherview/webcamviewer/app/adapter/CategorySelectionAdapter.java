@@ -140,7 +140,7 @@ public class CategorySelectionAdapter extends BaseAdapter implements OnClickList
                     DialogFragment dialogFragment;
                     Bundle bundle = new Bundle();
                     bundle.putInt("position", position);
-                    bundle.putLong("categoryId", category.getId());
+                    bundle.putInt("categoryId", category.getId());
 
                     switch (item.getItemId()) {
                         case R.id.menu_edit:

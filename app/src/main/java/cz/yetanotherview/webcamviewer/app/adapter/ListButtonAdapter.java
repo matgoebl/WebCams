@@ -83,6 +83,9 @@ public class ListButtonAdapter extends ArrayAdapter<File> {
                                             .replaceFirst("[.][^.]+$", "");
                                     new MaterialDialog.Builder(context)
                                             .title(R.string.rename)
+                                            .inputMaxLength(20)
+                                            .positiveText(R.string.dialog_positive_text)
+                                            .negativeText(android.R.string.cancel)
                                             .input(null, input_prefill, false, new MaterialDialog.InputCallback() {
                                                 @Override
                                                 public void onInput(MaterialDialog dialog, CharSequence input) {

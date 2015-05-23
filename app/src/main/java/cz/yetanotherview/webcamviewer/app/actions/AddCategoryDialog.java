@@ -53,7 +53,7 @@ public class AddCategoryDialog extends DialogFragment {
     private Category category;
     private Icons icons;
     private ImageView category_icon;
-    private long createdCategoryId;
+    private int createdCategoryId;
 
     private MaterialDialog gridDialog;
     private DatabaseHelper db;
@@ -147,9 +147,9 @@ public class AddCategoryDialog extends DialogFragment {
         if (mNavigationDrawerFragment != null) {
             mNavigationDrawerFragment.addData(category);
         }
-        EditDialog editDialog = (EditDialog) getFragmentManager().findFragmentByTag("EditDialog");
-        if (editDialog != null) {
-            editDialog.addCategoryInAdapter(category);
+        CategoryDialog categoryDialog = (CategoryDialog) getFragmentManager().findFragmentByTag("CategoryDialog");
+        if (categoryDialog != null) {
+            categoryDialog.addCategoryInAdapter(category);
         }
     }
 }

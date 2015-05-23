@@ -20,29 +20,21 @@ package cz.yetanotherview.webcamviewer.app.actions;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.mapbox.mapboxsdk.api.ILatLng;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.overlay.Marker;
-import com.mapbox.mapboxsdk.views.MapView;
-import com.mapbox.mapboxsdk.views.MapViewListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
-import cz.yetanotherview.webcamviewer.app.adapter.CategorySelectionAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.OnTextChange;
 import cz.yetanotherview.webcamviewer.app.listener.WebCamListener;
@@ -52,19 +44,18 @@ import cz.yetanotherview.webcamviewer.app.model.WebCam;
 /**
  * Edit dialog fragment
  */
-public class EditDialog extends DialogFragment implements View.OnClickListener {
+public class EditDialog extends DialogFragment implements View.OnClickListener, CategoryDialog.Callback, CoordinatesChooserDialog.Callback {
 
+    private DatabaseHelper db;
     private EditText mWebCamName, mWebCamUrl, mWebCamThumbUrl, mWebCamLatitude, mWebCamLongitude;
+    private Double mLatitude, mLongitude;
+    private boolean mEmpty;
     private WebCam webCam;
     private WebCamListener mOnAddListener;
     private View positiveAction;
-    private MapView mMapView;
-    private Marker marker;
     private TextView mWebCamThumbUrlTitle, webCamCategoryButton;
-    private CategorySelectionAdapter categorySelectionAdapter;
     private StringBuilder selectedCategoriesNames;
-    private List<Category> allCategories;
-    private List<Long> category_ids;
+    private List<Integer> category_ids;
     private RadioButton liveStream;
 
     private int pos, status, position;
@@ -89,23 +80,10 @@ public class EditDialog extends DialogFragment implements View.OnClickListener {
         long id = bundle.getLong("id", 0);
         position = bundle.getInt("position", 0);
 
-        DatabaseHelper db = new DatabaseHelper(getActivity());
+        db = new DatabaseHelper(getActivity());
         webCam = db.getWebCam(id);
-        allCategories = db.getAllCategories();
-        List<Long> webCam_category_ids = db.getWebCamCategoriesIds(webCam.getId());
-        selectedCategoriesNames = new StringBuilder();
-        for (Category category : allCategories) {
-            if (webCam_category_ids.contains(category.getId())) {
-                category.setSelected(true);
-
-                if (selectedCategoriesNames.length() > 0) {
-                    selectedCategoriesNames.append(", ");
-                }
-                selectedCategoriesNames.append(category.getCategoryName());
-            }
-        }
-        db.closeDB();
-        category_ids = webCam_category_ids;
+        List<Integer> webCam_category_ids = db.getWebCamCategoriesIds(webCam.getId());
+        proceedAssigned(webCam_category_ids);
 
         pos = webCam.getPosition();
         status = webCam.getStatus();
@@ -128,8 +106,9 @@ public class EditDialog extends DialogFragment implements View.OnClickListener {
                         else webCam.setThumbUrl(webCam.getThumbUrl());
                         webCam.setPosition(pos);
                         webCam.setStatus(status);
-                        webCam.setLatitude(Double.parseDouble(mWebCamLatitude.getText().toString().trim()));
-                        webCam.setLongitude(Double.parseDouble(mWebCamLongitude.getText().toString().trim()));
+                        getAndCheckLatLong();
+                        webCam.setLatitude(mLatitude);
+                        webCam.setLongitude(mLongitude);
 
                         if (mOnAddListener != null) {
                             mOnAddListener.webCamEdited(position, webCam, category_ids);
@@ -167,67 +146,22 @@ public class EditDialog extends DialogFragment implements View.OnClickListener {
         mWebCamCoordinatesMapSelector.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                        .title(R.string.selecting_from_map)
-                        .customView(R.layout.maps_layout, false)
-                        .positiveText(R.string.dialog_positive_text)
-                        .negativeText(android.R.string.cancel)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                if (marker != null) {
-                                    LatLng latLng = marker.getPoint();
-                                    mWebCamLatitude.setText(String.valueOf(latLng.getLatitude()));
-                                    mWebCamLongitude.setText(String.valueOf(latLng.getLongitude()));
-                                }
-                            }
-                        })
-                        .build();
+                FragmentManager fm = getActivity().getFragmentManager();
+                DialogFragment dialogFragment = new CoordinatesChooserDialog();
 
-                marker = null;
-                mMapView = (MapView) dialog.getCustomView().findViewById(R.id.mapView);
-                mMapView.setZoom(1);
-                mMapView.setDiskCacheEnabled(false);
-                mMapView.setMapViewListener(new MapViewListener() {
-                    @Override
-                    public void onShowMarker(MapView pMapView, Marker pMarker) {}
+                Bundle args = new Bundle();
+                getAndCheckLatLong();
+                args.putBoolean("empty", mEmpty);
+                args.putDouble("latitude", mLatitude);
+                args.putDouble("longitude", mLongitude);
+                dialogFragment.setArguments(args);
 
-                    @Override
-                    public void onHideMarker(MapView pMapView, Marker pMarker) {}
-
-                    @Override
-                    public void onTapMarker(MapView pMapView, Marker pMarker) {}
-
-                    @Override
-                    public void onLongPressMarker(MapView pMapView, Marker pMarker) {}
-
-                    @Override
-                    public void onTapMap(MapView pMapView, ILatLng pPosition) {
-                        if (marker != null) {
-                            mMapView.removeMarker(marker);
-                        }
-                        addMarker(new LatLng(pPosition.getLatitude(), pPosition.getLongitude()));
-                        Toast.makeText(getActivity(), String.valueOf(pPosition.getLatitude()) + ", " +
-                                String.valueOf(pPosition.getLongitude()), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onLongPressMap(MapView pMapView, ILatLng pPosition) {}
-
-                    private void addMarker(LatLng markerPosition) {
-                        marker = new Marker(mMapView, "", "", markerPosition);
-                        marker.setMarker(ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null));
-                        mMapView.addMarker(marker);
-                    }
-                });
-
-
-                dialog.show();
+                dialogFragment.setTargetFragment(EditDialog.this, 0);
+                dialogFragment.show(fm, "CoordinatesChooserDialog");
             }
         });
 
         webCamCategoryButton = (TextView) dialog.getCustomView().findViewById(R.id.webcam_category_button);
-
         if (webCam_category_ids.size() == 0) {
             webCamCategoryButton.setText(R.string.select_categories);
         }
@@ -237,58 +171,16 @@ public class EditDialog extends DialogFragment implements View.OnClickListener {
         webCamCategoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FragmentManager fm = getActivity().getFragmentManager();
+                DialogFragment dialogFragment = new CategoryDialog();
 
-                MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                        .title(R.string.webcam_category)
-                        .customView(R.layout.category_selection_dialog, false)
-                        .positiveText(R.string.dialog_positive_text)
-                        .negativeText(android.R.string.cancel)
-                        .neutralText(R.string.action_new)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                selectedCategoriesNames = new StringBuilder();
-                                category_ids = new ArrayList<>();
-                                for (Category category : allCategories) {
-                                    if (category.isSelected()) {
-                                        category_ids.add(category.getId());
+                Bundle args = new Bundle();
+                args.putIntegerArrayList("category_ids", (ArrayList<Integer>) category_ids);
+                dialogFragment.setArguments(args);
 
-                                        if (selectedCategoriesNames.length() > 0) {
-                                            selectedCategoriesNames.append(", ");
-                                        }
-                                        selectedCategoriesNames.append(category.getCategoryName());
-                                    }
-                                }
-                                if (category_ids.size() == 0) {
-                                    webCamCategoryButton.setText(R.string.select_categories);
-                                }
-                                else {
-                                    webCamCategoryButton.setText(selectedCategoriesNames);
-                                }
-
-                                positiveAction.setEnabled(true);
-                                dialog.dismiss();
-                            }
-                            @Override
-                            public void onNegative(MaterialDialog dialog) {
-                                dialog.dismiss();
-                            }
-                            @Override
-                            public void onNeutral(MaterialDialog dialog) {
-                                new AddCategoryDialog().show(getFragmentManager(), "AddCategoryDialog");
-                            }
-                        })
-                        .autoDismiss(false)
-                        .build();
-
-                ListView categorySelectionList = (ListView) dialog.getCustomView().findViewById(R.id.category_list_view);
-                categorySelectionList.setEmptyView(dialog.getCustomView().findViewById(R.id.no_categories));
-                categorySelectionAdapter = new CategorySelectionAdapter(getActivity(), allCategories);
-                categorySelectionList.setAdapter(categorySelectionAdapter);
-
-                dialog.show();
+                dialogFragment.setTargetFragment(EditDialog.this, 0);
+                dialogFragment.show(fm, "CategoryDialog");
             }
-
         });
 
         positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
@@ -313,16 +205,38 @@ public class EditDialog extends DialogFragment implements View.OnClickListener {
         return dialog;
     }
 
-    public void addCategoryInAdapter(Category category) {
-        categorySelectionAdapter.addItem(categorySelectionAdapter.getCount(), category);
+    private void proceedAssigned(List<Integer> new_webCam_category_ids) {
+        List<Category> allCategories = db.getAllCategories();
+        db.closeDB();
+        selectedCategoriesNames = new StringBuilder();
+        for (Category category : allCategories) {
+            if (new_webCam_category_ids.contains(category.getId())) {
+                category.setSelected(true);
+
+                if (selectedCategoriesNames.length() > 0) {
+                    selectedCategoriesNames.append(", ");
+                }
+                selectedCategoriesNames.append(category.getCategoryName());
+            }
+        }
+        category_ids = new_webCam_category_ids;
     }
 
-    public void editCategoryInAdapter(int position, Category category) {
-        categorySelectionAdapter.modifyItem(position, category);
-    }
+    private void getAndCheckLatLong() {
+        mEmpty = false;
+        String latitudeStr = mWebCamLatitude.getText().toString();
+        if (latitudeStr.isEmpty()) {
+            mEmpty = true;
+            mLatitude = 0.0;
+        }
+        else mLatitude = Double.parseDouble(latitudeStr);
 
-    public void deleteCategoryInAdapter(int position) {
-        categorySelectionAdapter.removeItem(position);
+        String longitudeStr = mWebCamLongitude.getText().toString();
+        if (longitudeStr.isEmpty()) {
+            mEmpty = true;
+            mLongitude = 0.0;
+        }
+        else mLongitude = Double.parseDouble(longitudeStr);
     }
 
     @Override
@@ -346,5 +260,23 @@ public class EditDialog extends DialogFragment implements View.OnClickListener {
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onCategorySave(List<Integer> new_category_ids) {
+        proceedAssigned(new_category_ids);
+        if (category_ids.size() == 0) {
+            webCamCategoryButton.setText(R.string.select_categories);
+        }
+        else {
+            webCamCategoryButton.setText(selectedCategoriesNames);
+        }
+        positiveAction.setEnabled(true);
+    }
+
+    @Override
+    public void onCoordinatesSave(String latitude, String longitude) {
+        mWebCamLatitude.setText(latitude);
+        mWebCamLongitude.setText(longitude);
     }
 }

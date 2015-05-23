@@ -342,6 +342,7 @@ public class JsonFetcherDialog extends DialogFragment {
                         .title(R.string.importing_from_server)
                         .content(importProgress)
                         .progress(false, maxProgressValue, false)
+                        .cancelable(false)
                         .show();
             }
         });
@@ -655,7 +656,7 @@ public class JsonFetcherDialog extends DialogFragment {
     private void proceed(Category category) {
 
         synchronized (sDataLock) {
-            long newCategory = db.createCategory(category);
+            int newCategory = db.createCategory(category);
             for (WebCam webCam : importWebCams) {
 
                 boolean condition;

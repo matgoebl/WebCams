@@ -16,14 +16,34 @@
 * *****************************************************************************
 */
 
-package cz.yetanotherview.webcamviewer.app.listener;
+package cz.yetanotherview.webcamviewer.app.model;
 
-import java.util.List;
+public class Link {
 
-import cz.yetanotherview.webcamviewer.app.model.WebCam;
+    private long id;
+    private String url;
 
-public interface WebCamListener {
-    void webCamAdded(WebCam webCam, List<Integer> category_ids, boolean share);
-    void webCamEdited(int position, WebCam webCam, List<Integer> category_ids);
-    void webCamDeleted(WebCam webCam, int position);
+    // constructors
+    public Link(long id, String url) {
+        this.id = id;
+        this.url = url;
+    }
+
+    // setter
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    // getter
+    public long getId() {
+        return this.id;
+    }
+
+    public String getUrl() {
+        return this.url;
+    }
 }
