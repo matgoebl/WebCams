@@ -147,10 +147,14 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
                         mWebCamUrl = webcamUrlAddStill.getText().toString().trim();
                         if (stillImageDirectCheckBox.isChecked()) {
                             openThirdDialog();
+                            dialog.dismiss();
                         } else {
-                            openAnalyzeDialog();
+                            if (mWebCamUrl.toLowerCase().contains("Http://".toLowerCase()) ) {
+                                openAnalyzeDialog();
+                                dialog.dismiss();
+                            }
+                            else showBadUrlDialog();
                         }
-                        dialog.dismiss();
                     }
                     @Override
                     public void onNegative(MaterialDialog dialog) {
@@ -192,6 +196,14 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
         dialog.show();
     }
 
+    private void showBadUrlDialog() {
+        new MaterialDialog.Builder(mActivity)
+                .title(R.string.wrong_url)
+                .content(R.string.url_is_not_valid)
+                .positiveText(android.R.string.ok)
+                .show();
+    }
+
     private void openAnalyzeDialog() {
         dialog = new MaterialDialog.Builder(mActivity)
                 .title(R.string.analyzing)
@@ -213,7 +225,6 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
                 links = ListImagesLinks.main(mWebCamUrl);
             } catch (IOException e) {
                 links = new ArrayList<>();
-                //ToDo:
             }
             return null;
         }
@@ -221,8 +232,23 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
         @Override
         protected void onPostExecute(Void result) {
             dialog.dismiss();
-            openResultDialog(); // ToDO:
+            if (links.size() != 0) {
+                openResultDialog();
+            }
+            else {
+                openSecondDialogStill();
+                webcamUrlAddStill.setText(mWebCamUrl);
+                openTryAgainDialog();
+            }
         }
+    }
+
+    private void openTryAgainDialog() {
+        new MaterialDialog.Builder(mActivity)
+                .title(R.string.no_results)
+                .content(R.string.url_try_again)
+                .positiveText(android.R.string.ok)
+                .show();
     }
 
     private void openResultDialog() {

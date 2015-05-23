@@ -274,4 +274,8 @@
 <string name="next">"Ďalšie"</string>
 <string name="enter_direct_url">"Zadajte priamu URL"</string>
 <string name="analyzing">"Analyzujem"</string>
+<string name="wrong_url">"Neplatná Url"</string>
+<string name="url_is_not_valid">"Zadaná URL adresa nie je platná."</string>
+<string name="no_results">"Žiadne výsledky"</string>
+<string name="url_try_again">"Skúste to znova s inou URL adresou."</string>
 </resources>
