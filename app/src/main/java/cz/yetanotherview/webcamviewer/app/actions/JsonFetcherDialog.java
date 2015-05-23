@@ -656,6 +656,7 @@ public class JsonFetcherDialog extends DialogFragment {
     private void proceed(Category category) {
 
         synchronized (sDataLock) {
+            List<Category> categoriesFromDb = db.getAllCategories();
             int newCategory = db.createCategory(category);
             for (WebCam webCam : importWebCams) {
 
@@ -725,6 +726,18 @@ public class JsonFetcherDialog extends DialogFragment {
                 db.deleteCategory(newCategory, false);
             }
             else if (selection == 0 || selection == 8) {
+
+                String compare;
+                if (selection == 0) {
+                    compare = mActivity.getString(R.string.popular);
+                }
+                else compare = mActivity.getString(R.string.latest);
+                for (Category categoryFromDb : categoriesFromDb) {
+                    if (categoryFromDb.getCategoryName().contains(compare)){
+                        db.deleteCategory(categoryFromDb.getId(), false);
+                    }
+                }
+
                 SharedPreferences.Editor editor = preferences.edit();
                 if (selection == 0) {
                     editor.putLong("pref_last_fetch_popular", Utils.getDate());
