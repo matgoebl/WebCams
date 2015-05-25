@@ -68,7 +68,6 @@
 <string name="pref_reset_last_check_summary">"Reset last checkpoint for Popular and Latest WebCams"</string>
 <string name="reset_last_check_message">"Are you sure you want to reset last checkpoint for Popular and Latest WebCams?"</string>
 <string name="community_list">"Community list"</string>
-<string name="submit_for_approval">"Submit this WebCam for approval"</string>
 <string name="import_webcams_now">"IMPORT WEBCAMS NOW!"</string>
 <string name="show_me_help">"SHOW ME HELP"</string>
 <string name="import_selected">"IMPORT SELECTED"</string>
@@ -94,7 +93,6 @@
 <string name="maximize">"Maximize"</string>
 <string name="save_to">"Save to..."</string>
 <string name="share">"Share"</string>
-<string name="submit_to_appr">"Submit for approval"</string>
 <string name="back">"Back"</string>
 <string name="show_on_map">"Show on map"</string>
 <string name="zoom_small">"zoom"</string>
@@ -281,4 +279,6 @@
 <string name="not_detected">"Not detected"</string>
 <string name="dimensions">"Dimensions:"</string>
 <string name="file_size">"File size:"</string>
+<string name="submit_as_suggestion">"Submit as suggestion"</string>
+<string name="community_list_summary">"Do you want to send this WebCam as a suggestion to the community database?"</string>
 </resources>

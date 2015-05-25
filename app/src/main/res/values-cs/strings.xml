@@ -68,7 +68,6 @@
 <string name="pref_reset_last_check_summary">"Obnovit kontrolu dostupnosti pro Populární a Nejnovější WebKamery"</string>
 <string name="reset_last_check_message">"Opravdu chcete obnovit kontrolu dostupnosti pro Populární a Nejnovější WebKamery?"</string>
 <string name="community_list">"Komunitní seznam"</string>
-<string name="submit_for_approval">"Odeslat tuto WebKameru ke schválení"</string>
 <string name="import_webcams_now">"IMPORTOVAT WEBKAMERY NYNÍ!"</string>
 <string name="show_me_help">"ZOBRAZIT NÁPOVĚDU"</string>
 <string name="import_selected">"IMPORTOVAT VYBRANÉ"</string>
@@ -94,7 +93,6 @@
 <string name="maximize">"Maximalizovat"</string>
 <string name="save_to">"Uložit do..."</string>
 <string name="share">"Sdílet"</string>
-<string name="submit_to_appr">"Odeslat ke schválení"</string>
 <string name="back">"Zpět"</string>
 <string name="show_on_map">"Zobrazit na mapě"</string>
 <string name="zoom_small">"zoom"</string>
@@ -281,4 +279,6 @@
 <string name="not_detected">"Nedetekováno"</string>
 <string name="dimensions">"Rozměry:"</string>
 <string name="file_size">"Velikost souboru:"</string>
+<string name="submit_as_suggestion">"Odeslat jako návrh"</string>
+<string name="community_list_summary">"Chcete odeslat tuto WebKameru jako návrh do komunitní databáze?"</string>
 </resources>

@@ -647,7 +647,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             options_values[8] = getString(R.string.report_problem);
         }
         else {
-            options_values[8] = getString(R.string.submit_to_appr);
+            options_values[8] = getString(R.string.submit_as_suggestion);
         }
 
         dialog = new MaterialDialog.Builder(this)
