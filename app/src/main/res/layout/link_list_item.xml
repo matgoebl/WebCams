@@ -20,23 +20,48 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical|start"
-    android:paddingRight="15dp"
-    android:paddingEnd="15dp"
-    android:paddingStart="25dp"
-    android:paddingLeft="25dp">
+    android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/link_image_view"
+        android:id="@+id/link_image"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="200dp"
+        android:layout_marginTop="@dimen/big_margin"/>
 
-    <!--<TextView-->
-        <!--android:id="@+id/link_url"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textSize="18sp"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:layout_marginRight="10dp"-->
-        <!--android:layout_marginEnd="10dp" />-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/big_margin"
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:text="@string/dimensions"
+                style="@style/link_text_view" />
+
+            <TextView
+                android:id="@+id/link_text_dim"
+                style="@style/link_text_view" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:text="@string/file_size"
+                style="@style/link_text_view" />
+
+            <TextView
+                android:id="@+id/link_text_size"
+                style="@style/link_text_view" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

@@ -18,15 +18,21 @@
 
 package cz.yetanotherview.webcamviewer.app.model;
 
+import cz.yetanotherview.webcamviewer.app.helper.Utils;
+
 public class Link {
 
     private long id;
     private String url;
+    private int width, height;
+    private long size;
 
     // constructors
-    public Link(long id, String url) {
+    public Link(long id, String url, int width, int height) {
         this.id = id;
         this.url = url;
+        this.width = width;
+        this.height = height;
     }
 
     // setter
@@ -38,6 +44,18 @@ public class Link {
         this.url = url;
     }
 
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
+
     // getter
     public long getId() {
         return this.id;
@@ -45,5 +63,28 @@ public class Link {
 
     public String getUrl() {
         return this.url;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
+    public String getWidthAndHeightString() {
+        if (width + height == 0) {
+            return null;
+        }
+        else return String.valueOf(this.width + "x" + this.height);
+    }
+
+    public long getSize() {
+        return this.size;
+    }
+
+    public String getSizeString() {
+        return Utils.humanReadableByteCount(this.size, true);
     }
 }

@@ -278,4 +278,7 @@
 <string name="url_is_not_valid">"Zadaná URL adresa není platná."</string>
 <string name="no_results">"Žádné výsledky"</string>
 <string name="url_try_again">"Zkuste to prosím znovu s jinou URL adresou."</string>
+<string name="not_detected">"Nedetekováno"</string>
+<string name="dimensions">"Rozměry:"</string>
+<string name="file_size">"Velikost souboru:"</string>
 </resources>

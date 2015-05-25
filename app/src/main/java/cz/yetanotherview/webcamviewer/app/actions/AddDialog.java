@@ -205,8 +205,9 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
     }
 
     private void openAnalyzeDialog() {
+        String title = mActivity.getString(R.string.analyzing) + " (BETA)"; //ToDo
         dialog = new MaterialDialog.Builder(mActivity)
-                .title(R.string.analyzing)
+                .title(title)
                 .content(R.string.please_wait)
                 .progress(true, 0)
                 .cancelable(false)
@@ -301,9 +302,9 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
         positiveAction.setEnabled(false);
 
         webCamUrlAddStream = (EditText) dialog.getCustomView().findViewById(R.id.webcam_url_add_stream);
+        webCamUrlAddStream.addTextChangedListener(new OnTextChange(positiveAction));
 
         webCamThumbUrlAddStream = (EditText) dialog.getCustomView().findViewById(R.id.webcam_thumb_url_add_stream);
-        webCamThumbUrlAddStream.addTextChangedListener(new OnTextChange(positiveAction));
 
         dialog.show();
     }
