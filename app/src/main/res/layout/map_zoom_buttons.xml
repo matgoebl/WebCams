@@ -1,0 +1,17 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/zoomIn"
+        android:src="@drawable/zoom_in"
+        android:background="@drawable/background_with_shadow" />
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/zoomOut"
+        android:src="@drawable/zoom_out"
+        android:background="@drawable/background_with_shadow_2" />
+
+</merge>

@@ -33,6 +33,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -510,7 +511,7 @@ public class JsonFetcherDialog extends DialogFragment {
 
                 MaterialDialog dialog = new MaterialDialog.Builder(mActivity)
                         .title(R.string.selecting_from_map)
-                        .customView(R.layout.maps_layout, false)
+                        .customView(R.layout.maps_dialog_layout, false)
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
@@ -534,6 +535,20 @@ public class JsonFetcherDialog extends DialogFragment {
                 }
 
                 mMapView.setDiskCacheEnabled(false);
+
+                ImageButton zoomIn = (ImageButton) dialog.getCustomView().findViewById(R.id.zoomIn);
+                zoomIn.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        mMapView.getController().zoomIn();
+                    }
+                });
+
+                ImageButton zoomOut = (ImageButton) dialog.getCustomView().findViewById(R.id.zoomOut);
+                zoomOut.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        mMapView.getController().zoomOut();
+                    }
+                });
 
                 selMarkers = new ArrayList<>();
                 mMapView.addItemizedOverlay(new ItemizedIconOverlay(mActivity, markers,

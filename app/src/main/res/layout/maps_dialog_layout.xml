@@ -26,9 +26,11 @@
 
     <LinearLayout
         style="@style/maps_zoom_container"
-        android:layout_marginRight="@dimen/middle_margin"
-        android:layout_marginEnd="@dimen/middle_margin"
-        android:layout_marginBottom="@dimen/huge_margin">
+        android:paddingLeft="@dimen/zero_padding"
+        android:paddingStart="@dimen/zero_padding"
+        android:paddingRight="@dimen/big_padding"
+        android:paddingEnd="@dimen/big_padding"
+        android:paddingBottom="@dimen/big_padding">
 
         <include
             layout="@layout/map_zoom_buttons"/>

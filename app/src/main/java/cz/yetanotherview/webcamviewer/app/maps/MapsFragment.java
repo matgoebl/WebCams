@@ -26,7 +26,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.overlay.Marker;
@@ -44,9 +43,6 @@ public class MapsFragment extends Fragment {
         super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.maps_layout, container,
                 false);
-
-        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.zoomContainer);
-        linearLayout.setVisibility(View.VISIBLE);
 
         ImageButton zoomIn = (ImageButton) view.findViewById(R.id.zoomIn);
         zoomIn.setOnClickListener(new View.OnClickListener() {

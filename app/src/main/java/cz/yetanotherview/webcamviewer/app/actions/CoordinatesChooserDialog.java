@@ -23,6 +23,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -54,7 +56,7 @@ public class CoordinatesChooserDialog extends DialogFragment {
 
         MaterialDialog dialog = new MaterialDialog.Builder(mActivity)
                 .title(R.string.selecting_from_map)
-                .customView(R.layout.maps_layout, false)
+                .customView(R.layout.maps_dialog_layout, false)
                 .positiveText(R.string.dialog_positive_text)
                 .negativeText(android.R.string.cancel)
                 .callback(new MaterialDialog.ButtonCallback() {
@@ -79,6 +81,20 @@ public class CoordinatesChooserDialog extends DialogFragment {
             mMapView.setZoom(16);
             mMapView.setCenter(initPosition);
         }
+
+        ImageButton zoomIn = (ImageButton) dialog.getCustomView().findViewById(R.id.zoomIn);
+        zoomIn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mMapView.getController().zoomIn();
+            }
+        });
+
+        ImageButton zoomOut = (ImageButton) dialog.getCustomView().findViewById(R.id.zoomOut);
+        zoomOut.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mMapView.getController().zoomOut();
+            }
+        });
 
         mMapView.setDiskCacheEnabled(false);
         mMapView.setMapViewListener(new MapViewListener() {
