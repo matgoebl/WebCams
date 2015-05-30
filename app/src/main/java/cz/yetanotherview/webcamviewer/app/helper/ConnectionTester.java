@@ -20,18 +20,22 @@ package cz.yetanotherview.webcamviewer.app.helper;
 
 import android.os.AsyncTask;
 
-import junit.framework.Assert;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 
 import cz.yetanotherview.webcamviewer.app.listener.ConnectionTesterListener;
+
+import static junit.framework.Assert.assertTrue;
 
 public class ConnectionTester extends AsyncTask<Void, Void, Boolean> {
 
     private String url;
     private ConnectionTesterListener mListener;
+    private Integer[] statusCodes = { HttpURLConnection.HTTP_OK, HttpURLConnection.HTTP_CREATED,
+            HttpURLConnection.HTTP_ACCEPTED, HttpURLConnection.HTTP_MOVED_PERM,
+            HttpURLConnection.HTTP_MOVED_TEMP, HttpURLConnection.HTTP_NO_CONTENT};
 
     public ConnectionTester(String url, ConnectionTesterListener mListener) {
         this.url = url;
@@ -45,7 +49,8 @@ public class ConnectionTester extends AsyncTask<Void, Void, Boolean> {
         try {
             HttpURLConnection urlConn = (HttpURLConnection) new URL(url).openConnection();
             urlConn.connect();
-            Assert.assertEquals(HttpURLConnection.HTTP_OK, urlConn.getResponseCode());
+            int responseCode = urlConn.getResponseCode();
+            assertTrue(Arrays.asList(statusCodes).contains(responseCode));
             status = true;
         }
         catch (IOException e) {
@@ -54,7 +59,6 @@ public class ConnectionTester extends AsyncTask<Void, Void, Boolean> {
         }
         return status;
     }
-
 
     @Override
     protected void onPostExecute(Boolean result) {

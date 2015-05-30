@@ -281,4 +281,16 @@
 <string name="file_size">"Veľkosť súboru:"</string>
 <string name="submit_as_suggestion">"Odoslať ako návrh"</string>
 <string name="community_list_summary">"Chcete odoslať túto WebKameru ako návrh do komunitnej databázy?"</string>
+<string name="analyze_links_confirmation">"Chcete tiež analyzovať odkazy a podstránky?"</string>
+<string name="analysis_time_info">"Týmto krokom môže byť doba analýzy značne predĺžená."</string>
+<string name="analyzer_doesnt_work">"Analyzátor nefunguje na dynamicky načítaných stránkach pomocou JavaScriptu."</string>
+<string name="aborted">"Prerušené"</string>
+<string name="analyzing_canceled">"Analýza bola užívateľom ukončená."</string>
+<string name="completed_tasks">"Dokončené úlohy:"</string>
+<string name="try_deeper_analyzing">"Chcete vyskúšať hlbšie metódu analýzy?"</string>
+<string name="processing_image">"Spracovanie obrázku:"</string>
+<string name="processing_link">"Spracovanie odkaze:"</string>
+<string name="processing_feed_url">"Spracovanie rss zdroje:"</string>
+<string name="fetching_size">"Načítanie veľkosti:"</string>
+<string name="notice">"Upozornenie"</string>
 </resources>

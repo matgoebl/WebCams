@@ -279,5 +279,18 @@
 <string name="not_detected">"Nicht erkannt"</string>
 <string name="dimensions">"Dimensionen:"</string>
 <string name="file_size">"Dateigröße:"</string>
-<string name="submit_as_suggestion"></string>
+<string name="submit_as_suggestion">"Submit as suggestion"</string>
+<string name="community_list_summary">"Do you want to send this WebCam as a suggestion to the community database?"</string>
+<string name="analyze_links_confirmation">"Do you also want to analyze the links and subpages?"</string>
+<string name="analysis_time_info">"This can increase the analysis time."</string>
+<string name="analyzer_doesnt_work">"The analyzer doesn't work on dynamically loaded pages using JavaScript."</string>
+<string name="aborted">"Aborted"</string>
+<string name="analyzing_canceled">"Analyzing was canceled manually."</string>
+<string name="completed_tasks">"Completed tasks:"</string>
+<string name="try_deeper_analyzing">"Do you want to try a deeper analyzing method?"</string>
+<string name="processing_image">"Processing image:"</string>
+<string name="processing_link">"Processing link:"</string>
+<string name="processing_feed_url">"Processing feed url:"</string>
+<string name="fetching_size">"Fetching size:"</string>
+<string name="notice">"Notice"</string>
 </resources>

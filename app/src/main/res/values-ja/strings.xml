@@ -68,7 +68,6 @@
 <string name="pref_reset_last_check_summary">"人気のある最新のウェブカムの、最後の確認回数をリセットします"</string>
 <string name="reset_last_check_message">"人気のある最新のウェブカムの、最後の確認回数をリセットしますか?"</string>
 <string name="community_list">"コミュニティリスト"</string>
-<string name="submit_for_approval">"承認のためこのウェブカムを送信"</string>
 <string name="import_webcams_now">"今すぐウェブカムをインポート!"</string>
 <string name="show_me_help">"ヘルプを表示"</string>
 <string name="import_selected">"選択済をインポート"</string>
@@ -94,7 +93,6 @@
 <string name="maximize">"最大化"</string>
 <string name="save_to">"...に保存"</string>
 <string name="share">"共有"</string>
-<string name="submit_to_appr">"承認して送信"</string>
 <string name="back">"戻る"</string>
 <string name="show_on_map">"地図上に表示する"</string>
 <string name="zoom_small">"ズーム"</string>
@@ -278,4 +276,21 @@
 <string name="url_is_not_valid">"入力された URL が正しくありません"</string>
 <string name="no_results">"結果なし"</string>
 <string name="url_try_again">"別の URL でもう一度試してください"</string>
+<string name="not_detected">"Not detected"</string>
+<string name="dimensions">"Dimensions:"</string>
+<string name="file_size">"File size:"</string>
+<string name="submit_as_suggestion">"Submit as suggestion"</string>
+<string name="community_list_summary">"Do you want to send this WebCam as a suggestion to the community database?"</string>
+<string name="analyze_links_confirmation">"Do you also want to analyze the links and subpages?"</string>
+<string name="analysis_time_info">"This can increase the analysis time."</string>
+<string name="analyzer_doesnt_work">"The analyzer doesn't work on dynamically loaded pages using JavaScript."</string>
+<string name="aborted">"Aborted"</string>
+<string name="analyzing_canceled">"Analyzing was canceled manually."</string>
+<string name="completed_tasks">"Completed tasks:"</string>
+<string name="try_deeper_analyzing">"Do you want to try a deeper analyzing method?"</string>
+<string name="processing_image">"Processing image:"</string>
+<string name="processing_link">"Processing link:"</string>
+<string name="processing_feed_url">"Processing feed url:"</string>
+<string name="fetching_size">"Fetching size:"</string>
+<string name="notice">"Notice"</string>
 </resources>

@@ -31,7 +31,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -40,14 +40,13 @@ import org.videolan.libvlc.IVideoPlayer;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.LibVlcUtil;
 
-import java.lang.ref.WeakReference;
-
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.helper.ImmersiveMode;
 
 public class LiveStreamActivity extends Activity implements SurfaceHolder.Callback,
         IVideoPlayer {
     public final static String TAG = "LiveStreamActivity";
+    public final static int VideoSizeChanged = -1;
 
     private String mFilePath;
     private MaterialDialog dialog;
@@ -55,13 +54,15 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
     // display surface
     private SurfaceView mSurface;
     private SurfaceHolder holder;
-    private ImageView playButton;
+    private FrameLayout playButton;
 
     // media player
     private LibVLC mLibVLC;
     private int mVideoWidth;
     private int mVideoHeight;
-    private final static int VideoSizeChanged = -1;
+
+    private Handler mPlayerEventHandler;
+    public boolean mSwitchingView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,11 +80,14 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
 
         Log.d(TAG, "Playing back " + mFilePath);
 
+        mPlayerEventHandler = new PlayerEventHandler(this);
+        mSwitchingView = false;
+
         mSurface = (SurfaceView) findViewById(R.id.surface);
         holder = mSurface.getHolder();
         holder.addCallback(this);
 
-        playButton = (ImageView) findViewById(R.id.play_button);
+        playButton = (FrameLayout) findViewById(R.id.play_button);
 
         dialog = new MaterialDialog.Builder(this)
                 .content(R.string.buffering)
@@ -133,7 +137,7 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
     public void surfaceDestroyed(SurfaceHolder surfaceholder) {
     }
 
-    private void setSize(int width, int height) {
+    public void setSize(int width, int height) {
         mVideoWidth = width;
         mVideoHeight = height;
         if (mVideoWidth * mVideoHeight <= 1)
@@ -177,7 +181,7 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
     @Override
     public void setSurfaceLayout(int width, int height, int visible_width,
                                  int visible_height, int sar_num, int sar_den) {
-        Message msg = Message.obtain(mHandler, VideoSizeChanged, width, height);
+        Message msg = Message.obtain(mPlayerEventHandler, VideoSizeChanged, width, height);
         msg.sendToTarget();
     }
 
@@ -193,7 +197,7 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
             mLibVLC.setVout(LibVLC.VOUT_ANDROID_WINDOW);
             mLibVLC.destroy();
             mLibVLC.init(this);
-            EventHandler.getInstance().addHandler(mHandler);
+            EventHandler.getInstance().addHandler(mPlayerEventHandler);
             holder.setKeepScreenOn(true);
             mLibVLC.playMRL(mFilePath);
         } catch (Exception e) {
@@ -201,10 +205,10 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
         }
     }
 
-    private void releasePlayer() {
+    public void releasePlayer() {
         if (mLibVLC == null)
             return;
-        EventHandler.getInstance().removeHandler(mHandler);
+        EventHandler.getInstance().removeHandler(mPlayerEventHandler);
         mLibVLC.stop();
         mLibVLC.detachSurface();
         holder = null;
@@ -212,47 +216,6 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
 
         mVideoWidth = 0;
         mVideoHeight = 0;
-    }
-
-    private Handler mHandler = new MyHandler(this);
-
-    private static class MyHandler extends Handler {
-        private WeakReference<LiveStreamActivity> mOwner;
-
-        public MyHandler(LiveStreamActivity owner) {
-            mOwner = new WeakReference<>(owner);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            LiveStreamActivity player = mOwner.get();
-
-            // SamplePlayer events
-            if (msg.what == VideoSizeChanged) {
-                player.setSize(msg.arg1, msg.arg2);
-                return;
-            }
-
-            // LibVLC events
-            Bundle b = msg.getData();
-            switch (b.getInt("event")) {
-                case EventHandler.MediaPlayerPlaying:
-                    Log.d(TAG, "MediaPlayerStartReached");
-                    player.dialogDismiss();
-                    break;
-                case EventHandler.MediaPlayerEndReached:
-                    Log.d(TAG, "MediaPlayerEndReached");
-                    player.showRePlayButton();
-                    player.releasePlayer();
-                    break;
-                case EventHandler.MediaPlayerEncounteredError:
-                    Log.d(TAG, "MediaPlayerErrorReached");
-                    player.showErrorDialog();
-                    break;
-                default:
-                    break;
-            }
-        }
     }
 
     @Override
@@ -286,11 +249,11 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
         return 1;
     }
 
-    private void dialogDismiss() {
+    public void dialogDismiss() {
         dialog.dismiss();
     }
 
-    private void showRePlayButton() {
+    public void showRePlayButton() {
         playButton.setVisibility(View.VISIBLE);
     }
 
@@ -299,7 +262,7 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
         recreate();
     }
 
-    private void showErrorDialog() {
+    public void showErrorDialog() {
         dialogDismiss();
         streamError();
     }

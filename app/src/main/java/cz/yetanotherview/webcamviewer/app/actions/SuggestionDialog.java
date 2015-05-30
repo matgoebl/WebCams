@@ -56,6 +56,7 @@ public class SuggestionDialog extends DialogFragment {
     private View positiveAction;
 
     private Activity mActivity;
+    private MaterialDialog dialog, progressDialog;
 
     @Override
     public void onAttach(Activity activity) {
@@ -67,10 +68,11 @@ public class SuggestionDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MaterialDialog dialog = new MaterialDialog.Builder(mActivity)
+        dialog = new MaterialDialog.Builder(mActivity)
                 .title(R.string.submit_suggestion)
                 .customView(R.layout.suggestion_layout, false)
                 .positiveText(R.string.send)
+                .negativeText(android.R.string.cancel)
                 .showListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {
@@ -85,10 +87,15 @@ public class SuggestionDialog extends DialogFragment {
                         if (mEmail.isShown()) {
                             inputEmail = mEmail.getText().toString().trim();
                         } else inputEmail = "none";
+                        showProgressDialog();
                         new createSuggestion().execute();
                     }
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        dialog.dismiss();
+                    }
                 })
-
+                .autoDismiss(false)
                 .build();
 
         mSuggestion = (EditText) dialog.getCustomView().findViewById(R.id.suggestion_input);
@@ -126,6 +133,14 @@ public class SuggestionDialog extends DialogFragment {
         return dialog;
     }
 
+    private void showProgressDialog() {
+        progressDialog = new MaterialDialog.Builder(mActivity)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .cancelable(false)
+                .show();
+    }
+
     private class createSuggestion extends AsyncTask<String, String, String> {
 
         protected String doInBackground(String... args) {
@@ -143,6 +158,8 @@ public class SuggestionDialog extends DialogFragment {
                 postDataParams.put("suggestion", inputSuggestion);
                 postDataParams.put("userEmail", inputEmail);
                 new PerformPostCall().performPostCall(url, postDataParams);
+                dialog.dismiss();
+                progressDialog.dismiss();
                 sent();
             }
             catch (IOException e) {
@@ -155,7 +172,8 @@ public class SuggestionDialog extends DialogFragment {
         @Override
         protected void onProgressUpdate(String... args) {
             super.onProgressUpdate(args);
-            new UnavailableDialog().show(getFragmentManager(), "UnavailableDialog");
+            progressDialog.dismiss();
+            new UnavailableDialog().show(mActivity.getFragmentManager(), "UnavailableDialog");
         }
     }
 

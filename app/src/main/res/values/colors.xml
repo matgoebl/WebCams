@@ -21,6 +21,7 @@
     <color name="another_grey">#505050</color>
     <color name="white_separator">#37ffffff</color>
     <color name="hint_gray">#6f909090</color>
+    <color name="next_grey">#9a9a9a</color>
 
     <color name="fab_normal">#DB4437</color>
     <color name="fab_pressed">#EF5350</color>

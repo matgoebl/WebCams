@@ -327,7 +327,7 @@ public class JsonFetcherDialog extends DialogFragment {
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-            new UnavailableDialog().show(getFragmentManager(), "UnavailableDialog");
+            new UnavailableDialog().show(mActivity.getFragmentManager(), "UnavailableDialog");
         }
     }
 

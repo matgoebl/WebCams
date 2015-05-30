@@ -22,7 +22,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
-import android.os.AsyncTask;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -35,18 +35,21 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.actions.simple.UnavailableDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.LinkAdapter;
+import cz.yetanotherview.webcamviewer.app.analyzer.AnalyzerCallback;
+import cz.yetanotherview.webcamviewer.app.analyzer.Analyzer;
+import cz.yetanotherview.webcamviewer.app.helper.ConnectionTester;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
-import cz.yetanotherview.webcamviewer.app.helper.ListImagesLinks;
 import cz.yetanotherview.webcamviewer.app.helper.OnTextChange;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.helper.YouTubeIntent;
+import cz.yetanotherview.webcamviewer.app.listener.ConnectionTesterListener;
 import cz.yetanotherview.webcamviewer.app.listener.WebCamListener;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.Link;
@@ -58,21 +61,21 @@ import cz.yetanotherview.webcamviewer.app.model.WebCam;
 public class AddDialog extends DialogFragment implements CategoryDialog.Callback, CoordinatesChooserDialog.Callback {
 
     private Activity mActivity;
-    private String mWebCamName, mWebCamUrl, mWebCamThumbUrl;
+    private String mWebCamName, mWebCamUrl, mWebCamThumbUrl, analyzingTitle;
     private EditText webCamUrlAddStream, webCamThumbUrlAddStream, webCamNameAdd, webCamLatitude, webCamLongitude, webcamUrlAddStill;
     private double mLatitude, mLongitude;
     private boolean mEmpty;
     private WebCamListener mOnAddListener;
     private MaterialDialog dialog;
-    private TextView webcamUrlTitleAddStill, webCamCategoryButton;
+    private TextView webcamUrlTitleAddStill, webCamCategoryButton, progressText;
     private StringBuilder selectedCategoriesNames;
     private List<Integer> category_ids;
     private List<Category> allCategories;
-    private List<Link> links;
+    private List<Link> imageLinks;
     private CheckBox stillImageDirectCheckBox;
     private DatabaseHelper db;
-
     private RadioButton liveStream;
+    private Analyzer analyzer;
 
     public AddDialog() {
     }
@@ -102,6 +105,8 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        analyzingTitle = mActivity.getString(R.string.analyzing) + " (BETA)"; //ToDo
+
         dialog = new MaterialDialog.Builder(mActivity)
                 .title(R.string.input_dialog_title)
                 .customView(R.layout.add_webcam_dialog_first, true)
@@ -130,6 +135,9 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
 
         liveStream = (RadioButton) dialog.getCustomView().findViewById(R.id.radioLiveStreamAdd);
 
+        imageLinks = new ArrayList<>();
+        analyzer = new Analyzer(mActivity, mCallback);
+
         return dialog;
     }
 
@@ -150,8 +158,26 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
                             dialog.dismiss();
                         } else {
                             if (mWebCamUrl.toLowerCase().contains("Http://".toLowerCase())) {
-                                openAnalyzeDialog();
-                                dialog.dismiss();
+                                showProgress(true);
+                                new ConnectionTester(mWebCamUrl, new ConnectionTesterListener() {
+                                    @Override
+                                    public void connectionStatus(boolean result) {
+                                        if (result) {
+                                            openAnalyzeDialog();
+                                        } else {
+                                            new ConnectionTester(Utils.GOOGLE, new ConnectionTesterListener() {
+                                                @Override
+                                                public void connectionStatus(boolean result) {
+                                                    if (result) {
+                                                        showAvailableButWrong();
+                                                    } else {
+                                                        showUnavailable();
+                                                    }
+                                                }
+                                            }).execute();
+                                        }
+                                    }
+                                }).execute();
                             } else showBadUrlDialog();
                         }
                     }
@@ -196,6 +222,18 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
         dialog.show();
     }
 
+    private void showAvailableButWrong() {
+        dialog.dismiss();
+        openSecondDialogStill();
+        webcamUrlAddStill.setText(mWebCamUrl);
+        showBadUrlDialog();
+    }
+
+    private void showUnavailable() {
+        dialog.dismiss();
+        new UnavailableDialog().show(mActivity.getFragmentManager(), "UnavailableDialog");
+    }
+
     private void showBadUrlDialog() {
         new MaterialDialog.Builder(mActivity)
                 .title(R.string.wrong_url)
@@ -206,47 +244,146 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
     }
 
     private void openAnalyzeDialog() {
-        String title = mActivity.getString(R.string.analyzing) + " (BETA)"; //ToDo
+        dialog.dismiss();
+
         dialog = new MaterialDialog.Builder(mActivity)
-                .title(title)
+                .title(analyzingTitle)
+                .content(R.string.analyze_links_confirmation)
+                .iconRes(R.drawable.settings_about)
+                .positiveText(R.string.Yes)
+                .negativeText(R.string.No)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+
+                        String noteMessage = "• " + mActivity.getString(R.string.analysis_time_info) + "\n"
+                                + "• " + mActivity.getString(R.string.analyzer_doesnt_work);
+
+                        new MaterialDialog.Builder(mActivity)
+                                .title(R.string.notice)
+                                .content(noteMessage)
+                                .positiveText(android.R.string.ok)
+                                .negativeText(R.string.back)
+                                .iconRes(R.drawable.settings_about)
+                                .callback(new MaterialDialog.ButtonCallback() {
+                                    @Override
+                                    public void onPositive(MaterialDialog dialog) {
+                                        showProgress(false);
+                                        analyzer.startTask(mWebCamUrl, true);
+                                    }
+                                    @Override
+                                    public void onNegative(MaterialDialog dialog) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        showProgress(false);
+                        analyzer.startTask(mWebCamUrl, false);
+                        dialog.dismiss();
+                    }
+                })
+                .autoDismiss(false)
+                .show();
+    }
+
+    private void showProgress(boolean beforeTest) {
+        dialog.dismiss();
+        dialog = new MaterialDialog.Builder(mActivity)
+                .title(analyzingTitle)
                 .content(R.string.please_wait)
                 .iconRes(R.drawable.dialog_still_image)
+                .cancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        manualCancel();
+                    }
+                })
                 .progress(true, 0)
-                .cancelable(false)
-                .show();
+                .build();
 
-        new runAnalyzeBackgroundTask().execute();
+        if (beforeTest) {
+            dialog.setCancelable(false);
+        }
+        else dialog.setCancelable(true);
+        progressText = dialog.getContentView();
 
+        dialog.show();
     }
 
-    private class runAnalyzeBackgroundTask extends AsyncTask<Void, Void, Void> {
+    private void manualCancel() {
+        analyzer.stopTask();
+        dialog.dismiss();
+        openSecondDialogStill();
+        webcamUrlAddStill.setText(mWebCamUrl);
+        new MaterialDialog.Builder(mActivity)
+                .title(R.string.aborted)
+                .content(R.string.analyzing_canceled)
+                .positiveText(android.R.string.ok)
+                .iconRes(R.drawable.warning)
+                .show();
+    }
+
+    private AnalyzerCallback mCallback = new AnalyzerCallback() {
+
+        int i = 0;
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        public void onAnalyzingUpdate(final String message) {
+            progressText.post(new Runnable() {
 
-            try {
-                links = ListImagesLinks.main(mWebCamUrl);
-            } catch (IOException e) {
-                links = new ArrayList<>();
-            }
-            return null;
+                @Override
+                public void run() {
+                    progressText.setText(message  + "\n" + mActivity.getString(R.string.completed_tasks) + i);
+                    i++;
+                }
+            });
         }
-
         @Override
-        protected void onPostExecute(Void result) {
+        public void onAnalyzingFailed(List<Link> links, String Url, int errorCode) {
+            // TODO:
+        }
+        @Override
+        public void onAnalyzingCompleted(List<Link> links, boolean fromComplete) {
+            imageLinks = links;
             dialog.dismiss();
-            if (links.size() != 0) {
+            if (imageLinks.size() != 0) {
                 openResultDialog();
-            }
-            else {
+            } else if (fromComplete) {
                 openSecondDialogStill();
                 webcamUrlAddStill.setText(mWebCamUrl);
-                openTryAgainDialog();
+                openNoResultsDialog();
             }
+            else openTryAgainDialog();
         }
-    }
+    };
 
     private void openTryAgainDialog() {
+        new MaterialDialog.Builder(mActivity)
+                .title(R.string.no_results)
+                .content(R.string.try_deeper_analyzing)
+                .positiveText(R.string.Yes)
+                .negativeText(R.string.No)
+                .iconRes(R.drawable.settings_about)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        showProgress(false);
+                        analyzer.startTask(mWebCamUrl, true);
+                    }
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        openSecondDialogStill();
+                        webcamUrlAddStill.setText(mWebCamUrl);
+                    }
+                })
+                .show();
+    }
+
+    private void openNoResultsDialog() {
         new MaterialDialog.Builder(mActivity)
                 .title(R.string.no_results)
                 .content(R.string.url_try_again)
@@ -259,11 +396,11 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
         dialog = new MaterialDialog.Builder(mActivity)
                 .title(R.string.select_webcam)
                 .iconRes(R.drawable.dialog_still_image)
-                .adapter(new LinkAdapter(mActivity, links),
+                .adapter(new LinkAdapter(mActivity, imageLinks),
                         new MaterialDialog.ListCallback() {
                             @Override
                             public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                                Link link = links.get(which);
+                                Link link = imageLinks.get(which);
                                 mWebCamUrl = link.getUrl();
                                 openThirdDialog(true);
                                 dialog.dismiss();

@@ -8,8 +8,8 @@ android {
         applicationId "cz.yetanotherview.webcamviewer.app"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 66
-        versionName "3.0 beta4"
+        versionCode 67
+        versionName "3.0 rc1"
     }
     buildTypes {
         release {
@@ -29,13 +29,13 @@ dependencies {
     compile 'com.android.support:cardview-v7:+'
     compile 'com.android.support:recyclerview-v7:+'
     compile 'com.android.support:gridlayout-v7:+'
-    compile 'org.videolan:libvlc:1.3.2'
+    compile 'org.videolan:libvlc:1.4.1.1'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'org.jsoup:jsoup:1.8.2'
     compile 'com.github.bumptech.glide:glide:3.6.0'
     compile 'com.getbase:floatingactionbutton:1.9.0'
     compile 'com.afollestad:material-dialogs:0.7.4.2'
-    compile 'com.nispok:snackbar:2.10.8'
+    compile 'com.nispok:snackbar:2.10.9'
     compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:0.7.3@aar'){
         transitive=true
     }

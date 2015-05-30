@@ -18,7 +18,6 @@
 
 package cz.yetanotherview.webcamviewer.app.listener;
 
-
 import android.widget.SeekBar;
 import android.widget.TextView;
 

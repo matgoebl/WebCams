@@ -141,6 +141,7 @@
         <item name="android:visibility">visible</item>
     </style>
 
+    <!-- ToDO: Not needed with new AppCompat?-->
     <style name="DialogContent">
         <item name="android:textSize">@dimen/md_content_textsize</item>
         <item name="android:textColor">?android:textColorSecondary</item>
