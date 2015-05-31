@@ -133,7 +133,7 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
                 .autoDismiss(false)
                 .build();
 
-        liveStream = (RadioButton) dialog.getCustomView().findViewById(R.id.radioLiveStreamAdd);
+        liveStream = (RadioButton) dialog.findViewById(R.id.radioLiveStreamAdd);
 
         imageLinks = new ArrayList<>();
         analyzer = new Analyzer(mActivity, mCallback);
@@ -195,15 +195,15 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
                 .autoDismiss(false)
                 .build();
 
-        webcamUrlTitleAddStill = (TextView) dialog.getCustomView().findViewById(R.id.webcam_url_title_add_still);
+        webcamUrlTitleAddStill = (TextView) dialog.findViewById(R.id.webcam_url_title_add_still);
 
         View positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
         positiveAction.setEnabled(false);
 
-        webcamUrlAddStill = (EditText) dialog.getCustomView().findViewById(R.id.webcam_url_add_still);
+        webcamUrlAddStill = (EditText) dialog.findViewById(R.id.webcam_url_add_still);
         webcamUrlAddStill.addTextChangedListener(new OnTextChange(positiveAction));
 
-        stillImageDirectCheckBox = (CheckBox) dialog.getCustomView().findViewById(R.id.still_image_direct_checkBox);
+        stillImageDirectCheckBox = (CheckBox) dialog.findViewById(R.id.still_image_direct_checkBox);
         stillImageDirectCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -443,10 +443,10 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
         View positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
         positiveAction.setEnabled(false);
 
-        webCamUrlAddStream = (EditText) dialog.getCustomView().findViewById(R.id.webcam_url_add_stream);
+        webCamUrlAddStream = (EditText) dialog.findViewById(R.id.webcam_url_add_stream);
         webCamUrlAddStream.addTextChangedListener(new OnTextChange(positiveAction));
 
-        webCamThumbUrlAddStream = (EditText) dialog.getCustomView().findViewById(R.id.webcam_thumb_url_add_stream);
+        webCamThumbUrlAddStream = (EditText) dialog.findViewById(R.id.webcam_thumb_url_add_stream);
 
         dialog.show();
     }
@@ -487,13 +487,13 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
         View positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
         positiveAction.setEnabled(false);
 
-        webCamNameAdd = (EditText) dialog.getCustomView().findViewById(R.id.webcam_name_add);
+        webCamNameAdd = (EditText) dialog.findViewById(R.id.webcam_name_add);
         webCamNameAdd.addTextChangedListener(new OnTextChange(positiveAction));
 
-        webCamLatitude = (EditText) dialog.getCustomView().findViewById(R.id.webcam_latitude_add);
-        webCamLongitude = (EditText) dialog.getCustomView().findViewById(R.id.webcam_longitude_add);
+        webCamLatitude = (EditText) dialog.findViewById(R.id.webcam_latitude_add);
+        webCamLongitude = (EditText) dialog.findViewById(R.id.webcam_longitude_add);
 
-        ImageView mWebCamCoordinatesMapSelector = (ImageView) dialog.getCustomView().findViewById(R.id.webcam_coordinates_map_selector_add);
+        ImageView mWebCamCoordinatesMapSelector = (ImageView) dialog.findViewById(R.id.webcam_coordinates_map_selector_add);
         mWebCamCoordinatesMapSelector.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -550,7 +550,7 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
         allCategories = db.getAllCategories();
         db.closeDB();
 
-        webCamCategoryButton = (TextView) dialog.getCustomView().findViewById(R.id.webcam_category_button_add);
+        webCamCategoryButton = (TextView) dialog.findViewById(R.id.webcam_category_button_add);
         webCamCategoryButton.setText(R.string.select_categories);
 
         webCamCategoryButton.setOnClickListener(new View.OnClickListener() {

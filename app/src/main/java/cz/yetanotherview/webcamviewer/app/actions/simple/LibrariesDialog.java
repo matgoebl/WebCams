@@ -92,10 +92,10 @@ public class LibrariesDialog extends DialogFragment {
     }
 
     private void initLibrary(MaterialDialog dialog, int libraries_title, String text, int libraries_container, SimpleIntentOnClickListener l) {
-        TextView mLibrariesTitle = (TextView) dialog.getCustomView().findViewById(libraries_title);
+        TextView mLibrariesTitle = (TextView) dialog.findViewById(libraries_title);
         mLibrariesTitle.setText(text);
 
-        LinearLayout mLibrariesContainer = (LinearLayout) dialog.getCustomView().findViewById(libraries_container);
+        LinearLayout mLibrariesContainer = (LinearLayout) dialog.findViewById(libraries_container);
         mLibrariesContainer.setOnClickListener(l);
     }
 }

@@ -98,11 +98,11 @@ public class SuggestionDialog extends DialogFragment {
                 .autoDismiss(false)
                 .build();
 
-        mSuggestion = (EditText) dialog.getCustomView().findViewById(R.id.suggestion_input);
+        mSuggestion = (EditText) dialog.findViewById(R.id.suggestion_input);
         mSuggestion.setHint(R.string.submit_suggestion_hint);
         mSuggestion.requestFocus();
 
-        CheckBox suggestionCheckBox = (CheckBox) dialog.getCustomView().findViewById(R.id.suggestion_checkbox);
+        CheckBox suggestionCheckBox = (CheckBox) dialog.findViewById(R.id.suggestion_checkbox);
         suggestionCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -123,7 +123,7 @@ public class SuggestionDialog extends DialogFragment {
             }
         });
 
-        mEmail = (EditText) dialog.getCustomView().findViewById(R.id.suggestion_email);
+        mEmail = (EditText) dialog.findViewById(R.id.suggestion_email);
         mEmail.setHint(R.string.email_hint);
 
         positiveAction = dialog.getActionButton(DialogAction.POSITIVE);

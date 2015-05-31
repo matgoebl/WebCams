@@ -61,7 +61,7 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
         for (int i = 0; i < ta.length(); i++)
             mColors[i] = ta.getColor(i, 0);
         ta.recycle();
-        final GridLayout list = (GridLayout) dialog.getCustomView().findViewById(R.id.grid);
+        final GridLayout list = (GridLayout) dialog.findViewById(R.id.grid);
         final int preselect = getArguments().getInt("preselect", -1);
         fromTextButton = getArguments().getBoolean("fromTextButton", true);
 

@@ -93,8 +93,8 @@ public class ImportDialog extends DialogFragment {
                 .build();
 
         listButtonAdapter = new ListButtonAdapter(mActivity, Utils.getFiles(Utils.folderWCVPath));
-        ListView listView = (ListView) importDialog.getCustomView().findViewById(R.id.list_files);
-        View empty = importDialog.getCustomView().findViewById(R.id.list_files_empty);
+        ListView listView = (ListView) importDialog.findViewById(R.id.list_files);
+        View empty = importDialog.findViewById(R.id.list_files_empty);
         listView.setEmptyView(empty);
         listView.setAdapter(listButtonAdapter);
 
@@ -110,13 +110,13 @@ public class ImportDialog extends DialogFragment {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
-            LinearLayout containerLayout = (LinearLayout) importDialog.getCustomView().findViewById(R.id.container_layout);
+            LinearLayout containerLayout = (LinearLayout) importDialog.findViewById(R.id.container_layout);
             containerLayout.setVisibility(View.VISIBLE);
 
             ArrayAdapter<String> itemsAdapter =
                     new ArrayAdapter<>(mActivity, R.layout.simple_list_item,
                             Collections.singletonList(mActivity.getString(R.string.browse)));
-            ListView fakeList = (ListView) importDialog.getCustomView().findViewById(R.id.fake_list);
+            ListView fakeList = (ListView) importDialog.findViewById(R.id.fake_list);
             fakeList.setVisibility(View.VISIBLE);
             fakeList.setAdapter(itemsAdapter);
 

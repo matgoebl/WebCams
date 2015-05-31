@@ -93,7 +93,7 @@ public class ExportDialog extends DialogFragment {
                         }
                     }).build();
 
-            input = (EditText) dialog.getCustomView().findViewById(R.id.input_name);
+            input = (EditText) dialog.findViewById(R.id.input_name);
             input.requestFocus();
             input.setText(Utils.getCustomDateString("yyyy-MM-dd_HH-mm"));
 
@@ -103,7 +103,7 @@ public class ExportDialog extends DialogFragment {
             }
             else backUpValues = getResources().getStringArray(R.array.backup_values_pre_kk);
 
-            spinner = (Spinner) dialog.getCustomView().findViewById(R.id.backup_spinner);
+            spinner = (Spinner) dialog.findViewById(R.id.backup_spinner);
             spinner.setAdapter(new SpinnerAdapter(getActivity(), R.layout.spinner_item, backUpValues));
 
             View positiveAction = dialog.getActionButton(DialogAction.POSITIVE);

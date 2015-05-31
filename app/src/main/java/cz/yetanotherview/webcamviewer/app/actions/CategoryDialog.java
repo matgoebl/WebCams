@@ -92,8 +92,8 @@ public class CategoryDialog extends DialogFragment {
                 .autoDismiss(false)
                 .build();
 
-        ListView categorySelectionList = (ListView) dialog.getCustomView().findViewById(R.id.category_list_view);
-        categorySelectionList.setEmptyView(dialog.getCustomView().findViewById(R.id.no_categories));
+        ListView categorySelectionList = (ListView) dialog.findViewById(R.id.category_list_view);
+        categorySelectionList.setEmptyView(dialog.findViewById(R.id.no_categories));
         categorySelectionAdapter = new CategorySelectionAdapter(mActivity, allCategories);
         categorySelectionList.setAdapter(categorySelectionAdapter);
 

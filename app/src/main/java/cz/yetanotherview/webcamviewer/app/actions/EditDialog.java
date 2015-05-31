@@ -121,27 +121,27 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
                     }
                 }).build();
 
-        RadioButton stillImage = (RadioButton) dialog.getCustomView().findViewById(R.id.radioStillImage);
-        liveStream = (RadioButton) dialog.getCustomView().findViewById(R.id.radioLiveStream);
+        RadioButton stillImage = (RadioButton) dialog.findViewById(R.id.radioStillImage);
+        liveStream = (RadioButton) dialog.findViewById(R.id.radioLiveStream);
 
-        mWebCamName = (EditText) dialog.getCustomView().findViewById(R.id.webcam_name);
+        mWebCamName = (EditText) dialog.findViewById(R.id.webcam_name);
         mWebCamName.setText(webCam.getName());
         mWebCamName.requestFocus();
 
-        mWebCamUrl = (EditText) dialog.getCustomView().findViewById(R.id.webcam_url);
+        mWebCamUrl = (EditText) dialog.findViewById(R.id.webcam_url);
         mWebCamUrl.setText(webCam.getUrl());
 
-        mWebCamThumbUrlTitle = (TextView) dialog.getCustomView().findViewById(R.id.webcam_thumb_url_title);
-        mWebCamThumbUrl = (EditText) dialog.getCustomView().findViewById(R.id.webcam_thumb_url);
+        mWebCamThumbUrlTitle = (TextView) dialog.findViewById(R.id.webcam_thumb_url_title);
+        mWebCamThumbUrl = (EditText) dialog.findViewById(R.id.webcam_thumb_url);
         mWebCamThumbUrl.setText(webCam.getThumbUrl());
 
-        mWebCamLatitude = (EditText) dialog.getCustomView().findViewById(R.id.webcam_latitude);
+        mWebCamLatitude = (EditText) dialog.findViewById(R.id.webcam_latitude);
         mWebCamLatitude.setText(String.valueOf(webCam.getLatitude()));
 
-        mWebCamLongitude = (EditText) dialog.getCustomView().findViewById(R.id.webcam_longitude);
+        mWebCamLongitude = (EditText) dialog.findViewById(R.id.webcam_longitude);
         mWebCamLongitude.setText(String.valueOf(webCam.getLongitude()));
 
-        ImageView mWebCamCoordinatesMapSelector = (ImageView) dialog.getCustomView().findViewById(R.id.webcam_coordinates_map_selector);
+        ImageView mWebCamCoordinatesMapSelector = (ImageView) dialog.findViewById(R.id.webcam_coordinates_map_selector);
         mWebCamCoordinatesMapSelector.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,7 +160,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
             }
         });
 
-        webCamCategoryButton = (TextView) dialog.getCustomView().findViewById(R.id.webcam_category_button);
+        webCamCategoryButton = (TextView) dialog.findViewById(R.id.webcam_category_button);
         if (getIdsFromDb().size() == 0) {
             webCamCategoryButton.setText(R.string.select_categories);
         }

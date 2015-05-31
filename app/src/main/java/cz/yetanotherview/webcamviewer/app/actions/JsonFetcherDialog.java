@@ -382,8 +382,8 @@ public class JsonFetcherDialog extends DialogFragment {
                             .positiveText(android.R.string.ok)
                             .build();
 
-                    seekBar = (SeekBar) dialog.getCustomView().findViewById(R.id.seekbar_seek);
-                    seekBarText = (TextView) dialog.getCustomView().findViewById(R.id.seekbar_text);
+                    seekBar = (SeekBar) dialog.findViewById(R.id.seekbar_seek);
+                    seekBarText = (TextView) dialog.findViewById(R.id.seekbar_text);
 
                     units = " km";
                     String mLocale = getResources().getConfiguration().locale.getISO3Country();
@@ -426,15 +426,15 @@ public class JsonFetcherDialog extends DialogFragment {
                         .positiveText(R.string.import_selected)
                         .build();
 
-                ListView manualSelectionList = (ListView) dialog.getCustomView().findViewById(R.id.filtered_list_view);
-                manualSelectionList.setEmptyView(dialog.getCustomView().findViewById(R.id.empty_info_text));
+                ListView manualSelectionList = (ListView) dialog.findViewById(R.id.filtered_list_view);
+                manualSelectionList.setEmptyView(dialog.findViewById(R.id.empty_info_text));
                 manualSelectionAdapter = new ManualSelectionAdapter(mActivity, importWebCams);
                 manualSelectionList.setAdapter(manualSelectionAdapter);
 
-                filterBox = (EditText) dialog.getCustomView().findViewById(R.id.ms_filter);
+                filterBox = (EditText) dialog.findViewById(R.id.ms_filter);
                 filterBox.addTextChangedListener(new OnFilterTextChange(manualSelectionAdapter));
 
-                CheckBox chkAll = (CheckBox) dialog.getCustomView().findViewById(R.id.chkAll);
+                CheckBox chkAll = (CheckBox) dialog.findViewById(R.id.chkAll);
                 chkAll.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -523,7 +523,7 @@ public class JsonFetcherDialog extends DialogFragment {
                         .positiveText(R.string.import_selected)
                         .build();
 
-                mMapView = (MapView) dialog.getCustomView().findViewById(R.id.mapView);
+                mMapView = (MapView) dialog.findViewById(R.id.mapView);
                 LatLng latLng = new LatLng(knownLocation.getLatitude(), knownLocation.getLongitude());
                 mMapView.setCenter(latLng);
                 if (knownLocation.isNotDetected()) {
@@ -536,14 +536,14 @@ public class JsonFetcherDialog extends DialogFragment {
 
                 mMapView.setDiskCacheEnabled(false);
 
-                ImageButton zoomIn = (ImageButton) dialog.getCustomView().findViewById(R.id.zoomIn);
+                ImageButton zoomIn = (ImageButton) dialog.findViewById(R.id.zoomIn);
                 zoomIn.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         mMapView.getController().zoomIn();
                     }
                 });
 
-                ImageButton zoomOut = (ImageButton) dialog.getCustomView().findViewById(R.id.zoomOut);
+                ImageButton zoomOut = (ImageButton) dialog.findViewById(R.id.zoomOut);
                 zoomOut.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         mMapView.getController().zoomOut();

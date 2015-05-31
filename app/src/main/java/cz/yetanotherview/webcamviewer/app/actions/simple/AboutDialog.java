@@ -49,7 +49,7 @@ public class AboutDialog extends DialogFragment {
                 .iconRes(R.drawable.settings_about)
                 .build();
 
-        ImageView mAboutAuthorImage = (ImageView) dialog.getCustomView().findViewById(R.id.about_image);
+        ImageView mAboutAuthorImage = (ImageView) dialog.findViewById(R.id.about_image);
         loadImage(mAboutAuthorImage, "http://www.gravatar.com/avatar/3be466b04b57b07a9f6efce06685713f.jpg?s=256");
 
         initAbout(dialog, R.id.about_author_container, new SimpleIntentOnClickListener(getActivity(),
@@ -85,7 +85,7 @@ public class AboutDialog extends DialogFragment {
     }
 
     private void initAbout(MaterialDialog dialog, int about_container, SimpleIntentOnClickListener l) {
-        LinearLayout mAboutAuthorContainer = (LinearLayout) dialog.getCustomView().findViewById(about_container);
+        LinearLayout mAboutAuthorContainer = (LinearLayout) dialog.findViewById(about_container);
         mAboutAuthorContainer.setOnClickListener(l);
     }
 

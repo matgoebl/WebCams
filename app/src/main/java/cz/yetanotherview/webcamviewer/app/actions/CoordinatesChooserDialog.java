@@ -70,7 +70,7 @@ public class CoordinatesChooserDialog extends DialogFragment {
                 })
                 .build();
 
-        mMapView = (MapView) dialog.getCustomView().findViewById(R.id.mapView);
+        mMapView = (MapView) dialog.findViewById(R.id.mapView);
 
         if (getArguments().getBoolean("empty")) {
             marker = null;
@@ -82,14 +82,14 @@ public class CoordinatesChooserDialog extends DialogFragment {
             mMapView.setCenter(initPosition);
         }
 
-        ImageButton zoomIn = (ImageButton) dialog.getCustomView().findViewById(R.id.zoomIn);
+        ImageButton zoomIn = (ImageButton) dialog.findViewById(R.id.zoomIn);
         zoomIn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mMapView.getController().zoomIn();
             }
         });
 
-        ImageButton zoomOut = (ImageButton) dialog.getCustomView().findViewById(R.id.zoomOut);
+        ImageButton zoomOut = (ImageButton) dialog.findViewById(R.id.zoomOut);
         zoomOut.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mMapView.getController().zoomOut();

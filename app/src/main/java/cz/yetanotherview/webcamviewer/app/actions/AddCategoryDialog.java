@@ -104,7 +104,7 @@ public class AddCategoryDialog extends DialogFragment {
                 })
                 .build();
 
-        category_icon = (ImageView) dialog.getCustomView().findViewById(R.id.category_icon);
+        category_icon = (ImageView) dialog.findViewById(R.id.category_icon);
         category_icon.setImageResource(R.drawable.icon_manual);
         category_icon.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -130,7 +130,7 @@ public class AddCategoryDialog extends DialogFragment {
             }
         });
 
-        input = (EditText) dialog.getCustomView().findViewById(R.id.category_name);
+        input = (EditText) dialog.findViewById(R.id.category_name);
         input.requestFocus();
         input.setHint(R.string.new_category_hint);
 

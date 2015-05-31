@@ -99,7 +99,7 @@ public class EditCategoryDialog extends DialogFragment {
                     }
                 }).build();
 
-        category_icon = (ImageView) dialog.getCustomView().findViewById(R.id.category_icon);
+        category_icon = (ImageView) dialog.findViewById(R.id.category_icon);
 
         String iconName = category.getCategoryIcon();
         if (iconName == null) {
@@ -131,7 +131,7 @@ public class EditCategoryDialog extends DialogFragment {
             }
         });
 
-        input = (EditText) dialog.getCustomView().findViewById(R.id.category_name);
+        input = (EditText) dialog.findViewById(R.id.category_name);
         input.requestFocus();
         input.setText(category.getCategoryName());
 

@@ -133,8 +133,8 @@ public class SettingsFragment extends PreferenceFragment {
                         })
                         .build();
 
-                seekBar = (SeekBar) dialog.getCustomView().findViewById(R.id.seekbar_seek);
-                seekBarText = (TextView) dialog.getCustomView().findViewById(R.id.seekbar_text);
+                seekBar = (SeekBar) dialog.findViewById(R.id.seekbar_seek);
+                seekBarText = (TextView) dialog.findViewById(R.id.seekbar_text);
 
                 units = "s";
                 seekBarCorrection = 5;
@@ -211,16 +211,16 @@ public class SettingsFragment extends PreferenceFragment {
                             })
                             .build();
 
-                    manualSelectionList = (ListView) dialog.getCustomView().findViewById(R.id.filtered_list_view);
-                    manualSelectionList.setEmptyView(dialog.getCustomView().findViewById(R.id.empty_info_text));
+                    manualSelectionList = (ListView) dialog.findViewById(R.id.filtered_list_view);
+                    manualSelectionList.setEmptyView(dialog.findViewById(R.id.empty_info_text));
                     manualSelectionAdapter = new ManualSelectionAdapter(getActivity(), allWebCams);
                     manualSelectionList.setAdapter(manualSelectionAdapter);
 
-                    filterBox = (EditText) dialog.getCustomView().findViewById(R.id.ms_filter);
+                    filterBox = (EditText) dialog.findViewById(R.id.ms_filter);
                     filterBox.setHint(R.string.enter_name);
                     filterBox.addTextChangedListener(new OnFilterTextChange(manualSelectionAdapter));
 
-                    CheckBox chkAll = (CheckBox) dialog.getCustomView().findViewById(R.id.chkAll);
+                    CheckBox chkAll = (CheckBox) dialog.findViewById(R.id.chkAll);
                     chkAll.setOnClickListener(new View.OnClickListener() {
 
                         @Override
@@ -352,8 +352,8 @@ public class SettingsFragment extends PreferenceFragment {
                         })
                         .build();
 
-                seekBar = (SeekBar) dialog.getCustomView().findViewById(R.id.seekbar_seek);
-                seekBarText = (TextView) dialog.getCustomView().findViewById(R.id.seekbar_text);
+                seekBar = (SeekBar) dialog.findViewById(R.id.seekbar_seek);
+                seekBarText = (TextView) dialog.findViewById(R.id.seekbar_text);
 
                 units = "x " + getString(R.string.zoom_small);
                 seekBarCorrection = 1;

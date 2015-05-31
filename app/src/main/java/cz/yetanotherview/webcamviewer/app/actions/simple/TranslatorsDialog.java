@@ -100,13 +100,13 @@ public class TranslatorsDialog extends DialogFragment {
         String lang = new Locale(language, "").getDisplayLanguage();
         String capLang = lang.substring(0, 1).toUpperCase() + lang.substring(1);
 
-        ImageView mTranslatorLanguageFlag = (ImageView) dialog.getCustomView().findViewById(translator_language_flag);
+        ImageView mTranslatorLanguageFlag = (ImageView) dialog.findViewById(translator_language_flag);
         mTranslatorLanguageFlag.setImageResource(Utils.getResId(country_flag, R.drawable.class));
 
-        TextView mTranslatorLanguage = (TextView) dialog.getCustomView().findViewById(translator_language);
+        TextView mTranslatorLanguage = (TextView) dialog.findViewById(translator_language);
         mTranslatorLanguage.setText(capLang);
 
-        LinearLayout mTranslatorLanguageContainer = (LinearLayout) dialog.getCustomView().findViewById(translator_container);
+        LinearLayout mTranslatorLanguageContainer = (LinearLayout) dialog.findViewById(translator_container);
         mTranslatorLanguageContainer.setOnClickListener(l);
     }
 }
