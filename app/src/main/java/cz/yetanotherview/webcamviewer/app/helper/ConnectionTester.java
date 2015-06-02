@@ -18,51 +18,18 @@
 
 package cz.yetanotherview.webcamviewer.app.helper;
 
-import android.os.AsyncTask;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Arrays;
+public class ConnectionTester {
 
-import cz.yetanotherview.webcamviewer.app.listener.ConnectionTesterListener;
+    public static boolean isConnected(Context context){
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-import static junit.framework.Assert.assertTrue;
-
-public class ConnectionTester extends AsyncTask<Void, Void, Boolean> {
-
-    private String url;
-    private ConnectionTesterListener mListener;
-    private Integer[] statusCodes = { HttpURLConnection.HTTP_OK, HttpURLConnection.HTTP_CREATED,
-            HttpURLConnection.HTTP_ACCEPTED, HttpURLConnection.HTTP_MOVED_PERM,
-            HttpURLConnection.HTTP_MOVED_TEMP, HttpURLConnection.HTTP_NO_CONTENT};
-
-    public ConnectionTester(String url, ConnectionTesterListener mListener) {
-        this.url = url;
-        this.mListener  = mListener;
-    }
-
-    @Override
-    protected Boolean doInBackground(Void... params) {
-
-        Boolean status;
-        try {
-            HttpURLConnection urlConn = (HttpURLConnection) new URL(url).openConnection();
-            urlConn.connect();
-            int responseCode = urlConn.getResponseCode();
-            assertTrue(Arrays.asList(statusCodes).contains(responseCode));
-            status = true;
-        }
-        catch (IOException e) {
-            System.err.println("Error creating HTTP connection");
-            status = false;
-        }
-        return status;
-    }
-
-    @Override
-    protected void onPostExecute(Boolean result) {
-        if (mListener != null)
-            mListener.connectionStatus(result);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
     }
 }

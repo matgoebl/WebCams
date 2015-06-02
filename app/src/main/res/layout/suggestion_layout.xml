@@ -37,6 +37,9 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/DialogContent"
+        android:textSize="14sp"
+        android:layout_gravity="center_horizontal"
         android:text="@string/get_feedback"
         android:layout_marginTop="@dimen/middle_margin"
         android:id="@+id/suggestion_checkbox" />

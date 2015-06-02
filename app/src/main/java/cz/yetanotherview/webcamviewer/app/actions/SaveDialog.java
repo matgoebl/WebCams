@@ -84,26 +84,20 @@ public class SaveDialog extends DialogFragment {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        new ConnectionTester(url, new ConnectionTesterListener() {
-                            @Override
-                            public void connectionStatus(boolean result) {
-                                if (result) {
-                                    materialDialog.dismiss();
-                                    DialogFragment saveProgressDialog = new SaveProgressDialog();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("name", name);
-                                    bundle.putString("url", url);
-                                    bundle.putString("path", parentFolder.getAbsolutePath());
-                                    saveProgressDialog.setArguments(bundle);
-                                    saveProgressDialog.show(getFragmentManager(), "SaveProgressDialog");
-                                } else {
-                                    materialDialog.dismiss();
-                                    new UnavailableDialog().show(getFragmentManager(), "UnavailableDialog");
-                                }
-                            }
-                        }).execute();
+                        if (ConnectionTester.isConnected(getActivity())) {
+                            materialDialog.dismiss();
+                            DialogFragment saveProgressDialog = new SaveProgressDialog();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("name", name);
+                            bundle.putString("url", url);
+                            bundle.putString("path", parentFolder.getAbsolutePath());
+                            saveProgressDialog.setArguments(bundle);
+                            saveProgressDialog.show(getFragmentManager(), "SaveProgressDialog");
+                        } else {
+                            materialDialog.dismiss();
+                            new UnavailableDialog().show(getFragmentManager(), "UnavailableDialog");
+                        }
                     }
-
                     @Override
                     public void onNegative(MaterialDialog dialog) {
                         dialog.dismiss();

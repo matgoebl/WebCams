@@ -39,6 +39,7 @@ import android.os.AsyncTask;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.helper.LinkSizeComparator;
+import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.model.Link;
 
 public class Analyzer {
@@ -49,7 +50,7 @@ public class Analyzer {
 
     private boolean complete;
     private static final int sleep = 10;
-    private static final int trimEnd = 10;
+    private static final int trimEnd = 22;
     private static final int minAllowedWidth = 320;
     private static final int minAllowedFileSize = 30000;
     private static final String[] feedRules = {"rss","feed"};
@@ -71,7 +72,7 @@ public class Analyzer {
 
     public void stopTask() {
         if (mTask != null) {
-            mTask.cancel(true); //ToDO: Not Work, if fetching started !!!
+            mTask.cancel(true);
         }
     }
 
@@ -137,8 +138,8 @@ public class Analyzer {
             for (Element src : media) {
                 if (src.tagName().equals("img")) {
                     Thread.sleep(sleep);
-                    publishProgress(context.getString(R.string.processing_image) + trimFromEnd(src.attr("abs:src"), trimEnd));
-                    if (!stringContainsItem(src.attr("abs:src"), notAllowed)) {
+                    publishProgress(context.getString(R.string.processing_image) + "\n" + trimFromEnd(src.attr("abs:src"), trimEnd));
+                    if (!Utils.stringContainsItem(src.attr("abs:src"), notAllowed)) {
                         String widthString = src.attr("width");
                         int width;
                         if (!widthString.isEmpty()) {
@@ -174,8 +175,8 @@ public class Analyzer {
             for (Element link : links) {
                 if (!link.attr("abs:href").isEmpty()) {
                     Thread.sleep(sleep);
-                    publishProgress(context.getString(R.string.processing_link) + trimFromEnd(link.attr("abs:href"), trimEnd));
-                    if (stringContainsItem(link.attr("abs:href"), linksRules)) {
+                    publishProgress(context.getString(R.string.processing_link) + "\n" + trimFromEnd(link.attr("abs:href"), trimEnd));
+                    if (Utils.stringContainsItem(link.attr("abs:href"), linksRules)) {
                         finalLinks.add(link.attr("abs:href"));
                         print(" * a: <%s>", link.attr("abs:href"));
                     }
@@ -191,15 +192,15 @@ public class Analyzer {
             int i = 0;
             for (Element link : imports) {
                 if (!link.attr("abs:href").isEmpty()) {
-                    if (stringContainsItem(link.attr("abs:href"), feedRules)) {
+                    if (Utils.stringContainsItem(link.attr("abs:href"), feedRules)) {
                         print(" * link: <%s>", link.attr("abs:href"));
 
                         Document feedLink = Jsoup.connect(link.attr("abs:href")).get();
                         List<String> extractedUrls = extractUrls(feedLink.toString());
                         for (String extractedUrl : extractedUrls) {
                             Thread.sleep(sleep);
-                            publishProgress(context.getString(R.string.processing_feed_url) + trimFromEnd(extractedUrl, trimEnd));
-                            if (stringContainsItem(extractedUrl, imgRules)) {
+                            publishProgress(context.getString(R.string.processing_feed_url) + "\n" + trimFromEnd(extractedUrl, trimEnd));
+                            if (Utils.stringContainsItem(extractedUrl, imgRules)) {
                                 finalImgFeedLinks.add(new Link(i, extractedUrl, 0, 0));
                                 System.out.println("Extracted Url: " + extractedUrl);
                                 i++;
@@ -222,14 +223,15 @@ public class Analyzer {
             }
             List<Link> finalLinks = new ArrayList<>();
             for (Link link : noDuplicates) {
+                if (isCancelled()) break;
                 URL testUrl = new URL(link.getUrl());
                 URLConnection urlConnection = testUrl.openConnection();
                 urlConnection.connect();
                 int file_size = urlConnection.getContentLength();
                 System.out.println("Fetching size: " + link.getUrl() + " " + file_size);
-                publishProgress(context.getString(R.string.fetching_size) + trimFromEnd(link.getUrl(), trimEnd));
+                publishProgress(context.getString(R.string.fetching_size) + "\n" + trimFromEnd(link.getUrl(), trimEnd));
                 if (complete) {
-                    if (stringContainsItem(link.getUrl(), jpgRules)) {
+                    if (Utils.stringContainsItem(link.getUrl(), jpgRules)) {
                         if (file_size >= minAllowedFileSize) {
                             link.setSize(file_size);
                             finalLinks.add(link);
@@ -277,15 +279,6 @@ public class Analyzer {
             return " ..." + s.substring(s.length()-width, s.length());
         else
             return s;
-    }
-
-    private static boolean stringContainsItem(String inputString, String[] items) {
-        for (String item : items) {
-            if (inputString.contains(item)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private static List<String> extractUrls(String text) {

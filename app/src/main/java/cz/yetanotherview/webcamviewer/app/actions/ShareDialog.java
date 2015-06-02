@@ -64,17 +64,11 @@ public class ShareDialog extends DialogFragment {
                 .build();
 
         createFolders();
-        new ConnectionTester(url, new ConnectionTesterListener() {
-            @Override
-            public void connectionStatus(boolean result) {
-                if (result) {
-                    new ShareImage().execute();
-                } else {
-                    mProgressDialog.dismiss();
-                    new UnavailableDialog().show(getFragmentManager(), "UnavailableDialog");
-                }
-            }
-        }).execute();
+        if (ConnectionTester.isConnected(getActivity())) {
+            new ShareImage().execute(true);
+        } else {
+            new ShareImage().execute(false);
+        }
 
         return mProgressDialog;
     }
@@ -90,41 +84,44 @@ public class ShareDialog extends DialogFragment {
         }
     }
 
-    private class ShareImage extends AsyncTask <String,Integer,Long> {
+    private class ShareImage extends AsyncTask <Boolean,Integer,Long> {
 
         @Override
-        protected Long doInBackground(String... args) {
+        protected Long doInBackground(Boolean... booleans) {
             int count;
-            try {
-                URL mUrl = new URL(url);
-                URLConnection connexion = mUrl.openConnection();
-                connexion.connect();
-                String targetFileName = "share_image_" + System.currentTimeMillis() + ".jpg";
-                int lengthOfFile = connexion.getContentLength();
-                InputStream input = new BufferedInputStream(mUrl.openStream());
-                OutputStream output = new FileOutputStream(tmpFolderPath + targetFileName);
-                byte data[] = new byte[1024];
-                long total = 0;
-                while ((count = input.read(data)) != -1) {
-                    total += count;
-                    publishProgress ((int)(total*100/lengthOfFile));
-                    output.write(data, 0, count);
-                }
-                output.flush();
-                output.close();
-                input.close();
+            if (booleans[0]) {
+                try {
+                    URL mUrl = new URL(url);
+                    URLConnection connexion = mUrl.openConnection();
+                    connexion.connect();
+                    String targetFileName = "share_image_" + System.currentTimeMillis() + ".jpg";
+                    int lengthOfFile = connexion.getContentLength();
+                    InputStream input = new BufferedInputStream(mUrl.openStream());
+                    OutputStream output = new FileOutputStream(tmpFolderPath + targetFileName);
+                    byte data[] = new byte[1024];
+                    long total = 0;
+                    while ((count = input.read(data)) != -1) {
+                        total += count;
+                        publishProgress ((int)(total*100/lengthOfFile));
+                        output.write(data, 0, count);
+                    }
+                    output.flush();
+                    output.close();
+                    input.close();
 
-                // Compress
-                File file =  new File(tmpFolderPath + targetFileName);
-                Bitmap bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
-                FileOutputStream out = new FileOutputStream(file);
-                bmp.compress(Bitmap.CompressFormat.JPEG, 78, out);
-                out.close();
+                    // Compress
+                    File file =  new File(tmpFolderPath + targetFileName);
+                    Bitmap bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    FileOutputStream out = new FileOutputStream(file);
+                    bmp.compress(Bitmap.CompressFormat.JPEG, 78, out);
+                    out.close();
 
-                bmpUri = Uri.fromFile(file);
+                    bmpUri = Uri.fromFile(file);
 
-                continueOnUiThread();
-            } catch (Exception ignored) {}
+                    continueOnUiThread(true);
+                } catch (Exception ignored) {}
+            }
+            else continueOnUiThread(false);
             return null;
         }
         protected void onProgressUpdate(Integer... progress) {
@@ -132,17 +129,19 @@ public class ShareDialog extends DialogFragment {
         }
     }
 
-    private void continueOnUiThread() {
+    private void continueOnUiThread(final boolean connected) {
 
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 mProgressDialog.dismiss();
 
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("image/jpeg");
-                shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
-                startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share)));
-
+                if (connected) {
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("image/jpeg");
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+                    startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share)));
+                }
+                else new UnavailableDialog().show(getFragmentManager(), "UnavailableDialog");
             }
         });
     }

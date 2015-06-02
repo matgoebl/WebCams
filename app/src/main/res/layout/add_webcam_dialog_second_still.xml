@@ -41,10 +41,11 @@
     <CheckBox
         android:id="@+id/still_image_direct_checkBox"
         style="@style/DialogContent"
-        android:layout_marginTop="@dimen/five_margin"
+        android:layout_marginTop="@dimen/big_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dont_analyze"
+        android:textSize="14sp"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

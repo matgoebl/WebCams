@@ -192,6 +192,7 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
 
                 allWebCams = db.getAllWebCams(Utils.defaultSortOrder);
+                db.closeDB();
                 if (allWebCams.size() > 0) {
                     MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                             .title(R.string.delete_webcams)

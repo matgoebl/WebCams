@@ -54,20 +54,19 @@ public class Utils {
     public static String dateTimeFormat = "yyyy-MM-dd HH:mm:ss, zzzz";
 
     public static final String YAV = "http://www.yetanotherview.cz/";
-    public static final String GOOGLE = "https://www.google.com/";
 
     public static final String HELP_PRESENTATION_ = "Xcp0j2vwbxI";
     public static final String HELP_MANUALLY_ADDING = "liYtvXE0JTI";
 
-    public static final String SUPPORT_LIBRARIES_VERSION = "22.1.1";
+    public static final String SUPPORT_LIBRARIES_VERSION = "22.2.0";
     public static final String GLIDE_VERSION = "3.6.0";
     public static final String LIB_VLC_VERSION = "1.4.1.1";
-    public static final String MATERIAL_DIALOGS_VERSION = "0.7.5.0";
+    public static final String MATERIAL_DIALOGS_VERSION = "0.7.5.1";
     public static final String GOOGLE_GSON_VERSION = "2.3.1";
     public static final String JSOUP_VERSION = "1.8.2";
     public static final String MAPBOX_VERSION = "0.7.3";
     public static final String FAB_VERSION = "1.9.0";
-    public static final String SNACKBAR_VERSION = "2.10.9";
+    public static final String SNACKBAR_VERSION = "2.10.10";
 
     private static final String JSON_FILE_CORE = "http://api.yetanotherview.cz/api/v2/";
     public static final String JSON_FILE_URL_ALL = JSON_FILE_CORE + "get_all_webcams.php";
@@ -279,5 +278,17 @@ public class Utils {
         int exp = (int) (Math.log(bytes) / Math.log(unit));
         String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+    }
+
+    /**
+     * Test if Array of Strings contain given text
+     */
+    public static boolean stringContainsItem(String inputString, String[] items) {
+        for (String item : items) {
+            if (inputString.contains(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

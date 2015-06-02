@@ -91,7 +91,7 @@ public class LinkAdapter extends BaseAdapter {
         Glide.with(context)
                 .load(HttpHeader.getUrl(link.getUrl()))
                 .crossFade()
-                .fitCenter()
+                .centerCrop()
                 .placeholder(R.drawable.placeholder_small)
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

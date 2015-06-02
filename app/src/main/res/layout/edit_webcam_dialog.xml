@@ -210,7 +210,6 @@
 
         <TextView
             android:id="@+id/webcam_category_button"
-            style="@style/DialogContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_action_category"
