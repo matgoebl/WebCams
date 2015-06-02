@@ -21,7 +21,6 @@ package cz.yetanotherview.webcamviewer.app.actions;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.backup.BackupManager;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -86,8 +85,6 @@ import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class JsonFetcherDialog extends DialogFragment {
 
-    // Object for intrinsic lock
-    public static final Object sDataLock = new Object();
     private static final String TAG = "JsonFetcher";
 
     private Activity mActivity;
@@ -111,7 +108,6 @@ public class JsonFetcherDialog extends DialogFragment {
     private TextView seekBarText;
     private MapView mMapView;
     private Drawable selectedMarker, markerNotSelected;
-    private BackupManager backupManager;
     private SharedPreferences preferences;
     private Type type;
 
@@ -156,7 +152,6 @@ public class JsonFetcherDialog extends DialogFragment {
                 .progress(true, 0)
                 .build();
 
-        backupManager = new BackupManager(mActivity);
         preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
 
         WebCamsFromJsonFetcher fetcher = new WebCamsFromJsonFetcher();
@@ -670,101 +665,98 @@ public class JsonFetcherDialog extends DialogFragment {
 
     private void proceed(Category category) {
 
-        synchronized (sDataLock) {
-            List<Category> categoriesFromDb = db.getAllCategories();
-            int newCategory = db.createCategory(category);
-            for (WebCam webCam : importWebCams) {
+        List<Category> categoriesFromDb = db.getAllCategories();
+        int newCategory = db.createCategory(category);
+        for (WebCam webCam : importWebCams) {
 
-                boolean condition;
-                long differenceBetweenLastFetch;
-                switch (selection) {
-                    case 0:
-                        differenceBetweenLastFetch = lastFetchLatest - webCam.getDateModifiedMillisecond();
-                        condition = differenceBetweenLastFetch < 0;
-                        break;
-                    case 1:
-                        float[] distance = new float[1];
-                        Location.distanceBetween(webCam.getLatitude(), webCam.getLongitude(),
-                                knownLocation.getLatitude(), knownLocation.getLongitude(), distance);
-                        condition = distance[0] < selectedDistance;
-                        break;
-                    case 2:
-                        condition = webCam.isSelected();
-                        break;
-                    case 3:
-                        condition = webCam.getCountry().equals(countryCode);
-                        break;
-                    case 4:
-                        condition = webCam.getStatus() == type.getId();
-                        break;
-                    case 8:
-                        differenceBetweenLastFetch = lastFetchLatest - webCam.getDateModifiedMillisecond();
-                        condition = differenceBetweenLastFetch < 0;
-                        break;
-                    default:
-                        // case: 5,6,7
-                        condition = true;
-                        break;
-                }
+            boolean condition;
+            long differenceBetweenLastFetch;
+            switch (selection) {
+                case 0:
+                    differenceBetweenLastFetch = lastFetchLatest - webCam.getDateModifiedMillisecond();
+                    condition = differenceBetweenLastFetch < 0;
+                    break;
+                case 1:
+                    float[] distance = new float[1];
+                    Location.distanceBetween(webCam.getLatitude(), webCam.getLongitude(),
+                            knownLocation.getLatitude(), knownLocation.getLongitude(), distance);
+                    condition = distance[0] < selectedDistance;
+                    break;
+                case 2:
+                    condition = webCam.isSelected();
+                    break;
+                case 3:
+                    condition = webCam.getCountry().equals(countryCode);
+                    break;
+                case 4:
+                    condition = webCam.getStatus() == type.getId();
+                    break;
+                case 8:
+                    differenceBetweenLastFetch = lastFetchLatest - webCam.getDateModifiedMillisecond();
+                    condition = differenceBetweenLastFetch < 0;
+                    break;
+                default:
+                    // case: 5,6,7
+                    condition = true;
+                    break;
+            }
 
-                if (condition) {
-                    lastFetchNewWebCams = true;
-                    if (allWebCams.size() != 0) {
-                        boolean found = false;
-                        for (WebCam allWebCam : allWebCams) {
-                            if (webCam.getUniId() == allWebCam.getUniId()) {
-                                if (webCam.getDateModifiedMillisecond() == allWebCam.getDateModifiedFromDb()) {
-                                    db.createWebCamCategory(allWebCam.getId(), newCategory);
-                                    duplicityWebCams++;
-                                }
-                                else {
-                                    db.updateWebCamFromJson(allWebCam, webCam, newCategory);
-                                    updatedWebCams++;
-                                }
-                                found = true;
+            if (condition) {
+                lastFetchNewWebCams = true;
+                if (allWebCams.size() != 0) {
+                    boolean found = false;
+                    for (WebCam allWebCam : allWebCams) {
+                        if (webCam.getUniId() == allWebCam.getUniId()) {
+                            if (webCam.getDateModifiedMillisecond() == allWebCam.getDateModifiedFromDb()) {
+                                db.createWebCamCategory(allWebCam.getId(), newCategory);
+                                duplicityWebCams++;
                             }
-                        }
-                        if (!found) {
-                            db.createWebCam(webCam, Collections.singletonList(newCategory));
-                            newWebCams++;
+                            else {
+                                db.updateWebCamFromJson(allWebCam, webCam, newCategory);
+                                updatedWebCams++;
+                            }
+                            found = true;
                         }
                     }
-                    else {
+                    if (!found) {
                         db.createWebCam(webCam, Collections.singletonList(newCategory));
                         newWebCams++;
                     }
                 }
-                progressUpdate();
-            }
-
-            if (!lastFetchNewWebCams) {
-                db.deleteCategory(newCategory, false);
-            }
-            else if (selection == 0 || selection == 8) {
-
-                String compare;
-                if (selection == 0) {
-                    compare = mActivity.getString(R.string.popular);
+                else {
+                    db.createWebCam(webCam, Collections.singletonList(newCategory));
+                    newWebCams++;
                 }
-                else compare = mActivity.getString(R.string.latest);
-                for (Category categoryFromDb : categoriesFromDb) {
-                    if (categoryFromDb.getCategoryName().contains(compare)){
-                        db.deleteCategory(categoryFromDb.getId(), false);
-                    }
-                }
-
-                SharedPreferences.Editor editor = preferences.edit();
-                if (selection == 0) {
-                    editor.putLong("pref_last_fetch_popular", Utils.getDate());
-                }
-                else editor.putLong("pref_last_fetch_latest", Utils.getDate());
-                editor.apply();
             }
-
-            showResult();
+            progressUpdate();
         }
+
+        if (!lastFetchNewWebCams) {
+            db.deleteCategory(newCategory, false);
+        }
+        else if (selection == 0 || selection == 8) {
+
+            String compare;
+            if (selection == 0) {
+                compare = mActivity.getString(R.string.popular);
+            }
+            else compare = mActivity.getString(R.string.latest);
+            for (Category categoryFromDb : categoriesFromDb) {
+                if (categoryFromDb.getCategoryName().contains(compare)){
+                    db.deleteCategory(categoryFromDb.getId(), false);
+                }
+            }
+
+            SharedPreferences.Editor editor = preferences.edit();
+            if (selection == 0) {
+                editor.putLong("pref_last_fetch_popular", Utils.getDate());
+            }
+            else editor.putLong("pref_last_fetch_latest", Utils.getDate());
+            editor.apply();
+        }
+
+        showResult();
         db.closeDB();
-        backupManager.dataChanged();
     }
 
     private void showResult() {

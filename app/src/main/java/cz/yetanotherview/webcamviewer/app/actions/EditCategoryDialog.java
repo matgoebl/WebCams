@@ -21,7 +21,6 @@ package cz.yetanotherview.webcamviewer.app.actions;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.backup.BackupManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,9 +40,6 @@ import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.Icons;
 
 public class EditCategoryDialog extends DialogFragment {
-
-    // Object for intrinsic lock
-    public static final Object sDataLock = new Object();
 
     private String inputName, iconPath;
     private int position;
@@ -82,18 +78,14 @@ public class EditCategoryDialog extends DialogFragment {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         inputName = input.getText().toString().trim();
-                        synchronized (EditCategoryDialog.sDataLock) {
-                            if (iconPath == null) {
-                                iconPath = category.getCategoryIcon();
-                            }
-                            category.setCategoryIcon(iconPath);
-                            category.setCategoryName(inputName);
-                            category.setCount(db.getCategoryItemsCount(category.getId()));
-                            db.updateCategory(category);
-                            db.closeDB();
+                        if (iconPath == null) {
+                            iconPath = category.getCategoryIcon();
                         }
-                        BackupManager backupManager = new BackupManager(mActivity);
-                        backupManager.dataChanged();
+                        category.setCategoryIcon(iconPath);
+                        category.setCategoryName(inputName);
+                        category.setCount(db.getCategoryItemsCount(category.getId()));
+                        db.updateCategory(category);
+                        db.closeDB();
 
                         reloadHost();
                     }

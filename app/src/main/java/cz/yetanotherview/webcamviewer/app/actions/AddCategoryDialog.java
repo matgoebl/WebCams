@@ -21,7 +21,6 @@ package cz.yetanotherview.webcamviewer.app.actions;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -44,9 +43,6 @@ import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.Icons;
 
 public class AddCategoryDialog extends DialogFragment {
-
-    // Object for intrinsic lock
-    public static final Object sDataLock = new Object();
 
     private String inputName, iconPath;
     private EditText input;
@@ -86,20 +82,15 @@ public class AddCategoryDialog extends DialogFragment {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        inputName = input.getText().toString().trim();
-                        synchronized (AddCategoryDialog.sDataLock) {
-                            if (iconPath == null) {
-                                iconPath = "@drawable/icon_manual";
-                            }
-                            category = new Category(iconPath, inputName);
-                            createdCategoryId = db.createCategory(category);
-                            category.setId(createdCategoryId);
-                            db.closeDB();
-                        }
-                        BackupManager backupManager = new BackupManager(mActivity);
-                        backupManager.dataChanged();
-
-                        reloadHost();
+                    inputName = input.getText().toString().trim();
+                    if (iconPath == null) {
+                        iconPath = "@drawable/icon_manual";
+                    }
+                    category = new Category(iconPath, inputName);
+                    createdCategoryId = db.createCategory(category);
+                    category.setId(createdCategoryId);
+                    db.closeDB();
+                    reloadHost();
                     }
                 })
                 .build();

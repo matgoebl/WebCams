@@ -19,7 +19,6 @@
 package cz.yetanotherview.webcamviewer.app.settings;
 
 import android.app.DialogFragment;
-import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -58,9 +57,6 @@ import cz.yetanotherview.webcamviewer.app.listener.SeekBarChangeListener;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class SettingsFragment extends PreferenceFragment {
-
-    // Object for intrinsic lock
-    public static final Object sDataLock = new Object();
 
     private Context context;
     private List<WebCam> allWebCams;
@@ -246,20 +242,15 @@ public class SettingsFragment extends PreferenceFragment {
 
         @Override
         protected Void doInBackground(Integer... integers) {
-
-            synchronized (SettingsFragment.sDataLock) {
-                for (WebCam deleteWebCam : allWebCams) {
-                    if (deleteWebCam.isSelected()) {
-                        db.deleteWebCam(deleteWebCam.getId());
-                    }
+            for (WebCam deleteWebCam : allWebCams) {
+                if (deleteWebCam.isSelected()) {
+                    db.deleteWebCam(deleteWebCam.getId());
                 }
-                if (db.getWebCamCount() == 0) {
-                    DeleteAllWebCams.execute(context, false);
-                }
-                db.closeDB();
             }
-            BackupManager backupManager = new BackupManager(getActivity());
-            backupManager.dataChanged();
+            if (db.getWebCamCount() == 0) {
+                DeleteAllWebCams.execute(context, false);
+            }
+            db.closeDB();
 
             showDeletedSnackBar();
             return null;

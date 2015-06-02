@@ -21,7 +21,6 @@ package cz.yetanotherview.webcamviewer.app.actions;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.backup.BackupManager;
 import android.os.Bundle;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -32,9 +31,6 @@ import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 
 public class DeleteCategoryDialog extends DialogFragment {
-
-    // Object for intrinsic lock
-    public static final Object sDataLock = new Object();
 
     private Category category;
     private Activity mActivity;
@@ -67,12 +63,8 @@ public class DeleteCategoryDialog extends DialogFragment {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        synchronized (DeleteCategoryDialog.sDataLock) {
-                            db.deleteCategory(category.getId(), false);
-                            db.closeDB();
-                        }
-                        BackupManager backupManager = new BackupManager(mActivity);
-                        backupManager.dataChanged();
+                        db.deleteCategory(category.getId(), false);
+                        db.closeDB();
                         reloadHost();
                     }
                 })

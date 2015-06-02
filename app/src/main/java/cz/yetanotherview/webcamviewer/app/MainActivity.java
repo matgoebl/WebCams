@@ -23,7 +23,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.DialogFragment;
 import android.app.SearchManager;
-import android.app.backup.BackupManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -88,9 +87,6 @@ import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks, WebCamListener,
         JsonFetcherDialog.ReloadInterface, SwipeRefreshLayout.OnRefreshListener {
-
-    // Object for intrinsic lock
-    public static final Object sDataLock = new Object();
 
     private DatabaseHelper db;
     private WebCam webCam, webCamToDelete;
@@ -750,17 +746,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
     @Override
     public void webCamAdded(WebCam wc, List<Integer> category_ids, boolean share) {
-        synchronized (sDataLock) {
-            if (category_ids != null) {
-                wc.setId(db.createWebCam(wc, category_ids));
-            }
-            else {
-                wc.setId(db.createWebCam(wc, null));
-            }
-            db.closeDB();
+        if (category_ids != null) {
+            wc.setId(db.createWebCam(wc, category_ids));
         }
-        BackupManager backupManager = new BackupManager(this);
-        backupManager.dataChanged();
+        else {
+            wc.setId(db.createWebCam(wc, null));
+        }
+        db.closeDB();
 
         mAdapter.addItem(mAdapter.getItemCount(), wc);
         mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
@@ -776,17 +768,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
     @Override
     public void webCamEdited(int position, WebCam wc, List<Integer> category_ids) {
-        synchronized (sDataLock) {
-            if (category_ids != null) {
-                db.updateWebCam(wc, category_ids);
-            }
-            else {
-                db.updateWebCam(wc, null);
-            }
-            db.closeDB();
+        if (category_ids != null) {
+            db.updateWebCam(wc, category_ids);
         }
-        BackupManager backupManager = new BackupManager(this);
-        backupManager.dataChanged();
+        else {
+            db.updateWebCam(wc, null);
+        }
+        db.closeDB();
 
         mAdapter.modifyItem(position, wc);
         reInitializeDrawerListAdapter();
@@ -803,12 +791,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (mAdapter != null && mAdapter.getItemCount() > 0) {
             mAdapter.removeItem(mAdapter.getItemAt(webCamToDeletePosition));
 
-            synchronized (sDataLock) {
-                db.deleteWebCam(webCamToDelete.getId());
-                db.closeDB();
-            }
-            BackupManager backupManager = new BackupManager(getApplicationContext());
-            backupManager.dataChanged();
+            db.deleteWebCam(webCamToDelete.getId());
+            db.closeDB();
             reInitializeDrawerListAdapter();
         }
 
@@ -824,12 +808,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                             @Override
                             public void onActionClicked(Snackbar snackbar) {
                                 mAdapter.addItem(webCamToDeletePosition, webCamToDelete);
-                                synchronized (sDataLock) {
-                                    db.undoDeleteWebCam(webCamToDelete, webCamToDelete_category_ids);
-                                    db.closeDB();
-                                }
-                                BackupManager backupManager = new BackupManager(getApplicationContext());
-                                backupManager.dataChanged();
+                                db.undoDeleteWebCam(webCamToDelete, webCamToDelete_category_ids);
+                                db.closeDB();
                                 checkAdapterIsEmpty();
                                 reInitializeDrawerListAdapter();
                                 floatingActionsMenu.animate().translationYBy(snackbar.getHeight());
@@ -923,17 +903,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         protected Void doInBackground(Long... longs) {
 
             List<WebCam> newWebCams = mAdapter.getItems();
-            synchronized (sDataLock) {
-                int i = 0;
-                for (WebCam mWebCam : newWebCams) {
-                    mWebCam.setPosition(i);
-                    db.updateWebCamPosition(mWebCam);
-                    i++;
-                }
+            int i = 0;
+            for (WebCam mWebCam : newWebCams) {
+                mWebCam.setPosition(i);
+                db.updateWebCamPosition(mWebCam);
+                i++;
             }
             db.closeDB();
-            BackupManager backupManager = new BackupManager(getApplicationContext());
-            backupManager.dataChanged();
             this.publishProgress();
 
             return null;

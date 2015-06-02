@@ -22,7 +22,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.backup.BackupManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -58,9 +57,6 @@ import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class ImportDialog extends DialogFragment {
-
-    // Object for intrinsic lock
-    public static final Object sDataLock = new Object();
 
     private MaterialDialog importDialog;
     private File selectedFile;
@@ -233,40 +229,36 @@ public class ImportDialog extends DialogFragment {
                 duplicityWebCams = 0;
                 updatedWebCams = 0;
 
-                synchronized (sDataLock) {
-                    int newCategory = db.createCategory(new Category("@drawable/icon_imported",
-                            mActivity.getString(R.string.imported) + " " + Utils.getDateString()));
-                    for (WebCam webCam : importWebCams) {
-                        if (allWebCams.size() != 0) {
-                            boolean found = false;
-                            for (WebCam allWebCam : allWebCams) {
-                                if (webCam.getUniId() == allWebCam.getUniId()) {
-                                    if (webCam.getDateModifiedMillisecond() == allWebCam.getDateModifiedFromDb()) {
-                                        db.createWebCamCategory(allWebCam.getId(), newCategory);
-                                        duplicityWebCams++;
-                                    }
-                                    else {
-                                        db.updateWebCamFromJson(allWebCam, webCam, newCategory);
-                                        updatedWebCams++;
-                                    }
-                                    found = true;
+                int newCategory = db.createCategory(new Category("@drawable/icon_imported",
+                        mActivity.getString(R.string.imported) + " " + Utils.getDateString()));
+                for (WebCam webCam : importWebCams) {
+                    if (allWebCams.size() != 0) {
+                        boolean found = false;
+                        for (WebCam allWebCam : allWebCams) {
+                            if (webCam.getUniId() == allWebCam.getUniId()) {
+                                if (webCam.getDateModifiedMillisecond() == allWebCam.getDateModifiedFromDb()) {
+                                    db.createWebCamCategory(allWebCam.getId(), newCategory);
+                                    duplicityWebCams++;
                                 }
-                            }
-                            if (!found) {
-                                db.createWebCam(webCam, Collections.singletonList(newCategory));
-                                newWebCams++;
+                                else {
+                                    db.updateWebCamFromJson(allWebCam, webCam, newCategory);
+                                    updatedWebCams++;
+                                }
+                                found = true;
                             }
                         }
-                        else {
+                        if (!found) {
                             db.createWebCam(webCam, Collections.singletonList(newCategory));
                             newWebCams++;
                         }
-                        progressUpdate();
                     }
+                    else {
+                        db.createWebCam(webCam, Collections.singletonList(newCategory));
+                        newWebCams++;
+                    }
+                    progressUpdate();
                 }
                 db.closeDB();
-                BackupManager backupManager = new BackupManager(mActivity);
-                backupManager.dataChanged();
                 if (booleans[0]) {
                     snackBarImportDone();
                 }
