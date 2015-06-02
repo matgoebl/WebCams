@@ -147,6 +147,14 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         return mData != null ? mData.size() : 0;
     }
 
+    public Object getLatestPositionObject() {
+        return mData.get(getItemCount() - 1);
+    }
+
+    public int getLatestPositionInt() {
+        return getItemCount() - 1;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView categoryIcon;
         public TextView categoryName;

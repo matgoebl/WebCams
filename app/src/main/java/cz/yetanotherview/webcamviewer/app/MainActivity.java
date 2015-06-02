@@ -840,6 +840,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         reInitializeRecyclerViewAdapter();
         reInitializeDrawerListAdapter();
         mNavigationDrawerFragment.openDrawer();
+        mNavigationDrawerFragment.selectPosition();
     }
 
     private void moveItem() {

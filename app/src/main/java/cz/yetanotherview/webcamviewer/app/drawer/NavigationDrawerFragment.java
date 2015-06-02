@@ -202,6 +202,23 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mDrawerAdapter.selectPosition(position);
     }
 
+    public void selectPosition() {
+        Category category = (Category) mDrawerAdapter.getLatestPositionObject();
+        int position = mDrawerAdapter.getLatestPositionInt();
+        mCurrentSelectedPosition = position;
+        mCurrentSelectedName = category.getCategoryName();
+        if (mDrawerLayout != null) {
+            if (mCurrentSelectedPosition == 0) {
+                mToolbar.setTitle(getString(R.string.app_name));
+            }
+            else mToolbar.setTitle(category.getCategoryName());
+        }
+        if (mCallbacks != null) {
+            mCallbacks.onNavigationDrawerItemSelected(position, category.getId());
+        }
+        mDrawerAdapter.selectPosition(position);
+    }
+
     public void reloadData() {
         navigationItems = getCategories();
         mDrawerAdapter.swapData(navigationItems);
