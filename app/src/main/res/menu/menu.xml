@@ -10,7 +10,7 @@
         android:title="@string/action_search"
         android:orderInCategory="1"
         app:showAsAction="collapseActionView|always|withText"
-        app:actionViewClass="android.widget.SearchView" />
+        app:actionViewClass="android.support.v7.widget.SearchView" />
 
     <item android:icon="@drawable/ic_action_refresh"
         android:id="@+id/action_refresh"

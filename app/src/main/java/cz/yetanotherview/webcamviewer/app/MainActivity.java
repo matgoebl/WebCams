@@ -22,7 +22,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.DialogFragment;
-import android.app.SearchManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -36,6 +35,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.ActionMode;
@@ -44,7 +44,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.SearchView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.signature.StringSignature;
@@ -120,7 +119,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         loadPref();
 
         // Inflating main layout
-        setContentView(R.layout.activity_main);
+        if (fullScreen) {
+            setContentView(R.layout.activity_main_immersive);
+        }
+        else setContentView(R.layout.activity_main);
         mEmptyView = findViewById(R.id.empty);
         mEmptySearchView = findViewById(R.id.search_empty);
 
@@ -382,10 +384,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         getMenuInflater().inflate(R.menu.menu, menu);
 
         searchItem = menu.findItem(R.id.action_search);
-
-        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         searchView = (SearchView) searchItem.getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint(getString(R.string.search_hint));
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {

@@ -69,6 +69,8 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.full_screen_video_layout);
 
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+
         // Receive path to play from intent
         Bundle extras = getIntent().getExtras();
         mFilePath = extras.getString("url");

@@ -2,11 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="AppTheme.Base">
-        <!-- Customize your theme here. -->
-    </style>
-
-    <style name="NoTransparentStatusBar" parent="AppTheme.Base">
-        <!-- Customize your theme here. -->
+        <!-- Customized only for v21 and up... -->
     </style>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
@@ -19,7 +15,6 @@
         <item name="selectableItemBackground">@drawable/ripple</item>
         <item name="android:selectableItemBackground">@drawable/ripple</item>
 
-        <item name="android:autoCompleteTextViewStyle">@style/cursorColor</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">@color/very_dark_grey</item>
 
@@ -28,6 +23,10 @@
 
     <style name="ActionBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:titleTextStyle">@color/white</item>
+    </style>
+
+    <style name="TranslucentStatusBar" parent="AppTheme">
+        <!-- Customized only for v21 and up... -->
     </style>
 
     <style name="AppCompatFullScreen" parent="AppTheme.Base">
@@ -147,8 +146,12 @@
         <item name="android:textColorHint">@color/hint_gray</item>
     </style>
 
-    <style name="cursorColor" parent="Widget.AppCompat.Light.AutoCompleteTextView">
+    <style name="ThemeOverlay.ActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textCursorDrawable">@null</item>
+    </style>
+
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="queryBackground">@color/black</item>
     </style>
 
     <style name="menu_labels_style">

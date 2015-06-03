@@ -293,4 +293,5 @@
 <string name="processing_feed_url">"Zpracování rss zdroje:"</string>
 <string name="fetching_size">"Načítání velikosti:"</string>
 <string name="notice">"Upozornění"</string>
+<string name="search_hint">"Hledat..."</string>
 </resources>

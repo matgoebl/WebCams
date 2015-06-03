@@ -106,6 +106,7 @@ public class FullScreenFragment extends Fragment {
         View.OnClickListener touchImageViewsListener = new View.OnClickListener() {
             public void onClick(View v) {
                 mButtonsLayout.setVisibility(View.VISIBLE);
+                getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
                 mButtonsLayout.startAnimation(fadeOut);
             }
         };
@@ -187,6 +188,7 @@ public class FullScreenFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animation animation) {
+                getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
                 mButtonsLayout.setVisibility(View.GONE);
             }
 

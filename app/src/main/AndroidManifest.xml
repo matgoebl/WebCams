@@ -20,7 +20,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@style/TranslucentStatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +33,6 @@
             android:name=".settings.SettingsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/action_settings"
-            android:theme="@style/NoTransparentStatusBar"
             android:parentActivityName=".MainActivity">
         </activity>
         <activity
@@ -51,7 +51,6 @@
             android:name=".help.HelpActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/action_menu_help"
-            android:theme="@style/NoTransparentStatusBar"
             android:parentActivityName=".MainActivity">
         </activity>
 
