@@ -234,7 +234,7 @@ public class Utils {
      * Get random image
      */
     public static int getRandomImage() {
-        Random r = new Random();
+        final Random r = new Random();
         int[] imgIds = {R.drawable.no_image_0, R.drawable.no_image_1, R.drawable.no_image_2,
                 R.drawable.no_image_3, R.drawable.no_image_4, R.drawable.no_image_5,
                 R.drawable.no_image_6, R.drawable.no_image_7, R.drawable.no_image_8,
