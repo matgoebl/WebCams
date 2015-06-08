@@ -1,6 +1,7 @@
 <resources>
 
     <dimen name="navigation_drawer_width">320dp</dimen>
+    <dimen name="collapse_toolbar_height">212dp</dimen>
 
     <!-- Card margin -->
     <dimen name="margin_top_bottom">12dp</dimen>

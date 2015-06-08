@@ -1,0 +1,14 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.design.widget.NavigationView
+        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start">
+
+        <fragment android:id="@+id/fragment_drawer"
+            android:name="cz.yetanotherview.webcamviewer.app.drawer.NavigationDrawerFragment"
+            android:layout_width="@dimen/navigation_drawer_width"
+            android:layout_height="match_parent" app:layout="@layout/fragment_navigation_drawer" />
+    </android.support.design.widget.NavigationView>
+</merge>
