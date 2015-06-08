@@ -24,6 +24,7 @@ import android.app.Fragment;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,8 +34,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,9 +61,10 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     private List<Category> navigationItems;
     private NavigationDrawerAdapter mDrawerAdapter;
 
-    private Toolbar mToolbar;
+    private CollapsingToolbarLayout mCollapsingToolbar;
     private DrawerLayout mDrawerLayout;
     private View mFragmentContainerView;
+    private ImageView mToolbarImage;
 
     private int mCurrentSelectedPosition = 0;
     private int mClickedPosition, mClickedCategoryId;
@@ -137,17 +142,11 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         return items;
     }
 
-    /**
-     * Users of this fragment must call this method to set up the navigation drawer interactions.
-     *
-     * @param fragmentId   The android:id of this fragment in its activity's layout.
-     * @param drawerLayout The DrawerLayout containing this fragment's UI.
-     * @param toolbar      The Toolbar of the activity.
-     */
-    public void setup(int fragmentId, DrawerLayout drawerLayout, Toolbar toolbar) {
+    public void setup(int fragmentId, DrawerLayout drawerLayout, Toolbar toolbar, CollapsingToolbarLayout collapsingToolbar, ImageView toolbarImage) {
         mFragmentContainerView = (View) getActivity().findViewById(fragmentId).getParent();
         mDrawerLayout = drawerLayout;
-        mToolbar = toolbar;
+        mCollapsingToolbar = collapsingToolbar;
+        mToolbarImage = toolbarImage;
 
         mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.primary_dark));
 
@@ -169,14 +168,16 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
             }
         };
 
-        // Defer code dependent on restoration of previous instance state.
         mDrawerLayout.post(new Runnable() {
             @Override
             public void run() {
                 mActionBarDrawerToggle.syncState();
                 if (mCurrentSelectedPosition == 0) {
-                    mToolbar.setTitle(getString(R.string.app_name));
-                } else mToolbar.setTitle(mCurrentSelectedName);
+                    mCollapsingToolbar.setTitle(getString(R.string.app_name));
+                } else {
+                    mCollapsingToolbar.setTitle(mCurrentSelectedName);
+                }
+                loadCategoryToolbarImage(mDrawerAdapter.getItem(mCurrentSelectedPosition));
             }
         });
 
@@ -184,14 +185,17 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     }
 
     private void selectItem(int position, boolean closeDrawer) {
-        Category category = (Category) mDrawerAdapter.getItem(position);
+        Category category = mDrawerAdapter.getItem(position);
         mCurrentSelectedPosition = position;
         mCurrentSelectedName = category.getCategoryName();
         if (mDrawerLayout != null) {
             if (mCurrentSelectedPosition == 0) {
-                mToolbar.setTitle(getString(R.string.app_name));
+                mCollapsingToolbar.setTitle(getString(R.string.app_name));
             }
-            else mToolbar.setTitle(category.getCategoryName());
+            else {
+                mCollapsingToolbar.setTitle(category.getCategoryName());
+            }
+            loadCategoryToolbarImage(category);
             if (closeDrawer) {
                 mDrawerLayout.closeDrawer(mFragmentContainerView);
             }
@@ -209,14 +213,27 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mCurrentSelectedName = category.getCategoryName();
         if (mDrawerLayout != null) {
             if (mCurrentSelectedPosition == 0) {
-                mToolbar.setTitle(getString(R.string.app_name));
+                mCollapsingToolbar.setTitle(getString(R.string.app_name));
             }
-            else mToolbar.setTitle(category.getCategoryName());
+            else {
+                mCollapsingToolbar.setTitle(category.getCategoryName());
+            }
+            loadCategoryToolbarImage(category);
         }
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position, category.getId());
         }
         mDrawerAdapter.selectPosition(position);
+    }
+
+    private void loadCategoryToolbarImage(Category category) {
+        int imageResource;
+        if (category.getCategory_image() != null) {
+            imageResource = getActivity().getResources().getIdentifier(category.getCategory_image(), null,
+                    getActivity().getPackageName());
+        }
+        else imageResource = R.drawable.image_all;
+        Glide.with(getActivity()).load(imageResource).centerCrop().into(mToolbarImage);
     }
 
     public void reloadData() {
@@ -328,7 +345,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Forward the new configuration the drawer toggle component.
         mActionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 

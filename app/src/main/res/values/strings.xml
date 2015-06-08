@@ -239,7 +239,6 @@
 <string name="gnu_lgpl">"GNU LGPLv2.1+"</string>
 <string name="gson">"Gson"</string>
 <string name="floating_action_button">"Floating Action Button"</string>
-<string name="base_lab">"BASE LAB"</string>
 <string name="snackbar">"Snackbar"</string>
 <string name="nispok">"nispok"</string>
 <string name="mapbox">"Mapbox"</string>
@@ -294,4 +293,6 @@
 <string name="fetching_size">"Fetching size:"</string>
 <string name="notice">"Notice"</string>
 <string name="search_hint">"Search..."</string>
+<string name="create_manually">"Create manually"</string>
+<string name="dmitry_tarianyk">"Dmitry Tarianyk"</string>
 </resources>

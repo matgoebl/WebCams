@@ -25,7 +25,7 @@
 
     <color name="fab_normal">#DB4437</color>
     <color name="fab_pressed">#EF5350</color>
-    <color name="black_transparent">#96000000</color>
+    <color name="black_transparent">#6f000000</color>
 
     <color name="swipe">@color/fab_normal</color>
     <color name="move">#B14a148c</color>

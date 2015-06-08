@@ -56,7 +56,6 @@ public class Category {
         this.selected = selected;
     }
 
-
     // getter
     public int getId() {
         return this.id;
@@ -76,5 +75,9 @@ public class Category {
 
     public boolean isSelected() {
         return this.selected;
+    }
+
+    public String getCategory_image() {
+        return category_icon.replace("icon", "image");
     }
 }

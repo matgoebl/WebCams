@@ -282,7 +282,7 @@
 
             <TextView
                 style="@style/libraries_author_licence_and_version"
-                android:text="@string/base_lab" />
+                android:text="@string/dmitry_tarianyk" />
 
             <TextView
                 style="@style/libraries_author_licence_and_version"

@@ -81,7 +81,7 @@ public class LibrariesDialog extends DialogFragment {
         initLibrary(dialog, R.id.libraries_title_fab,
                 getString(R.string.floating_action_button) + " " + Utils.FAB_VERSION,
                 R.id.libraries_fab_container,
-                new SimpleIntentOnClickListener(getActivity(), "https://github.com/futuresimple/android-floating-action-button"));
+                new SimpleIntentOnClickListener(getActivity(), "https://github.com/Clans/FloatingActionButton"));
 
         initLibrary(dialog, R.id.libraries_title_snackbar,
                 getString(R.string.snackbar) + " " + Utils.SNACKBAR_VERSION,

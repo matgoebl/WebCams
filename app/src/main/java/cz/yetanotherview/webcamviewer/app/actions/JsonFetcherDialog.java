@@ -555,7 +555,7 @@ public class JsonFetcherDialog extends DialogFragment {
 
                                 if (selMarkers.size() != 0) {
                                     if (selMarkers.contains(marker)) {
-                                        //marker.closeToolTip();
+                                        marker.getToolTip(mMapView).close();
                                         marker.setMarker(markerNotSelected);
                                         selMarkers.remove(marker);
                                     } else {

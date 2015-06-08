@@ -61,11 +61,11 @@ public class Utils {
     public static final String SUPPORT_LIBRARIES_VERSION = "22.2.0";
     public static final String GLIDE_VERSION = "3.6.0";
     public static final String LIB_VLC_VERSION = "1.4.1.1";
-    public static final String MATERIAL_DIALOGS_VERSION = "0.7.5.1";
+    public static final String MATERIAL_DIALOGS_VERSION = "0.7.5.5";
     public static final String GOOGLE_GSON_VERSION = "2.3.1";
     public static final String JSOUP_VERSION = "1.8.2";
-    public static final String MAPBOX_VERSION = "0.7.3";
-    public static final String FAB_VERSION = "1.9.0";
+    public static final String MAPBOX_VERSION = "0.7.4";
+    public static final String FAB_VERSION = "1.5.0";
     public static final String SNACKBAR_VERSION = "2.10.10";
 
     private static final String JSON_FILE_CORE = "http://api.yetanotherview.cz/api/v2/";

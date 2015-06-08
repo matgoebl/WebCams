@@ -18,8 +18,6 @@
 
 package cz.yetanotherview.webcamviewer.app;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -29,6 +27,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -44,10 +44,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.signature.StringSignature;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.github.clans.fab.FloatingActionMenu;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 import com.nispok.snackbar.listeners.ActionClickListener;
@@ -93,7 +94,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private List<WebCam> allWebCams;
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
-    private View mEmptyView, mEmptySearchView, shadowView, mTintView;
+    private View mTintView;
+    private ImageView toolbarImage;
     private WebCamAdapter mAdapter;
     private float zoom;
     private int numberOfColumns, mOrientation, selectedCategory, autoRefreshInterval, mPosition,
@@ -102,9 +104,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             imagesOnOff, simpleList;
     private String mStringSignature;
     private String sortOrder = Utils.defaultSortOrder;
-    private FloatingActionsMenu floatingActionsMenu;
-    private SwipeRefreshLayout swipeLayout;
+    private FloatingActionMenu floatingActionMenu;
+    private FloatingActionButton floatingActionButton;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private Toolbar mToolbar;
+    private CollapsingToolbarLayout collapsingToolbar;
     private MaterialDialog dialog;
     private MenuItem searchItem;
     private SearchView searchView;
@@ -123,8 +127,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             setContentView(R.layout.activity_main_immersive);
         }
         else setContentView(R.layout.activity_main);
-        mEmptyView = findViewById(R.id.empty);
-        mEmptySearchView = findViewById(R.id.search_empty);
 
         // Auto Refreshing
         if (autoRefresh && !autoRefreshFullScreenOnly) {
@@ -179,14 +181,15 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        toolbarImage = (ImageView) findViewById(R.id.toolbar_image);
     }
 
     private void initDrawer() {
-
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.fragment_drawer);
-
-        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer_layout),
+                mToolbar, collapsingToolbar, toolbarImage);
     }
 
     private void initRecyclerView() {
@@ -235,93 +238,72 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 } else showImageFullscreen(position, false);
             }
         });
-
-        checkAdapterIsEmpty();
     }
 
     private void initFab() {
-        floatingActionsMenu = (FloatingActionsMenu) findViewById(R.id.fab);
-        shadowView = findViewById(R.id.shadowView);
+        floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floating_action_menu);
+        floatingActionMenu.setClosedOnTouchOutside(true);
 
-        FloatingActionsMenu.OnFloatingActionsMenuUpdateListener listener =
-                new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-            @Override
-            public void onMenuExpanded() {
-                shadowView.animate()
-                        .setDuration(400)
-                        .alpha(1.0f)
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
-                                super.onAnimationStart(animation);
-                                shadowView.setVisibility(View.VISIBLE);
-                            }
-                        });
-            }
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.floating_action_button);
 
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onMenuCollapsed() {
-                shadowView.animate()
-                        .setDuration(400)
-                        .alpha(0.0f)
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                shadowView.setVisibility(View.GONE);
-                            }
-                        });
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                int scrollLimit = 4;
+                boolean scrollLimitReached = Math.abs(dy) >= scrollLimit;
+                if (scrollLimitReached) {
+                    boolean scrollUp = dy >= 0;
+                    if (scrollUp) {
+                        floatingActionMenu.hideMenuButton(true);
+                    } else {
+                        floatingActionMenu.showMenuButton(true);
+                    }
+                }
             }
-        };
-        floatingActionsMenu.setOnFloatingActionsMenuUpdateListener(listener);
+        });
+
+        floatingActionMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
+            @Override
+            public void onMenuToggle(boolean b) {
+                if (b) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !fullScreen) {
+                        getWindow().setStatusBarColor(getResources().getColor(R.color.black_transparent));
+                    }
+                    floatingActionButton.setVisibility(View.INVISIBLE);
+                } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !fullScreen) {
+                        getWindow().setStatusBarColor(getResources().getColor(android.R.color.transparent));
+                    }
+                    floatingActionButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
         eventListener = new EventListener() {
             @Override
             public void onShow(Snackbar snackbar) {
-                floatingActionsMenu.animate().translationYBy(-snackbar.getHeight());
+                floatingActionMenu.hideMenuButton(true);
             }
-
             @Override
-            public void onShowByReplace(Snackbar snackbar) {
-            }
-
+            public void onShowByReplace(Snackbar snackbar) {}
             @Override
-            public void onShown(Snackbar snackbar) {
-            }
-
+            public void onShown(Snackbar snackbar) {}
             @Override
             public void onDismiss(Snackbar snackbar) {
-                floatingActionsMenu.animate().translationYBy(snackbar.getHeight());
+                floatingActionMenu.showMenuButton(true);
             }
-
             @Override
-            public void onDismissByReplace(Snackbar snackbar) {
-            }
-
+            public void onDismissByReplace(Snackbar snackbar) {}
             @Override
-            public void onDismissed(Snackbar snackbar) {
-            }
+            public void onDismissed(Snackbar snackbar) {}
         };
-    }
-
-    public void hideShadowView(View view) {
-        shadowView.animate()
-                .setDuration(400)
-                .alpha(0.0f)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        shadowView.setVisibility(View.GONE);
-                    }
-                });
-        floatingActionsMenu.collapse();
     }
 
     private void initPullToRefresh() {
         // Pull To Refresh 1/2
-        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-        swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorSchemeResources(R.color.primary, R.color.swipe, R.color.yellow);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.swipe, R.color.yellow);
     }
 
     private void initFirstRun() {
@@ -334,28 +316,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         }
     }
 
-    private void checkAdapterIsEmpty () {
-        if (mAdapter.getItemCount() == 0 && mEmptySearchView.getVisibility() == View.GONE) {
-            mEmptyView.setVisibility(View.VISIBLE);
-        } else {
-            mEmptyView.setVisibility(View.GONE);
-        }
-    }
-
-    private void checkSearchViewIsEmpty () {
-        if (mAdapter.getItemCount() == 0 && mEmptyView.getVisibility() == View.GONE) {
-            mEmptySearchView.setVisibility(View.VISIBLE);
-        } else {
-            mEmptySearchView.setVisibility(View.GONE);
-        }
-    }
-
     @Override
     public void onNavigationDrawerItemSelected(int position, int categoryId) {
         selectedCategory = position;
         selectedCategoryId = categoryId;
         if (mAdapter != null) {
             reInitializeRecyclerViewAdapter();
+            floatingActionMenu.showMenuButton(true);
         }
     }
 
@@ -371,7 +338,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             }
             db.closeDB();
             saveToPref();
-            checkAdapterIsEmpty();
         }
     }
 
@@ -417,7 +383,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             @Override
             public boolean onQueryTextChange(String newText) {
                 mAdapter.filter(newText);
-                checkSearchViewIsEmpty();
                 return true;
             }
         });
@@ -450,7 +415,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 return super.onOptionsItemSelected(item);
 
             case R.id.action_refresh:
-                refresh(false);
+                refresh();
                 break;
 
             case R.id.action_dashboard:
@@ -475,8 +440,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     imagesOnOff = false;
                     item.setTitle(R.string.images_on);
                     item.setIcon(R.drawable.ic_action_image_on);
-                }
-                else {
+                } else {
                     imagesOnOff = true;
                     item.setTitle(R.string.images_off);
                     item.setIcon(R.drawable.ic_action_image_off);
@@ -709,25 +673,46 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     }
 
     public void showSelectionDialog(View view) {
-        new SelectionDialog().show(getFragmentManager(), "SelectionDialog");
+        openAfterDelay(0);
         hideAfterDelay();
     }
 
     public void showAddDialog(View view) {
-        AddDialog.newInstance(this).show(getFragmentManager(), "AddDialog");
+        openAfterDelay(1);
         hideAfterDelay();
     }
 
     public void showSuggestionDialog(View view) {
-        new SuggestionDialog().show(getFragmentManager(), "SuggestionDialog");
+        openAfterDelay(2);
         hideAfterDelay();
+    }
+
+    private void openAfterDelay(final int which) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                switch (which) {
+                    case 0:
+                        new SelectionDialog().show(getFragmentManager(), "SelectionDialog");
+                        break;
+                    case 1:
+                        AddDialog.newInstance(MainActivity.this).show(getFragmentManager(), "AddDialog");
+                        break;
+                    case 2:
+                        new SuggestionDialog().show(getFragmentManager(), "SuggestionDialog");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }, 50);
     }
 
     private void hideAfterDelay() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                floatingActionsMenu.collapse();
+                floatingActionMenu.close(true);
             }
         }, 500);
     }
@@ -757,7 +742,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         mAdapter.addItem(mAdapter.getItemCount(), wc);
         mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
 
-        checkAdapterIsEmpty();
         reInitializeDrawerListAdapter();
 
         if (share) {
@@ -770,8 +754,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     public void webCamEdited(int position, WebCam wc, List<Integer> category_ids) {
         if (category_ids != null) {
             db.updateWebCam(wc, category_ids);
-        }
-        else {
+        } else {
             db.updateWebCam(wc, null);
         }
         db.closeDB();
@@ -796,7 +779,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             reInitializeDrawerListAdapter();
         }
 
-        checkAdapterIsEmpty();
         reInitializeDrawerListAdapter();
 
         SnackbarManager.show(
@@ -810,15 +792,14 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 mAdapter.addItem(webCamToDeletePosition, webCamToDelete);
                                 db.undoDeleteWebCam(webCamToDelete, webCamToDelete_category_ids);
                                 db.closeDB();
-                                checkAdapterIsEmpty();
                                 reInitializeDrawerListAdapter();
-                                floatingActionsMenu.animate().translationYBy(snackbar.getHeight());
+                                floatingActionMenu.showMenuButton(true);
                             }
                         })
                         .eventListener(new EventListener() {
                             @Override
                             public void onShow(Snackbar snackbar) {
-                                floatingActionsMenu.animate().translationYBy(-snackbar.getHeight());
+                                floatingActionMenu.hideMenuButton(true);
                             }
                             @Override
                             public void onShowByReplace(Snackbar snackbar) {}
@@ -826,7 +807,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                             public void onShown(Snackbar snackbar) {}
                             @Override
                             public void onDismiss(Snackbar snackbar) {
-                                floatingActionsMenu.animate().translationYBy(snackbar.getHeight());
+                                floatingActionMenu.showMenuButton(true);
                             }
                             @Override
                             public void onDismissByReplace(Snackbar snackbar) {}
@@ -933,37 +914,23 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 , this);
     }
 
-    private void nothingToRefresh() {
-        SnackbarManager.show(
-                Snackbar.with(getApplicationContext())
-                        .text(R.string.nothing_to_refresh)
-                        .actionLabel(R.string.dismiss)
-                        .actionColor(getResources().getColor(R.color.yellow))
-                        .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
-                        .eventListener(eventListener)
-                , this);
-    }
-
     // Pull To Refresh 2/2
     @Override
     public void onRefresh() {
-        refresh(false);
+        refresh();
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                swipeLayout.setRefreshing(false);
+                swipeRefreshLayout.setRefreshing(false);
             }
         }, 2500);
     }
 
-    private void refresh(boolean fromAutoRefresh) {
-        mStringSignature = UUID.randomUUID().toString();
-        mAdapter.refreshViewImages(new StringSignature(mStringSignature));
-        if (!fromAutoRefresh) {
-            if (mAdapter.getItemCount() == 0) {
-                nothingToRefresh();
-            }
+    private void refresh() {
+        if (mAdapter.getItemCount() != 0) {
+            mStringSignature = UUID.randomUUID().toString();
+            mAdapter.refreshViewImages(new StringSignature(mStringSignature));
         }
     }
 
@@ -981,7 +948,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 handler.post(new Runnable() {
                     public void run() {
                         try {
-                            refresh(true);
+                            refresh();
                         } catch (Exception ignored) {}
                     }
                 });

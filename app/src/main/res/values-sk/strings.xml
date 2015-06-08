@@ -239,7 +239,6 @@
 <string name="gnu_lgpl">"GNU LGPLv2.1+"</string>
 <string name="gson">"Gson"</string>
 <string name="floating_action_button">"Floating Action Button"</string>
-<string name="base_lab">"BASE LAB"</string>
 <string name="snackbar">"Snackbar"</string>
 <string name="nispok">"nispok"</string>
 <string name="mapbox">"Mapbox"</string>
@@ -293,4 +292,7 @@
 <string name="processing_feed_url">"Spracovanie rss zdroje:"</string>
 <string name="fetching_size">"Načítanie veľkosti:"</string>
 <string name="notice">"Upozornenie"</string>
+<string name="search_hint">"Hľadať..."</string>
+<string name="create_manually">"Vytvoriť ručne"</string>
+<string name="dmitry_tarianyk">"Dmitry Tarianyk"</string>
 </resources>

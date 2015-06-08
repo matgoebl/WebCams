@@ -117,7 +117,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         notifyDataSetChanged();
     }
 
-    public Object getItem(int position) {
+    public Category getItem(int position) {
         return mData.get(position);
     }
 

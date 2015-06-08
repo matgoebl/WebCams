@@ -16,7 +16,7 @@
 
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">@color/very_dark_grey</item>
-
+        <item name="android:windowBackground">@color/white</item>
         <item name="actionBarTheme">@style/ActionBarTheme</item>
     </style>
 
@@ -151,11 +151,6 @@
 
     <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
         <item name="queryBackground">@color/black</item>
-    </style>
-
-    <style name="menu_labels_style">
-        <item name="android:background">@drawable/fab_label_background</item>
-        <item name="android:textColor">@color/very_dark_grey</item>
     </style>
 
     <style name="drawer_separator">
