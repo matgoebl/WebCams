@@ -227,12 +227,14 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     }
 
     private void loadCategoryToolbarImage(Category category) {
-        int imageResource;
+        int imageResource = R.drawable.image_all;
         if (category.getCategory_image() != null) {
             imageResource = getActivity().getResources().getIdentifier(category.getCategory_image(), null,
                     getActivity().getPackageName());
+            if (imageResource == 0) {
+                imageResource = R.drawable.image_all;
+            }
         }
-        else imageResource = R.drawable.image_all;
         Glide.with(getActivity()).load(imageResource).centerCrop().into(mToolbarImage);
     }
 
