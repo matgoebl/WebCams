@@ -44,7 +44,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.signature.StringSignature;
@@ -69,12 +72,14 @@ import cz.yetanotherview.webcamviewer.app.actions.SuggestionDialog;
 import cz.yetanotherview.webcamviewer.app.actions.WelcomeDialog;
 import cz.yetanotherview.webcamviewer.app.actions.simple.LocationWarningDialog;
 import cz.yetanotherview.webcamviewer.app.actions.simple.NoCoordinatesDialog;
+import cz.yetanotherview.webcamviewer.app.adapter.ManualSelectionAdapter;
 import cz.yetanotherview.webcamviewer.app.drawer.NavigationDrawerCallbacks;
 import cz.yetanotherview.webcamviewer.app.drawer.NavigationDrawerFragment;
 import cz.yetanotherview.webcamviewer.app.fullscreen.FullScreenActivity;
 import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
 import cz.yetanotherview.webcamviewer.app.help.HelpActivity;
 import cz.yetanotherview.webcamviewer.app.helper.ClearImageCache;
+import cz.yetanotherview.webcamviewer.app.helper.OnFilterTextChange;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.settings.SettingsActivity;
 import cz.yetanotherview.webcamviewer.app.stream.LiveStreamActivity;
@@ -91,12 +96,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private DatabaseHelper db;
     private WebCam webCam, webCamToDelete;
     private List<Integer> webCamToDelete_category_ids;
-    private List<WebCam> allWebCams;
+    private List<WebCam> allWebCams, reallyAllWebCams;
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
     private View mTintView;
     private ImageView toolbarImage;
     private WebCamAdapter mAdapter;
+    private ManualSelectionAdapter manualSelectionAdapter;
     private float zoom;
     private int numberOfColumns, mOrientation, selectedCategory, autoRefreshInterval, mPosition,
             webCamToDeletePosition, selectedCategoryId;
@@ -109,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private SwipeRefreshLayout swipeRefreshLayout;
     private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbar;
-    private MaterialDialog dialog;
+    private MaterialDialog dialog, indeterminateProgress;
     private MenuItem searchItem;
     private SearchView searchView;
     private EventListener eventListener;
@@ -824,6 +830,95 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         mNavigationDrawerFragment.selectPosition();
     }
 
+    public void assignSelectedWebCamsToCategory(View view) {
+        reallyAllWebCams = db.getAllWebCams(sortOrder);
+        if (reallyAllWebCams.size() > 0) {
+            if (selectedCategory != 0) {
+                MaterialDialog dialog = new MaterialDialog.Builder(this)
+                        .title(R.string.select_webcams)
+                        .customView(R.layout.manual_selection_dialog, false)
+                        .positiveText(R.string.choose)
+                        .iconRes(R.drawable.edit)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                showIndeterminateProgress();
+                                new assignSelectedWebCamsToCategoryBackgroundTask().execute();
+                            }
+                        })
+                        .build();
+
+                ListView assignSelectionList = (ListView) dialog.findViewById(R.id.filtered_list_view);
+                assignSelectionList.setEmptyView(dialog.findViewById(R.id.empty_info_text));
+                manualSelectionAdapter = new ManualSelectionAdapter(this, reallyAllWebCams);
+                manualSelectionAdapter.setSelected(db.getAllWebCamsByCategory(selectedCategoryId, sortOrder));
+                assignSelectionList.setAdapter(manualSelectionAdapter);
+
+                EditText filterBox = (EditText) dialog.findViewById(R.id.ms_filter);
+                filterBox.setHint(R.string.enter_name);
+                filterBox.addTextChangedListener(new OnFilterTextChange(manualSelectionAdapter));
+
+                CheckBox chkAll = (CheckBox) dialog.findViewById(R.id.chkAll);
+                chkAll.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        CheckBox chk = (CheckBox) v;
+                        if (chk.isChecked()) {
+                            manualSelectionAdapter.setAllChecked();
+                        } else manualSelectionAdapter.setAllUnChecked();
+                    }
+                });
+
+                dialog.show();
+            } else cannotBeEdited();
+
+        } else listIsEmpty();
+        db.closeDB();
+    }
+
+    private class assignSelectedWebCamsToCategoryBackgroundTask extends AsyncTask<Integer, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Integer... integers) {
+            for (WebCam webCam : reallyAllWebCams) {
+                List<Integer> webCamCategoriesIds = db.getWebCamCategoriesIds(webCam.getId());
+                if (webCam.isSelected()) {
+                    if (!webCamCategoriesIds.contains(selectedCategoryId)) {
+                        webCamCategoriesIds.add(selectedCategoryId);
+                    }
+                }
+                else {
+                    if (webCamCategoriesIds.contains(selectedCategoryId)) {
+                        webCamCategoriesIds.remove((Integer)selectedCategoryId);
+                    }
+                }
+                db.updateWebCam(webCam, webCamCategoriesIds);
+            }
+            db.closeDB();
+            this.publishProgress();
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+
+            reInitializeRecyclerViewAdapter();
+            reInitializeDrawerListAdapter();
+            indeterminateProgress.dismiss();
+            saveDone();
+        }
+    }
+
+    private void showIndeterminateProgress() {
+        indeterminateProgress = new MaterialDialog.Builder(this)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .show();
+    }
+
     private void moveItem() {
 
         mToolbar.startActionMode(new ActionMode.Callback() {
@@ -864,6 +959,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         return true;
                     case R.id.done:
                         sortOrder = "position";
+                        showIndeterminateProgress();
                         new savePositionsToDB().execute();
                         mode.finish();
                         return true;
@@ -900,6 +996,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
+
+            indeterminateProgress.dismiss();
             saveDone();
         }
     }
@@ -908,6 +1006,26 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         SnackbarManager.show(
                 Snackbar.with(getApplicationContext())
                         .text(R.string.dialog_positive_toast_message)
+                        .actionLabel(R.string.dismiss)
+                        .actionColor(getResources().getColor(R.color.yellow))
+                        .eventListener(eventListener)
+                , this);
+    }
+
+    private void listIsEmpty() {
+        SnackbarManager.show(
+                Snackbar.with(getApplicationContext())
+                        .text(R.string.list_is_empty)
+                        .actionLabel(R.string.dismiss)
+                        .actionColor(getResources().getColor(R.color.yellow))
+                        .eventListener(eventListener)
+                , this);
+    }
+
+    private void cannotBeEdited() {
+        SnackbarManager.show(
+                Snackbar.with(getApplicationContext())
+                        .text(R.string.cannot_be_edited)
                         .actionLabel(R.string.dismiss)
                         .actionColor(getResources().getColor(R.color.yellow))
                         .eventListener(eventListener)

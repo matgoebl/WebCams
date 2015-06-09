@@ -133,6 +133,17 @@ public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
         notifyDataSetChanged();
     }
 
+    public void setSelected(List<WebCam> webCams) {
+        for (WebCam webCam : webCams) {
+            for (WebCam webCamFromList : webCamList) {
+                if (webCamFromList.getId() == webCam.getId()) {
+                    webCamFromList.setSelected(true);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     @Override
     public Object getItem(int position) {
         return webCamList.get(position);
