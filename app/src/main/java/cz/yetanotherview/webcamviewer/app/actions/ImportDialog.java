@@ -281,7 +281,7 @@ public class ImportDialog extends DialogFragment {
                 progressDialog = new MaterialDialog.Builder(mActivity)
                         .title(R.string.restore_progress)
                         .content(R.string.please_wait)
-                        .progress(false, maxProgressValue)
+                        .progress(false, maxProgressValue, true)
                         .show();
             }
         });
