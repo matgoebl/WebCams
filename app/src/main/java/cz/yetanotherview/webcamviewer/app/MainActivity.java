@@ -835,7 +835,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (reallyAllWebCams.size() > 0) {
             if (selectedCategory != 0) {
                 MaterialDialog dialog = new MaterialDialog.Builder(this)
-                        .title(R.string.select_webcams)
+                        .title(R.string.assign_selected)
                         .customView(R.layout.manual_selection_dialog, false)
                         .positiveText(R.string.choose)
                         .iconRes(R.drawable.edit)
@@ -1025,7 +1025,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private void cannotBeEdited() {
         SnackbarManager.show(
                 Snackbar.with(getApplicationContext())
-                        .text(R.string.cannot_be_edited)
+                        .text(R.string.this_category_cannot_be_edited)
                         .actionLabel(R.string.dismiss)
                         .actionColor(getResources().getColor(R.color.yellow))
                         .eventListener(eventListener)

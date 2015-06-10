@@ -295,6 +295,6 @@
 <string name="search_hint">"Search..."</string>
 <string name="create_manually">"Create manually"</string>
 <string name="dmitry_tarianyk">"Dmitry Tarianyk"</string>
-<string name="select_webcams">"Select WebCams"</string>
-<string name="cannot_be_edited">"Cannot be edited"</string>
+<string name="this_category_cannot_be_edited">"This category can not be edited"</string>
+<string name="assign_selected">"Assign selected"</string>
 </resources>

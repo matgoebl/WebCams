@@ -30,6 +30,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -50,6 +51,8 @@ public class CategorySelectionAdapter extends BaseAdapter implements OnClickList
     }
 
     public class ViewHolder {
+        ImageView selCategoryIcon;
+        TextView selCategoryText;
         CheckBox selCategoryCheckBox;
         ImageView selCategoryOptions;
     }
@@ -91,6 +94,8 @@ public class CategorySelectionAdapter extends BaseAdapter implements OnClickList
         if (convertView == null) {
             convertView = LayoutInflater.from(activity).inflate(R.layout.category_selection_list_item, parent, false);
             holder = new ViewHolder();
+            holder.selCategoryIcon = (ImageView) convertView.findViewById(R.id.category_sel_icon);
+            holder.selCategoryText = (TextView) convertView.findViewById(R.id.category_sel_text);
             holder.selCategoryCheckBox = (CheckBox) convertView.findViewById(R.id.category_sel_checkbox);
             holder.selCategoryOptions = (ImageView) convertView.findViewById(R.id.categorySelectionOptions);
             convertView.setTag(holder);
@@ -110,8 +115,8 @@ public class CategorySelectionAdapter extends BaseAdapter implements OnClickList
                     activity.getPackageName());
         }
         else imageResource = R.drawable.icon_unknown;
-        holder.selCategoryCheckBox.setCompoundDrawablesWithIntrinsicBounds(imageResource, 0, 0, 0);
-        holder.selCategoryCheckBox.setText(category.getCategoryName());
+        holder.selCategoryIcon.setImageResource(imageResource);
+        holder.selCategoryText.setText(category.getCategoryName());
         holder.selCategoryCheckBox.setTag(category);
         holder.selCategoryOptions.setTag(position);
 

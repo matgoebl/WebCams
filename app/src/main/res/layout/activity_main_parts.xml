@@ -2,17 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floating_action_button"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        app:layout_anchor="@id/appbar"
-        app:layout_anchorGravity="bottom|right|end"
-        android:layout_margin="16dp"
-        app:fabSize="mini"
-        android:src="@drawable/ic_action_edit"
-        android:onClick="assignSelectedWebCamsToCategory"/>
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
@@ -25,6 +14,17 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical" />
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floating_action_button"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|right|end"
+        android:layout_margin="16dp"
+        app:fabSize="mini"
+        android:src="@drawable/ic_action_edit"
+        android:onClick="assignSelectedWebCamsToCategory"/>
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/floating_action_menu"

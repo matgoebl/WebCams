@@ -295,6 +295,6 @@
 <string name="search_hint">"Hľadať..."</string>
 <string name="create_manually">"Vytvoriť ručne"</string>
 <string name="dmitry_tarianyk">"Dmitry Tarianyk"</string>
-<string name="select_webcams">"Vyberte WebKamery"</string>
-<string name="cannot_be_edited">"Nemožno upravovať"</string>
+<string name="this_category_cannot_be_edited">"Túto kategóriu nemožno upravovať"</string>
+<string name="assign_selected">"Priradiť vybrané"</string>
 </resources>
