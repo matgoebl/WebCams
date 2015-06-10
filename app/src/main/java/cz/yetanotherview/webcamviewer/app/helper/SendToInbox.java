@@ -21,6 +21,7 @@ package cz.yetanotherview.webcamviewer.app.helper;
 import android.app.Activity;
 import android.os.AsyncTask;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.nispok.snackbar.Snackbar;
 
 import junit.framework.Assert;
@@ -39,6 +40,7 @@ public class SendToInbox {
     private WebCam webCam;
     private Boolean fromCommunityList;
     private Activity mActivity;
+    private MaterialDialog indeterminateProgress;
 
     public void sendToInbox(Activity activity, WebCam webCam, Boolean fromCommunityList) {
 
@@ -46,6 +48,7 @@ public class SendToInbox {
         this.fromCommunityList = fromCommunityList;
         this.mActivity = activity;
 
+        showIndeterminateProgress();
         new sendToInboxBackgroundTask().execute();
     }
 
@@ -90,14 +93,24 @@ public class SendToInbox {
         @Override
         protected void onProgressUpdate(Void... args) {
             super.onProgressUpdate(args);
+
+            indeterminateProgress.dismiss();
             new UnavailableDialog().show(mActivity.getFragmentManager(), "UnavailableDialog");
         }
+    }
+
+    private void showIndeterminateProgress() {
+        indeterminateProgress = new MaterialDialog.Builder(mActivity)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .show();
     }
 
     private void sent() {
 
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
+                indeterminateProgress.dismiss();
                 Snackbar.with(mActivity)
                         .text(R.string.sent)
                         .actionLabel(R.string.dismiss)

@@ -23,6 +23,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -67,6 +68,7 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
     private EditText webCamUrlAddStream, webCamThumbUrlAddStream, webCamNameAdd, webCamLatitude, webCamLongitude, webcamUrlAddStill;
     private double mLatitude, mLongitude;
     private boolean mEmpty;
+    private int taskResult;
     private WebCamListener mOnAddListener;
     private MaterialDialog materialDialog, progressDialog;
     private TextView webcamUrlTitleAddStill, webCamCategoryButton, progressText;
@@ -107,40 +109,107 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        Bundle bundle = this.getArguments();
+        String sharedUrl;
+        if (bundle != null) {
+            sharedUrl = bundle.getString("sharedUrl", null);
+        }
+        else sharedUrl = null;
+
         analyzingTitle = mActivity.getString(R.string.analyzing) + " (BETA)";
-
-        materialDialog = new MaterialDialog.Builder(mActivity)
-                .title(R.string.input_dialog_title)
-                .customView(R.layout.add_webcam_dialog_first, true)
-                .positiveText(R.string.next)
-                .negativeText(android.R.string.cancel)
-                .neutralText(R.string.how_to)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        if (!liveStream.isChecked()) {
-                            openSecondDialogStill();
-                        } else openSecondDialogStream();
-                        dialog.dismiss();
-                    }
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        dialog.dismiss();
-                    }
-                    @Override
-                    public void onNeutral(MaterialDialog dialog) {
-                        new YouTubeIntent(mActivity, Utils.HELP_MANUALLY_ADDING).open();
-                    }
-                })
-                .autoDismiss(false)
-                .build();
-
-        liveStream = (RadioButton) materialDialog.findViewById(R.id.radioLiveStreamAdd);
-
         imageLinks = new ArrayList<>();
         analyzer = new Analyzer(mActivity, mCallback);
 
+        if (sharedUrl == null) {
+            materialDialog = new MaterialDialog.Builder(mActivity)
+                    .title(R.string.input_dialog_title)
+                    .customView(R.layout.add_webcam_dialog_first, true)
+                    .positiveText(R.string.next)
+                    .negativeText(android.R.string.cancel)
+                    .neutralText(R.string.how_to)
+                    .callback(new MaterialDialog.ButtonCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            if (!liveStream.isChecked()) {
+                                openSecondDialogStill();
+                            } else openSecondDialogStream();
+                            dialog.dismiss();
+                        }
+                        @Override
+                        public void onNegative(MaterialDialog dialog) {
+                            dialog.dismiss();
+                        }
+                        @Override
+                        public void onNeutral(MaterialDialog dialog) {
+                            new YouTubeIntent(mActivity, Utils.HELP_MANUALLY_ADDING).open();
+                        }
+                    })
+                    .autoDismiss(false)
+                    .build();
+
+            liveStream = (RadioButton) materialDialog.findViewById(R.id.radioLiveStreamAdd);
+        }
+        else {
+            mWebCamUrl = sharedUrl;
+            materialDialog = new MaterialDialog.Builder(mActivity)
+                    .content(R.string.please_wait)
+                    .progress(true, 0)
+                    .build();
+            new SharedUrlAsyncTask().execute();
+        }
+
         return materialDialog;
+    }
+
+    private class SharedUrlAsyncTask extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+
+            if (Patterns.WEB_URL.matcher(mWebCamUrl).matches()) {
+                if (ConnectionTester.isConnected(mActivity)) {
+                    taskResult = 3;
+                } else {
+                    taskResult = 2;
+                }
+            } else {
+                taskResult = 1;
+            }
+            return taskResult;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            super.onPostExecute(result);
+
+            switch (result) {
+                case 1:
+                    showBadUrlDialog();
+                    materialDialog.dismiss();
+                    break;
+                case 2:
+                    new UnavailableDialog().show(mActivity.getFragmentManager(), "UnavailableDialog");
+                    materialDialog.dismiss();
+                    break;
+                case 3:
+                    testImageAfterAsyncTask();
+                    break;
+            }
+        }
+    }
+
+    private void testImageAfterAsyncTask() {
+        new ImageTester(mWebCamUrl, new ConnectionTesterListener() {
+            @Override
+            public void connectionStatus(boolean result) {
+                materialDialog.dismiss();
+                if (result) {
+                    openThirdDialog(true);
+                } else {
+                    openAnalyzeDialog();
+                }
+            }
+        }).execute();
     }
 
     private void openSecondDialogStill() {
@@ -571,8 +640,9 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
     }
 
     private void buildWebCam(boolean submit) {
+        boolean isStream = liveStream != null && liveStream.isChecked();
         WebCam webCam = new WebCam(
-                liveStream.isChecked(),
+                isStream,
                 mWebCamName,
                 mWebCamUrl,
                 mWebCamThumbUrl,

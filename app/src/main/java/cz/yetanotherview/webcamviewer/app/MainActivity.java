@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         initFab();
         initPullToRefresh();
         initFirstRun();
+        initReceivedIntent();
     }
 
     @Override
@@ -319,6 +320,31 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             // Save the state
             firstRun = false;
             saveToPref();
+        }
+    }
+
+    private void initReceivedIntent() {
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                handleReceivedUrl(intent);
+            }
+        }
+    }
+
+    private void handleReceivedUrl(Intent intent) {
+        String sharedUrl = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (sharedUrl != null) {
+            DialogFragment dialogFragment = AddDialog.newInstance(this);
+
+            Bundle bundle = new Bundle();
+            bundle.putString("sharedUrl", sharedUrl);
+            dialogFragment.setArguments(bundle);
+
+            dialogFragment.show(getFragmentManager(), "AddDialog");
         }
     }
 
