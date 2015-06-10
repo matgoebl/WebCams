@@ -27,7 +27,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -115,6 +117,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private SwipeRefreshLayout swipeRefreshLayout;
     private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbar;
+    private CoordinatorLayout coordinatorLayout;
+    private AppBarLayout appBarLayout;
     private MaterialDialog dialog, indeterminateProgress;
     private MenuItem searchItem;
     private SearchView searchView;
@@ -180,6 +184,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        reInitializeRecyclerViewAdapter();
+        reInitializeDrawerListAdapter();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         new ClearImageCache(this).execute();
@@ -190,6 +201,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         setSupportActionBar(mToolbar);
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         toolbarImage = (ImageView) findViewById(R.id.toolbar_image);
+        //coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
+        //appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
     }
 
     private void initDrawer() {
@@ -355,6 +368,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (mAdapter != null) {
             reInitializeRecyclerViewAdapter();
             floatingActionMenu.showMenuButton(true);
+            //CoordinatorLayout.LayoutParams coordinatorLayoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+            //AppBarLayout.Behavior appBarLayoutBehavior = (AppBarLayout.Behavior) coordinatorLayoutParams.getBehavior();
+            //int[] consumed = new int[2];
+            //appBarLayoutBehavior.onNestedPreScroll(coordinatorLayout, appBarLayout, null, 0, -1000, consumed);
+            //appBarLayoutBehavior.onNestedFling(coordinatorLayout, appBarLayout, null, 0, -Integer.MAX_VALUE, true);
         }
     }
 
