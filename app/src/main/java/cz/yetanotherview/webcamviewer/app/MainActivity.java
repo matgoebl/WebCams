@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private ImageView toolbarImage;
     private WebCamAdapter mAdapter;
     private ManualSelectionAdapter manualSelectionAdapter;
-    private float zoom;
     private int numberOfColumns, mOrientation, selectedCategory, autoRefreshInterval, mPosition,
             webCamToDeletePosition, selectedCategoryId;
     private boolean firstRun, fullScreen, autoRefresh, autoRefreshFullScreenOnly, screenAlwaysOn,
@@ -638,7 +637,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             intent.putExtra("url", webCam.getUrl());
             intent.putExtra("latitude", webCam.getLatitude());
             intent.putExtra("longitude", webCam.getLongitude());
-            intent.putExtra("zoom", zoom);
             intent.putExtra("fullScreen", fullScreen);
             intent.putExtra("autoRefresh", autoRefresh);
             intent.putExtra("interval", autoRefreshInterval);
@@ -1150,7 +1148,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         autoRefresh = preferences.getBoolean("pref_auto_refresh", false);
         autoRefreshInterval = preferences.getInt("pref_auto_refresh_interval", 30000);
         autoRefreshFullScreenOnly = preferences.getBoolean("pref_auto_refresh_fullscreen", false);
-        zoom = preferences.getFloat("pref_zoom", 2);
         screenAlwaysOn = preferences.getBoolean("pref_screen_always_on", false);
         simpleList = preferences.getBoolean("pref_simple_list", false);
     }

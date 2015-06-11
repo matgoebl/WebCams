@@ -98,7 +98,6 @@ public class SettingsFragment extends PreferenceFragment {
         importFromExt();
         exportToExt();
 
-        setZoom();
         resetLastCheck();
         cleanCacheAndTmpFolder();
         showTranslators();
@@ -318,47 +317,6 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 dialogFragment = new ImportDialog();
                 dialogFragment.show(getFragmentManager(), "ImportDialog");
-                return true;
-            }
-        });
-    }
-
-    private void setZoom() {
-        Preference pref_zoom = findPreference("pref_zoom");
-        pref_zoom.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-
-                MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                        .title(R.string.pref_zoom)
-                        .customView(R.layout.seekbar_dialog, false)
-                        .positiveText(R.string.dialog_positive_text)
-                        .iconRes(R.drawable.settings_zoom)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                sharedPref.edit().putFloat("pref_zoom", seekBar.getProgress()
-                                        + seekBarCorrection).apply();
-
-                                saveDone();
-                            }
-                        })
-                        .build();
-
-                seekBar = (SeekBar) dialog.findViewById(R.id.seekbar_seek);
-                seekBarText = (TextView) dialog.findViewById(R.id.seekbar_text);
-
-                units = "x " + getString(R.string.zoom_small);
-                seekBarCorrection = 1;
-                seekBar.setMax(3);
-                seekBarProgress = Math.round(sharedPref.getFloat("pref_zoom", 2));
-                seekBar.setProgress(seekBarProgress - seekBarCorrection);
-                seekBarText.setText((seekBar.getProgress() + seekBarCorrection) + units);
-
-                seekBar.setOnSeekBarChangeListener(new SeekBarChangeListener(seekBar, seekBarText,
-                        seekBarCorrection, units));
-
-                dialog.show();
-
                 return true;
             }
         });

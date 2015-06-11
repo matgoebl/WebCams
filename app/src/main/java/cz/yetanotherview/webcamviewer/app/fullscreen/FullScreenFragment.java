@@ -54,7 +54,6 @@ public class FullScreenFragment extends Fragment {
     private Animation fadeOut;
     private String signature, name, url;
     private StringSignature stringSignature;
-    private float zoom;
     private double latitude, longitude;
     private boolean autoRefresh, fullScreen;
     private int autoRefreshInterval;
@@ -70,7 +69,6 @@ public class FullScreenFragment extends Fragment {
         signature = bundle.getString("signature");
         name = bundle.getString("name");
         url = bundle.getString("url");
-        zoom = bundle.getFloat("zoom");
         autoRefresh = bundle.getBoolean("autoRefresh");
         autoRefreshInterval = bundle.getInt("interval");
         latitude = bundle.getDouble("latitude");
@@ -112,7 +110,7 @@ public class FullScreenFragment extends Fragment {
         };
 
         touchImageView = (TouchImageView) view.findViewById(R.id.touch_image);
-        touchImageView.setMaxZoom(zoom);
+        touchImageView.setMaxZoom(2);
         touchImageView.setOnClickListener(touchImageViewsListener);
 
         errorImageView = (ImageView) view.findViewById(R.id.action_error_full);
