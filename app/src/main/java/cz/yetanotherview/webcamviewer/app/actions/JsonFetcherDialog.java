@@ -525,10 +525,7 @@ public class JsonFetcherDialog extends DialogFragment {
                     mMapView.setZoom(3);
                 } else mMapView.setZoom(8);
 
-                for (Marker marker : markers) {
-                    mMapView.addMarker(marker);
-                }
-
+                mMapView.addMarkers(markers);
                 mMapView.setDiskCacheEnabled(false);
 
                 ImageButton zoomIn = (ImageButton) dialog.findViewById(R.id.zoomIn);

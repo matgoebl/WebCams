@@ -201,8 +201,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         setSupportActionBar(mToolbar);
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         toolbarImage = (ImageView) findViewById(R.id.toolbar_image);
-        //coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
-        //appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
+        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
     }
 
     private void initDrawer() {
@@ -368,11 +368,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (mAdapter != null) {
             reInitializeRecyclerViewAdapter();
             floatingActionMenu.showMenuButton(true);
-            //CoordinatorLayout.LayoutParams coordinatorLayoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
-            //AppBarLayout.Behavior appBarLayoutBehavior = (AppBarLayout.Behavior) coordinatorLayoutParams.getBehavior();
-            //int[] consumed = new int[2];
-            //appBarLayoutBehavior.onNestedPreScroll(coordinatorLayout, appBarLayout, null, 0, -1000, consumed);
-            //appBarLayoutBehavior.onNestedFling(coordinatorLayout, appBarLayout, null, 0, -Integer.MAX_VALUE, true);
+            expandToolbar();
         }
     }
 
@@ -405,6 +401,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
+                expandToolbar();
                 searchView.setIconified(false);
                 searchView.requestFocus();
                 return true;
@@ -412,6 +409,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
+                expandToolbar();
                 searchView.clearFocus();
                 return true;
             }
@@ -521,6 +519,17 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         MenuItemCompat.expandActionView(searchItem);
         searchView.requestFocus();
         return true;
+    }
+
+    private void expandToolbar(){
+        mLayoutManager.scrollToPosition(0);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+        if (behavior != null) {
+            behavior.setTopAndBottomOffset(0);
+            behavior.onNestedPreScroll(coordinatorLayout, appBarLayout, null, 0, 1, new int[2]);
+            //behavior.onNestedFling(coordinatorLayout, appBarLayout, null, 0, -Integer.MAX_VALUE, true);
+        }
     }
 
     private void showSortDialog() {
