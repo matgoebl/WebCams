@@ -81,6 +81,7 @@ import cz.yetanotherview.webcamviewer.app.fullscreen.FullScreenActivity;
 import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
 import cz.yetanotherview.webcamviewer.app.help.HelpActivity;
 import cz.yetanotherview.webcamviewer.app.helper.ClearImageCache;
+import cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView;
 import cz.yetanotherview.webcamviewer.app.helper.OnFilterTextChange;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.settings.SettingsActivity;
@@ -93,13 +94,13 @@ import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks, WebCamListener,
-        JsonFetcherDialog.ReloadInterface, SwipeRefreshLayout.OnRefreshListener {
+        JsonFetcherDialog.ReloadInterface, AppBarLayout.OnOffsetChangedListener {
 
     private DatabaseHelper db;
     private WebCam webCam, webCamToDelete;
     private List<Integer> webCamToDelete_category_ids;
     private List<WebCam> allWebCams, reallyAllWebCams;
-    private RecyclerView mRecyclerView;
+    private EmptyRecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
     private View mTintView;
     private ImageView toolbarImage;
@@ -180,11 +181,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (dialog != null) {
             dialog.dismiss();
         }
+        appBarLayout.removeOnOffsetChangedListener(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        appBarLayout.addOnOffsetChangedListener(this);
         reInitializeRecyclerViewAdapter();
         reInitializeDrawerListAdapter();
     }
@@ -227,9 +230,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         }
         mLayoutManager = new StaggeredGridLayoutManager(mLayoutId, StaggeredGridLayoutManager.VERTICAL);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.cardList);
+        mRecyclerView = (EmptyRecyclerView) findViewById(R.id.mainList);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setEmptyView(findViewById(R.id.list_empty));
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         if (selectedCategory == 0) {
@@ -321,8 +325,19 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private void initPullToRefresh() {
         // Pull To Refresh 1/2
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-        swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.swipe, R.color.yellow);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 2500);
+            }
+        });
     }
 
     private void initFirstRun() {
@@ -528,6 +543,15 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             behavior.setTopAndBottomOffset(0);
             behavior.onNestedPreScroll(coordinatorLayout, appBarLayout, null, 0, 1, new int[2]);
             //behavior.onNestedFling(coordinatorLayout, appBarLayout, null, 0, -Integer.MAX_VALUE, true);
+        }
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+        if (i == 0) {
+            swipeRefreshLayout.setEnabled(true);
+        } else {
+            swipeRefreshLayout.setEnabled(false);
         }
     }
 
@@ -1081,19 +1105,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         .actionColor(getResources().getColor(R.color.yellow))
                         .eventListener(eventListener)
                 , this);
-    }
-
-    // Pull To Refresh 2/2
-    @Override
-    public void onRefresh() {
-        refresh();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        }, 2500);
     }
 
     private void refresh() {

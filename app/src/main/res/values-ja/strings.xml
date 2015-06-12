@@ -29,8 +29,6 @@
 <string name="new_category_hint">"新しいリスト"</string>
 <string name="dismiss">"破棄"</string>
 <string name="refresh">"リフレッシュ"</string>
-<string name="pref_zoom">"ズーム"</string>
-<string name="pref_zoom_summary">"全画面表示の最大ズームレベルを設定します"</string>
 <string name="action_menu_help">"ヘルプとフィードバック"</string>
 <string name="pref_auto_refresh">"自動リフレッシュ"</string>
 <string name="pref_auto_refresh_summary">"ウェブカムの自動リフレッシュを有効または無効にします"</string>
@@ -95,7 +93,6 @@
 <string name="share">"共有"</string>
 <string name="back">"戻る"</string>
 <string name="show_on_map">"地図上に表示する"</string>
-<string name="zoom_small">"ズーム"</string>
 <string name="undo">"戻す"</string>
 <string name="nearby">"近く"</string>
 <string name="select_radius">"範囲を選択"</string>
@@ -292,9 +289,11 @@
 <string name="processing_feed_url">"処理中のフィードURL:"</string>
 <string name="fetching_size">"取得サイズ:"</string>
 <string name="notice">"お知らせ"</string>
-<string name="search_hint">"Search..."</string>
-<string name="create_manually">"Create manually"</string>
+<string name="search_hint">"検索"</string>
+<string name="create_manually">"手動で作成"</string>
 <string name="dmitry_tarianyk">"Dmitry Tarianyk"</string>
-<string name="this_category_cannot_be_edited">"This category can not be edited"</string>
-<string name="assign_selected">"Assign selected"</string>
+<string name="this_category_cannot_be_edited">"このカテゴリーは編集できません"</string>
+<string name="assign_selected">"割り当てを選択しました"</string>
+<string name="no_webcams_to_show"></string>
+<string name="no_webcams_to_show_description"></string>
 </resources>
