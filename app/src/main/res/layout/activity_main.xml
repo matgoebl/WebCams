@@ -37,7 +37,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/empty"
-            android:layout_marginBottom="@dimen/huge_margin"/>
+            android:layout_marginBottom="@dimen/huger_margin"
+            android:paddingTop="55dp" />
 
         <TextView
             android:layout_width="220dp"

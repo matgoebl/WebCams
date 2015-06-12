@@ -30,6 +30,7 @@
     <dimen name="big_margin">14dp</dimen>
     <dimen name="bigger_margin">16dp</dimen>
     <dimen name="huge_margin">20dp</dimen>
+    <dimen name="huger_margin">26dp</dimen>
     <dimen name="large_margin">40dp</dimen>
     <dimen name="larger_margin">44dp</dimen>
     <dimen name="ultra_margin">80dp</dimen>
