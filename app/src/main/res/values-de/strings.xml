@@ -288,12 +288,12 @@
 <string name="processing_link">"Bearbeite Link:"</string>
 <string name="processing_feed_url">"Bearbeite Feedadresse:"</string>
 <string name="fetching_size">"Rufe Größe ab:"</string>
-<string name="notice"></string>
+<string name="notice">"Notice"</string>
 <string name="search_hint">"Suchen..."</string>
 <string name="create_manually">"Manuell erstellen"</string>
 <string name="dmitry_tarianyk">"Dmitry Tarianyk"</string>
 <string name="this_category_cannot_be_edited">"Diese Kategorie kann nicht bearbeitet werden"</string>
 <string name="assign_selected">"Weise ausgewählte zu"</string>
-<string name="no_webcams_to_show"></string>
-<string name="no_webcams_to_show_description"></string>
+<string name="no_webcams_to_show">"Oops! There are no WebCams"</string>
+<string name="no_webcams_to_show_description">"If you want to add some new WebCams use the red button below, or refine your search."</string>
 </resources>

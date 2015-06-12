@@ -294,6 +294,6 @@
 <string name="dmitry_tarianyk">"Dmitry Tarianyk"</string>
 <string name="this_category_cannot_be_edited">"このカテゴリーは編集できません"</string>
 <string name="assign_selected">"割り当てを選択しました"</string>
-<string name="no_webcams_to_show"></string>
-<string name="no_webcams_to_show_description"></string>
+<string name="no_webcams_to_show">"ウェブカムはありません!"</string>
+<string name="no_webcams_to_show_description">"新しいウェブカムを追加する場合、下の赤いボタンを使用するか、検索を調整してみてください"</string>
 </resources>

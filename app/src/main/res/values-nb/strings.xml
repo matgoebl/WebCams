@@ -29,8 +29,6 @@
 <string name="new_category_hint">"Ny liste"</string>
 <string name="dismiss">"LUKK"</string>
 <string name="refresh">"Oppfrisk"</string>
-<string name="pref_zoom">"Zoom"</string>
-<string name="pref_zoom_summary">"Set maks. zoom-nivå i fullskjermsmodus"</string>
 <string name="action_menu_help">"Hjelp"</string>
 <string name="pref_auto_refresh">"Auto-oppfrisk"</string>
 <string name="pref_auto_refresh_summary">"Aktiver eller deaktiver webkam auto-oppfrisking"</string>
@@ -95,7 +93,6 @@
 <string name="share">"Del"</string>
 <string name="back">"Tilbake"</string>
 <string name="show_on_map">"Vis på kart"</string>
-<string name="zoom_small">"zoom"</string>
 <string name="undo">"ANGRE"</string>
 <string name="nearby">"Nær"</string>
 <string name="select_radius">"Velg en radius"</string>
@@ -297,4 +294,6 @@
 <string name="dmitry_tarianyk">"Dmitry Tarianyk"</string>
 <string name="this_category_cannot_be_edited">"Denne kategorien kan ikke endres"</string>
 <string name="assign_selected">"Bruk valgt"</string>
+<string name="no_webcams_to_show">"Oops! There are no WebCams"</string>
+<string name="no_webcams_to_show_description">"If you want to add some new WebCams use the red button below, or refine your search."</string>
 </resources>
