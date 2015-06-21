@@ -30,7 +30,6 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private String mStringSignature;
     private String sortOrder = Utils.defaultSortOrder;
     private FloatingActionMenu floatingActionMenu;
-    private FloatingActionButton floatingActionButton;
+    private android.support.design.widget.FloatingActionButton floatingActionButtonNative;
     private SwipeRefreshLayout swipeRefreshLayout;
     private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbar;
@@ -267,7 +266,36 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floating_action_menu);
         floatingActionMenu.setClosedOnTouchOutside(true);
 
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.floating_action_button);
+        com.github.clans.fab.FloatingActionButton floatingActionButtonImport =
+                (com.github.clans.fab.FloatingActionButton) findViewById(R.id.floating_action_button_import);
+        com.github.clans.fab.FloatingActionButton floatingActionButtonManual =
+                (com.github.clans.fab.FloatingActionButton) findViewById(R.id.floating_action_button_manual);
+        com.github.clans.fab.FloatingActionButton floatingActionButtonSuggestion =
+                (com.github.clans.fab.FloatingActionButton) findViewById(R.id.floating_action_button_suggestion);
+
+        floatingActionButtonImport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAfterDelay(0);
+                hideAfterDelay();
+            }
+        });
+        floatingActionButtonManual.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAfterDelay(1);
+                hideAfterDelay();
+            }
+        });
+        floatingActionButtonSuggestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAfterDelay(2);
+                hideAfterDelay();
+            }
+        });
+
+        floatingActionButtonNative = (android.support.design.widget.FloatingActionButton) findViewById(R.id.floating_action_button);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -292,12 +320,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !fullScreen) {
                         getWindow().setStatusBarColor(getResources().getColor(R.color.black_transparent));
                     }
-                    floatingActionButton.setVisibility(View.INVISIBLE);
+                    floatingActionButtonNative.setVisibility(View.INVISIBLE);
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !fullScreen) {
                         getWindow().setStatusBarColor(getResources().getColor(android.R.color.transparent));
                     }
-                    floatingActionButton.setVisibility(View.VISIBLE);
+                    floatingActionButtonNative.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -751,21 +779,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (webCam.getUniId() != 0) {
             new SendToInbox().sendToInbox(this, webCam, true);
         } else new SendToInbox().sendToInbox(this, webCam, false);
-    }
-
-    public void showSelectionDialog(View view) {
-        openAfterDelay(0);
-        hideAfterDelay();
-    }
-
-    public void showAddDialog(View view) {
-        openAfterDelay(1);
-        hideAfterDelay();
-    }
-
-    public void showSuggestionDialog(View view) {
-        openAfterDelay(2);
-        hideAfterDelay();
     }
 
     private void openAfterDelay(final int which) {

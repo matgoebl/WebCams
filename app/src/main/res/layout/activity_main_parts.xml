@@ -49,6 +49,7 @@
         fab:menu_backgroundColor="@color/black_transparent">
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/floating_action_button_import"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_content_import"
@@ -56,10 +57,10 @@
             fab:fab_label="@string/pref_import_from_server"
             fab:fab_colorNormal="@color/white"
             app:fab_colorPressed="@color/next_grey"
-            app:fab_colorRipple="#99FFFFFF"
-            android:onClick="showSelectionDialog"/>
+            app:fab_colorRipple="#99FFFFFF" />
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/floating_action_button_manual"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_content_manually"
@@ -67,10 +68,10 @@
             fab:fab_label="@string/create_manually"
             fab:fab_colorNormal="@color/white"
             app:fab_colorPressed="@color/next_grey"
-            app:fab_colorRipple="#99FFFFFF"
-            android:onClick="showAddDialog"/>
+            app:fab_colorRipple="#99FFFFFF" />
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/floating_action_button_suggestion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_content_suggestion"
@@ -78,8 +79,7 @@
             fab:fab_label="@string/submit_suggestion"
             fab:fab_colorNormal="@color/white"
             app:fab_colorPressed="@color/next_grey"
-            app:fab_colorRipple="#99FFFFFF"
-            android:onClick="showSuggestionDialog"/>
+            app:fab_colorRipple="#99FFFFFF" />
 
     </com.github.clans.fab.FloatingActionMenu>
 
