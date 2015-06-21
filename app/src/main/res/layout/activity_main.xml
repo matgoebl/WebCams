@@ -24,42 +24,8 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <LinearLayout
-        android:id="@+id/list_empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:background="@color/hyperlink"
-        xmlns:android="http://schemas.android.com/apk/res/android">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/empty"
-            android:layout_marginBottom="@dimen/huger_margin"
-            android:paddingTop="55dp" />
-
-        <TextView
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:lineSpacingExtra="4dp"
-            android:text="@string/no_webcams_to_show"
-            android:layout_marginBottom="@dimen/middle_margin"
-            android:gravity="center_horizontal" />
-
-        <TextView
-            android:layout_width="260dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:lineSpacingExtra="10dp"
-            android:text="@string/no_webcams_to_show_description"
-            android:gravity="center_horizontal" />
-    </LinearLayout>
+    <include
+        layout="@layout/activity_main_empty_list"/>
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"

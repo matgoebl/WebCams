@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         loadPref();
 
         // Inflating main layout
-        if (fullScreen) {
+        if (fullScreen || Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) { //ToDo: Workaround for Bug 176647
             setContentView(R.layout.activity_main_immersive);
         }
         else setContentView(R.layout.activity_main);
