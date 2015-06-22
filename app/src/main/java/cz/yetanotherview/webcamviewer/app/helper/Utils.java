@@ -55,7 +55,7 @@ public class Utils {
 
     public static final String YAV = "http://www.yetanotherview.cz/";
 
-    public static final String HELP_PRESENTATION_ = "Xcp0j2vwbxI";
+    public static final String HELP_PRESENTATION_ = "ZCMKV54rQVM";
     public static final String HELP_MANUALLY_ADDING = "liYtvXE0JTI";
 
     public static final String SUPPORT_LIBRARIES_VERSION = "22.2.0";

@@ -1,6 +1,6 @@
 # WebCam Viewer
 
-[![Presentation video](http://img.youtube.com/vi/Xcp0j2vwbxI/0.jpg)](http://www.youtube.com/watch?v=Xcp0j2vwbxI)
+[![Presentation video](http://img.youtube.com/vi/ZCMKV54rQVM/0.jpg)](http://www.youtube.com/watch?v=ZCMKV54rQVM)
 
 With this fast, simple and modern application you can quickly create a list of all your favorite WebCams.
 
