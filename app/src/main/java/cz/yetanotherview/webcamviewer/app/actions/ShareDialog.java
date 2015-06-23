@@ -41,7 +41,6 @@ import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.actions.simple.UnavailableDialog;
 import cz.yetanotherview.webcamviewer.app.helper.ConnectionTester;
-import cz.yetanotherview.webcamviewer.app.listener.ConnectionTesterListener;
 
 public class ShareDialog extends DialogFragment {
 

@@ -46,17 +46,16 @@ import cz.yetanotherview.webcamviewer.app.helper.HttpHeader;
 
 public class FullScreenFragment extends Fragment {
 
-    private Bundle bundle;
     private View view;
     private RelativeLayout mButtonsLayout;
     private TouchImageView touchImageView;
     private ImageView errorImageView;
     private Animation fadeOut;
-    private String signature, name, url;
+    private String name;
+    private String url;
     private StringSignature stringSignature;
     private double latitude, longitude;
-    private boolean autoRefresh, fullScreen;
-    private int autoRefreshInterval;
+    private boolean fullScreen;
     private ImageButton backButton;
     private DiaporamaAdapter diaporamaAdapter;
 
@@ -65,12 +64,12 @@ public class FullScreenFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.full_screen_layout, container, false);
 
-        bundle = getActivity().getIntent().getExtras();
-        signature = bundle.getString("signature");
+        Bundle bundle = getActivity().getIntent().getExtras();
+        String signature = bundle.getString("signature");
         name = bundle.getString("name");
         url = bundle.getString("url");
-        autoRefresh = bundle.getBoolean("autoRefresh");
-        autoRefreshInterval = bundle.getInt("interval");
+        boolean autoRefresh = bundle.getBoolean("autoRefresh");
+        int autoRefreshInterval = bundle.getInt("interval");
         latitude = bundle.getDouble("latitude");
         longitude = bundle.getDouble("longitude");
         fullScreen = bundle.getBoolean("fullScreen");
@@ -104,7 +103,9 @@ public class FullScreenFragment extends Fragment {
         View.OnClickListener touchImageViewsListener = new View.OnClickListener() {
             public void onClick(View v) {
                 mButtonsLayout.setVisibility(View.VISIBLE);
-                getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                if (!fullScreen) {
+                    getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                }
                 mButtonsLayout.startAnimation(fadeOut);
             }
         };
@@ -132,11 +133,13 @@ public class FullScreenFragment extends Fragment {
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShareDialog shareDialog = new ShareDialog();
-                Bundle shareDialogBundle = new Bundle();
-                shareDialogBundle.putString("url", url);
-                shareDialog.setArguments(shareDialogBundle);
-                shareDialog.show(getFragmentManager(), "ShareDialog");
+                if (touchImageView.getDrawable() != null) {
+                    ShareDialog shareDialog = new ShareDialog();
+                    Bundle shareDialogBundle = new Bundle();
+                    shareDialogBundle.putString("url", url);
+                    shareDialog.setArguments(shareDialogBundle);
+                    shareDialog.show(getFragmentManager(), "ShareDialog");
+                }
             }
         });
 
@@ -153,12 +156,14 @@ public class FullScreenFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new SaveDialog();
-                Bundle bundle = new Bundle();
-                bundle.putString("name", name);
-                bundle.putString("url", url);
-                newFragment.setArguments(bundle);
-                newFragment.show(getFragmentManager(), "SaveDialog");
+                if (touchImageView.getDrawable() != null) {
+                    DialogFragment newFragment = new SaveDialog();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("name", name);
+                    bundle.putString("url", url);
+                    newFragment.setArguments(bundle);
+                    newFragment.show(getFragmentManager(), "SaveDialog");
+                }
             }
         });
 
@@ -186,7 +191,9 @@ public class FullScreenFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+                if (!fullScreen) {
+                    getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+                }
                 mButtonsLayout.setVisibility(View.GONE);
             }
 

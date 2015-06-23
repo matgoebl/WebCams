@@ -102,7 +102,7 @@ public class DiaporamaAdapter {
     // public methods
     //////////////////////////////////////////////////////////////////////////////////////
 
-    public <T> void loadNextImage(@NonNull T model, @NonNull StringSignature stringSignature,
+    public <T> void loadNextImage(T model, @NonNull StringSignature stringSignature,
                                   @NonNull BitmapTransformation... transformations) {
         //noinspection MagicNumber
         int hash = model.hashCode() + 31 * Arrays.hashCode(transformations);
@@ -111,7 +111,7 @@ public class DiaporamaAdapter {
         mLastLoadHash = hash;
     }
 
-    public <T> void loadNextImage(@NonNull T model, @NonNull StringSignature stringSignature) {
+    public <T> void loadNextImage(T model, @NonNull StringSignature stringSignature) {
         if (firstTime) {
             Glide.with(mContext)
                     .load(model)

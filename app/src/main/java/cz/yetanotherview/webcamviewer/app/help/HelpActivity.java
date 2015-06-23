@@ -54,6 +54,9 @@ public class HelpActivity extends AppCompatActivity {
         List<HelpItem> helpData = new ArrayList<>();
         helpData.add(new HelpItem(getString(R.string.presentation), R.drawable.help_preview_0, Utils.HELP_PRESENTATION_));
         helpData.add(new HelpItem(getString(R.string.manually_adding),R.drawable.help_preview_1, Utils.HELP_MANUALLY_ADDING));
+        helpData.add(new HelpItem(getString(R.string.analyzer_tool),R.drawable.help_preview_2, Utils.HELP_ANALYZER_TOOL));
+        helpData.add(new HelpItem(getString(R.string.category_management),R.drawable.help_preview_3, Utils.HELP_CATEGORY_MANAGEMENT));
+        helpData.add(new HelpItem(getString(R.string.pref_backup_restore),R.drawable.help_preview_4, Utils.HELP_BACKUP_RESTORE));
 
         mAdapter = new HelpAdapter(helpData);
         recyclerView.setHasFixedSize(true);

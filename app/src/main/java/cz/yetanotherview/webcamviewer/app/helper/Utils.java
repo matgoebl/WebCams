@@ -56,7 +56,10 @@ public class Utils {
     public static final String YAV = "http://www.yetanotherview.cz/";
 
     public static final String HELP_PRESENTATION_ = "ZCMKV54rQVM";
-    public static final String HELP_MANUALLY_ADDING = "liYtvXE0JTI";
+    public static final String HELP_MANUALLY_ADDING = "tAwHqEK4IpI";
+    public static final String HELP_ANALYZER_TOOL = "j6wa-xpoBYs";
+    public static final String HELP_CATEGORY_MANAGEMENT = "SZGEwhPltJk";
+    public static final String HELP_BACKUP_RESTORE = "qVdhrAGEmp4";
 
     public static final String SUPPORT_LIBRARIES_VERSION = "22.2.0";
     public static final String GLIDE_VERSION = "3.6.0";
@@ -65,16 +68,17 @@ public class Utils {
     public static final String GOOGLE_GSON_VERSION = "2.3.1";
     public static final String JSOUP_VERSION = "1.8.2";
     public static final String MAPBOX_VERSION = "0.7.4";
-    public static final String FAB_VERSION = "1.5.1";
+    public static final String FAB_VERSION = "1.5.2";
     public static final String SNACKBAR_VERSION = "2.10.10";
 
-    private static final String JSON_FILE_CORE = "http://api.yetanotherview.cz/api/v2/";
-    public static final String JSON_FILE_URL_ALL = JSON_FILE_CORE + "get_all_webcams.php";
-    public static final String JSON_FILE_URL_POPULAR = JSON_FILE_CORE +  "get_popular_webcams.php";
-    public static final String JSON_FILE_URL_LATEST = JSON_FILE_CORE + "get_latest_webcams.php";
-    public static final String JSON_FILE_URL_LIVE_STREAMS = JSON_FILE_CORE + "get_live_streams_webcams.php";
-    public static final String JSON_FILE_URL_SEND_TO_APPROVAL = JSON_FILE_CORE + "send_to_approval.php";
-    public static final String JSON_FILE_URL_SEND_SUGGESTION = JSON_FILE_CORE + "send_suggestion.php";
+    private static final String CORE = "http://api.yetanotherview.cz/api/v2/";
+    private static final String PHP = ".php";
+    public static final String JSON_FILE_SNRSRKUBIIXK = CORE + "SNRSrkubIIxk" + PHP;
+    public static final String JSON_FILE_ETGGISNVIYVH = CORE + "EtggIsnviYvh" + PHP;
+    public static final String JSON_FILE_HYBFVHABSMXZ = CORE + "hyBfVhAbsMxz" + PHP;
+    public static final String JSON_FILE_QFPMSVSKAVLR = CORE + "QFpmSVsKAvlr" + PHP;
+    public static final String JSON_FILE_NPOEMOWQCPPO = CORE + "NPOEmowqCppo" + PHP;
+    public static final String JSON_FILE_OZOBFUTXJVXO = CORE + "OZObFutXjVxo" + PHP;
 
     /**
      * Get current date

@@ -811,9 +811,13 @@ public class TouchImageView extends ImageView {
     }
 
     private PointF transformCoordTouchToBitmap(float x, float y, boolean clipToBitmap) {
+        Drawable drawable = getDrawable();
+        if (drawable == null) {
+            return new PointF(0 , 0);
+        }
         matrix.getValues(m);
-        float origW = getDrawable().getIntrinsicWidth();
-        float origH = getDrawable().getIntrinsicHeight();
+        float origW = drawable.getIntrinsicWidth();
+        float origH = drawable.getIntrinsicHeight();
         float transX = m[Matrix.MTRANS_X];
         float transY = m[Matrix.MTRANS_Y];
         float finalX = ((x - transX) * origW) / getImageWidth();
@@ -828,9 +832,13 @@ public class TouchImageView extends ImageView {
     }
 
     private PointF transformCoordBitmapToTouch(float bx, float by) {
+        Drawable drawable = getDrawable();
+        if (drawable == null) {
+            return new PointF(0 , 0);
+        }
         matrix.getValues(m);
-        float origW = getDrawable().getIntrinsicWidth();
-        float origH = getDrawable().getIntrinsicHeight();
+        float origW = drawable.getIntrinsicWidth();
+        float origH = drawable.getIntrinsicHeight();
         float px = bx / origW;
         float py = by / origH;
         float finalX = m[Matrix.MTRANS_X] + getImageWidth() * px;

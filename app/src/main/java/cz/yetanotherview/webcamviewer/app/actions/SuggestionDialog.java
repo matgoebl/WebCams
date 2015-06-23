@@ -145,7 +145,7 @@ public class SuggestionDialog extends DialogFragment {
 
         protected String doInBackground(String... args) {
 
-            String url = Utils.JSON_FILE_URL_SEND_SUGGESTION;
+            String url = Utils.JSON_FILE_OZOBFUTXJVXO;
             String reason = "New Suggestion";
 
             try {

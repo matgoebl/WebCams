@@ -170,16 +170,16 @@ public class JsonFetcherDialog extends DialogFragment {
                 URL url;
                 switch (selection) {
                     case 0:
-                        url = new URL(Utils.JSON_FILE_URL_POPULAR);
+                        url = new URL(Utils.JSON_FILE_ETGGISNVIYVH);
                         break;
                     case 6:
-                        url = new URL(Utils.JSON_FILE_URL_LIVE_STREAMS);
+                        url = new URL(Utils.JSON_FILE_QFPMSVSKAVLR);
                         break;
                     case 8:
-                        url = new URL(Utils.JSON_FILE_URL_LATEST);
+                        url = new URL(Utils.JSON_FILE_HYBFVHABSMXZ);
                         break;
                     default:
-                        url = new URL(Utils.JSON_FILE_URL_ALL);
+                        url = new URL(Utils.JSON_FILE_SNRSRKUBIIXK);
                         break;
                 }
 

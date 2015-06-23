@@ -317,12 +317,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             @Override
             public void onMenuToggle(boolean b) {
                 if (b) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !fullScreen) {
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP && !fullScreen) { //ToDo: Workaround for Bug 176647
                         getWindow().setStatusBarColor(getResources().getColor(R.color.black_transparent));
                     }
                     floatingActionButtonNative.setVisibility(View.INVISIBLE);
                 } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !fullScreen) {
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP && !fullScreen) { //ToDo: Workaround for Bug 176647
                         getWindow().setStatusBarColor(getResources().getColor(android.R.color.transparent));
                     }
                     floatingActionButtonNative.setVisibility(View.VISIBLE);
@@ -424,9 +424,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 allWebCams = db.getAllWebCamsByCategory(selectedCategoryId, sortOrder);
                 mAdapter.swapData(allWebCams);
             }
-            db.closeDB();
             saveToPref();
         }
+        db.closeDB();
     }
 
     private void reInitializeDrawerListAdapter() {

@@ -9,38 +9,28 @@ This application has a community based database and also allows you to manually 
 **Features:**
 - Importing WebCams from community database
 - Adding your own WebCams (Naming, Editing, Removal)
+- Support for Live Streams
 - Fully administration of the categories
 - Saving and sharing pictures from WebCams
 - Showing WebCams on the map
 - Sorting function
 - "Keep screen on" function
 - Refresh and Auto Refresh function (whole list or only full screen view)
-- Ability to set preferred Zoom level
 - Import and export WebCams list to external storage
 - View each WebCam in full screen mode (pinch to zoom, move and double tap)
 - Intelligent images caching
 - Modern Material Design on all devices
 - The Lollipop "PullToRefresh" function
 - Immersive Full-Screen Mode (only KitKat or higher)
-- Full compatibility with Android 5.0 Lollipop
-- Support for native Backup and Restore feature, which is part of Android system
-- Rewritten from scratch using new native RecyclerView and CardView
+- Full compatibility with Android 5.1 Lollipop
 - Completely free, open source and no Ads!
 
 **Supported languages:**
-* English, Czech, Slovak, German, Japanese, Norwegian (I would be grateful, if you can help me with the translation into your language at this address: http://goo.gl/MUJqYZ)
-
-**Website:**
-
-* http://www.yetanotherview.cz/wcv/en.html
+* English, Czech, Slovak, German, Japanese, Norwegian, Swedish ([Want to translate?](http://goo.gl/MUJqYZ))
 
 **Bug reports:**
 
 * https://github.com/TomasValenta/WebCamViewer/issues
-
-**Note:**
-
-* This application currently do not support video sequences.
 
 [![Get it on Google Play](http://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=cz.yetanotherview.webcamviewer.app)
 	 

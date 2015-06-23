@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="hint_webcam_latitude">"50.770481"</string>
+<string name="hint_webcam_longitude">"14.209077"</string>
+<string name="google_inc">"Google, Inc."</string>
+<string name="aidan_follestad">"Aidan Follestad"</string>
+<string name="glide">"Glide"</string>
+<string name="bump_technologies">"Bump Technologies"</string>
+<string name="lib_vlc">"libVLC"</string>
+<string name="gnu_lgpl">"GNU LGPLv2.1+"</string>
+<string name="gson">"Gson"</string>
+<string name="floating_action_button">"Floating Action Button"</string>
+<string name="snackbar">"Snackbar"</string>
+<string name="nispok">"nispok"</string>
+<string name="mapbox">"Mapbox"</string>
+<string name="jsoup">"jsoup"</string>
+<string name="jonathan_hedley">"Jonathan Hedley"</string>
+<string name="mat_vallo">"Mat Vallo"</string>
+<string name="tomas_valenta">"Tomáš Valenta"</string>
+<string name="sven_fischer">"Sven Fischer"</string>
+<string name="naofumi">"Naofumi"</string>
+<string name="falk_petersen">"Falk Petersen"</string>
+<string name="yet_another_view">"Yet Another View"</string>
+<string name="tomas_borov">"Tomáš Borov"</string>
+<string name="radek_matouch">"Radek Matouch"</string>
+<string name="dmitry_tarianyk">"Dmitry Tarianyk"</string>
+<string name="alvar_lagerlof">"Alvar Lagerlof"</string>
+</resources>

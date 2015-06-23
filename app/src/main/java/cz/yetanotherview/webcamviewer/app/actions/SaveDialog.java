@@ -35,7 +35,6 @@ import java.util.List;
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.actions.simple.UnavailableDialog;
 import cz.yetanotherview.webcamviewer.app.helper.ConnectionTester;
-import cz.yetanotherview.webcamviewer.app.listener.ConnectionTesterListener;
 
 public class SaveDialog extends DialogFragment {
 

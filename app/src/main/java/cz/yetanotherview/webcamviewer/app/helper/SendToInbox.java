@@ -57,7 +57,7 @@ public class SendToInbox {
         protected Void doInBackground(Void... voids) {
 
             try {
-                String url = Utils.JSON_FILE_URL_SEND_TO_APPROVAL;
+                String url = Utils.JSON_FILE_NPOEMOWQCPPO;
                 HttpURLConnection urlConn = (HttpURLConnection) new URL(url).openConnection();
                 urlConn.connect();
                 Assert.assertEquals(HttpURLConnection.HTTP_OK, urlConn.getResponseCode());

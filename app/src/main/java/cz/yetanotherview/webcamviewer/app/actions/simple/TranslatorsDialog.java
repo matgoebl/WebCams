@@ -81,6 +81,11 @@ public class TranslatorsDialog extends DialogFragment {
                 new SimpleIntentOnClickListener(getActivity(),
                         "http://0p.no/"));
 
+        initTranslator(dialog, "sv", R.id.translators_language_swedish_flag, "se",
+                R.id.translators_language_swedish, R.id.translators_language_swedish_container,
+                new SimpleIntentOnClickListener(getActivity(),
+                        "https://plus.google.com/118225125255733736923"));
+
         initTranslator(dialog, "cs", R.id.translators_language_czech_flag, "cz",
                 R.id.translators_language_czech, R.id.translators_language_czech_container,
                 new SimpleIntentOnClickListener(getActivity(),
