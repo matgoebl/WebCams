@@ -16,12 +16,13 @@ This application has a community based database and also allows you to manually 
 - Sorting function
 - "Keep screen on" function
 - Refresh and Auto Refresh function (whole list or only full screen view)
-- Import and export WebCams list to external storage
+- Import and export WebCams list to external and cloud storage
 - View each WebCam in full screen mode (pinch to zoom, move and double tap)
 - Intelligent images caching
 - Modern Material Design on all devices
 - The Lollipop "PullToRefresh" function
 - Immersive Full-Screen Mode (only KitKat or higher)
+- Configurable Widget
 - Full compatibility with Android 5.1 Lollipop
 - Completely free, open source and no Ads!
 
