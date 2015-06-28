@@ -78,6 +78,9 @@ public class Category {
     }
 
     public String getCategory_image() {
-        return category_icon.replace("icon", "image");
+        if (category_icon != null) {
+            return category_icon.replace("icon", "image");
+        }
+        else return null;
     }
 }

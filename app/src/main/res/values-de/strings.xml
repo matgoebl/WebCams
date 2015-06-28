@@ -267,8 +267,8 @@
 <string name="create_manually">"Manuell erstellen"</string>
 <string name="this_category_cannot_be_edited">"Diese Kategorie kann nicht bearbeitet werden"</string>
 <string name="assign_selected">"Weise ausgewählte zu"</string>
-<string name="no_webcams_to_show">"Oops! There are no WebCams"</string>
-<string name="no_webcams_to_show_description">"If you want to add some new WebCams use the red button below, or refine your search."</string>
-<string name="analyzer_tool">"Analyzer Tool"</string>
-<string name="category_management">"Kategorie Verwaltung"</string>
+<string name="no_webcams_to_show">"Oops! Es gibt keine WebCams"</string>
+<string name="no_webcams_to_show_description">"Wenn du neue WebCams hinzufügen möchtest, nutze den unteren roten Button oder verfeinere deine Suche"</string>
+<string name="analyzer_tool">"Analysewerkzeug"</string>
+<string name="category_management">"Kategorienverwaltung"</string>
 </resources>
