@@ -42,10 +42,10 @@
                 android:contentDescription="@string/image_description" />
 
             <include
-                layout="@layout/play_overlay"/>
+                layout="@layout/webcam_layout_parts"/>
 
             <include
-                layout="@layout/webcam_layout_parts"/>
+                layout="@layout/play_overlay"/>
 
         </RelativeLayout>
 

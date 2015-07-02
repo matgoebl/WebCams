@@ -246,21 +246,22 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
         @Override
         public void onClick(View v) {
             if (v instanceof ImageButton){
-                clickListener.onClick(v, getAdapterPosition(), true, false, vTint);
+                clickListener.onClick(v, getAdapterPosition(), true, false, vTint, vError);
             } else {
-                clickListener.onClick(v, getAdapterPosition(), false, false, vTint);
+                clickListener.onClick(v, getAdapterPosition(), false, false, vTint, vError);
             }
         }
 
         @Override
         public boolean onLongClick(View v) {
-            clickListener.onClick(v, getAdapterPosition(), false, true, vTint);
+            clickListener.onClick(v, getAdapterPosition(), false, true, vTint, vError);
             return true;
         }
     }
 
     public interface ClickListener {
-        void onClick(View v, int position, boolean isEditClick, boolean isLongClick, View tintview);
+        void onClick(View v, int position, boolean isEditClick, boolean isLongClick, View tintView,
+                     View errorView);
     }
 
     public void setClickListener(ClickListener clickListener) {

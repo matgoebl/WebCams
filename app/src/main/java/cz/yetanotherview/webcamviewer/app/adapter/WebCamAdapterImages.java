@@ -39,6 +39,7 @@ public class WebCamAdapterImages {
     private boolean isStream;
     private StringSignature stringSignature;
     private String source;
+    private int count;
 
     public WebCamAdapterImages(Context context, int layoutId, WebCamAdapter.WebCamViewHolder webcamViewHolder, boolean isStream,
                                StringSignature stringSignature, String source) {
@@ -48,6 +49,7 @@ public class WebCamAdapterImages {
         this.isStream = isStream;
         this.stringSignature = stringSignature;
         this.source = source;
+        count = 0;
         loadImage();
     }
 
@@ -80,8 +82,14 @@ public class WebCamAdapterImages {
         @Override
         public boolean onException(Exception e, GlideUrl model, Target<GlideDrawable> target,
                                    boolean isFirstResource) {
-            webcamViewHolder.vProgress.setVisibility(View.GONE);
-            webcamViewHolder.vError.setVisibility(View.VISIBLE);
+            if (count == 6) {
+                webcamViewHolder.vProgress.setVisibility(View.GONE);
+                webcamViewHolder.vError.setVisibility(View.VISIBLE);
+            }
+            else {
+                count++;
+                loadImage();
+            }
             return false;
         }
 

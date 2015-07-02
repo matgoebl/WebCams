@@ -248,7 +248,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         mAdapter.setClickListener(new WebCamAdapter.ClickListener() {
 
             @Override
-            public void onClick(View view, int position, boolean isEditClick, boolean isLongClick, View tintView) {
+            public void onClick(View view, int position, boolean isEditClick, boolean isLongClick,
+                                View tintView, View errorView) {
                 if (isEditClick) {
                     mTintView = tintView;
                     showOptionsDialog(position);
@@ -256,7 +257,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     mTintView = tintView;
                     mPosition = position;
                     moveItem();
-                } else showImageFullscreen(position, false);
+                } else {
+                    if (errorView.getVisibility() == View.VISIBLE) {
+                        refreshSelected(position);
+                    }
+                    else showImageFullscreen(position, false);
+                }
             }
         });
     }
