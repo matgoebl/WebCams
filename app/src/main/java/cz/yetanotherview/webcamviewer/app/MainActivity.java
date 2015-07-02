@@ -109,8 +109,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             webCamToDeletePosition, selectedCategoryId;
     private boolean firstRun, fullScreen, autoRefresh, autoRefreshFullScreenOnly, screenAlwaysOn,
             imagesOnOff, simpleList;
-    private String mStringSignature;
-    private String sortOrder = Utils.defaultSortOrder;
+    private String mStringSignature, sortOrder;
     private FloatingActionMenu floatingActionMenu;
     private android.support.design.widget.FloatingActionButton floatingActionButtonNative;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -659,6 +658,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 break;
                         }
                         reInitializeRecyclerViewAdapter();
+                        saveToPref();
 
                         return true;
                     }
@@ -1047,6 +1047,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         return true;
                     case R.id.done:
                         sortOrder = "position";
+                        saveToPref();
                         showIndeterminateProgress();
                         new savePositionsToDB().execute();
                         mode.finish();
@@ -1168,6 +1169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         firstRun = preferences.getBoolean("pref_first_run", true);
         numberOfColumns = preferences.getInt("number_of_columns", 1);
         imagesOnOff = preferences.getBoolean("pref_images_on_off", true);
+        sortOrder = preferences.getString("pref_sort_order", Utils.defaultSortOrder);
         fullScreen = preferences.getBoolean("pref_full_screen", false);
         autoRefresh = preferences.getBoolean("pref_auto_refresh", false);
         autoRefreshInterval = preferences.getInt("pref_auto_refresh_interval", 30000);
@@ -1182,6 +1184,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         editor.putBoolean("pref_first_run", firstRun);
         editor.putInt("number_of_columns", numberOfColumns);
         editor.putBoolean("pref_images_on_off", imagesOnOff);
+        editor.putString("pref_sort_order", sortOrder);
         editor.apply();
     }
 }
