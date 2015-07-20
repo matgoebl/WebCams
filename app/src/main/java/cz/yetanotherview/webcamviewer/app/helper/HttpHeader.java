@@ -25,7 +25,7 @@ import com.bumptech.glide.load.model.LazyHeaders;
 
 public class HttpHeader {
 
-    public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0";
+    public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0";
     public static final String APP_AGENT = "0I9BttDa88rL";
 
     public static GlideUrl getUrl(String url) {
@@ -33,7 +33,7 @@ public class HttpHeader {
             return null;
         }
         else return new GlideUrl(url, new LazyHeaders.Builder()
-                .addHeader("User-Agent", USER_AGENT)
+                .setHeader("User-Agent", USER_AGENT) // ToDo: Workaround for Glide bug #546
                 .addHeader("App-agent", APP_AGENT)
                 .build());
     }
