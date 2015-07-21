@@ -260,10 +260,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     mPosition = position;
                     moveItem();
                 } else {
-                    if (errorView.getVisibility() == View.VISIBLE) {
+                    webCam = (WebCam) mAdapter.getItem(position);
+                    if (errorView.getVisibility() == View.VISIBLE && !webCam.isStream()) {
                         refreshSelected(position);
                     }
-                    else showImageFullscreen(position, false);
+                    else showImageOrPlayStream(position, false);
                 }
             }
         });
@@ -678,7 +679,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         new WelcomeDialog().show(getFragmentManager(), "WelcomeDialog");
     }
 
-    private void showImageFullscreen(int position, boolean map) {
+    private void showImageOrPlayStream(int position, boolean map) {
         Intent intent;
         webCam = (WebCam) mAdapter.getItem(position);
 
@@ -748,7 +749,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 moveItem();
                                 break;
                             case 4:
-                                showImageFullscreen(position, false);
+                                showImageOrPlayStream(position, false);
                                 break;
                             case 5:
                                 SaveDialog saveDialog = new SaveDialog();
@@ -770,7 +771,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 shareDialog.show(getFragmentManager(), "ShareDialog");
                                 break;
                             case 7:
-                                showImageFullscreen(position, true);
+                                showImageOrPlayStream(position, true);
                                 break;
                             case 8:
                                 if (webCam.getUniId() != 0) {
