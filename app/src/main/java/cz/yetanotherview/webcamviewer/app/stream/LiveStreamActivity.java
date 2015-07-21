@@ -21,13 +21,10 @@ package cz.yetanotherview.webcamviewer.app.stream;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-import android.view.Surface;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -35,34 +32,32 @@ import android.widget.FrameLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import org.videolan.libvlc.EventHandler;
-import org.videolan.libvlc.IVideoPlayer;
+import org.videolan.libvlc.IVLCVout;
 import org.videolan.libvlc.LibVLC;
-import org.videolan.libvlc.LibVlcUtil;
+import org.videolan.libvlc.Media;
+import org.videolan.libvlc.MediaPlayer;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.helper.ImmersiveMode;
 
-public class LiveStreamActivity extends Activity implements SurfaceHolder.Callback,
-        IVideoPlayer {
+public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
+        MediaPlayer.EventListener, LibVLC.HardwareAccelerationError {
+
     public final static String TAG = "LiveStreamActivity";
-    public final static int VideoSizeChanged = -1;
 
     private String mFilePath;
     private MaterialDialog dialog;
 
     // display surface
     private SurfaceView mSurface;
-    private SurfaceHolder holder;
     private FrameLayout playButton;
 
     // media player
     private LibVLC mLibVLC;
+    private IVLCVout vlcVout;
+    private MediaPlayer mMediaPlayer;
     private int mVideoWidth;
     private int mVideoHeight;
-
-    private Handler mPlayerEventHandler;
-    public boolean mSwitchingView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,24 +69,21 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
         // Receive path to play from intent
         Bundle extras = getIntent().getExtras();
         mFilePath = extras.getString("url");
+        String mName = extras.getString("name");
+        if (mName == null) {
+            mName = "";
+        }
 
         // Go FullScreen only on KitKat and up
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && extras.getBoolean("fullScreen")) {
             new ImmersiveMode().goFullScreen(this);
         }
 
-        Log.d(TAG, "Playing back " + mFilePath);
-
-        mPlayerEventHandler = new PlayerEventHandler(this);
-        mSwitchingView = false;
-
         mSurface = (SurfaceView) findViewById(R.id.surface);
-        holder = mSurface.getHolder();
-        holder.addCallback(this);
-
         playButton = (FrameLayout) findViewById(R.id.play_button);
 
         dialog = new MaterialDialog.Builder(this)
+                .title(mName)
                 .content(R.string.buffering)
                 .progress(true, 0)
                 .cancelListener(new DialogInterface.OnCancelListener() {
@@ -127,16 +119,53 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
         releasePlayer();
     }
 
-    public void surfaceCreated(SurfaceHolder holder) {
+    @Override
+    public void onNewLayout(IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
+        setSize(width, height);
     }
 
-    public void surfaceChanged(SurfaceHolder surfaceholder, int format,
-                               int width, int height) {
-        if (mLibVLC != null)
-            mLibVLC.attachSurface(holder.getSurface(), this);
+    @Override
+    public void onSurfacesCreated(IVLCVout ivlcVout) {}
+
+    @Override
+    public void onSurfacesDestroyed(IVLCVout ivlcVout) {}
+
+    @Override
+    public void onEvent(MediaPlayer.Event event) {
+        switch (event.type) {
+            case MediaPlayer.Event.Playing:
+                Log.i(TAG, "MediaPlayerPlaying");
+                dialog.dismiss();
+                break;
+            case MediaPlayer.Event.EndReached:
+                Log.i(TAG, "MediaPlayerEndReached");
+                releasePlayer();
+                playButton.setVisibility(View.VISIBLE);
+                break;
+            case MediaPlayer.Event.EncounteredError:
+                Log.i(TAG, "MediaPlayerEncounteredError");
+                dialog.dismiss();
+                streamError();
+                break;
+        }
     }
 
-    public void surfaceDestroyed(SurfaceHolder surfaceholder) {
+    @Override
+    public void eventHardwareAccelerationError() {
+        Log.e(TAG, "Error with hardware acceleration");
+        dialog.dismiss();
+        releasePlayer();
+        new MaterialDialog.Builder(this)
+                .title(R.string.error)
+                .content(R.string.error_hw)
+                .positiveText(android.R.string.ok)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        finish();
+                    }
+                })
+                .show();
     }
 
     public void setSize(int width, int height) {
@@ -145,7 +174,7 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
         if (mVideoWidth * mVideoHeight <= 1)
             return;
 
-        if(holder == null || mSurface == null)
+        if(mSurface == null)
             return;
 
         // get screen size
@@ -169,9 +198,6 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
         else
             w = (int) (h * videoAR);
 
-        // force surface buffer size
-        holder.setFixedSize(mVideoWidth, mVideoHeight);
-
         // set display size
         LayoutParams lp = mSurface.getLayoutParams();
         lp.width = w;
@@ -180,28 +206,21 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
         mSurface.invalidate();
     }
 
-    @Override
-    public void setSurfaceLayout(int width, int height, int visible_width,
-                                 int visible_height, int sar_num, int sar_den) {
-        Message msg = Message.obtain(mPlayerEventHandler, VideoSizeChanged, width, height);
-        msg.sendToTarget();
-    }
-
     private void createPlayer() {
         releasePlayer();
         try {
             mLibVLC = new LibVLC();
-            mLibVLC.setHardwareAcceleration(LibVLC.HW_ACCELERATION_DISABLED);
-            mLibVLC.setSubtitlesEncoding("");
-            mLibVLC.setAout(LibVLC.AOUT_OPENSLES);
-            mLibVLC.setTimeStretching(true);
-            mLibVLC.setVerboseMode(true);
-            mLibVLC.setVout(LibVLC.VOUT_ANDROID_WINDOW);
-            mLibVLC.destroy();
-            mLibVLC.init(this);
-            EventHandler.getInstance().addHandler(mPlayerEventHandler);
-            holder.setKeepScreenOn(true);
-            mLibVLC.playMRL(mFilePath);
+            mLibVLC.setOnHardwareAccelerationError(this);
+
+            mMediaPlayer = new MediaPlayer(mLibVLC);
+            vlcVout = mMediaPlayer.getVLCVout();
+            vlcVout.setVideoView(mSurface);
+            vlcVout.addCallback(this);
+            vlcVout.attachViews();
+
+            mMediaPlayer.setEventListener(this);
+            mMediaPlayer.setMedia(new Media(mLibVLC, Uri.parse(mFilePath)));
+            mMediaPlayer.play();
         } catch (Exception e) {
             streamError();
         }
@@ -210,53 +229,13 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
     public void releasePlayer() {
         if (mLibVLC == null)
             return;
-        EventHandler.getInstance().removeHandler(mPlayerEventHandler);
-        mLibVLC.stop();
-        mLibVLC.detachSurface();
-        holder = null;
+        mMediaPlayer.stop();
+        vlcVout.detachViews();
         mLibVLC = null;
+        mMediaPlayer = null;
 
         mVideoWidth = 0;
         mVideoHeight = 0;
-    }
-
-    @Override
-    public void eventHardwareAccelerationError() {
-        // Handle errors with hardware acceleration
-        Log.e(TAG, "Error with hardware acceleration");
-        this.releasePlayer();
-        new MaterialDialog.Builder(this)
-                .title(R.string.error)
-                .content(R.string.error_hw)
-                .positiveText(android.R.string.ok)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        finish();
-                    }
-                })
-                .show();
-    }
-
-    @Override
-    public int configureSurface(Surface surface, int width, int height, int hal) {
-        Log.d(TAG, "configureSurface: width = " + width + ", height = " + height);
-        if (LibVlcUtil.isICSOrLater() || surface == null)
-            return -1;
-        if (width * height == 0)
-            return 0;
-        if(hal != 0)
-            holder.setFormat(hal);
-        holder.setFixedSize(width, height);
-        return 1;
-    }
-
-    public void dialogDismiss() {
-        dialog.dismiss();
-    }
-
-    public void showRePlayButton() {
-        playButton.setVisibility(View.VISIBLE);
     }
 
     public void rePlay(View view) {
@@ -264,13 +243,7 @@ public class LiveStreamActivity extends Activity implements SurfaceHolder.Callba
         recreate();
     }
 
-    public void showErrorDialog() {
-        dialogDismiss();
-        streamError();
-    }
-
     private void streamError() {
-
         String errorMessage = getString(R.string.stream_error_description) + "\n\n"
                 + "• " + getString(R.string.stream_error_0) + "\n"
                 + "• " + getString(R.string.stream_error_1) + "\n"

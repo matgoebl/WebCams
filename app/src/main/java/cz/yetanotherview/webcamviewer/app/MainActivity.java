@@ -684,6 +684,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (webCam.isStream() && !map) {
             intent = new Intent(this, LiveStreamActivity.class);
             intent.putExtra("url", webCam.getUrl());
+            intent.putExtra("name", webCam.getName());
             intent.putExtra("fullScreen", fullScreen);
             startActivity(intent);
         }
