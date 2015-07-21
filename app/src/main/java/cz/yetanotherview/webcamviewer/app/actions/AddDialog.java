@@ -167,6 +167,7 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
         protected Integer doInBackground(Void... voids) {
 
             if (Patterns.WEB_URL.matcher(mWebCamUrl).matches()) {
+                checkIfUrlStartsWithHttp();
                 if (ConnectionTester.isConnected(mActivity)) {
                     taskResult = 3;
                 } else {
@@ -212,6 +213,14 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
         }).execute();
     }
 
+    private void checkIfUrlStartsWithHttp() {
+        String http = "http://";
+        String https = "https://";
+        if(!mWebCamUrl.startsWith(http) && !mWebCamUrl.startsWith(https)){
+            mWebCamUrl = http + mWebCamUrl;
+        }
+    }
+
     private void openSecondDialogStill() {
         materialDialog = new MaterialDialog.Builder(mActivity)
                 .title(R.string.input_dialog_title)
@@ -230,6 +239,7 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
                         } else {
                             if (Patterns.WEB_URL.matcher(mWebCamUrl).matches()) {
                                 showProgress(true);
+                                checkIfUrlStartsWithHttp();
                                 if (ConnectionTester.isConnected(mActivity)) {
                                     dialog.dismiss();
                                     new ImageTester(mWebCamUrl, new ConnectionTesterListener() {
