@@ -175,7 +175,7 @@ public class JsonFetcherDialog extends DialogFragment {
                     case 6:
                         url = new URL(Utils.JSON_FILE_QFPMSVSKAVLR);
                         break;
-                    case 8:
+                    case 7:
                         url = new URL(Utils.JSON_FILE_HYBFVHABSMXZ);
                         break;
                     default:
@@ -199,7 +199,7 @@ public class JsonFetcherDialog extends DialogFragment {
 
                     // Swap dialogs
                     maxProgressValue = importWebCams.size();
-                    if (selection == 0 || selection == 6 || selection == 8) {
+                    if (selection == 0 || selection == 6 || selection == 7) {
                         swapProgressDialog();
                     }
 
@@ -300,12 +300,9 @@ public class JsonFetcherDialog extends DialogFragment {
                                     getString(R.string.live_streams) + " " + Utils.getDateString()));
                         }
                         else if (selection == 7) {
-                            handleAll();
-                        }
-                        else if (selection == 8) {
                             lastFetchLatest = preferences.getLong("pref_last_fetch_latest", 0);
                             proceed(new Category("@drawable/icon_latest",
-                                            getString(R.string.latest) + " " + Utils.getDateString()));
+                                    getString(R.string.latest) + " " + Utils.getDateString()));
                         }
                 } catch (Exception ex) {
                     Log.e(TAG, "Failed to parse JSON due to: " + ex);
@@ -331,7 +328,7 @@ public class JsonFetcherDialog extends DialogFragment {
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
 
-                if (selection == 0 || selection == 6 || selection == 7 || selection == 8) {
+                if (selection == 0 || selection == 6 || selection == 7) {
                     initDialog.dismiss();
                 }
                 progressDialog = new MaterialDialog.Builder(mActivity)
@@ -413,10 +410,37 @@ public class JsonFetcherDialog extends DialogFragment {
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
-                                new backgroundTask().execute();
-                                swapProgressDialog();
+                                int count = importWebCams.size();
+                                int selCount = 0;
+                                for (WebCam webCam : importWebCams) {
+                                    if (webCam.isSelected()) {
+                                        selCount++;
+                                    }
+                                }
+                                if (count == selCount) {
+                                    String content = mActivity.getString(R.string.all_webcams_confirmation_part1) + " " + count + " " +
+                                            mActivity.getString(R.string.all_webcams_confirmation_part2) + " " + mActivity.getString(R.string.are_you_sure);
+                                    new MaterialDialog.Builder(mActivity)
+                                            .title(R.string.all_webcams)
+                                            .content(content)
+                                            .positiveText(R.string.Yes)
+                                            .negativeText(android.R.string.cancel)
+                                            .iconRes(R.drawable.warning)
+                                            .callback(new MaterialDialog.ButtonCallback() {
+                                                @Override
+                                                public void onPositive(MaterialDialog dialog) {
+                                                    selection = 8;
+                                                    new backgroundTask().execute();
+                                                    swapProgressDialog();
+                                                }
+                                            })
+                                            .show();
+                                }
+                                else {
+                                    new backgroundTask().execute();
+                                    swapProgressDialog();
+                                }
                             }
-
                         })
                         .positiveText(R.string.import_selected)
                         .build();
@@ -585,36 +609,6 @@ public class JsonFetcherDialog extends DialogFragment {
         });
     }
 
-    private void handleAll() {
-
-        mActivity.runOnUiThread(new Runnable() {
-            public void run() {
-
-                int count = importWebCams.size();
-                String content = getString(R.string.all_webcams_confirmation_part1) + " " + count + " " +
-                        getString(R.string.all_webcams_confirmation_part2) + " " + getString(R.string.are_you_sure);
-                new MaterialDialog.Builder(mActivity)
-                        .title(R.string.all_webcams)
-                        .content(content)
-                        .positiveText(R.string.Yes)
-                        .negativeText(android.R.string.cancel)
-                        .iconRes(R.drawable.warning)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                new backgroundTask().execute();
-                                swapProgressDialog();
-                            }
-                            @Override
-                            public void onNegative(MaterialDialog dialog) {
-                                initDialog.dismiss();
-                            }
-                        })
-                        .show();
-            }
-        });
-    }
-
     private class backgroundTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -650,9 +644,9 @@ public class JsonFetcherDialog extends DialogFragment {
                     proceed(new Category("@drawable/icon_map", mActivity.getString(R.string.from_map) + " " +
                             Utils.getDateString()));
                     break;
-                case 7:
+                case 8:
                     proceed(new Category("@drawable/icon_all_imported",
-                            getString(R.string.all) + " " + Utils.getDateString()));
+                            mActivity.getString(R.string.all) + " " + Utils.getDateString()));
                     break;
             }
 
@@ -688,12 +682,12 @@ public class JsonFetcherDialog extends DialogFragment {
                 case 4:
                     condition = webCam.getStatus() == type.getId();
                     break;
-                case 8:
+                case 7:
                     differenceBetweenLastFetch = lastFetchLatest - webCam.getDateModifiedMillisecond();
                     condition = differenceBetweenLastFetch < 0;
                     break;
                 default:
-                    // case: 5,6,7
+                    // case: 5,6,8
                     condition = true;
                     break;
             }
@@ -731,7 +725,7 @@ public class JsonFetcherDialog extends DialogFragment {
         if (!lastFetchNewWebCams) {
             db.deleteCategory(newCategory, false);
         }
-        else if (selection == 0 || selection == 8) {
+        else if (selection == 0 || selection == 7) {
 
             String compare;
             if (selection == 0) {

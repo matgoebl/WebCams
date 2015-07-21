@@ -55,7 +55,6 @@
         <item>@string/selecting_by_type</item>
         <item>@string/selecting_from_map</item>
         <item>@string/live_streams</item>
-        <item>@string/all_webcams</item>
         <item>@string/latest_webcams</item>
     </string-array>
 
