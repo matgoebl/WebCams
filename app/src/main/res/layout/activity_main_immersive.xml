@@ -31,8 +31,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appbar"
+        <cz.yetanotherview.webcamviewer.app.helper.ControllableAppBarLayout
+            android:id="@+id/controllable_app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/collapse_toolbar_height"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -57,7 +57,7 @@
                     layout="@layout/activity_main_toolbar"/>
 
             </android.support.design.widget.CollapsingToolbarLayout>
-        </android.support.design.widget.AppBarLayout>
+        </cz.yetanotherview.webcamviewer.app.helper.ControllableAppBarLayout>
 
         <include
             layout="@layout/activity_main_parts"/>

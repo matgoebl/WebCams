@@ -29,7 +29,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -80,6 +79,7 @@ import cz.yetanotherview.webcamviewer.app.fullscreen.FullScreenActivity;
 import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
 import cz.yetanotherview.webcamviewer.app.help.HelpActivity;
 import cz.yetanotherview.webcamviewer.app.helper.ClearImageCache;
+import cz.yetanotherview.webcamviewer.app.helper.ControllableAppBarLayout;
 import cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView;
 import cz.yetanotherview.webcamviewer.app.helper.OnFilterTextChange;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
@@ -115,8 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private SwipeRefreshLayout swipeRefreshLayout;
     private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbar;
-    private CoordinatorLayout coordinatorLayout;
-    private AppBarLayout appBarLayout;
+    private ControllableAppBarLayout controllableAppBarLayout;
     private MaterialDialog dialog, indeterminateProgress;
     private MenuItem searchItem;
     private SearchView searchView;
@@ -142,9 +141,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         }
 
         // Go FullScreen only on KitKat and up
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && fullScreen) {
-            new ImmersiveMode().goFullScreen(this);
-        }
+        goToFullScreen();
 
         // Screen Always on
         if (screenAlwaysOn){
@@ -179,13 +176,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (dialog != null) {
             dialog.dismiss();
         }
-        appBarLayout.removeOnOffsetChangedListener(this);
+        controllableAppBarLayout.removeOnOffsetChangedListener(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        appBarLayout.addOnOffsetChangedListener(this);
+        controllableAppBarLayout.addOnOffsetChangedListener(this);
         reInitializeRecyclerViewAdapter();
         reInitializeDrawerListAdapter();
     }
@@ -196,13 +193,18 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         new ClearImageCache(this).execute();
     }
 
+    private void goToFullScreen() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && fullScreen) {
+            new ImmersiveMode().goFullScreen(this);
+        }
+    }
+
     private void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         toolbarImage = (ImageView) findViewById(R.id.toolbar_image);
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
-        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        controllableAppBarLayout = (ControllableAppBarLayout) findViewById(R.id.controllable_app_bar_layout);
     }
 
     private void initDrawer() {
@@ -300,7 +302,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             }
         });
 
-        floatingActionButtonNative = (android.support.design.widget.FloatingActionButton) findViewById(R.id.floating_action_button);
+        floatingActionButtonNative = (android.support.design.widget.FloatingActionButton) findViewById(R.id.small_floating_action_button);
+        floatingActionButtonNative.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                assignSelectedWebCamsToCategory();
+            }
+        });
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -415,7 +423,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (mAdapter != null) {
             reInitializeRecyclerViewAdapter();
             floatingActionMenu.showMenuButton(true);
-            expandToolbar();
+            controllableAppBarLayout.expandToolbar();
         }
     }
 
@@ -448,7 +456,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                expandToolbar();
+                controllableAppBarLayout.collapseToolbar(true);
+                collapsingToolbar.setCollapsedTitleTextColor(getResources().getColor(android.R.color.transparent));
+                goToFullScreen();
                 searchView.setIconified(false);
                 searchView.requestFocus();
                 return true;
@@ -456,7 +466,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                expandToolbar();
+                controllableAppBarLayout.expandToolbar(true);
+                collapsingToolbar.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
+                goToFullScreen();
                 searchView.clearFocus();
                 return true;
             }
@@ -568,19 +580,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         return true;
     }
 
-    private void expandToolbar(){
-        mLayoutManager.scrollToPosition(0);
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
-        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
-        if (behavior != null) {
-            behavior.setTopAndBottomOffset(0);
-            behavior.onNestedPreScroll(coordinatorLayout, appBarLayout, null, 0, 1, new int[2]);
-            //behavior.onNestedFling(coordinatorLayout, appBarLayout, null, 0, -Integer.MAX_VALUE, true);
-        }
-    }
-
     @Override
-    public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+    public void onOffsetChanged(AppBarLayout controllableAppBarLayout, int i) {
         if (i == 0) {
             swipeRefreshLayout.setEnabled(true);
         } else {
@@ -925,7 +926,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         mNavigationDrawerFragment.selectPosition();
     }
 
-    public void assignSelectedWebCamsToCategory(View view) {
+    private void assignSelectedWebCamsToCategory() {
         reallyAllWebCams = db.getAllWebCams(sortOrder);
         if (reallyAllWebCams.size() > 0) {
             if (selectedCategory != 0) {
