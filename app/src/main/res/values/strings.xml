@@ -271,4 +271,6 @@
 <string name="no_webcams_to_show_description">"If you want to add some new WebCams use the red button below, or refine your search."</string>
 <string name="analyzer_tool">"Analyzer Tool"</string>
 <string name="category_management">"Category Management"</string>
+<string name="no_nearby_webcams_send_location">"Oh no! :( No nearby WebCams found. Do you want to help improve the community database by sending your approximate location for manual research?"</string>
+<string name="research">"Research"</string>
 </resources>

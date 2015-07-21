@@ -788,8 +788,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                             @Override
                                             public void onPositive(MaterialDialog dialog) {
                                                 if (webCam.getUniId() != 0) {
-                                                    new SendToInbox().sendToInbox(MainActivity.this, webCam, true);
-                                                } else new SendToInbox().sendToInbox(MainActivity.this, webCam, false);
+                                                    new SendToInbox().sendToInboxWebCam(MainActivity.this, webCam, true);
+                                                } else new SendToInbox().sendToInboxWebCam(MainActivity.this, webCam, false);
                                             }
                                         })
                                         .show();
@@ -860,7 +860,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         reInitializeDrawerListAdapter();
 
         if (share) {
-            new SendToInbox().sendToInbox(this, wc, false);
+            new SendToInbox().sendToInboxWebCam(this, wc, false);
         }
         else saveDone();
     }

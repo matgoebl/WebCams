@@ -62,6 +62,7 @@ import java.util.List;
 import java.util.Locale;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.helper.SendToInbox;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.actions.simple.LocationWarningDialog;
 import cz.yetanotherview.webcamviewer.app.actions.simple.NothingSelectedDialog;
@@ -760,15 +761,14 @@ public class JsonFetcherDialog extends DialogFragment {
                     mListener = (ReloadInterface) mActivity;
                     mListener.invokeReload();
                     showReportDialog();
-                }
-                else {
+                } else {
                     if (selection == 1) {
-                        noNearbyWebCamsDialog();
-                    }
-                    else if (selection == 2 || selection == 5) {
+                        if (selectedDistance >= 270000) {
+                            noNearbyWebCamsSendDialog();
+                        } else noNearbyWebCamsDialog();
+                    } else if (selection == 2 || selection == 5) {
                         new NothingSelectedDialog().show(mActivity.getFragmentManager(), "NothingSelectedDialog");
-                    }
-                    else noNewWebCamsDialog();
+                    } else noNewWebCamsDialog();
                 }
             }
         });
@@ -790,6 +790,23 @@ public class JsonFetcherDialog extends DialogFragment {
                 .content(R.string.no_nearby_webcams_summary)
                 .positiveText(android.R.string.ok)
                 .iconRes(R.drawable.warning)
+                .show();
+    }
+
+    private void noNearbyWebCamsSendDialog() {
+        new MaterialDialog.Builder(mActivity)
+                .title(R.string.research)
+                .content(R.string.no_nearby_webcams_send_location)
+                .positiveText(R.string.Yes)
+                .negativeText(R.string.No)
+                .iconRes(R.drawable.settings_about)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        new SendToInbox().sendToInboxLocation(mActivity, knownLocation.getLatitude(),
+                                knownLocation.getLongitude());
+                    }
+                })
                 .show();
     }
 

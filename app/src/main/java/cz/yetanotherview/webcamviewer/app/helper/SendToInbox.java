@@ -37,48 +37,77 @@ import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class SendToInbox {
 
+    private double latitude, longitude;
     private WebCam webCam;
     private Boolean fromCommunityList;
     private Activity mActivity;
     private MaterialDialog indeterminateProgress;
 
-    public void sendToInbox(Activity activity, WebCam webCam, Boolean fromCommunityList) {
+    public void sendToInboxWebCam(Activity activity, WebCam webCam, Boolean fromCommunityList) {
 
         this.webCam = webCam;
         this.fromCommunityList = fromCommunityList;
         this.mActivity = activity;
 
         showIndeterminateProgress();
-        new sendToInboxBackgroundTask().execute();
+        new sendToInboxBackgroundTask().execute(0);
     }
 
-    private class sendToInboxBackgroundTask extends AsyncTask<Void, Void, Void> {
+    public void sendToInboxLocation(Activity activity, double latitude, double longitude) {
 
-        protected Void doInBackground(Void... voids) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.mActivity = activity;
+
+        showIndeterminateProgress();
+        new sendToInboxBackgroundTask().execute(1);
+    }
+
+    private class sendToInboxBackgroundTask extends AsyncTask<Integer, Void, Void> {
+
+        protected Void doInBackground(Integer... params) {
 
             try {
-                String url = Utils.JSON_FILE_NPOEMOWQCPPO;
+                String url = "";
+                switch (params[0]) {
+                    case 0:
+                        url = Utils.JSON_FILE_NPOEMOWQCPPO;
+                        break;
+                    case 1:
+                        url = Utils.JSON_FILE_JDWUFOYXLOYY;
+                        break;
+                }
                 HttpURLConnection urlConn = (HttpURLConnection) new URL(url).openConnection();
                 urlConn.connect();
                 Assert.assertEquals(HttpURLConnection.HTTP_OK, urlConn.getResponseCode());
 
                 HashMap<String , String> postDataParams = new HashMap<>();
-                if (fromCommunityList) {
-                    postDataParams.put("subject", "Something is wrong");
-                    postDataParams.put("webCamUniId", String.valueOf(webCam.getUniId()));
+
+                switch (params[0]) {
+                    case 0:
+                        if (fromCommunityList) {
+                            postDataParams.put("subject", "Something is wrong");
+                            postDataParams.put("webCamUniId", String.valueOf(webCam.getUniId()));
+                        }
+                        else {
+                            postDataParams.put("subject", "New WebCam for approval");
+                            postDataParams.put("webCamUniId", "none");
+                        }
+                        postDataParams.put("isStream", String.valueOf(webCam.isStream()));
+                        postDataParams.put("webCamName", webCam.getName());
+                        postDataParams.put("webCamUrl", webCam.getUrl());
+                        if (webCam.isStream()) {
+                            postDataParams.put("webCamThumbUrl", webCam.getThumbUrl());
+                        }
+                        postDataParams.put("webCamLatitude", String.valueOf(webCam.getLatitude()));
+                        postDataParams.put("webCamLongitude", String.valueOf(webCam.getLongitude()));
+                        break;
+                    case 1:
+                        postDataParams.put("subject", "No nearby WebCams");
+                        postDataParams.put("latitude", String.valueOf(latitude));
+                        postDataParams.put("longitude", String.valueOf(longitude));
+                        break;
                 }
-                else {
-                    postDataParams.put("subject", "New WebCam for approval");
-                    postDataParams.put("webCamUniId", "none");
-                }
-                postDataParams.put("isStream", String.valueOf(webCam.isStream()));
-                postDataParams.put("webCamName", webCam.getName());
-                postDataParams.put("webCamUrl", webCam.getUrl());
-                if (webCam.isStream()) {
-                    postDataParams.put("webCamThumbUrl", webCam.getThumbUrl());
-                }
-                postDataParams.put("webCamLatitude", String.valueOf(webCam.getLatitude()));
-                postDataParams.put("webCamLongitude", String.valueOf(webCam.getLongitude()));
 
                 new PerformPostCall().performPostCall(url, postDataParams);
                 sent();

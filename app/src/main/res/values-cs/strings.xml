@@ -271,4 +271,6 @@
 <string name="no_webcams_to_show_description">"Chcete-li přidat nějaké nové WebKamery použijte červené dolní tlačítko nebo zpřesněte vaše vyhledávání."</string>
 <string name="analyzer_tool">"Analyzátor adres"</string>
 <string name="category_management">"Správa kategorií"</string>
+<string name="no_nearby_webcams_send_location">"Ale ne! :( Ve vašem okolí nebyly nalezeny žádné WebKamery. Chcete pomoci vylepšit komunitní databázi zasláním vaší přibližné polohy pro ruční přezkoumání?"</string>
+<string name="research">"Výzkum"</string>
 </resources>

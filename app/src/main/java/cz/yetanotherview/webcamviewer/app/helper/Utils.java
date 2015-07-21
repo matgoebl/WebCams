@@ -79,6 +79,7 @@ public class Utils {
     public static final String JSON_FILE_QFPMSVSKAVLR = CORE + "QFpmSVsKAvlr" + PHP;
     public static final String JSON_FILE_NPOEMOWQCPPO = CORE + "NPOEmowqCppo" + PHP;
     public static final String JSON_FILE_OZOBFUTXJVXO = CORE + "OZObFutXjVxo" + PHP;
+    public static final String JSON_FILE_JDWUFOYXLOYY = CORE + "jDWUFOyxlOyY" + PHP;
 
     /**
      * Get current date
