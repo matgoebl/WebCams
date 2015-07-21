@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbar;
     private ControllableAppBarLayout controllableAppBarLayout;
-    private MaterialDialog dialog, indeterminateProgress;
+    private MaterialDialog materialDialog, indeterminateProgress;
     private MenuItem searchItem;
     private SearchView searchView;
     private EventListener eventListener;
@@ -173,8 +173,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     @Override
     public void onPause() {
         super.onPause();
-        if (dialog != null) {
-            dialog.dismiss();
+        if (materialDialog != null) {
+            materialDialog.dismiss();
         }
         controllableAppBarLayout.removeOnOffsetChangedListener(this);
     }
@@ -615,7 +615,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             whatMarkToCheck = 6;
         }
 
-        dialog = new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .title(R.string.action_sort)
                 .items(R.array.sort_values)
                 .itemsCallbackSingleChoice(whatMarkToCheck, new MaterialDialog.ListCallbackSingleChoice() {
@@ -728,7 +728,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             options_values[8] = getString(R.string.submit_as_suggestion);
         }
 
-        dialog = new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .items(options_values)
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
@@ -774,9 +774,25 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 showImageOrPlayStream(position, true);
                                 break;
                             case 8:
+                                String dialogTitle;
                                 if (webCam.getUniId() != 0) {
-                                    new SendToInbox().sendToInbox(MainActivity.this, webCam, true);
-                                } else new SendToInbox().sendToInbox(MainActivity.this, webCam, false);
+                                    dialogTitle = getString(R.string.report_problem);
+                                } else dialogTitle = getString(R.string.submit_as_suggestion);
+                                new MaterialDialog.Builder(MainActivity.this)
+                                        .title(dialogTitle)
+                                        .content(R.string.are_you_sure)
+                                        .positiveText(R.string.Yes)
+                                        .negativeText(android.R.string.cancel)
+                                        .iconRes(R.drawable.settings_about)
+                                        .callback(new MaterialDialog.ButtonCallback() {
+                                            @Override
+                                            public void onPositive(MaterialDialog dialog) {
+                                                if (webCam.getUniId() != 0) {
+                                                    new SendToInbox().sendToInbox(MainActivity.this, webCam, true);
+                                                } else new SendToInbox().sendToInbox(MainActivity.this, webCam, false);
+                                            }
+                                        })
+                                        .show();
                                 break;
                             default:
                                 break;
