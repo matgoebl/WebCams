@@ -71,6 +71,7 @@
             android:imeOptions="actionNext"/>
 
     <TextView
+        android:id="@+id/webcam_url_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/webcam_url" />
@@ -88,10 +89,10 @@
             android:imeOptions="actionNext"/>
 
     <TextView
+        android:id="@+id/webcam_thumb_url_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/webcam_thumb_url"
-        android:id="@+id/webcam_thumb_url_title"
         android:visibility="gone"/>
 
         <EditText

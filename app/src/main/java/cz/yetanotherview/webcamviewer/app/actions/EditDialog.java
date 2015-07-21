@@ -128,6 +128,7 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
         mWebCamName.setText(webCam.getName());
         mWebCamName.requestFocus();
 
+        TextView mWebCamUrlTitle = (TextView) dialog.findViewById(R.id.webcam_url_title);
         mWebCamUrl = (EditText) dialog.findViewById(R.id.webcam_url);
         mWebCamUrl.setText(webCam.getUrl());
 
@@ -191,8 +192,21 @@ public class EditDialog extends DialogFragment implements View.OnClickListener, 
         }
         else stillImage.setChecked(true);
 
-        stillImage.setOnClickListener(this);
-        liveStream.setOnClickListener(this);
+        if (webCam.getUniId() != 0) {
+            if (webCam.isStream()) {
+                stillImage.setEnabled(false);
+            }
+            else liveStream.setEnabled(false);
+            mWebCamUrlTitle.setVisibility(View.GONE);
+            mWebCamUrl.setVisibility(View.GONE);
+            mWebCamThumbUrlTitle.setVisibility(View.GONE);
+            mWebCamThumbUrl.setVisibility(View.GONE);
+        }
+        else {
+            stillImage.setOnClickListener(this);
+            liveStream.setOnClickListener(this);
+        }
+
         mWebCamName.addTextChangedListener(new OnTextChange(positiveAction));
         mWebCamUrl.addTextChangedListener(new OnTextChange(positiveAction));
         mWebCamThumbUrl.addTextChangedListener(new OnTextChange(positiveAction));

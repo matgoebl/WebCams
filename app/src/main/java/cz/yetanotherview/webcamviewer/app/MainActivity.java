@@ -773,7 +773,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 showImageFullscreen(position, true);
                                 break;
                             case 8:
-                                isFromCommunityOrNot();
+                                if (webCam.getUniId() != 0) {
+                                    new SendToInbox().sendToInbox(MainActivity.this, webCam, true);
+                                } else new SendToInbox().sendToInbox(MainActivity.this, webCam, false);
                                 break;
                             default:
                                 break;
@@ -781,12 +783,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     }
                 })
                 .show();
-    }
-
-    private void isFromCommunityOrNot() {
-        if (webCam.getUniId() != 0) {
-            new SendToInbox().sendToInbox(this, webCam, true);
-        } else new SendToInbox().sendToInbox(this, webCam, false);
     }
 
     private void openAfterDelay(final int which) {
