@@ -271,4 +271,6 @@
 <string name="no_webcams_to_show_description">"新しいウェブカムを追加する場合、下の赤いボタンを使用するか、検索を調整してみてください"</string>
 <string name="analyzer_tool">"解析ツール"</string>
 <string name="category_management">"カテゴリー管理"</string>
+<string name="no_nearby_webcams_send_location">"残念ですが :( 近くのウェブカムは見つかりませんでした。手動で調査をしておおよその現在地を送信することによって、コミュニティデータベースを改善しますか?"</string>
+<string name="research">"調査"</string>
 </resources>

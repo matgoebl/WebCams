@@ -5,8 +5,10 @@
         <item name="android:navigationBarColor">@color/primary</item>
     </style>
 
-    <!--ToDo: v22 style with TranslucentStatusBar is workaround for Bug 176647-->
-    <!--ToDo: when bug is fixed, then merge back v21 and v22 style-->
+    <style name="TranslucentStatusBar" parent="AppTheme">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 
     <style name="AppCompatFullScreen" parent="AppTheme">
         <item name="android:statusBarColor">@color/black</item>

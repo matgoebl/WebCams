@@ -83,6 +83,7 @@ import cz.yetanotherview.webcamviewer.app.helper.ControllableAppBarLayout;
 import cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView;
 import cz.yetanotherview.webcamviewer.app.helper.OnFilterTextChange;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
+import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.settings.SettingsActivity;
 import cz.yetanotherview.webcamviewer.app.stream.LiveStreamActivity;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         loadPref();
 
         // Inflating main layout
-        if (fullScreen || Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) { //ToDo: Workaround for Bug 176647
+        if (fullScreen) {
             setContentView(R.layout.activity_main_immersive);
         }
         else setContentView(R.layout.activity_main);
@@ -331,12 +332,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             @Override
             public void onMenuToggle(boolean b) {
                 if (b) {
-                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP && !fullScreen) { //ToDo: Workaround for Bug 176647
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !fullScreen) {
                         getWindow().setStatusBarColor(getResources().getColor(R.color.black_transparent));
                     }
                     floatingActionButtonNative.setVisibility(View.INVISIBLE);
                 } else {
-                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP && !fullScreen) { //ToDo: Workaround for Bug 176647
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !fullScreen) {
                         getWindow().setStatusBarColor(getResources().getColor(android.R.color.transparent));
                     }
                     floatingActionButtonNative.setVisibility(View.VISIBLE);
@@ -944,9 +945,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (reallyAllWebCams.size() > 0) {
             if (selectedCategory != 0) {
                 MaterialDialog dialog = new MaterialDialog.Builder(this)
-                        .title(R.string.assign_selected)
+                        .title(db.getCategory(selectedCategoryId).getCategoryName())
                         .customView(R.layout.manual_selection_dialog, false)
-                        .positiveText(R.string.choose)
+                        .positiveText(R.string.assign_selected)
                         .iconRes(R.drawable.edit)
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
