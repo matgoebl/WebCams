@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -33,7 +34,6 @@ import android.widget.EditText;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.nispok.snackbar.Snackbar;
 
 import junit.framework.Assert;
 
@@ -181,11 +181,8 @@ public class SuggestionDialog extends DialogFragment {
 
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
-                Snackbar.with(mActivity)
-                        .text(R.string.sent)
-                        .actionLabel(R.string.dismiss)
-                        .actionColor(mActivity.getResources().getColor(R.color.yellow))
-                        .show(mActivity);
+                Snackbar.make(mActivity.findViewById(R.id.coordinator_layout), R.string.sent,
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }

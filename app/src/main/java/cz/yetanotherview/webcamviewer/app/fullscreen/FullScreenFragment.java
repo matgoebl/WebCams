@@ -159,6 +159,7 @@ public class FullScreenFragment extends Fragment {
                 if (touchImageView.getDrawable() != null) {
                     DialogFragment newFragment = new SaveDialog();
                     Bundle bundle = new Bundle();
+                    bundle.putInt("from", 1);
                     bundle.putString("name", name);
                     bundle.putString("url", url);
                     newFragment.setArguments(bundle);

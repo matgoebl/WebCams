@@ -29,6 +29,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -52,10 +53,6 @@ import android.widget.ListView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.signature.StringSignature;
 import com.github.clans.fab.FloatingActionMenu;
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.SnackbarManager;
-import com.nispok.snackbar.listeners.ActionClickListener;
-import com.nispok.snackbar.listeners.EventListener;
 
 import java.util.List;
 import java.util.Timer;
@@ -83,7 +80,6 @@ import cz.yetanotherview.webcamviewer.app.helper.ControllableAppBarLayout;
 import cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView;
 import cz.yetanotherview.webcamviewer.app.helper.OnFilterTextChange;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
-import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.settings.SettingsActivity;
 import cz.yetanotherview.webcamviewer.app.stream.LiveStreamActivity;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
@@ -120,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private MaterialDialog materialDialog, indeterminateProgress;
     private MenuItem searchItem;
     private SearchView searchView;
-    private EventListener eventListener;
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Override
@@ -344,25 +339,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 }
             }
         });
-
-        eventListener = new EventListener() {
-            @Override
-            public void onShow(Snackbar snackbar) {
-                floatingActionMenu.hideMenuButton(true);
-            }
-            @Override
-            public void onShowByReplace(Snackbar snackbar) {}
-            @Override
-            public void onShown(Snackbar snackbar) {}
-            @Override
-            public void onDismiss(Snackbar snackbar) {
-                floatingActionMenu.showMenuButton(true);
-            }
-            @Override
-            public void onDismissByReplace(Snackbar snackbar) {}
-            @Override
-            public void onDismissed(Snackbar snackbar) {}
-        };
     }
 
     private void initPullToRefresh() {
@@ -754,6 +730,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 break;
                             case 5:
                                 SaveDialog saveDialog = new SaveDialog();
+                                bundle.putInt("from", 0);
                                 bundle.putString("name", webCam.getName());
                                 if (webCam.isStream()) {
                                     bundle.putString("url", webCam.getThumbUrl());
@@ -897,39 +874,19 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
         reInitializeDrawerListAdapter();
 
-        SnackbarManager.show(
-                Snackbar.with(getApplicationContext())
-                        .text(R.string.action_deleted)
-                        .actionLabel(R.string.undo)
-                        .actionColor(getResources().getColor(R.color.yellow))
-                        .actionListener(new ActionClickListener() {
-                            @Override
-                            public void onActionClicked(Snackbar snackbar) {
-                                mAdapter.addItem(webCamToDeletePosition, webCamToDelete);
-                                db.undoDeleteWebCam(webCamToDelete, webCamToDelete_category_ids);
-                                db.closeDB();
-                                reInitializeDrawerListAdapter();
-                                floatingActionMenu.showMenuButton(true);
-                            }
-                        })
-                        .eventListener(new EventListener() {
-                            @Override
-                            public void onShow(Snackbar snackbar) {
-                                floatingActionMenu.hideMenuButton(true);
-                            }
-                            @Override
-                            public void onShowByReplace(Snackbar snackbar) {}
-                            @Override
-                            public void onShown(Snackbar snackbar) {}
-                            @Override
-                            public void onDismiss(Snackbar snackbar) {
-                                floatingActionMenu.showMenuButton(true);
-                            }
-                            @Override
-                            public void onDismissByReplace(Snackbar snackbar) {}
-                            @Override
-                            public void onDismissed(Snackbar snackbar) {}
-                        }), this);
+        Snackbar.make(findViewById(R.id.coordinator_layout), R.string.undo,
+                Snackbar.LENGTH_LONG)
+                .setAction(R.string.undo, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mAdapter.addItem(webCamToDeletePosition, webCamToDelete);
+                        db.undoDeleteWebCam(webCamToDelete, webCamToDelete_category_ids);
+                        db.closeDB();
+                        reInitializeDrawerListAdapter();
+                        floatingActionMenu.showMenuButton(true);
+                    }
+                })
+                .show();
     }
 
     @Override
@@ -1114,33 +1071,18 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     }
 
     private void saveDone() {
-        SnackbarManager.show(
-                Snackbar.with(getApplicationContext())
-                        .text(R.string.dialog_positive_toast_message)
-                        .actionLabel(R.string.dismiss)
-                        .actionColor(getResources().getColor(R.color.yellow))
-                        .eventListener(eventListener)
-                , this);
+        Snackbar.make(findViewById(R.id.coordinator_layout), R.string.dialog_positive_toast_message,
+                Snackbar.LENGTH_SHORT).show();
     }
 
     private void listIsEmpty() {
-        SnackbarManager.show(
-                Snackbar.with(getApplicationContext())
-                        .text(R.string.list_is_empty)
-                        .actionLabel(R.string.dismiss)
-                        .actionColor(getResources().getColor(R.color.yellow))
-                        .eventListener(eventListener)
-                , this);
+        Snackbar.make(findViewById(R.id.coordinator_layout), R.string.list_is_empty,
+                Snackbar.LENGTH_SHORT).show();
     }
 
     private void cannotBeEdited() {
-        SnackbarManager.show(
-                Snackbar.with(getApplicationContext())
-                        .text(R.string.this_category_cannot_be_edited)
-                        .actionLabel(R.string.dismiss)
-                        .actionColor(getResources().getColor(R.color.yellow))
-                        .eventListener(eventListener)
-                , this);
+        Snackbar.make(findViewById(R.id.coordinator_layout), R.string.this_category_cannot_be_edited,
+                Snackbar.LENGTH_SHORT).show();
     }
 
     private void refresh() {

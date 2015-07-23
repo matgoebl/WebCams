@@ -43,6 +43,7 @@ public class SaveDialog extends DialogFragment {
     private boolean canGoUp = false;
     private String topFolder;
 
+    private int from;
     private String name;
     private String url;
 
@@ -58,6 +59,7 @@ public class SaveDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         Bundle bundle = this.getArguments();
+        from = bundle.getInt("from", 0);
         name = bundle.getString("name", "");
         url = bundle.getString("url", "");
 
@@ -87,6 +89,7 @@ public class SaveDialog extends DialogFragment {
                             materialDialog.dismiss();
                             DialogFragment saveProgressDialog = new SaveProgressDialog();
                             Bundle bundle = new Bundle();
+                            bundle.putInt("from", from);
                             bundle.putString("name", name);
                             bundle.putString("url", url);
                             bundle.putString("path", parentFolder.getAbsolutePath());

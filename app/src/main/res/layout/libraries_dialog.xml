@@ -291,38 +291,4 @@
 
     </LinearLayout>
 
-    <include
-        layout="@layout/view_divider"/>
-
-    <LinearLayout
-        android:id="@+id/libraries_snackbar_container"
-        style="@style/libraries_container">
-
-        <LinearLayout
-            style="@style/inner_container"
-            android:orientation="horizontal">
-
-            <ImageView
-                style="@style/libraries_image" />
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/inner_container"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/libraries_title_snackbar"
-                style="@style/libraries_title"/>
-
-            <TextView
-                style="@style/libraries_author_licence_and_version"
-                android:text="@string/nispok" />
-
-            <TextView
-                style="@style/libraries_author_licence_and_version"
-                android:text="@string/mit_license" />
-        </LinearLayout>
-
-    </LinearLayout>
-
 </LinearLayout>

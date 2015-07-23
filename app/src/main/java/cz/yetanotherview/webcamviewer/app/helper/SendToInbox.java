@@ -20,9 +20,9 @@ package cz.yetanotherview.webcamviewer.app.helper;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.nispok.snackbar.Snackbar;
 
 import junit.framework.Assert;
 
@@ -140,11 +140,8 @@ public class SendToInbox {
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
                 indeterminateProgress.dismiss();
-                Snackbar.with(mActivity)
-                        .text(R.string.sent)
-                        .actionLabel(R.string.dismiss)
-                        .actionColor(mActivity.getResources().getColor(R.color.yellow))
-                        .show(mActivity);
+                Snackbar.make(mActivity.findViewById(R.id.coordinator_layout), R.string.sent,
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }

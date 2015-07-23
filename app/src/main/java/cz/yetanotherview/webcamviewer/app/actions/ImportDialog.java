@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,7 +36,6 @@ import android.widget.ListView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.nispok.snackbar.Snackbar;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -303,11 +303,8 @@ public class ImportDialog extends DialogFragment {
             public void run() {
 
                 progressDialog.dismiss();
-                Snackbar.with(mActivity)
-                        .text(R.string.import_done)
-                        .actionLabel(R.string.dismiss)
-                        .actionColor(mActivity.getResources().getColor(R.color.yellow))
-                        .show(mActivity);
+                Snackbar.make(mActivity.findViewById(R.id.content_frame), R.string.import_done,
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -318,11 +315,8 @@ public class ImportDialog extends DialogFragment {
             public void run() {
 
                 progressDialog.dismiss();
-                Snackbar.with(mActivity)
-                        .text(R.string.import_failed)
-                        .actionLabel(R.string.dismiss)
-                        .actionColor(mActivity.getResources().getColor(R.color.yellow))
-                        .show(mActivity);
+                Snackbar.make(mActivity.findViewById(R.id.content_frame), R.string.import_failed,
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }

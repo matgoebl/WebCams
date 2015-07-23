@@ -22,9 +22,9 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.nispok.snackbar.Snackbar;
 
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
@@ -39,11 +39,13 @@ import cz.yetanotherview.webcamviewer.app.helper.Utils;
 public class SaveProgressDialog extends DialogFragment {
 
     private MaterialDialog mProgressDialog;
+    private int from;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         Bundle bundle = this.getArguments();
+        from = bundle.getInt("from", 0);
         String url = bundle.getString("url", "");
         String name = bundle.getString("name", "");
         String path = bundle.getString("path", "");
@@ -96,11 +98,17 @@ public class SaveProgressDialog extends DialogFragment {
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 mProgressDialog.dismiss();
-                Snackbar.with(getActivity().getApplicationContext())
-                        .text(R.string.dialog_positive_toast_message)
-                        .actionLabel(R.string.dismiss)
-                        .actionColor(getResources().getColor(R.color.yellow))
-                        .show(getActivity());
+                int layout = R.id.coordinator_layout;
+                switch (from) {
+                    case 0:
+                        layout = R.id.coordinator_layout;
+                        break;
+                    case 1:
+                        layout = R.id.full_screen_container;
+                        break;
+                }
+                Snackbar.make(getActivity().findViewById(layout), R.string.dialog_positive_toast_message,
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }

@@ -29,6 +29,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -37,7 +38,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.nispok.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class SettingsFragment extends PreferenceFragment {
     private MaterialDialog indeterminateProgress;
     private SeekBar seekBar;
     private TextView seekBarText;
-    private int seekBarProgress, seekBarCorrection, actionColor;
+    private int seekBarProgress, seekBarCorrection;
     private String units;
     private DatabaseHelper db;
     private SharedPreferences sharedPref;
@@ -87,7 +87,6 @@ public class SettingsFragment extends PreferenceFragment {
         }
 
         db = new DatabaseHelper(context);
-        actionColor = getResources().getColor(R.color.yellow);
 
         setAutoRefreshInterval();
         setAutoHideListener();
@@ -339,11 +338,8 @@ public class SettingsFragment extends PreferenceFragment {
                                 sharedPref.edit().putLong("pref_last_fetch_popular", 0).apply();
                                 sharedPref.edit().putLong("pref_last_fetch_latest", 0).apply();
 
-                                Snackbar.with(context)
-                                        .text(R.string.done)
-                                        .actionLabel(R.string.dismiss)
-                                        .actionColor(actionColor)
-                                        .show(getActivity());
+                                Snackbar.make(getActivity().findViewById(R.id.content_frame), R.string.done,
+                                        Snackbar.LENGTH_SHORT).show();
                             }
                         })
                         .show();
@@ -437,26 +433,17 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void listIsEmpty() {
-        Snackbar.with(context)
-                .text(R.string.list_is_empty)
-                .actionLabel(R.string.dismiss)
-                .actionColor(actionColor)
-                .show(getActivity());
+        Snackbar.make(getActivity().findViewById(R.id.content_frame), R.string.list_is_empty,
+                Snackbar.LENGTH_SHORT).show();
     }
 
     private void deleteDone() {
-        Snackbar.with(context)
-                .text(R.string.action_deleted)
-                .actionLabel(R.string.dismiss)
-                .actionColor(actionColor)
-                .show(getActivity());
+        Snackbar.make(getActivity().findViewById(R.id.content_frame), R.string.action_deleted,
+                Snackbar.LENGTH_SHORT).show();
     }
 
     private void saveDone() {
-        Snackbar.with(context)
-                .text(R.string.dialog_positive_toast_message)
-                .actionLabel(R.string.dismiss)
-                .actionColor(actionColor)
-                .show(getActivity());
+        Snackbar.make(getActivity().findViewById(R.id.content_frame), R.string.dialog_positive_toast_message,
+                        Snackbar.LENGTH_SHORT).show();
     }
 }

@@ -28,6 +28,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -35,7 +36,6 @@ import android.widget.Spinner;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
-import com.nispok.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -140,11 +140,8 @@ public class ExportDialog extends DialogFragment {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Snackbar.with(getActivity().getApplicationContext())
-                    .text(R.string.export_failed)
-                    .actionLabel(R.string.dismiss)
-                    .actionColor(getResources().getColor(R.color.yellow))
-                    .show(getActivity());
+            Snackbar.make(getActivity().findViewById(R.id.content_frame), R.string.export_failed,
+                    Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -194,10 +191,7 @@ public class ExportDialog extends DialogFragment {
     }
 
     private void backUpDone() {
-        Snackbar.with(getActivity().getApplicationContext())
-                .text(R.string.export_done)
-                .actionLabel(R.string.dismiss)
-                .actionColor(getResources().getColor(R.color.yellow))
-                .show(getActivity());
+        Snackbar.make(getActivity().findViewById(R.id.content_frame), R.string.export_done,
+                Snackbar.LENGTH_SHORT).show();
     }
 }

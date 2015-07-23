@@ -83,11 +83,6 @@ public class LibrariesDialog extends DialogFragment {
                 R.id.libraries_fab_container,
                 new SimpleIntentOnClickListener(getActivity(), "https://github.com/Clans/FloatingActionButton"));
 
-        initLibrary(dialog, R.id.libraries_title_snackbar,
-                getString(R.string.snackbar) + " " + Utils.SNACKBAR_VERSION,
-                R.id.libraries_snackbar_container,
-                new SimpleIntentOnClickListener(getActivity(), "https://github.com/nispok/snackbar"));
-
         return dialog;
     }
 
