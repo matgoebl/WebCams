@@ -271,4 +271,6 @@
 <string name="no_webcams_to_show_description">"Om du vill lägga till några nya WebCams, använd den röda knappen. Eller förbättra din sökning."</string>
 <string name="analyzer_tool">"Analyserings-verktyg"</string>
 <string name="category_management">"Katergorihantering"</string>
+<string name="no_nearby_webcams_send_location">"Oh no! :( No nearby WebCams found. Do you want to help improve the community database by sending your approximate location for manual research?"</string>
+<string name="research">"Research"</string>
 </resources>
