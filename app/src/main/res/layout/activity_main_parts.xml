@@ -27,7 +27,6 @@
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/floating_action_menu"
-        app:layout_behavior="cz.yetanotherview.webcamviewer.app.helper.FloatingActionMenuBehavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom|end"

@@ -259,8 +259,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     webCam = (WebCam) mAdapter.getItem(position);
                     if (errorView.getVisibility() == View.VISIBLE && !webCam.isStream()) {
                         refreshSelected(position);
-                    }
-                    else showImageOrPlayStream(position, false);
+                    } else showImageOrPlayStream(position, false);
                 }
             }
         });
@@ -883,10 +882,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         db.undoDeleteWebCam(webCamToDelete, webCamToDelete_category_ids);
                         db.closeDB();
                         reInitializeDrawerListAdapter();
+                        //ToDo: Only until it's officially added to Clans/FloatingActionButton
                         floatingActionMenu.showMenuButton(true);
                     }
                 })
                 .show();
+        temporaryHideFab(false);
     }
 
     @Override
@@ -1073,16 +1074,34 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private void saveDone() {
         Snackbar.make(findViewById(R.id.coordinator_layout), R.string.dialog_positive_toast_message,
                 Snackbar.LENGTH_SHORT).show();
+        temporaryHideFab(true);
     }
 
     private void listIsEmpty() {
         Snackbar.make(findViewById(R.id.coordinator_layout), R.string.list_is_empty,
                 Snackbar.LENGTH_SHORT).show();
+        temporaryHideFab(true);
     }
 
     private void cannotBeEdited() {
         Snackbar.make(findViewById(R.id.coordinator_layout), R.string.this_category_cannot_be_edited,
                 Snackbar.LENGTH_SHORT).show();
+        temporaryHideFab(true);
+    }
+
+    //ToDo: Only until it's officially added to Clans/FloatingActionButton
+    private void temporaryHideFab(boolean durationShort) {
+        floatingActionMenu.hideMenuButton(true);
+
+        int duration = 2000;
+        if (!durationShort) duration = 3200;
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                floatingActionMenu.showMenuButton(true);
+            }
+        }, duration);
     }
 
     private void refresh() {
