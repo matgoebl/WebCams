@@ -70,12 +70,9 @@ public class Utils {
     public static final String MAPBOX_VERSION = "0.7.4";
     public static final String FAB_VERSION = "1.5.5";
 
-    private static final String CORE = "http://api.yetanotherview.cz/api/v2/";
+    private static final String CORE = "http://api.yetanotherview.cz/api/v3/";
     private static final String PHP = ".php";
     public static final String JSON_FILE_SNRSRKUBIIXK = CORE + "SNRSrkubIIxk" + PHP;
-    public static final String JSON_FILE_ETGGISNVIYVH = CORE + "EtggIsnviYvh" + PHP;
-    public static final String JSON_FILE_HYBFVHABSMXZ = CORE + "hyBfVhAbsMxz" + PHP;
-    public static final String JSON_FILE_QFPMSVSKAVLR = CORE + "QFpmSVsKAvlr" + PHP;
     public static final String JSON_FILE_NPOEMOWQCPPO = CORE + "NPOEmowqCppo" + PHP;
     public static final String JSON_FILE_OZOBFUTXJVXO = CORE + "OZObFutXjVxo" + PHP;
     public static final String JSON_FILE_JDWUFOYXLOYY = CORE + "jDWUFOyxlOyY" + PHP;

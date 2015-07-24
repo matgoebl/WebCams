@@ -100,7 +100,7 @@ public class JsonFetcherDialog extends DialogFragment {
     private boolean lastFetchNewWebCams = false;
     private float selectedDistance;
     private long lastFetchLatest;
-    private String importProgress, units, countryCode, countryName;
+    private String importProgress, units, countryCode, countryName, pN;
     private EditText filterBox;
     private ManualSelectionAdapter manualSelectionAdapter;
     private ReloadInterface mListener;
@@ -146,6 +146,7 @@ public class JsonFetcherDialog extends DialogFragment {
         selection = bundle.getInt("selection", 0);
         String plsWait = getString(R.string.please_wait);
         importProgress = getString(R.string.import_progress) + " " + plsWait;
+        pN = mActivity.getApplicationContext().getPackageName();
 
         initDialog = new MaterialDialog.Builder(mActivity)
                 .title(R.string.importing_from_server)
@@ -167,29 +168,28 @@ public class JsonFetcherDialog extends DialogFragment {
         protected String doInBackground(Void... params) {
 
             try {
-
-                URL url;
+                String action;
                 switch (selection) {
                     case 0:
-                        url = new URL(Utils.JSON_FILE_ETGGISNVIYVH);
+                        action = "1";
                         break;
                     case 6:
-                        url = new URL(Utils.JSON_FILE_QFPMSVSKAVLR);
+                        action = "2";
                         break;
                     case 7:
-                        url = new URL(Utils.JSON_FILE_HYBFVHABSMXZ);
+                        action = "3";
                         break;
                     default:
-                        url = new URL(Utils.JSON_FILE_SNRSRKUBIIXK);
+                        action = "0";
                         break;
                 }
 
+                URL url = new URL(Utils.JSON_FILE_SNRSRKUBIIXK + "?action=" + action + "&id=" + pN);
                 HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
-                InputStream content = new BufferedInputStream(urlConn.getInputStream());
-
                 urlConn.connect();
                 Assert.assertEquals(HttpURLConnection.HTTP_OK, urlConn.getResponseCode());
 
+                InputStream content = new BufferedInputStream(urlConn.getInputStream());
                 try {
                     //Read the server response and attempt to parse it as JSON
                     Reader reader = new InputStreamReader(content);
@@ -307,6 +307,9 @@ public class JsonFetcherDialog extends DialogFragment {
                         }
                 } catch (Exception ex) {
                     Log.e(TAG, "Failed to parse JSON due to: " + ex);
+
+                    initDialog.dismiss();
+                    this.publishProgress();
                 }
             } catch (IOException e) {
                 System.err.println("Error creating HTTP connection");
