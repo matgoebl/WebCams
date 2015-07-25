@@ -280,4 +280,6 @@
 <string name="not_working_web_cam">"Not working WebCam"</string>
 <string name="wrong_name">"Wrong Name"</string>
 <string name="bad_location">"Bad Location"</string>
+<string name="play_maximize">"Play or Maximize"</string>
+<string name="play">"Play"</string>
 </resources>

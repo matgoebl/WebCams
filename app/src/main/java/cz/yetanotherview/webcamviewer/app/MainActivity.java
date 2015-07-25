@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     webCam = (WebCam) mAdapter.getItem(position);
                     if (errorView.getVisibility() == View.VISIBLE && !webCam.isStream()) {
                         refreshSelected(position);
-                    } else showImageOrPlayStream(position, false);
+                    } else showImageOrPlayStream(position, false, false);
                 }
             }
         });
@@ -655,16 +655,49 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         new WelcomeDialog().show(getFragmentManager(), "WelcomeDialog");
     }
 
-    private void showImageOrPlayStream(int position, boolean map) {
+    private void showImageOrPlayStream(int position, boolean map, boolean fromEditClick) {
         Intent intent;
         webCam = (WebCam) mAdapter.getItem(position);
 
         if (webCam.isStream() && !map) {
-            intent = new Intent(this, LiveStreamActivity.class);
-            intent.putExtra("url", webCam.getUrl());
-            intent.putExtra("name", webCam.getName());
-            intent.putExtra("fullScreen", fullScreen);
-            startActivity(intent);
+            if (fromEditClick) {
+                new MaterialDialog.Builder(MainActivity.this)
+                        .items(R.array.play_maximize_values)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                if (which == 0) {
+                                    Intent liveIntent = new Intent(MainActivity.this, LiveStreamActivity.class);
+                                    liveIntent.putExtra("url", webCam.getUrl());
+                                    liveIntent.putExtra("name", webCam.getName());
+                                    liveIntent.putExtra("fullScreen", fullScreen);
+                                    startActivity(liveIntent);
+                                }
+                                else {
+                                    Intent prevIntent = new Intent(MainActivity.this, FullScreenActivity.class);
+                                    prevIntent.putExtra("signature", mStringSignature);
+                                    prevIntent.putExtra("map", false);
+                                    prevIntent.putExtra("name", webCam.getName());
+                                    prevIntent.putExtra("url", webCam.getThumbUrl());
+                                    prevIntent.putExtra("latitude", webCam.getLatitude());
+                                    prevIntent.putExtra("longitude", webCam.getLongitude());
+                                    prevIntent.putExtra("fullScreen", fullScreen);
+                                    prevIntent.putExtra("autoRefresh", autoRefresh);
+                                    prevIntent.putExtra("interval", autoRefreshInterval);
+                                    prevIntent.putExtra("screenAlwaysOn", screenAlwaysOn);
+                                    startActivity(prevIntent);
+                                }
+                            }
+                        })
+                        .show();
+            }
+            else {
+                intent = new Intent(this, LiveStreamActivity.class);
+                intent.putExtra("url", webCam.getUrl());
+                intent.putExtra("name", webCam.getName());
+                intent.putExtra("fullScreen", fullScreen);
+                startActivity(intent);
+            }
         }
         else {
             intent = new Intent(this, FullScreenActivity.class);
@@ -697,6 +730,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         webCam = (WebCam) mAdapter.getItem(position);
 
         String[] options_values = getResources().getStringArray(R.array.opt_values);
+        if (webCam.isStream()) {
+            options_values[4] = getString(R.string.play_maximize);
+        }
         if (webCam.getUniId() != 0) {
             options_values[8] = getString(R.string.report_problem);
         }
@@ -725,7 +761,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 moveItem();
                                 break;
                             case 4:
-                                showImageOrPlayStream(position, false);
+                                showImageOrPlayStream(position, false, true);
                                 break;
                             case 5:
                                 SaveDialog saveDialog = new SaveDialog();
@@ -746,7 +782,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 shareDialog.show(getFragmentManager(), "ShareDialog");
                                 break;
                             case 7:
-                                showImageOrPlayStream(position, true);
+                                showImageOrPlayStream(position, true, true);
                                 break;
                             case 8:
                                 if (webCam.getUniId() != 0) {

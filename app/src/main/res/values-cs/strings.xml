@@ -280,4 +280,6 @@
 <string name="not_working_web_cam">"Nefungující WebKamera"</string>
 <string name="wrong_name">"Chybný název"</string>
 <string name="bad_location">"Špatné umístění"</string>
+<string name="play_maximize">"Přehrát nebo Maximalizovat"</string>
+<string name="play">"Přehrát"</string>
 </resources>

@@ -100,4 +100,9 @@
         <item>@string/bad_location</item>
     </string-array>
 
+    <string-array name="play_maximize_values">
+        <item>@string/play</item>
+        <item>@string/maximize</item>
+    </string-array>
+
 </resources>
