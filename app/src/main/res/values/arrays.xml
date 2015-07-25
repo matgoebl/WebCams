@@ -94,4 +94,10 @@
         <item>@string/local_device</item>
     </string-array>
 
+    <string-array name="whats_wrong">
+        <item>@string/not_working_web_cam</item>
+        <item>@string/wrong_name</item>
+        <item>@string/bad_location</item>
+    </string-array>
+
 </resources>

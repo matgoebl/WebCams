@@ -273,4 +273,11 @@
 <string name="category_management">"Category Management"</string>
 <string name="no_nearby_webcams_send_location">"Oh no! :( No nearby WebCams found. Do you want to help improve the community database by sending your approximate location for manual research?"</string>
 <string name="research">"Research"</string>
+<string name="stay_tuned_content_approval">"The request was sent. In the next hours or days please try to find your WebCam in the community database or you can simply check the last added WebCams by using function: Import from Server -&gt; Latest WebCams."</string>
+<string name="stay_tuned_content_wrong">"The report was sent. In the next hours or days please try to update the reported WebCam from the community database by using function: Import from Server -&gt; Latest WebCams."</string>
+<string name="stay_tuned_content_location">"The report with location was sent. In the next hours or days please try again to find nearby WebCams or you can simply check the last added WebCams by using function: Import from Server -&gt; Latest WebCams."</string>
+<string name="report_problem_summary">"With this report you can inform community database administrators about not working WebCam, wrong Name or bad Location. Please select desired information bellow:"</string>
+<string name="not_working_web_cam">"Not working WebCam"</string>
+<string name="wrong_name">"Wrong Name"</string>
+<string name="bad_location">"Bad Location"</string>
 </resources>

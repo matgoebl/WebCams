@@ -25,7 +25,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -43,6 +42,7 @@ import java.net.URL;
 import java.util.HashMap;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.actions.simple.InfoSentDialog;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.actions.simple.UnavailableDialog;
 import cz.yetanotherview.webcamviewer.app.helper.IsValidEmail;
@@ -181,8 +181,11 @@ public class SuggestionDialog extends DialogFragment {
 
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
-                Snackbar.make(mActivity.findViewById(R.id.coordinator_layout), R.string.sent,
-                        Snackbar.LENGTH_SHORT).show();
+                DialogFragment infoSentDialog = new InfoSentDialog();
+                Bundle bundle = new Bundle();
+                bundle.putInt("action", -1);
+                infoSentDialog.setArguments(bundle);
+                infoSentDialog.show(mActivity.getFragmentManager(), "InfoSentDialog");
             }
         });
     }

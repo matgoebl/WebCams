@@ -733,8 +733,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 bundle.putString("name", webCam.getName());
                                 if (webCam.isStream()) {
                                     bundle.putString("url", webCam.getThumbUrl());
-                                }
-                                else bundle.putString("url", webCam.getUrl());
+                                } else bundle.putString("url", webCam.getUrl());
                                 saveDialog.setArguments(bundle);
                                 saveDialog.show(getFragmentManager(), "SaveDialog");
                                 break;
@@ -742,8 +741,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 ShareDialog shareDialog = new ShareDialog();
                                 if (webCam.isStream()) {
                                     bundle.putString("url", webCam.getThumbUrl());
-                                }
-                                else bundle.putString("url", webCam.getUrl());
+                                } else bundle.putString("url", webCam.getUrl());
                                 shareDialog.setArguments(bundle);
                                 shareDialog.show(getFragmentManager(), "ShareDialog");
                                 break;
@@ -751,25 +749,37 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 showImageOrPlayStream(position, true);
                                 break;
                             case 8:
-                                String dialogTitle;
                                 if (webCam.getUniId() != 0) {
-                                    dialogTitle = getString(R.string.report_problem);
-                                } else dialogTitle = getString(R.string.submit_as_suggestion);
-                                new MaterialDialog.Builder(MainActivity.this)
-                                        .title(dialogTitle)
-                                        .content(R.string.are_you_sure)
-                                        .positiveText(R.string.Yes)
-                                        .negativeText(android.R.string.cancel)
-                                        .iconRes(R.drawable.settings_about)
-                                        .callback(new MaterialDialog.ButtonCallback() {
-                                            @Override
-                                            public void onPositive(MaterialDialog dialog) {
-                                                if (webCam.getUniId() != 0) {
-                                                    new SendToInbox().sendToInboxWebCam(MainActivity.this, webCam, true);
-                                                } else new SendToInbox().sendToInboxWebCam(MainActivity.this, webCam, false);
-                                            }
-                                        })
-                                        .show();
+                                    new MaterialDialog.Builder(MainActivity.this)
+                                            .title(R.string.report_problem)
+                                            .content(R.string.report_problem_summary)
+                                            .positiveText(R.string.send)
+                                            .negativeText(android.R.string.cancel)
+                                            .iconRes(R.drawable.settings_about)
+                                            .items(R.array.whats_wrong)
+                                            .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                                                @Override
+                                                public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                                    new SendToInbox().sendToInboxWebCam(MainActivity.this, webCam, true, which);
+                                                    return true;
+                                                }
+                                            })
+                                            .show();
+                                } else {
+                                    new MaterialDialog.Builder(MainActivity.this)
+                                            .title(R.string.submit_as_suggestion)
+                                            .content(R.string.community_list_summary)
+                                            .positiveText(R.string.Yes)
+                                            .negativeText(android.R.string.cancel)
+                                            .iconRes(R.drawable.settings_about)
+                                            .callback(new MaterialDialog.ButtonCallback() {
+                                                @Override
+                                                public void onPositive(MaterialDialog dialog) {
+                                                    new SendToInbox().sendToInboxWebCam(MainActivity.this, webCam, false, -1);
+                                                }
+                                            })
+                                            .show();
+                                }
                                 break;
                             default:
                                 break;
@@ -837,7 +847,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         reInitializeDrawerListAdapter();
 
         if (share) {
-            new SendToInbox().sendToInboxWebCam(this, wc, false);
+            new SendToInbox().sendToInboxWebCam(this, wc, false, -1);
         }
         else saveDone();
     }

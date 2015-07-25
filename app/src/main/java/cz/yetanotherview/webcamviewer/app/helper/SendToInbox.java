@@ -19,8 +19,9 @@
 package cz.yetanotherview.webcamviewer.app.helper;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
+import android.os.Bundle;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -32,22 +33,26 @@ import java.net.URL;
 import java.util.HashMap;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.actions.simple.InfoSentDialog;
 import cz.yetanotherview.webcamviewer.app.actions.simple.UnavailableDialog;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class SendToInbox {
 
+    private int action;
+    private int whatsWrong;
     private double latitude, longitude;
     private WebCam webCam;
     private Boolean fromCommunityList;
     private Activity mActivity;
     private MaterialDialog indeterminateProgress;
 
-    public void sendToInboxWebCam(Activity activity, WebCam webCam, Boolean fromCommunityList) {
+    public void sendToInboxWebCam(Activity activity, WebCam webCam, Boolean fromCommunityList, int whatsWrong) {
 
+        this.mActivity = activity;
         this.webCam = webCam;
         this.fromCommunityList = fromCommunityList;
-        this.mActivity = activity;
+        this.whatsWrong = whatsWrong;
 
         showIndeterminateProgress();
         new sendToInboxBackgroundTask().execute(0);
@@ -55,9 +60,9 @@ public class SendToInbox {
 
     public void sendToInboxLocation(Activity activity, double latitude, double longitude) {
 
+        this.mActivity = activity;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.mActivity = activity;
 
         showIndeterminateProgress();
         new sendToInboxBackgroundTask().execute(1);
@@ -86,10 +91,13 @@ public class SendToInbox {
                 switch (params[0]) {
                     case 0:
                         if (fromCommunityList) {
+                            action = 1;
                             postDataParams.put("subject", "Something is wrong");
                             postDataParams.put("webCamUniId", String.valueOf(webCam.getUniId()));
+                            postDataParams.put("whatsWrong", String.valueOf(whatsWrong));
                         }
                         else {
+                            action = 0;
                             postDataParams.put("subject", "New WebCam for approval");
                             postDataParams.put("webCamUniId", "none");
                         }
@@ -103,6 +111,7 @@ public class SendToInbox {
                         postDataParams.put("webCamLongitude", String.valueOf(webCam.getLongitude()));
                         break;
                     case 1:
+                        action = 2;
                         postDataParams.put("subject", "No nearby WebCams");
                         postDataParams.put("latitude", String.valueOf(latitude));
                         postDataParams.put("longitude", String.valueOf(longitude));
@@ -140,8 +149,11 @@ public class SendToInbox {
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
                 indeterminateProgress.dismiss();
-                Snackbar.make(mActivity.findViewById(R.id.coordinator_layout), R.string.sent,
-                        Snackbar.LENGTH_SHORT).show();
+                DialogFragment infoSentDialog = new InfoSentDialog();
+                Bundle bundle = new Bundle();
+                bundle.putInt("action", action);
+                infoSentDialog.setArguments(bundle);
+                infoSentDialog.show(mActivity.getFragmentManager(), "InfoSentDialog");
             }
         });
     }

@@ -273,4 +273,11 @@
 <string name="category_management">"Správa kategorií"</string>
 <string name="no_nearby_webcams_send_location">"Ale ne! :( Ve vašem okolí nebyly nalezeny žádné WebKamery. Chcete pomoci vylepšit komunitní databázi zasláním vaší přibližné polohy pro ruční přezkoumání?"</string>
 <string name="research">"Výzkum"</string>
+<string name="stay_tuned_content_approval">"Žádost byla odeslána. V následujících hodinách či dnech zkuste prosím znovu vyhledat WebKameru v komunitní databázi nebo si jednoduše zkontrolujte poslední přidané pomocí funkce: Import ze serveru -&gt; Nejnovější WebKamery."</string>
+<string name="stay_tuned_content_wrong">"Zpráva byla odeslána. V následujících hodinách či dnech zkuste aktualizovat reportovanou WebKameru z komunitní databáze pomocí funkce: Import ze serveru -&gt; Nejnovější WebKamery."</string>
+<string name="stay_tuned_content_location">"Zpráva o umístění byla odeslána. V následujících hodinách či dnech zkuste prosím znovu vyhledat WebKamery ve vaší blízkosti nebo si jednoduše zkontrolujte poslední přidané pomocí funkce: Import ze serveru -&gt; Nejnovější WebKamery."</string>
+<string name="report_problem_summary">"Touto zprávou můžete informovat správce komunitní databáze o nefunkční WebKamere, špatném názvu nebo umístění. Zvolte prosím požadovaný report:"</string>
+<string name="not_working_web_cam">"Nefungující WebKamera"</string>
+<string name="wrong_name">"Chybný název"</string>
+<string name="bad_location">"Špatné umístění"</string>
 </resources>
