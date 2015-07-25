@@ -143,9 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (screenAlwaysOn){
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
-        else {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
+        else getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // Init DatabaseHelper for late use
         db = new DatabaseHelper(getApplicationContext());
@@ -235,9 +233,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (selectedCategory == 0) {
             allWebCams = db.getAllWebCams(sortOrder);
         }
-        else {
-            allWebCams = db.getAllWebCamsByCategory(selectedCategoryId, sortOrder);
-        }
+        else allWebCams = db.getAllWebCamsByCategory(selectedCategoryId, sortOrder);
         db.closeDB();
 
         mAdapter = new WebCamAdapter(this, allWebCams, mOrientation, mLayoutId,
@@ -259,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     webCam = (WebCam) mAdapter.getItem(position);
                     if (errorView.getVisibility() == View.VISIBLE && !webCam.isStream()) {
                         refreshSelected(position);
-                    } else showImageOrPlayStream(position, false, false);
+                    } else maximizeImageOrPlayStream(position, false, false);
                 }
             }
         });
@@ -315,9 +311,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     boolean scrollUp = dy >= 0;
                     if (scrollUp) {
                         floatingActionMenu.hideMenuButton(true);
-                    } else {
-                        floatingActionMenu.showMenuButton(true);
-                    }
+                    } else floatingActionMenu.showMenuButton(true);
                 }
             }
         });
@@ -561,35 +555,19 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     public void onOffsetChanged(AppBarLayout controllableAppBarLayout, int i) {
         if (i == 0) {
             swipeRefreshLayout.setEnabled(true);
-        } else {
-            swipeRefreshLayout.setEnabled(false);
-        }
+        } else swipeRefreshLayout.setEnabled(false);
     }
 
     private void showSortDialog() {
 
         int whatMarkToCheck = 0;
-        if (sortOrder.contains("position")) {
-            whatMarkToCheck = 0;
-        }
-        else if (sortOrder.contains(" ) ASC")) {
-            whatMarkToCheck = 1;
-        }
-        else if (sortOrder.contains(" ) DESC")) {
-            whatMarkToCheck = 2;
-        }
-        else if (sortOrder.contains("created_at ASC")) {
-            whatMarkToCheck = 3;
-        }
-        else if (sortOrder.contains("created_at DESC")) {
-            whatMarkToCheck = 4;
-        }
-        else if (sortOrder.contains("UNICODE ASC")) {
-            whatMarkToCheck = 5;
-        }
-        else if (sortOrder.contains("UNICODE DESC")) {
-            whatMarkToCheck = 6;
-        }
+        if (sortOrder.contains("position")) {whatMarkToCheck = 0;}
+        else if (sortOrder.contains(" ) ASC")) {whatMarkToCheck = 1;}
+        else if (sortOrder.contains(" ) DESC")) {whatMarkToCheck = 2;}
+        else if (sortOrder.contains("created_at ASC")) {whatMarkToCheck = 3;}
+        else if (sortOrder.contains("created_at DESC")) {whatMarkToCheck = 4;}
+        else if (sortOrder.contains("UNICODE ASC")) {whatMarkToCheck = 5;}
+        else if (sortOrder.contains("UNICODE DESC")) {whatMarkToCheck = 6;}
 
         materialDialog = new MaterialDialog.Builder(this)
                 .title(R.string.action_sort)
@@ -655,8 +633,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         new WelcomeDialog().show(getFragmentManager(), "WelcomeDialog");
     }
 
-    private void showImageOrPlayStream(int position, boolean map, boolean fromEditClick) {
-        Intent intent;
+    private void maximizeImageOrPlayStream(int position, boolean map, boolean fromEditClick) {
         webCam = (WebCam) mAdapter.getItem(position);
 
         if (webCam.isStream() && !map) {
@@ -667,62 +644,49 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                             @Override
                             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                                 if (which == 0) {
-                                    Intent liveIntent = new Intent(MainActivity.this, LiveStreamActivity.class);
-                                    liveIntent.putExtra("url", webCam.getUrl());
-                                    liveIntent.putExtra("name", webCam.getName());
-                                    liveIntent.putExtra("fullScreen", fullScreen);
-                                    startActivity(liveIntent);
+                                    playStream();
                                 }
-                                else {
-                                    Intent prevIntent = new Intent(MainActivity.this, FullScreenActivity.class);
-                                    prevIntent.putExtra("signature", mStringSignature);
-                                    prevIntent.putExtra("map", false);
-                                    prevIntent.putExtra("name", webCam.getName());
-                                    prevIntent.putExtra("url", webCam.getThumbUrl());
-                                    prevIntent.putExtra("latitude", webCam.getLatitude());
-                                    prevIntent.putExtra("longitude", webCam.getLongitude());
-                                    prevIntent.putExtra("fullScreen", fullScreen);
-                                    prevIntent.putExtra("autoRefresh", autoRefresh);
-                                    prevIntent.putExtra("interval", autoRefreshInterval);
-                                    prevIntent.putExtra("screenAlwaysOn", screenAlwaysOn);
-                                    startActivity(prevIntent);
-                                }
+                                else maximizeImage(false, true);
                             }
                         })
                         .show();
             }
-            else {
-                intent = new Intent(this, LiveStreamActivity.class);
-                intent.putExtra("url", webCam.getUrl());
-                intent.putExtra("name", webCam.getName());
-                intent.putExtra("fullScreen", fullScreen);
-                startActivity(intent);
-            }
+            else playStream();
+        }
+        else maximizeImage(map, false);
+    }
+
+    private void playStream() {
+        Intent intent = new Intent(this, LiveStreamActivity.class);
+        intent.putExtra("url", webCam.getUrl());
+        intent.putExtra("name", webCam.getName());
+        intent.putExtra("fullScreen", fullScreen);
+        startActivity(intent);
+    }
+
+    private void maximizeImage(boolean map, boolean preview) {
+        Intent intent = new Intent(this, FullScreenActivity.class);
+        intent.putExtra("signature", mStringSignature);
+        intent.putExtra("map", map);
+        intent.putExtra("name", webCam.getName());
+        String url = webCam.getUrl();
+        if (preview) url = webCam.getThumbUrl();
+        intent.putExtra("url", url);
+        intent.putExtra("latitude", webCam.getLatitude());
+        intent.putExtra("longitude", webCam.getLongitude());
+        intent.putExtra("fullScreen", fullScreen);
+        intent.putExtra("autoRefresh", autoRefresh);
+        intent.putExtra("interval", autoRefreshInterval);
+        intent.putExtra("screenAlwaysOn", screenAlwaysOn);
+
+        if (!map){
+            startActivity(intent);
         }
         else {
-            intent = new Intent(this, FullScreenActivity.class);
-            intent.putExtra("signature", mStringSignature);
-            intent.putExtra("map", map);
-            intent.putExtra("name", webCam.getName());
-            intent.putExtra("url", webCam.getUrl());
-            intent.putExtra("latitude", webCam.getLatitude());
-            intent.putExtra("longitude", webCam.getLongitude());
-            intent.putExtra("fullScreen", fullScreen);
-            intent.putExtra("autoRefresh", autoRefresh);
-            intent.putExtra("interval", autoRefreshInterval);
-            intent.putExtra("screenAlwaysOn", screenAlwaysOn);
-
-            if (!map){
+            if (webCam.getLatitude() != 0 || webCam.getLongitude() != 0) {
                 startActivity(intent);
             }
-            else {
-                if (webCam.getLatitude() != 0 || webCam.getLongitude() != 0) {
-                    startActivity(intent);
-                }
-                else {
-                    new NoCoordinatesDialog().show(getFragmentManager(), "NoCoordinatesDialog");
-                }
-            }
+            else new NoCoordinatesDialog().show(getFragmentManager(), "NoCoordinatesDialog");
         }
     }
 
@@ -736,9 +700,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (webCam.getUniId() != 0) {
             options_values[8] = getString(R.string.report_problem);
         }
-        else {
-            options_values[8] = getString(R.string.submit_as_suggestion);
-        }
+        else options_values[8] = getString(R.string.submit_as_suggestion);
 
         materialDialog = new MaterialDialog.Builder(this)
                 .items(options_values)
@@ -761,7 +723,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 moveItem();
                                 break;
                             case 4:
-                                showImageOrPlayStream(position, false, true);
+                                maximizeImageOrPlayStream(position, false, true);
                                 break;
                             case 5:
                                 SaveDialog saveDialog = new SaveDialog();
@@ -782,7 +744,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 shareDialog.show(getFragmentManager(), "ShareDialog");
                                 break;
                             case 7:
-                                showImageOrPlayStream(position, true, true);
+                                maximizeImageOrPlayStream(position, true, true);
                                 break;
                             case 8:
                                 if (webCam.getUniId() != 0) {
@@ -801,21 +763,19 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                                 }
                                             })
                                             .show();
-                                } else {
-                                    new MaterialDialog.Builder(MainActivity.this)
-                                            .title(R.string.submit_as_suggestion)
-                                            .content(R.string.community_list_summary)
-                                            .positiveText(R.string.Yes)
-                                            .negativeText(android.R.string.cancel)
-                                            .iconRes(R.drawable.settings_about)
-                                            .callback(new MaterialDialog.ButtonCallback() {
-                                                @Override
-                                                public void onPositive(MaterialDialog dialog) {
-                                                    new SendToInbox().sendToInboxWebCam(MainActivity.this, webCam, false, -1);
-                                                }
-                                            })
-                                            .show();
-                                }
+                                } else new MaterialDialog.Builder(MainActivity.this)
+                                        .title(R.string.submit_as_suggestion)
+                                        .content(R.string.community_list_summary)
+                                        .positiveText(R.string.Yes)
+                                        .negativeText(android.R.string.cancel)
+                                        .iconRes(R.drawable.settings_about)
+                                        .callback(new MaterialDialog.ButtonCallback() {
+                                            @Override
+                                            public void onPositive(MaterialDialog dialog) {
+                                                new SendToInbox().sendToInboxWebCam(MainActivity.this, webCam, false, -1);
+                                            }
+                                        })
+                                        .show();
                                 break;
                             default:
                                 break;
@@ -872,9 +832,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (category_ids != null) {
             wc.setId(db.createWebCam(wc, category_ids));
         }
-        else {
-            wc.setId(db.createWebCam(wc, null));
-        }
+        else wc.setId(db.createWebCam(wc, null));
         db.closeDB();
 
         mAdapter.addItem(mAdapter.getItemCount(), wc);
@@ -892,9 +850,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     public void webCamEdited(int position, WebCam wc, List<Integer> category_ids) {
         if (category_ids != null) {
             db.updateWebCam(wc, category_ids);
-        } else {
-            db.updateWebCam(wc, null);
-        }
+        } else db.updateWebCam(wc, null);
         db.closeDB();
 
         mAdapter.modifyItem(position, wc);
