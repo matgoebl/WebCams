@@ -27,7 +27,6 @@
 <string name="action_edit">"編集"</string>
 <string name="action_sort">"並び替え"</string>
 <string name="new_category_hint">"新しいリスト"</string>
-<string name="dismiss">"破棄"</string>
 <string name="refresh">"リフレッシュ"</string>
 <string name="action_menu_help">"ヘルプとフィードバック"</string>
 <string name="pref_auto_refresh">"自動リフレッシュ"</string>
@@ -106,8 +105,6 @@
 <string name="selecting_by_name">"名前による選択"</string>
 <string name="action_search">"検索"</string>
 <string name="selecting_from_map">"地図から選択"</string>
-<string name="simple_listview">"シンプルリスト"</string>
-<string name="simple_listview_summary">"リアルなプレビューが無効になっている場合は、名前だけのシンプルなリストを表示します"</string>
 <string name="delete_webcams_summary">"現在のデータベースから選択されたウェブカムを削除します"</string>
 <string name="submit_suggestion">"提案を送信"</string>
 <string name="submit_suggestion_hint">"お気に入りの場所"</string>
@@ -273,4 +270,13 @@
 <string name="category_management">"カテゴリー管理"</string>
 <string name="no_nearby_webcams_send_location">"残念ですが :( 近くのウェブカムは見つかりませんでした。手動で調査をしておおよその現在地を送信することによって、コミュニティデータベースを改善しますか?"</string>
 <string name="research">"調査"</string>
+<string name="stay_tuned_content_approval">"リクエストが送信されました。数時間から数日後にコミュニティデータベース内のウェブカムを検索してみてください。または次の機能を使用して、最後に追加されたウェブカムを確認することができます。サーバーからインポート -&gt; 最新のウェブカム。"</string>
+<string name="stay_tuned_content_wrong">"レポートが送信されました。数時間から数日後に次の機能を使用して、コミュニティデータベースから報告されたウェブカムを更新してみてください: サーバからインポート -&gt; 最新のウェブカム。"</string>
+<string name="stay_tuned_content_location">"場所のレポートが送信されました。数時間から数日後に、近くのウェブカムを検索してみてください。または、次の関数を使用して、最後に追加されたウェブムを確認することができます。サーバーからインポート -&gt; 最新のウェブカム。"</string>
+<string name="report_problem_summary">"このレポートを使用して、動作していないウェブカム、名前の間違い、場所の間違いに関してコミュニティデータベース管理者に通知することができます。次の希望する情報を選択してください:"</string>
+<string name="not_working_web_cam">"動作していないウェブカム"</string>
+<string name="wrong_name">"名前の間違い"</string>
+<string name="bad_location">"場所の間違い"</string>
+<string name="play_maximize">"再生または最大化"</string>
+<string name="play">"再生"</string>
 </resources>

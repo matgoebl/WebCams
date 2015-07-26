@@ -27,7 +27,6 @@
 <string name="action_edit">"Bearbeiten"</string>
 <string name="action_sort">"Sortieren"</string>
 <string name="new_category_hint">"Neue Liste"</string>
-<string name="dismiss">"VERBERGEN"</string>
 <string name="refresh">"Aktualisieren"</string>
 <string name="action_menu_help">"Hilfe"</string>
 <string name="pref_auto_refresh">"Automatische Aktualisierung"</string>
@@ -106,8 +105,6 @@
 <string name="selecting_by_name">"Auswahl nach Name"</string>
 <string name="action_search">"Suche"</string>
 <string name="selecting_from_map">"Auswahl von der Karte"</string>
-<string name="simple_listview">"Einfache Liste"</string>
-<string name="simple_listview_summary">"Wenn die realistische Vorschauen deaktiviert sind, zeige nur eine einfache Liste von Namen"</string>
 <string name="delete_webcams_summary">"Lösche ausgewählte WebCams aus der aktuellen Datenbank"</string>
 <string name="submit_suggestion">"Unterbreite einen Vorschlag"</string>
 <string name="submit_suggestion_hint">"Mein Lieblingsort"</string>
@@ -273,4 +270,13 @@
 <string name="category_management">"Kategorienverwaltung"</string>
 <string name="no_nearby_webcams_send_location">"Oh nein, es wurden keine WebCams in der Nähe gefunden. Möchtest du helfen, die Gemeinschaftsdatenbank zu verbessern, in dem du deine ungefähre Position für die manuelle Suche sendest?"</string>
 <string name="research">"Untersuchen"</string>
+<string name="stay_tuned_content_approval">"Die Anfrage wurde gesendet. Bitte versuche in den nächsten Stunden oder Tage die gemeldete WebCam von der Gemeinschaftsdatenbank zu aktualisieren mit der Funktion: Import vom Server -&gt; Neueste WebCams"</string>
+<string name="stay_tuned_content_wrong">"Der Bericht wurde gesendet. Bitte versuche in den nächsten Stunden oder Tage die gemeldete WebCam von der Gemeinschaftsdatenbank zu aktualisieren mit der Funktion: Import vom Server -&gt; Neueste WebCams"</string>
+<string name="stay_tuned_content_location">"Der Bericht mit Ort wurde gesendet. Versuche in den nächsten Stunden oder Tagen noch einmal WebCams in der Nähe zu finden oder du kannst einfach die letzten hinzugefügten WebCams mit der Funktion überprüfen: Import vom Server -&gt; Neueste WebCams"</string>
+<string name="report_problem_summary">"Mit diesem Bericht kannst du die Gemeinschaftsdatenbank Administratoren über nicht funtkionierende WebCams informieren, falscher Name oder falscher Ort. Bitte wähle die gewünschte Information aus:"</string>
+<string name="not_working_web_cam">"Nicht funktionierende WebCam"</string>
+<string name="wrong_name">"Falscher Name"</string>
+<string name="bad_location">"Schlechter Ort"</string>
+<string name="play_maximize">"Abspielen oder maximieren"</string>
+<string name="play">"Abspielen"</string>
 </resources>

@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private int numberOfColumns, mOrientation, selectedCategory, autoRefreshInterval, mPosition,
             webCamToDeletePosition, selectedCategoryId;
     private boolean firstRun, fullScreen, autoRefresh, autoRefreshFullScreenOnly, screenAlwaysOn,
-            imagesOnOff, simpleList;
+            imagesOnOff;
     private String mStringSignature, sortOrder;
     private FloatingActionMenu floatingActionMenu;
     private android.support.design.widget.FloatingActionButton floatingActionButtonNative;
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         db.closeDB();
 
         mAdapter = new WebCamAdapter(this, allWebCams, mOrientation, mLayoutId,
-                new StringSignature(mStringSignature), imagesOnOff, simpleList);
+                new StringSignature(mStringSignature), imagesOnOff);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setClickListener(new WebCamAdapter.ClickListener() {
 
@@ -1160,7 +1160,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         autoRefreshInterval = preferences.getInt("pref_auto_refresh_interval", 30000);
         autoRefreshFullScreenOnly = preferences.getBoolean("pref_auto_refresh_fullscreen", false);
         screenAlwaysOn = preferences.getBoolean("pref_screen_always_on", false);
-        simpleList = preferences.getBoolean("pref_simple_list", false);
     }
 
     private void saveToPref(){

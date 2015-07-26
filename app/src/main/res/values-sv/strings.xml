@@ -27,7 +27,6 @@
 <string name="action_edit">"Ändra"</string>
 <string name="action_sort">"Sortera"</string>
 <string name="new_category_hint">"Namn"</string>
-<string name="dismiss">"STÄNG"</string>
 <string name="refresh">"Uppdatera"</string>
 <string name="action_menu_help">"Hjälp"</string>
 <string name="pref_auto_refresh">"Autouppdatatera"</string>
@@ -106,8 +105,6 @@
 <string name="selecting_by_name">"Välj efter Namn"</string>
 <string name="action_search">"Sök"</string>
 <string name="selecting_from_map">"Väljer från Karta"</string>
-<string name="simple_listview">"Simpel lista"</string>
-<string name="simple_listview_summary">"Om live-bilder i listan är avstängt kommer listan bara att bestå av namn"</string>
 <string name="delete_webcams_summary">"Ta bort vald WebCams från den nuvarande databasen"</string>
 <string name="submit_suggestion">"Skicka ett önskemål"</string>
 <string name="submit_suggestion_hint">"Min favoritplats"</string>
@@ -273,4 +270,13 @@
 <string name="category_management">"Katergorihantering"</string>
 <string name="no_nearby_webcams_send_location">"Oh no! :( No nearby WebCams found. Do you want to help improve the community database by sending your approximate location for manual research?"</string>
 <string name="research">"Research"</string>
+<string name="stay_tuned_content_approval">"The request was sent. In the next hours or days please try to find your WebCam in the community database or you can simply check the last added WebCams by using function: Import from Server -&gt; Latest WebCams."</string>
+<string name="stay_tuned_content_wrong">"The report was sent. In the next hours or days please try to update the reported WebCam from the community database by using function: Import from Server -&gt; Latest WebCams."</string>
+<string name="stay_tuned_content_location">"The report with location was sent. In the next hours or days please try again to find nearby WebCams or you can simply check the last added WebCams by using function: Import from Server -&gt; Latest WebCams."</string>
+<string name="report_problem_summary">"With this report you can inform community database administrators about not working WebCam, wrong Name or bad Location. Please select desired information bellow:"</string>
+<string name="not_working_web_cam">"Not working WebCam"</string>
+<string name="wrong_name">"Wrong Name"</string>
+<string name="bad_location">"Bad Location"</string>
+<string name="play_maximize">"Play or Maximize"</string>
+<string name="play">"Play"</string>
 </resources>

@@ -32,7 +32,6 @@
     <color name="move_background">#2c4a148c</color>
 
     <color name="widget_background">#5F5F5F</color>
-    <color name="card_text_background">#dcffffff</color>
 
     <drawable name="selected_gray">#11000000</drawable>
     <drawable name="pressed_gray">#22000000</drawable>

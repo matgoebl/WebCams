@@ -232,20 +232,6 @@ public class Utils {
     }
 
     /**
-     * Get random image
-     */
-    public static int getRandomImage() {
-        final Random r = new Random();
-        int[] imgIds = {R.drawable.no_image_0, R.drawable.no_image_1, R.drawable.no_image_2,
-                R.drawable.no_image_3, R.drawable.no_image_4, R.drawable.no_image_5,
-                R.drawable.no_image_6, R.drawable.no_image_7, R.drawable.no_image_8,
-                R.drawable.no_image_9, R.drawable.no_image_10, R.drawable.no_image_11};
-        int randomInt = r.nextInt(imgIds.length);
-
-        return imgIds[randomInt];
-    }
-
-    /**
      * Calculate image height
      */
     public static int getImageHeight(Context context, int layoutId) {

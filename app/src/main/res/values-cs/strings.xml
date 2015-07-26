@@ -27,7 +27,6 @@
 <string name="action_edit">"Upravit"</string>
 <string name="action_sort">"Seřadit"</string>
 <string name="new_category_hint">"Nový seznam"</string>
-<string name="dismiss">"SKRÝT"</string>
 <string name="refresh">"Obnovit"</string>
 <string name="action_menu_help">"Nápověda"</string>
 <string name="pref_auto_refresh">"Automatické obnovení"</string>
@@ -106,8 +105,6 @@
 <string name="selecting_by_name">"Výběr podle názvu"</string>
 <string name="action_search">"Hledat"</string>
 <string name="selecting_from_map">"Výběr z mapy"</string>
-<string name="simple_listview">"Jednoduchý seznam"</string>
-<string name="simple_listview_summary">"Pokud jsou živé náhledy vypnuty, zobrazit pouze jednoduchý seznam s názvy"</string>
 <string name="delete_webcams_summary">"Smazat vybrané WebKamery z aktuální databáze"</string>
 <string name="submit_suggestion">"Odeslat návrh"</string>
 <string name="submit_suggestion_hint">"Mé oblíbené místo"</string>

@@ -27,7 +27,6 @@
 <string name="action_edit">"Edit"</string>
 <string name="action_sort">"Sort"</string>
 <string name="new_category_hint">"New list"</string>
-<string name="dismiss">"DISMISS"</string>
 <string name="refresh">"Refresh"</string>
 <string name="action_menu_help">"Help"</string>
 <string name="pref_auto_refresh">"Auto Refresh"</string>
@@ -106,8 +105,6 @@
 <string name="selecting_by_name">"Selecting by Name"</string>
 <string name="action_search">"Search"</string>
 <string name="selecting_from_map">"Selecting from Map"</string>
-<string name="simple_listview">"Simple list"</string>
-<string name="simple_listview_summary">"If live previews are disabled, then show only a simple list of names"</string>
 <string name="delete_webcams_summary">"Delete selected WebCams from the current database"</string>
 <string name="submit_suggestion">"Submit a Suggestion"</string>
 <string name="submit_suggestion_hint">"My favorite place"</string>

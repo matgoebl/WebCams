@@ -37,13 +37,6 @@
         android:summary="@string/pref_screen_always_on_summary" />
 
     <CheckBoxPreference
-        android:key="pref_simple_list"
-        android:checked="false"
-        android:title="@string/simple_listview"
-        android:icon="@drawable/settings_simple_list"
-        android:summary="@string/simple_listview_summary" />
-
-    <CheckBoxPreference
         android:key="pref_auto_refresh"
         android:checked="false"
         android:title="@string/pref_auto_refresh"
