@@ -485,6 +485,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     }
 
     @Override
+    public boolean onSearchRequested() {
+        MenuItemCompat.expandActionView(searchItem);
+        searchView.requestFocus();
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -542,13 +549,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onSearchRequested() {
-        MenuItemCompat.expandActionView(searchItem);
-        searchView.requestFocus();
-        return true;
     }
 
     @Override
@@ -654,6 +654,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             else playStream();
         }
         else maximizeImage(map, false);
+
+        // Workaround for cleaning the entered searchView text.
+        if (!searchView.isIconified()) {
+            searchView.setIconified(true);
+        }
     }
 
     private void playStream() {
