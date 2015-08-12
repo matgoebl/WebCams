@@ -63,8 +63,8 @@ public class Utils {
 
     public static final String SUPPORT_LIBRARIES_VERSION = "22.2.1";
     public static final String GLIDE_VERSION = "3.6.1";
-    public static final String LIB_VLC_VERSION = "3.0.0";
-    public static final String MATERIAL_DIALOGS_VERSION = "0.7.7.0";
+    public static final String LIB_VLC_VERSION = "3.0.0-1";
+    public static final String MATERIAL_DIALOGS_VERSION = "0.7.8.1";
     public static final String GOOGLE_GSON_VERSION = "2.3.1";
     public static final String JSOUP_VERSION = "1.8.2";
     public static final String MAPBOX_VERSION = "0.7.4";
