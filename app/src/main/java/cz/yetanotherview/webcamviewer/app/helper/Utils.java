@@ -18,12 +18,16 @@
 
 package cz.yetanotherview.webcamviewer.app.helper;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Environment;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -39,19 +43,18 @@ import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Random;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
 
 public class Utils {
 
-    public static String defaultSortOrder = "position";
-    public static String nameSortOrder = "webcam_name COLLATE UNICODE ASC";
-    public static String folderWCVPath = Environment.getExternalStorageDirectory() + "/WebCamViewer/";
-    public static String folderWCVPathTmp = folderWCVPath + "Tmp/";
-    public static String extension = ".wcv";
-    public static String dateTimeFormat = "yyyy-MM-dd HH:mm:ss, zzzz";
+    public static final String defaultSortOrder = "position";
+    public static final String nameSortOrder = "webcam_name COLLATE UNICODE ASC";
+    public static final String folderWCVPath = Environment.getExternalStorageDirectory() + "/WebCamViewer/";
+    public static final String folderWCVPathTmp = folderWCVPath + "Tmp/";
+    public static final String extension = ".wcv";
+    public static final String dateTimeFormat = "yyyy-MM-dd HH:mm:ss, zzzz";
 
     public static final String YAV = "http://www.yetanotherview.cz/";
 
@@ -63,7 +66,7 @@ public class Utils {
 
     public static final String SUPPORT_LIBRARIES_VERSION = "22.2.1";
     public static final String GLIDE_VERSION = "3.6.1";
-    public static final String LIB_VLC_VERSION = "3.0.0-1";
+    public static final String LIB_VLC_VERSION = "3.0.0-1.5.2";
     public static final String MATERIAL_DIALOGS_VERSION = "0.7.8.1";
     public static final String GOOGLE_GSON_VERSION = "2.3.1";
     public static final String JSOUP_VERSION = "1.8.2";
@@ -113,8 +116,7 @@ public class Utils {
     public static String getPattern(Context context) {
         if (!DateFormat.is24HourFormat(context)) {
             return "K:mm a";
-        }
-        else return "HH:mm:ss";
+        } else return "HH:mm:ss";
     }
 
     /**
@@ -136,12 +138,14 @@ public class Utils {
      */
     public static ArrayList<File> getFiles(String DirectoryPath) {
         File directory = new File(DirectoryPath);
-        directory.mkdirs();
+        if (!directory.mkdirs()) {
+            Log.i("Info", "Folder exist.");
+        }
         File[] files = directory.listFiles();
         ArrayList<File> arrayList = new ArrayList<>();
         for (File file : files) {
             if (!file.isDirectory() && (file.getAbsolutePath().endsWith(extension))) {
-               arrayList.add(file);
+                arrayList.add(file);
             }
         }
         return arrayList;
@@ -186,20 +190,29 @@ public class Utils {
             if (m.getName().equals("freeStorageAndNotify")) {
                 // Found the method I want to use
                 try {
-                    m.invoke(pm, Long.MAX_VALUE , null);
+                    m.invoke(pm, Long.MAX_VALUE, null);
                 } catch (Exception e) {
-                    Log.d("","Method invocation failed. Could be a permission problem");
+                    Log.d("", "Method invocation failed. Could be a permission problem");
                 }
                 break;
             }
         }
 
+        deleteTmpCache();
+    }
+
+    /**
+     * Clear Tmp folder
+     */
+    public static void deleteTmpCache() {
         try {
             File tmpFolder = new File(folderWCVPathTmp);
             if (tmpFolder.isDirectory()) {
                 String[] children = tmpFolder.list();
                 for (String aChildren : children) {
-                    new File(tmpFolder, aChildren).delete();
+                    if (!new File(tmpFolder, aChildren).delete()) {
+                        Log.d("Error", "File cannot be deleted.");
+                    }
                 }
             }
         } catch (Exception ignored) {}
@@ -208,16 +221,43 @@ public class Utils {
     /**
      * Get last know location
      */
-    public static KnownLocation getLastKnownLocation(Context context) {
+    public static KnownLocation getLastKnownLocation(Activity activity) {
         KnownLocation location;
 
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         String bestProvider = locationManager.getBestProvider(criteria, false);
         if (bestProvider == null) {
             bestProvider = LocationManager.NETWORK_PROVIDER;
         }
-        Location mLastLocation = locationManager.getLastKnownLocation(bestProvider);
+
+        Location mLastLocation = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for Activity#requestPermissions for more details.
+
+                // Should we show an explanation?
+                //if (shouldShowRequestPermissionRationale(
+                //        Manifest.permission.READ_CONTACTS)) {
+                    // Explain to the user why we need to read the contacts
+                //}
+
+                //activity.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                //        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant
+                //return;
+            }
+            else mLastLocation = locationManager.getLastKnownLocation(bestProvider);
+        }
+        else mLastLocation = locationManager.getLastKnownLocation(bestProvider);
 
         if (mLastLocation != null) {
                 location =  new KnownLocation(Utils.roundDouble(mLastLocation.getLatitude(), 6),
@@ -277,5 +317,17 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    /**
+     * Get color without multiple deprecations
+     */
+    public static int getColor(Resources res, int id)
+            throws Resources.NotFoundException {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return res.getColor(id, null);
+        } else {
+            return res.getColor(id);
+        }
     }
 }

@@ -45,7 +45,7 @@ import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class ManualSelectionAdapter extends BaseAdapter implements Filterable {
 
-    private Context context;
+    private final Context context;
     private List<WebCam> webCamList;
     private List<WebCam> origList;
 

@@ -24,6 +24,6 @@ import cz.yetanotherview.webcamviewer.app.model.Link;
 
 public interface AnalyzerCallback {
     void onAnalyzingUpdate(String message);
-    void onAnalyzingFailed(List<Link> links, String Url, int errorCode);
+    //void onAnalyzingFailed(List<Link> links, String Url, int errorCode);
     void onAnalyzingCompleted(List<Link> links, boolean fromComplete);
 }

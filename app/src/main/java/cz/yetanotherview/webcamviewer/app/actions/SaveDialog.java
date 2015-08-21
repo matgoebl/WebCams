@@ -41,7 +41,7 @@ public class SaveDialog extends DialogFragment {
     private File parentFolder;
     private File[] parentContents;
     private boolean canGoUp = false;
-    private String topFolder;
+    private final String topFolder;
 
     private int from;
     private String name;
@@ -119,7 +119,7 @@ public class SaveDialog extends DialogFragment {
         }
     }
 
-    String[] getContentsArray() {
+    private String[] getContentsArray() {
         String[] results = new String[parentContents.length + (canGoUp ? 1 : 0)];
         if (canGoUp) results[0] = "...";
         for (int i = 0; i < parentContents.length; i++)
@@ -127,7 +127,7 @@ public class SaveDialog extends DialogFragment {
         return results;
     }
 
-    File[] listFiles() {
+    private File[] listFiles() {
         File[] contents = parentFolder.listFiles();
         List<File> results = new ArrayList<>();
         for (File fi : contents) {

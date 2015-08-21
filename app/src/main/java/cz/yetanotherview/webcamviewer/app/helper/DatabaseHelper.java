@@ -43,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 7;
 
     // Database Name
-    public static final String DATABASE_NAME = "webCamDatabase.db";
+    private static final String DATABASE_NAME = "webCamDatabase.db";
 
     // Table Names
     private static final String TABLE_WEBCAM = "webcams";

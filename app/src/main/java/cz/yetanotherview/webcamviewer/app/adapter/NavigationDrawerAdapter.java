@@ -156,10 +156,10 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public ImageView categoryIcon;
-        public TextView categoryName;
-        public TextView categoryCount;
-        public ImageView categoryOptions;
+        final ImageView categoryIcon;
+        final TextView categoryName;
+        final TextView categoryCount;
+        final ImageView categoryOptions;
 
         public ViewHolder(View itemView) {
             super(itemView);

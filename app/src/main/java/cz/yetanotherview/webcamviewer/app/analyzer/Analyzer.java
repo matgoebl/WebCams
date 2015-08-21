@@ -44,8 +44,8 @@ import cz.yetanotherview.webcamviewer.app.model.Link;
 
 public class Analyzer {
 
-    private Context context;
-	private AnalyzerCallback callback;
+    private final Context context;
+	private final AnalyzerCallback callback;
     private AnalyzerAsyncTask mTask;
 
     private boolean complete;

@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.helper.Utils;
 
 public class ReportDialog extends DialogFragment {
 
@@ -51,22 +52,22 @@ public class ReportDialog extends DialogFragment {
         newWebCamsTv = (TextView) dialog.findViewById(R.id.report_newWebCams);
         newWebCamsTv.setText(String.valueOf(newWebCams));
         if (newWebCams != 0) {
-            newWebCamsTvText.setTextColor(getResources().getColor(R.color.primary));
-            newWebCamsTv.setTextColor(getResources().getColor(R.color.primary));
+            newWebCamsTvText.setTextColor(Utils.getColor(getResources(), R.color.primary));
+            newWebCamsTv.setTextColor(Utils.getColor(getResources(), R.color.primary));
         }
         duplicityWebCamsTvText = (TextView) dialog.findViewById(R.id.report_duplicityWebCams_text);
         duplicityWebCamsTv = (TextView) dialog.findViewById(R.id.report_duplicityWebCams);
         duplicityWebCamsTv.setText(String.valueOf(duplicityWebCams));
         if (duplicityWebCams != 0) {
-            duplicityWebCamsTvText.setTextColor(getResources().getColor(R.color.orange));
-            duplicityWebCamsTv.setTextColor(getResources().getColor(R.color.orange));
+            duplicityWebCamsTvText.setTextColor(Utils.getColor(getResources(), R.color.orange));
+            duplicityWebCamsTv.setTextColor(Utils.getColor(getResources(), R.color.orange));
         }
         updatedWebCamsTvText = (TextView) dialog.findViewById(R.id.report_updatedWebCams_text);
         updatedWebCamsTv = (TextView) dialog.findViewById(R.id.report_updatedWebCams);
         updatedWebCamsTv.setText(String.valueOf(updatedWebCams));
         if (updatedWebCams != 0) {
-            updatedWebCamsTvText.setTextColor(getResources().getColor(R.color.blue));
-            updatedWebCamsTv.setTextColor(getResources().getColor(R.color.blue));
+            updatedWebCamsTvText.setTextColor(Utils.getColor(getResources(), R.color.blue));
+            updatedWebCamsTv.setTextColor(Utils.getColor(getResources(), R.color.blue));
         }
 
         return dialog;

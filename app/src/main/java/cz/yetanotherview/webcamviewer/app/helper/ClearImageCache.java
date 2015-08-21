@@ -25,7 +25,7 @@ import com.bumptech.glide.Glide;
 
 public class ClearImageCache extends AsyncTask<Void, Void, Long> {
 
-    private Context mContext;
+    private final Context mContext;
     public ClearImageCache (Context context){
         mContext = context;
     }

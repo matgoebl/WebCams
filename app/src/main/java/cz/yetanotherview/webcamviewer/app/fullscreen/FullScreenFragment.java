@@ -74,7 +74,9 @@ public class FullScreenFragment extends Fragment {
         longitude = bundle.getDouble("longitude");
         fullScreen = bundle.getBoolean("fullScreen");
 
-        stringSignature = new StringSignature(signature);
+        if (signature != null) {
+            stringSignature = new StringSignature(signature);
+        }
 
         // Auto Refresh timer
         if (autoRefresh) {

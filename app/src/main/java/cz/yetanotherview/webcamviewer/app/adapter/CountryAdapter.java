@@ -33,8 +33,8 @@ import cz.yetanotherview.webcamviewer.app.model.Country;
 
 public class CountryAdapter extends BaseAdapter {
 
-    private Context context;
-    private List<Country> countryList;
+    private final Context context;
+    private final List<Country> countryList;
 
     public CountryAdapter(Context context, List<Country> countryList) {
         super();

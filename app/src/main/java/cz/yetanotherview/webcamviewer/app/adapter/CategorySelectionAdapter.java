@@ -41,8 +41,8 @@ import cz.yetanotherview.webcamviewer.app.model.Category;
 
 public class CategorySelectionAdapter extends BaseAdapter implements OnClickListener {
 
-    private Activity activity;
-    private List<Category> categoryList;
+    private final Activity activity;
+    private final List<Category> categoryList;
 
     public CategorySelectionAdapter(Activity activity, List<Category> categoryList) {
         super();

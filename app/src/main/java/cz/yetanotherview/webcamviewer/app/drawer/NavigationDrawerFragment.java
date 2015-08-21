@@ -49,6 +49,7 @@ import cz.yetanotherview.webcamviewer.app.actions.DeleteCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.actions.EditCategoryDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.NavigationDrawerAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
+import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 
 public class NavigationDrawerFragment extends Fragment implements NavigationDrawerCallbacks, View.OnClickListener {
@@ -122,7 +123,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         selectItem(position, true);
     }
 
-    public List<Category> getCategories() {
+    private List<Category> getCategories() {
 
         List<Category> allCategories = db.getAllCategories();
         for (Category category : allCategories) {
@@ -148,7 +149,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mCollapsingToolbar = collapsingToolbar;
         mToolbarImage = toolbarImage;
 
-        mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.primary_dark));
+        mDrawerLayout.setStatusBarBackgroundColor(Utils.getColor(getResources(), R.color.primary_dark));
 
         mActionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             @Override
@@ -320,9 +321,9 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         dialogFragment.show(getFragmentManager(), "DeleteCategoryDialog");
     }
 
-
     @Override
     public void onAttach(Activity activity) {
+        //ToDo: Replace deprecated method, context does not work
         super.onAttach(activity);
         try {
             mCallbacks = (NavigationDrawerCallbacks) activity;

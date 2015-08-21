@@ -23,9 +23,9 @@ import android.widget.TextView;
 
 public class SeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
 
-    private TextView seekBarText;
-    private String units;
-    private int seekBarCorrection;
+    private final TextView seekBarText;
+    private final String units;
+    private final int seekBarCorrection;
     private int val;
 
     public SeekBarChangeListener(SeekBar seekBar, TextView seekBarText, int seekBarCorrection, String units) {

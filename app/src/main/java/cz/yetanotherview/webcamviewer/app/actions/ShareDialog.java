@@ -26,6 +26,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -48,8 +49,8 @@ public class ShareDialog extends DialogFragment {
     private String url;
     private MaterialDialog mProgressDialog;
 
-    private static String baseFolderPath = Utils.folderWCVPath;
-    private static String tmpFolderPath = Utils.folderWCVPathTmp;
+    private static final String baseFolderPath = Utils.folderWCVPath;
+    private static final String tmpFolderPath = Utils.folderWCVPathTmp;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -76,10 +77,14 @@ public class ShareDialog extends DialogFragment {
         File baseFolder = new File(baseFolderPath);
         File tmpFolder = new File(tmpFolderPath);
         if (!baseFolder.exists()) {
-            baseFolder.mkdir();
+            if (!baseFolder.mkdir()) {
+                Log.d("Error","Folder cannot be created.");
+            }
         }
         if (!tmpFolder.exists()) {
-            tmpFolder.mkdir();
+            if (!tmpFolder.mkdir()) {
+                Log.d("Error","Folder cannot be created.");
+            }
         }
     }
 

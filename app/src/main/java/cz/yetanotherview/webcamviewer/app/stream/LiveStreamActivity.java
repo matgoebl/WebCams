@@ -43,7 +43,7 @@ import cz.yetanotherview.webcamviewer.app.helper.ImmersiveMode;
 public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
         MediaPlayer.EventListener, LibVLC.HardwareAccelerationError {
 
-    public final static String TAG = "LiveStreamActivity";
+    private final static String TAG = "LiveStreamActivity";
 
     private String mFilePath;
     private MaterialDialog dialog;
@@ -168,7 +168,7 @@ public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
                 .show();
     }
 
-    public void setSize(int width, int height) {
+    private void setSize(int width, int height) {
         mVideoWidth = width;
         mVideoHeight = height;
         if (mVideoWidth * mVideoHeight <= 1)
@@ -226,7 +226,7 @@ public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
         }
     }
 
-    public void releasePlayer() {
+    private void releasePlayer() {
         if (mLibVLC == null)
             return;
         mMediaPlayer.stop();

@@ -73,10 +73,10 @@ public class DiaporamaAdapter {
      * @param animationDuration the animationDuration to use or {@code -1} to use the platform's {@code config_mediumAnimTime}
      * @param placeholderResId  the drawableResId to use or {@code -1} if you don't want to display one.
      */
-    public DiaporamaAdapter(final @NonNull ImageView imageView,
-                            final ImageView errorImage,
-                            final int animationDuration,
-                            final @DrawableRes int placeholderResId) {
+    private DiaporamaAdapter(final @NonNull ImageView imageView,
+                             final ImageView errorImage,
+                             final int animationDuration,
+                             final @DrawableRes int placeholderResId) {
         mImageView = imageView;
         mErrorImage = errorImage;
         mContext = imageView.getContext();
@@ -169,7 +169,7 @@ public class DiaporamaAdapter {
         mAnimationDuration = animationDuration;
     }
 
-    public void setPlaceholder(@DrawableRes int resId) {
+    private void setPlaceholder(@DrawableRes int resId) {
         Bitmap bitmap = BitmapFactory.decodeResource(mImageView.getResources(), resId);
         mPlaceholder = new BitmapDrawable(mImageView.getResources(), bitmap);
         mImageView.setImageDrawable(mPlaceholder);
@@ -202,7 +202,6 @@ public class DiaporamaAdapter {
         public BitmapDrawable getLoadedDrawable() {
             return mLoadedDrawable;
         }
-
 
         @Override
         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {

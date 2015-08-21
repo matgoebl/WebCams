@@ -27,7 +27,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.signature.StringSignature;
@@ -44,7 +43,7 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
 
     private final int mLayoutId;
     private final int mOrientation;
-    private boolean imageOn;
+    private final boolean imageOn;
 
     private StringSignature mStringSignature;
 
@@ -131,23 +130,21 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
             webcamViewHolder.vImage.setVisibility(View.GONE);
             webcamViewHolder.vNumber.setText((position + 1) + ". ");
             webcamViewHolder.vName.setShadowLayer(0,0,0,0);
-            webcamViewHolder.vName.setTextColor(mContext.getResources().getColor(R.color.primary));
+            webcamViewHolder.vName.setTextColor(Utils.getColor(mContext.getResources(), R.color.primary));
             webcamViewHolder.vButton.setImageResource(R.drawable.ic_action_navigation_more_vert_dark);
         }
     }
 
     public class WebCamViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        protected TextView vNumber;
-        protected TextView vName;
-        protected ImageView vImage;
-        protected ImageView vPlay;
-        protected ImageButton vButton;
-        protected ImageView vError;
-        protected View vTint;
-
-        protected RelativeLayout vLayout;
-        protected ProgressBar vProgress;
+        final TextView vNumber;
+        final TextView vName;
+        final ImageView vImage;
+        final ImageView vPlay;
+        final ImageButton vButton;
+        final ImageView vError;
+        final View vTint;
+        final ProgressBar vProgress;
 
         public WebCamViewHolder(View itemLayoutView) {
             super(itemLayoutView);
@@ -159,7 +156,6 @@ public class WebCamAdapter extends RecyclerView.Adapter<WebCamAdapter.WebCamView
             vError = (ImageView) itemLayoutView.findViewById(R.id.action_error);
             vTint = itemLayoutView.findViewById(R.id.move_tint_view);
 
-            vLayout = (RelativeLayout) itemLayoutView.findViewById(R.id.InnerRelativeLayout);
             vProgress = (ProgressBar) itemLayoutView.findViewById(R.id.loadingProgressBar);
 
             vButton.setOnClickListener(this);

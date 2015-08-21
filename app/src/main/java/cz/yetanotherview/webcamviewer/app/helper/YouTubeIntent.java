@@ -25,8 +25,8 @@ import android.net.Uri;
 
 public class YouTubeIntent {
 
-    private Activity activity;
-    private String videoUrl;
+    private final Activity activity;
+    private final String videoUrl;
 
     public YouTubeIntent(Activity activity, String videoUrl) {
         this.activity = activity;

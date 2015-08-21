@@ -41,9 +41,6 @@ import cz.yetanotherview.webcamviewer.app.listener.WebCamListener;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
-/**
- * Edit dialog fragment
- */
 public class EditDialog extends DialogFragment implements View.OnClickListener, CategoryDialog.Callback, CoordinatesChooserDialog.Callback {
 
     private DatabaseHelper db;

@@ -22,7 +22,7 @@ public class KnownLocation {
 
     private final double latitude;
     private final double longitude;
-    private boolean notDetected;
+    private final boolean notDetected;
 
     public KnownLocation(double latitude, double longitude, boolean notDetected) {
         this.latitude = latitude;

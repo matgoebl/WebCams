@@ -129,7 +129,7 @@ public class ImportDialog extends DialogFragment {
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public void openFile() {
+    private void openFile() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("application/octet-stream");

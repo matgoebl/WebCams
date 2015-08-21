@@ -26,7 +26,7 @@ import java.util.Locale;
 import cz.yetanotherview.webcamviewer.app.adapter.ManualSelectionAdapter;
 
 public class OnFilterTextChange implements TextWatcher {
-    private ManualSelectionAdapter manualSelectionAdapter;
+    private final ManualSelectionAdapter manualSelectionAdapter;
 
     public OnFilterTextChange(ManualSelectionAdapter manualSelectionAdapter) {
         super();

@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -123,7 +124,9 @@ public class ExportDialog extends DialogFragment {
         File exportDirectory = new File(Utils.folderWCVPath);
 
         if (!exportDirectory.exists()) {
-            exportDirectory.mkdir();
+            if (!exportDirectory.mkdir()) {
+                Log.d("Error", "Folder cannot be created.");
+            }
         }
 
         try {

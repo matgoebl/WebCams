@@ -36,7 +36,7 @@ import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class WidgetConfigureAdapter extends RecyclerView.Adapter<WidgetConfigureAdapter.WidgetConfigureViewHolder> {
 
-    private List<WebCam> webCamList;
+    private final List<WebCam> webCamList;
     private ClickListener clickListener;
 
     public WidgetConfigureAdapter(List<WebCam> webCamList) {
@@ -81,8 +81,8 @@ public class WidgetConfigureAdapter extends RecyclerView.Adapter<WidgetConfigure
     }
 
     public class WidgetConfigureViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        protected ImageView vImage;
-        protected TextView vName;
+        final ImageView vImage;
+        final TextView vName;
 
         public WidgetConfigureViewHolder(View v) {
             super(v);

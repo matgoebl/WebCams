@@ -79,9 +79,9 @@ public class WvWidgetConfigure extends Activity implements ColorChooserDialog.Ca
         LinearLayout textColorButton = (LinearLayout) findViewById(R.id.text_color);
         LinearLayout backgroundColorButton = (LinearLayout) findViewById(R.id.background_color);
         text_color_icon = (ImageView) findViewById(R.id.text_color_icon);
-        text_color_icon.setColorFilter(getResources().getColor(R.color.white));
+        text_color_icon.setColorFilter(Utils.getColor(getResources(), R.color.white));
         background_color_icon = (ImageView) findViewById(R.id.background_color_icon);
-        background_color_icon.setColorFilter(getResources().getColor(R.color.widget_background));
+        background_color_icon.setColorFilter(Utils.getColor(getResources(), R.color.widget_background));
 
         context = this;
 

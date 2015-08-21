@@ -184,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Utils.deleteTmpCache();
         new ClearImageCache(this).execute();
     }
 
@@ -321,12 +322,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             public void onMenuToggle(boolean b) {
                 if (b) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !fullScreen) {
-                        getWindow().setStatusBarColor(getResources().getColor(R.color.black_transparent));
+                        getWindow().setStatusBarColor(Utils.getColor(getResources(), R.color.black_transparent));
                     }
                     floatingActionButtonNative.setVisibility(View.INVISIBLE);
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !fullScreen) {
-                        getWindow().setStatusBarColor(getResources().getColor(android.R.color.transparent));
+                        getWindow().setStatusBarColor(Utils.getColor(getResources(), android.R.color.transparent));
                     }
                     floatingActionButtonNative.setVisibility(View.VISIBLE);
                 }
@@ -428,7 +429,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 controllableAppBarLayout.collapseToolbar(true);
-                collapsingToolbar.setCollapsedTitleTextColor(getResources().getColor(android.R.color.transparent));
+                collapsingToolbar.setCollapsedTitleTextColor(Utils.getColor(getResources(), android.R.color.transparent));
                 goToFullScreen();
                 searchView.setIconified(false);
                 searchView.requestFocus();
@@ -438,7 +439,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 controllableAppBarLayout.expandToolbar(true);
-                collapsingToolbar.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
+                collapsingToolbar.setCollapsedTitleTextColor(Utils.getColor(getResources(), R.color.white));
                 goToFullScreen();
                 searchView.clearFocus();
                 return true;
@@ -583,7 +584,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 sortOrder = "position";
                                 break;
                             case 1:
-                                knownLocation = Utils.getLastKnownLocation(getApplicationContext());
+                                knownLocation = Utils.getLastKnownLocation(MainActivity.this);
                                 fudge = Math.pow(Math.cos(Math.toRadians(knownLocation.getLatitude())), 2);
 
                                 sortOrder = "((" + knownLocation.getLatitude() + " - latitude) * (" +
@@ -594,7 +595,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                 }
                                 break;
                             case 2:
-                                knownLocation = Utils.getLastKnownLocation(getApplicationContext());
+                                knownLocation = Utils.getLastKnownLocation(MainActivity.this);
                                 fudge = Math.pow(Math.cos(Math.toRadians(knownLocation.getLatitude())), 2);
 
                                 sortOrder = "((" + knownLocation.getLatitude() + " - latitude) * (" +
@@ -999,7 +1000,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         mToolbar.startActionMode(new ActionMode.Callback() {
 
             int pos = mPosition;
-            View tempView = findViewById(R.id.tempView);
+            final View tempView = findViewById(R.id.tempView);
 
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 MenuInflater inflater = mode.getMenuInflater();

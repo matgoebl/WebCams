@@ -25,8 +25,8 @@ import android.view.View;
 
 public class SimpleIntentOnClickListener implements View.OnClickListener {
 
-    Activity activity;
-    String uriString;
+    private final Activity activity;
+    private final String uriString;
 
     public SimpleIntentOnClickListener(Activity activity, String uriString) {
         this.activity = activity;

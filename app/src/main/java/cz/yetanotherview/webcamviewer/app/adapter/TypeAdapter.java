@@ -33,8 +33,8 @@ import cz.yetanotherview.webcamviewer.app.model.Type;
 
 public class TypeAdapter extends BaseAdapter {
 
-    private Context context;
-    private List<Type> typeList;
+    private final Context context;
+    private final List<Type> typeList;
 
     public TypeAdapter(Context context, List<Type> typeList) {
         super();

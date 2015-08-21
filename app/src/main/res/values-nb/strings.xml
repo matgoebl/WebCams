@@ -274,9 +274,9 @@
 <string name="stay_tuned_content_wrong">"The report was sent. In the next hours or days please try to update the reported WebCam from the community database by using function: Import from Server -&gt; Latest WebCams."</string>
 <string name="stay_tuned_content_location">"The report with location was sent. In the next hours or days please try again to find nearby WebCams or you can simply check the last added WebCams by using function: Import from Server -&gt; Latest WebCams."</string>
 <string name="report_problem_summary">"With this report you can inform community database administrators about not working WebCam, wrong Name or bad Location. Please select desired information bellow:"</string>
-<string name="not_working_web_cam">"Not working WebCam"</string>
-<string name="wrong_name">"Wrong Name"</string>
-<string name="bad_location">"Bad Location"</string>
-<string name="play_maximize">"Play or Maximize"</string>
-<string name="play">"Play"</string>
+<string name="not_working_web_cam">"Webkamera virker ikke"</string>
+<string name="wrong_name">"Feil med navn"</string>
+<string name="bad_location">"Feil med lokasjon"</string>
+<string name="play_maximize">"Spill eller maksimér"</string>
+<string name="play">"Spill"</string>
 </resources>

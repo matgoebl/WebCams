@@ -49,8 +49,7 @@ public class AboutDialog extends DialogFragment {
                 .iconRes(R.drawable.settings_about)
                 .build();
 
-        ImageView mAboutAuthorImage = (ImageView) dialog.findViewById(R.id.about_image);
-        loadImage(mAboutAuthorImage, "http://www.gravatar.com/avatar/3be466b04b57b07a9f6efce06685713f.jpg?s=256");
+        loadAuthorImage((ImageView) dialog.findViewById(R.id.about_image));
 
         initAbout(dialog, R.id.about_author_container, new SimpleIntentOnClickListener(getActivity(),
                 Utils.YAV));
@@ -89,7 +88,8 @@ public class AboutDialog extends DialogFragment {
         mAboutAuthorContainer.setOnClickListener(l);
     }
 
-    private void loadImage(ImageView imageView, String url) {
+    private void loadAuthorImage(ImageView imageView) {
+        String url = "http://www.gravatar.com/avatar/3be466b04b57b07a9f6efce06685713f.jpg?s=256";
         Glide.with(getActivity())
                 .load(HttpHeader.getUrl(url))
                 .crossFade()

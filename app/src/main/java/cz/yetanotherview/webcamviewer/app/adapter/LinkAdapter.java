@@ -19,6 +19,7 @@
 package cz.yetanotherview.webcamviewer.app.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +34,13 @@ import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.helper.HttpHeader;
+import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.model.Link;
 
 public class LinkAdapter extends BaseAdapter {
 
-    private Context context;
-    private List<Link> linkList;
+    private final Context context;
+    private final List<Link> linkList;
 
     public LinkAdapter(Context context, List<Link> linkList) {
         super();
@@ -106,25 +108,26 @@ public class LinkAdapter extends BaseAdapter {
         holder.imageSize.setText(" " + link.getSizeString());
 
         int width = link.getWidth();
+        Resources res = context.getResources();
         if (width > 900) {
-            holder.imageDimensions.setTextColor(context.getResources().getColor(R.color.hyperlink));
+            holder.imageDimensions.setTextColor(Utils.getColor(res, R.color.hyperlink));
         }
         else if (width < 900 && width > 600) {
-            holder.imageDimensions.setTextColor(context.getResources().getColor(R.color.blue));
+            holder.imageDimensions.setTextColor(Utils.getColor(res, R.color.blue));
         }
         else if (width < 600 && width > 1) {
-            holder.imageDimensions.setTextColor(context.getResources().getColor(R.color.orange));
+            holder.imageDimensions.setTextColor(Utils.getColor(res, R.color.orange));
         }
-        else holder.imageDimensions.setTextColor(context.getResources().getColor(R.color.fab_normal));
+        else holder.imageDimensions.setTextColor(Utils.getColor(res, R.color.fab_normal));
 
         long size = link.getSize();
         if (size > 100000) {
-            holder.imageSize.setTextColor(context.getResources().getColor(R.color.hyperlink));
+            holder.imageSize.setTextColor(Utils.getColor(res, R.color.hyperlink));
         }
         else if (size < 100000 && size > 50000) {
-            holder.imageSize.setTextColor(context.getResources().getColor(R.color.blue));
+            holder.imageSize.setTextColor(Utils.getColor(res, R.color.blue));
         }
-        else holder.imageSize.setTextColor(context.getResources().getColor(R.color.orange));
+        else holder.imageSize.setTextColor(Utils.getColor(res, R.color.orange));
 
         return convertView;
     }

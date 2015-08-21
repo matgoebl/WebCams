@@ -28,8 +28,8 @@ import cz.yetanotherview.webcamviewer.app.listener.ConnectionTesterListener;
 
 public class ImageTester extends AsyncTask<Void, Void, Boolean> {
 
-    private String url;
-    private ConnectionTesterListener mListener;
+    private final String url;
+    private final ConnectionTesterListener mListener;
 
     public ImageTester(String url, ConnectionTesterListener mListener) {
         this.url = url;

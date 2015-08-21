@@ -31,14 +31,14 @@ import com.bumptech.glide.signature.StringSignature;
 
 import cz.yetanotherview.webcamviewer.app.helper.HttpHeader;
 
-public class WebCamAdapterImages {
+class WebCamAdapterImages {
 
-    private Context context;
-    private WebCamAdapter.WebCamViewHolder webcamViewHolder;
-    private int layoutId;
-    private boolean isStream;
-    private StringSignature stringSignature;
-    private String source;
+    private final Context context;
+    private final WebCamAdapter.WebCamViewHolder webcamViewHolder;
+    private final int layoutId;
+    private final boolean isStream;
+    private final StringSignature stringSignature;
+    private final String source;
     private int count;
 
     public WebCamAdapterImages(Context context, int layoutId, WebCamAdapter.WebCamViewHolder webcamViewHolder, boolean isStream,
@@ -53,7 +53,7 @@ public class WebCamAdapterImages {
         loadImage();
     }
 
-    public void loadImage() {
+    private void loadImage() {
 
         if (layoutId == 1) {
             Glide.with(context)

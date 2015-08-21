@@ -32,7 +32,7 @@ import cz.yetanotherview.webcamviewer.app.model.HelpItem;
 
 public class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.ViewHolder> {
 
-    private List<HelpItem> helpData;
+    private final List<HelpItem> helpData;
     private ClickListener clickListener;
 
     public HelpAdapter(List<HelpItem> helpData) {
@@ -58,9 +58,9 @@ public class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public ImageView imgViewIcon;
-        public ImageView playOverlay;
-        public TextView txtViewTitle;
+        final ImageView imgViewIcon;
+        final ImageView playOverlay;
+        final TextView txtViewTitle;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);

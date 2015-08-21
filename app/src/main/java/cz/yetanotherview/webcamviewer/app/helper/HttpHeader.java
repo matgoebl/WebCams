@@ -25,8 +25,8 @@ import com.bumptech.glide.load.model.LazyHeaders;
 
 public class HttpHeader {
 
-    public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0";
-    public static final String APP_AGENT = "0I9BttDa88rL";
+    private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0";
+    private static final String APP_AGENT = "0I9BttDa88rL";
 
     public static GlideUrl getUrl(String url) {
         if (TextUtils.isEmpty(url)) {

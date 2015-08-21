@@ -23,7 +23,7 @@ import android.text.TextWatcher;
 import android.view.View;
 
 public class OnTextChange implements TextWatcher {
-    private View positiveAction;
+    private final View positiveAction;
 
     public OnTextChange(View positiveAction) {
         super();

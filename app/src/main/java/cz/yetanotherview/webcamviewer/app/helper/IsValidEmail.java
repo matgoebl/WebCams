@@ -23,7 +23,7 @@ import android.text.TextWatcher;
 import android.view.View;
 
 public class IsValidEmail implements TextWatcher {
-    private View positiveAction;
+    private final View positiveAction;
 
     public IsValidEmail(View positiveAction) {
         super();

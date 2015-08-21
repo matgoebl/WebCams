@@ -19,6 +19,7 @@
 package cz.yetanotherview.webcamviewer.app.adapter;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,8 +39,8 @@ import cz.yetanotherview.webcamviewer.app.helper.Utils;
 
 public class ListButtonAdapter extends ArrayAdapter<File> {
 
-    private Activity context;
-    private ArrayList<File> files;
+    private final Activity context;
+    private final ArrayList<File> files;
 
     public ListButtonAdapter(Activity context, ArrayList<File> files) {
         super(context, 0, files);
@@ -49,8 +50,8 @@ public class ListButtonAdapter extends ArrayAdapter<File> {
 
     static class ViewHolder {
         int position;
-        protected TextView text;
-        protected ImageView imageView;
+        TextView text;
+        ImageView imageView;
     }
 
     @Override
@@ -93,7 +94,9 @@ public class ListButtonAdapter extends ArrayAdapter<File> {
 
                                                     File file = (File) viewHolder.imageView.getTag();
                                                     File newName = new File(Utils.folderWCVPath + inputName + Utils.extension);
-                                                    file.renameTo(newName);
+                                                    if (!file.renameTo(newName)) {
+                                                        Log.d("Error", "File cannot be renamed.");
+                                                    }
                                                     files.set(viewHolder.position, newName);
                                                     notifyDataSetChanged();
                                                 }
@@ -104,7 +107,9 @@ public class ListButtonAdapter extends ArrayAdapter<File> {
                                 case R.id.delete:
                                     File file = (File) viewHolder.imageView.getTag();
                                     files.remove(file);
-                                    file.delete();
+                                    if (!file.delete()) {
+                                        Log.d("Error", "File cannot be deleted.");
+                                    }
                                     notifyDataSetChanged();
                                     break;
                             }

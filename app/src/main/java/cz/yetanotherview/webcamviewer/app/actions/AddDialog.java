@@ -58,20 +58,16 @@ import cz.yetanotherview.webcamviewer.app.model.Category;
 import cz.yetanotherview.webcamviewer.app.model.Link;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
-/**
- * Add dialog fragment
- */
 public class AddDialog extends DialogFragment implements CategoryDialog.Callback, CoordinatesChooserDialog.Callback {
 
     private Activity mActivity;
     private String mWebCamName, mWebCamUrl, mWebCamThumbUrl, analyzingTitle;
-    private EditText webCamUrlAddStream, webCamThumbUrlAddStream, webCamNameAdd, webCamLatitude, webCamLongitude, webcamUrlAddStill;
+    private EditText webCamUrlAddStream, webCamThumbUrlAddStream, webCamNameAdd, webCamLatitude, webCamLongitude, webCamUrlAddStill;
     private double mLatitude, mLongitude;
     private boolean mEmpty;
-    private int taskResult;
     private WebCamListener mOnAddListener;
     private MaterialDialog materialDialog, progressDialog;
-    private TextView webcamUrlTitleAddStill, webCamCategoryButton, progressText;
+    private TextView webCamUrlTitleAddStill, webCamCategoryButton, progressText;
     private StringBuilder selectedCategoriesNames;
     private List<Integer> category_ids;
     private List<Category> allCategories;
@@ -166,6 +162,7 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
         @Override
         protected Integer doInBackground(Void... voids) {
 
+            int taskResult;
             if (Patterns.WEB_URL.matcher(mWebCamUrl).matches()) {
                 checkIfUrlStartsWithHttp();
                 if (ConnectionTester.isConnected(mActivity)) {
@@ -232,7 +229,7 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        mWebCamUrl = webcamUrlAddStill.getText().toString().trim();
+                        mWebCamUrl = webCamUrlAddStill.getText().toString().trim();
                         if (stillImageDirectCheckBox.isChecked()) {
                             openThirdDialog(true);
                             dialog.dismiss();
@@ -273,25 +270,25 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
                 .autoDismiss(false)
                 .build();
 
-        webcamUrlTitleAddStill = (TextView) materialDialog.findViewById(R.id.webcam_url_title_add_still);
+        webCamUrlTitleAddStill = (TextView) materialDialog.findViewById(R.id.webcam_url_title_add_still);
 
         View positiveAction = materialDialog.getActionButton(DialogAction.POSITIVE);
         positiveAction.setEnabled(false);
 
-        webcamUrlAddStill = (EditText) materialDialog.findViewById(R.id.webcam_url_add_still);
-        webcamUrlAddStill.addTextChangedListener(new OnTextChange(positiveAction));
+        webCamUrlAddStill = (EditText) materialDialog.findViewById(R.id.webcam_url_add_still);
+        webCamUrlAddStill.addTextChangedListener(new OnTextChange(positiveAction));
 
         stillImageDirectCheckBox = (CheckBox) materialDialog.findViewById(R.id.still_image_direct_checkBox);
         stillImageDirectCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    webcamUrlTitleAddStill.setText(R.string.enter_direct_url);
-                    webcamUrlAddStill.setHint(R.string.hint_webcam_url);
+                    webCamUrlTitleAddStill.setText(R.string.enter_direct_url);
+                    webCamUrlAddStill.setHint(R.string.hint_webcam_url);
                     materialDialog.setActionButton(DialogAction.POSITIVE, R.string.next);
                 } else {
-                    webcamUrlTitleAddStill.setText(R.string.enter_page_for_analyzing);
-                    webcamUrlAddStill.setHint(R.string.hint_webcam_analyze);
+                    webCamUrlTitleAddStill.setText(R.string.enter_page_for_analyzing);
+                    webCamUrlAddStill.setHint(R.string.hint_webcam_analyze);
                     materialDialog.setActionButton(DialogAction.POSITIVE, R.string.analyze);
                 }
             }
@@ -377,7 +374,7 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
         analyzer.stopTask();
         progressDialog.dismiss();
         openSecondDialogStill();
-        webcamUrlAddStill.setText(mWebCamUrl);
+        webCamUrlAddStill.setText(mWebCamUrl);
         new MaterialDialog.Builder(mActivity)
                 .title(R.string.aborted)
                 .content(R.string.analyzing_canceled)
@@ -386,7 +383,7 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
                 .show();
     }
 
-    private AnalyzerCallback mCallback = new AnalyzerCallback() {
+    private final AnalyzerCallback mCallback = new AnalyzerCallback() {
 
         int i = 0;
         @Override
@@ -401,8 +398,6 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
             });
         }
         @Override
-        public void onAnalyzingFailed(List<Link> links, String Url, int errorCode) {}
-        @Override
         public void onAnalyzingCompleted(List<Link> links, boolean fromComplete) {
             if (links != null) {
                 imageLinks = links;
@@ -412,7 +407,7 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
                 openResultDialog();
             } else if (fromComplete) {
                 openSecondDialogStill();
-                webcamUrlAddStill.setText(mWebCamUrl);
+                webCamUrlAddStill.setText(mWebCamUrl);
                 openNoResultsDialog();
             }
             else openTryAgainDialog();
@@ -435,7 +430,7 @@ public class AddDialog extends DialogFragment implements CategoryDialog.Callback
                     @Override
                     public void onNegative(MaterialDialog dialog) {
                         openSecondDialogStill();
-                        webcamUrlAddStill.setText(mWebCamUrl);
+                        webCamUrlAddStill.setText(mWebCamUrl);
                     }
                 })
                 .show();

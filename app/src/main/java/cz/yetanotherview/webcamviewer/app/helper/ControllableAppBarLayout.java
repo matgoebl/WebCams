@@ -46,7 +46,7 @@ public class ControllableAppBarLayout extends AppBarLayout {
         if (!(getLayoutParams() instanceof CoordinatorLayout.LayoutParams) || !(getParent() instanceof CoordinatorLayout)) {
             throw new IllegalStateException("ControllableAppBarLayout must be a direct child of CoordinatorLayout.");
         } else {
-            mParent = new WeakReference<CoordinatorLayout>((CoordinatorLayout) getParent());
+            mParent = new WeakReference<>((CoordinatorLayout) getParent());
         }
     }
 

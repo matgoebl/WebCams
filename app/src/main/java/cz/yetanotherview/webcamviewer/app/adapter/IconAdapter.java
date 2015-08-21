@@ -29,8 +29,8 @@ import cz.yetanotherview.webcamviewer.app.R;
 
 public class IconAdapter extends BaseAdapter {
 
-    private Context context;
-    private int[] icons;
+    private final Context context;
+    private final int[] icons;
 
     public IconAdapter(Context context, int[] icons) {
         this.context = context;

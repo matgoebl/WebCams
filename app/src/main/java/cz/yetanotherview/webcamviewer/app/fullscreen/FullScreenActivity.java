@@ -30,7 +30,6 @@ import cz.yetanotherview.webcamviewer.app.maps.MapsFragment;
 
 public class FullScreenActivity extends Activity {
 
-    private FullScreenFragment fullScreenFragment;
     private MapsFragment mapsFragment;
 
     @Override
@@ -62,7 +61,7 @@ public class FullScreenActivity extends Activity {
                 return;
             }
             if (!map) {
-                fullScreenFragment = new FullScreenFragment();
+                FullScreenFragment fullScreenFragment = new FullScreenFragment();
                 fullScreenFragment.setArguments(bundle);
                 getFragmentManager().beginTransaction()
                         .add(R.id.full_screen_container, fullScreenFragment).commit();

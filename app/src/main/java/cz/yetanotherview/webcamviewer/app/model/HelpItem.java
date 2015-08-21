@@ -21,8 +21,8 @@ package cz.yetanotherview.webcamviewer.app.model;
 public class HelpItem {
 
     private String title;
-    private int imageUrl;
-    private String videoUrl;
+    private final int imageUrl;
+    private final String videoUrl;
 
     public HelpItem(String title, int imageUrl, String videoUrl) {
         this.title = title;

@@ -31,15 +31,15 @@ import cz.yetanotherview.webcamviewer.app.R;
 
 public class SelectionAdapter extends BaseAdapter {
 
-    private Context context;
-    private CharSequence[] mItems;
-    private int[] mIcons;
+    private final Context context;
+    private final CharSequence[] mItems;
+    private final int[] mIcons;
 
     public SelectionAdapter(Context context, @ArrayRes int arrayResId, int[] icons) {
         this(context, context.getResources().getTextArray(arrayResId), icons);
     }
 
-    public SelectionAdapter(Context context, CharSequence[] items, int[] icons) {
+    private SelectionAdapter(Context context, CharSequence[] items, int[] icons) {
         this.context = context;
         this.mItems = items;
         this.mIcons = icons;

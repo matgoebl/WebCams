@@ -30,9 +30,9 @@ import cz.yetanotherview.webcamviewer.app.R;
 
 public class SpinnerAdapter extends ArrayAdapter<String> {
 
-    private Activity activity;
-    private String[] objects;
-    private int[] icons = {R.drawable.ic_action_device_usb,
+    private final Activity activity;
+    private final String[] objects;
+    private final int[] icons = {R.drawable.ic_action_device_usb,
             R.drawable.ic_action_description};
 
     public SpinnerAdapter(Activity activity, int textViewResourceId,

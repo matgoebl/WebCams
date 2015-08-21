@@ -22,7 +22,7 @@ import cz.yetanotherview.webcamviewer.app.R;
 
 public class Icons {
 
-    private int[] iconIds = {R.drawable.icon_airports, R.drawable.icon_animals, R.drawable.icon_beaches,
+    private final int[] iconIds = {R.drawable.icon_airports, R.drawable.icon_animals, R.drawable.icon_beaches,
             R.drawable.icon_bridges, R.drawable.icon_buildings, R.drawable.icon_castles,
             R.drawable.icon_cities, R.drawable.icon_constructions, R.drawable.icon_harbours,
             R.drawable.icon_churches, R.drawable.icon_indoors, R.drawable.icon_lakes,
@@ -36,7 +36,7 @@ public class Icons {
             R.drawable.icon_unknown, R.drawable.icon_custom0, R.drawable.icon_custom1, R.drawable.icon_custom2,
             R.drawable.icon_custom3, R.drawable.icon_custom4};
 
-    private String[] iconNames = {"airports", "animals", "beaches", "bridges", "buildings", "castles",
+    private final String[] iconNames = {"airports", "animals", "beaches", "bridges", "buildings", "castles",
             "cities", "constructions", "harbours", "churches", "indoors", "lakes", "landscapes",
             "market_square", "mountains", "others", "parks", "pools", "radio_studios", "railways",
             "rivers", "ski_resorts", "traffic_cameras", "universities", "all_imported", "country",
