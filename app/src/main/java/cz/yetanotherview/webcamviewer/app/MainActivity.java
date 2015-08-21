@@ -229,6 +229,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setEmptyView(findViewById(R.id.list_empty));
+        mRecyclerView.setControllableAppBarLayout(controllableAppBarLayout);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         if (selectedCategory == 0) {
@@ -395,7 +396,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (mAdapter != null) {
             reInitializeRecyclerViewAdapter();
             floatingActionMenu.showMenuButton(true);
-            controllableAppBarLayout.expandToolbar();
+            if (mAdapter.getItemCount() != 0) {
+                controllableAppBarLayout.expandToolbar();
+            }
         }
     }
 
