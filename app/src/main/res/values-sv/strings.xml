@@ -186,7 +186,7 @@
 <string name="buffering">"Buffrar"</string>
 <string name="error">"Fel"</string>
 <string name="something_is_wrong">"Något är fel"</string>
-<string name="error_hw">"Felaktig hårdvaruacceleration"</string>
+<string name="error_hw">"Felaktig hårdvaruacceleration."</string>
 <string name="presentation">"Presentation"</string>
 <string name="manually_adding">"Lägg till manuellt"</string>
 <string name="picture">"BIld"</string>
@@ -279,4 +279,5 @@
 <string name="bad_location">"Bad Location"</string>
 <string name="play_maximize">"Play or Maximize"</string>
 <string name="play">"Play"</string>
+<string name="disable_and_try_again">"Would you like to disable it and try again?"</string>
 </resources>

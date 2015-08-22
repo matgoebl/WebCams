@@ -186,7 +186,7 @@
 <string name="buffering">"Puffern…"</string>
 <string name="error">"Fehler"</string>
 <string name="something_is_wrong">"Etwas ist falsch"</string>
-<string name="error_hw">"Fehler bei der Hardwarebeschleunigung"</string>
+<string name="error_hw">"Fehler bei der Hardwarebeschleunigung."</string>
 <string name="presentation">"Präsentation"</string>
 <string name="manually_adding">"Manuelles Hinzufügen"</string>
 <string name="picture">"Bild"</string>
@@ -279,4 +279,5 @@
 <string name="bad_location">"Schlechter Ort"</string>
 <string name="play_maximize">"Abspielen oder maximieren"</string>
 <string name="play">"Abspielen"</string>
+<string name="disable_and_try_again">"Would you like to disable it and try again?"</string>
 </resources>

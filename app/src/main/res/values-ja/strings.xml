@@ -186,7 +186,7 @@
 <string name="buffering">"バッファー中"</string>
 <string name="error">"エラー"</string>
 <string name="something_is_wrong">"何か問題が発生しました"</string>
-<string name="error_hw">"ハードウェアアクセラレーションでエラー"</string>
+<string name="error_hw">"ハードウェアアクセラレーションでエラー."</string>
 <string name="presentation">"プレゼンテーション"</string>
 <string name="manually_adding">"手動で追加"</string>
 <string name="picture">"写真"</string>
@@ -279,4 +279,5 @@
 <string name="bad_location">"場所の間違い"</string>
 <string name="play_maximize">"再生または最大化"</string>
 <string name="play">"再生"</string>
+<string name="disable_and_try_again">"Would you like to disable it and try again?"</string>
 </resources>

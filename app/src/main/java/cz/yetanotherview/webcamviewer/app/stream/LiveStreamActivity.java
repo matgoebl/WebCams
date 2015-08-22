@@ -58,6 +58,7 @@ public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
     private MediaPlayer mMediaPlayer;
     private int mVideoWidth;
     private int mVideoHeight;
+    private boolean mHardwareAccelerationError;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,6 +94,8 @@ public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
                     }
                 })
                 .show();
+
+        mHardwareAccelerationError = false;
     }
 
     @Override
@@ -150,24 +153,6 @@ public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
         }
     }
 
-    @Override
-    public void eventHardwareAccelerationError() {
-        Log.e(TAG, "Error with hardware acceleration");
-        dialog.dismiss();
-        releasePlayer();
-        new MaterialDialog.Builder(this)
-                .title(R.string.error)
-                .content(R.string.error_hw)
-                .positiveText(android.R.string.ok)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        finish();
-                    }
-                })
-                .show();
-    }
-
     private void setSize(int width, int height) {
         mVideoWidth = width;
         mVideoHeight = height;
@@ -219,7 +204,11 @@ public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
             vlcVout.attachViews();
 
             mMediaPlayer.setEventListener(this);
-            mMediaPlayer.setMedia(new Media(mLibVLC, Uri.parse(mFilePath)));
+            Media media = new Media(mLibVLC, Uri.parse(mFilePath));
+            if (mHardwareAccelerationError) {
+                media.setHWDecoderEnabled(false, false);
+            }
+            mMediaPlayer.setMedia(media);
             mMediaPlayer.play();
         } catch (Exception e) {
             streamError();
@@ -229,10 +218,10 @@ public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
     private void releasePlayer() {
         if (mLibVLC == null)
             return;
-        mMediaPlayer.stop();
         vlcVout.detachViews();
-        mLibVLC = null;
-        mMediaPlayer = null;
+        vlcVout.removeCallback(this);
+        mLibVLC.release();
+        mMediaPlayer.release();
 
         mVideoWidth = 0;
         mVideoHeight = 0;
@@ -261,5 +250,33 @@ public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public void eventHardwareAccelerationError() {
+        Log.e(TAG, "Error with hardware acceleration");
+        mHardwareAccelerationError = true;
+        dialog.dismiss();
+        releasePlayer();
+        String content = getString(R.string.error_hw) + " " + getString(R.string.disable_and_try_again);
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .title(R.string.error)
+                .content(content)
+                .positiveText(R.string.Yes)
+                .negativeText(R.string.No)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        createPlayer();
+                    }
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        finish();
+                    }
+                })
+                .build();
+        if(!isFinishing()) {
+            dialog.show();
+        }
     }
 }

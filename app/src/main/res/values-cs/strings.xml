@@ -186,7 +186,7 @@
 <string name="buffering">"Načítání do vyrovnávací paměti..."</string>
 <string name="error">"Chyba"</string>
 <string name="something_is_wrong">"Něco je špatně"</string>
-<string name="error_hw">"Chyba při použití hardwarové akcelerace"</string>
+<string name="error_hw">"Chyba při použití hardwarové akcelerace."</string>
 <string name="presentation">"Prezentace"</string>
 <string name="manually_adding">"Ruční přidávání"</string>
 <string name="picture">"Snímek"</string>
@@ -279,4 +279,5 @@
 <string name="bad_location">"Špatné umístění"</string>
 <string name="play_maximize">"Přehrát nebo Maximalizovat"</string>
 <string name="play">"Přehrát"</string>
+<string name="disable_and_try_again">"Chcete ji vypnout a zkusit to znovu?"</string>
 </resources>

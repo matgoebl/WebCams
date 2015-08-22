@@ -186,7 +186,7 @@
 <string name="buffering">"Buffering..."</string>
 <string name="error">"Error"</string>
 <string name="something_is_wrong">"Something is wrong"</string>
-<string name="error_hw">"Error with hardware acceleration"</string>
+<string name="error_hw">"Error with hardware acceleration."</string>
 <string name="presentation">"Presentation"</string>
 <string name="manually_adding">"Manually adding"</string>
 <string name="picture">"Picture"</string>
@@ -279,4 +279,5 @@
 <string name="bad_location">"Bad Location"</string>
 <string name="play_maximize">"Play or Maximize"</string>
 <string name="play">"Play"</string>
+<string name="disable_and_try_again">"Would you like to disable it and try again?"</string>
 </resources>
