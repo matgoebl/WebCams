@@ -1,4 +1,4 @@
-# WebCam Viewer
+# WebCams
 
 [![Presentation video](http://img.youtube.com/vi/ZCMKV54rQVM/0.jpg)](http://www.youtube.com/watch?v=ZCMKV54rQVM)
 
