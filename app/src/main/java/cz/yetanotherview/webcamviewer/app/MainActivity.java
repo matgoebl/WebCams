@@ -358,7 +358,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (firstRun){
             showWelcomeDialog();
             mNavigationDrawerFragment.openDrawer();
-            // Save the state
             firstRun = false;
             saveToPref();
         }
@@ -950,7 +949,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 });
 
                 dialog.show();
-            } else cannotBeEdited();
+            } else floatingActionMenu.open(true);
 
         } else listIsEmpty();
         db.closeDB();
@@ -1090,12 +1089,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
     private void listIsEmpty() {
         Snackbar.make(findViewById(R.id.coordinator_layout), R.string.list_is_empty,
-                Snackbar.LENGTH_SHORT).show();
-        temporaryHideFab(true);
-    }
-
-    private void cannotBeEdited() {
-        Snackbar.make(findViewById(R.id.coordinator_layout), R.string.this_category_cannot_be_edited,
                 Snackbar.LENGTH_SHORT).show();
         temporaryHideFab(true);
     }
