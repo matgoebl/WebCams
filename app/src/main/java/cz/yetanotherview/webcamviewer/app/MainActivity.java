@@ -304,19 +304,19 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             }
         });
 
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                int scrollLimit = 4;
-                boolean scrollLimitReached = Math.abs(dy) >= scrollLimit;
-                if (scrollLimitReached) {
-                    boolean scrollUp = dy >= 0;
-                    if (scrollUp) {
-                        floatingActionMenu.hideMenuButton(true);
-                    } else floatingActionMenu.showMenuButton(true);
-                }
-            }
-        });
+//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                int scrollLimit = 4;
+//                boolean scrollLimitReached = Math.abs(dy) >= scrollLimit;
+//                if (scrollLimitReached) {
+//                    boolean scrollUp = dy >= 0;
+//                    if (scrollUp) {
+//                        floatingActionMenu.hideMenuButton(true);
+//                    } else floatingActionMenu.showMenuButton(true);
+//                }
+//            }
+//        });
 
         floatingActionMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
@@ -892,12 +892,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         db.undoDeleteWebCam(webCamToDelete, webCamToDelete_category_ids);
                         db.closeDB();
                         reInitializeDrawerListAdapter();
-                        //ToDo: Only until it's officially added to Clans/FloatingActionButton
-                        floatingActionMenu.showMenuButton(true);
+                        //ToDo: Only temporary solution until FloatingActionMenuBehavior don't work correctly
+                        //floatingActionMenu.showMenuButton(true);
                     }
                 })
                 .show();
-        temporaryHideFab(false);
+        //temporaryHideFab(false);
     }
 
     @Override
@@ -1084,29 +1084,29 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private void saveDone() {
         Snackbar.make(findViewById(R.id.coordinator_layout), R.string.dialog_positive_toast_message,
                 Snackbar.LENGTH_SHORT).show();
-        temporaryHideFab(true);
+        //temporaryHideFab(true);
     }
 
     private void listIsEmpty() {
         Snackbar.make(findViewById(R.id.coordinator_layout), R.string.list_is_empty,
                 Snackbar.LENGTH_SHORT).show();
-        temporaryHideFab(true);
+        //temporaryHideFab(true);
     }
 
-    //ToDo: Only until it's officially added to Clans/FloatingActionButton
-    private void temporaryHideFab(boolean durationShort) {
-        floatingActionMenu.hideMenuButton(true);
-
-        int duration = 2000;
-        if (!durationShort) duration = 3200;
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                floatingActionMenu.showMenuButton(true);
-            }
-        }, duration);
-    }
+    //ToDo: Only temporary solution until FloatingActionMenuBehavior don't work correctly
+//    private void temporaryHideFab(boolean durationShort) {
+//        floatingActionMenu.hideMenuButton(true);
+//
+//        int duration = 2000;
+//        if (!durationShort) duration = 3200;
+//
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                floatingActionMenu.showMenuButton(true);
+//            }
+//        }, duration);
+//    }
 
     private void refresh() {
         if (mAdapter.getItemCount() != 0) {
