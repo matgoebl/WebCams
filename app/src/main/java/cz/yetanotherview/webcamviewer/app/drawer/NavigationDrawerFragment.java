@@ -185,7 +185,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
     }
 
-    private void selectItem(int position, boolean closeDrawer) {
+    public void selectItem(int position, boolean closeDrawer) {
         Category category = mDrawerAdapter.getItem(position);
         mCurrentSelectedPosition = position;
         mCurrentSelectedName = category.getCategoryName();

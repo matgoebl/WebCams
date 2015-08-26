@@ -16,7 +16,7 @@
 * *****************************************************************************
 */
 
-package cz.yetanotherview.webcamviewer.app.stream;
+package cz.yetanotherview.webcamviewer.app.fullscreen;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -58,7 +59,7 @@ public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
     private MediaPlayer mMediaPlayer;
     private int mVideoWidth;
     private int mVideoHeight;
-    private boolean mHardwareAccelerationError;
+    private boolean mHardwareAccelerationError, hwAcceleration;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,13 @@ public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
         String mName = extras.getString("name");
         if (mName == null) {
             mName = "";
+        }
+
+        // Screen Always on
+        if (extras.getBoolean("screenAlwaysOn")) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
         // Go FullScreen only on KitKat and up
@@ -96,6 +104,7 @@ public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
                 .show();
 
         mHardwareAccelerationError = false;
+        hwAcceleration = extras.getBoolean("hwAcceleration");
     }
 
     @Override
@@ -205,8 +214,13 @@ public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
 
             mMediaPlayer.setEventListener(this);
             Media media = new Media(mLibVLC, Uri.parse(mFilePath));
-            if (mHardwareAccelerationError) {
+            if (!hwAcceleration || mHardwareAccelerationError) {
                 media.setHWDecoderEnabled(false, false);
+                Log.d("HW Acc: ", "Disabled");
+            }
+            else {
+                media.setHWDecoderEnabled(true, false);
+                Log.d("HW Acc: ", "Enabled");
             }
             mMediaPlayer.setMedia(media);
             mMediaPlayer.play();

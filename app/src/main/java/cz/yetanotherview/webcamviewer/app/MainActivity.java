@@ -35,7 +35,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -81,7 +80,7 @@ import cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView;
 import cz.yetanotherview.webcamviewer.app.helper.OnFilterTextChange;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.settings.SettingsActivity;
-import cz.yetanotherview.webcamviewer.app.stream.LiveStreamActivity;
+import cz.yetanotherview.webcamviewer.app.fullscreen.LiveStreamActivity;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.ImmersiveMode;
 import cz.yetanotherview.webcamviewer.app.helper.SendToInbox;
@@ -103,9 +102,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private WebCamAdapter mAdapter;
     private ManualSelectionAdapter manualSelectionAdapter;
     private int numberOfColumns, mOrientation, selectedCategory, autoRefreshInterval, mPosition,
-            webCamToDeletePosition, selectedCategoryId;
-    private boolean firstRun, fullScreen, autoRefresh, autoRefreshFullScreenOnly, screenAlwaysOn,
-            imagesOnOff;
+            webCamToDeletePosition, selectedCategoryId, latestCategoryPos;
+    private boolean firstRun, fullScreen, autoRefresh, autoRefreshFullScreenOnly, hwAcceleration,
+            screenAlwaysOn, imagesOnOff, latestCategory;
     private String mStringSignature, sortOrder;
     private FloatingActionMenu floatingActionMenu;
     private android.support.design.widget.FloatingActionButton floatingActionButtonNative;
@@ -157,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         // Other core init
         initToolbar();
         initDrawer();
+        loadLastSelectedCategory();
         initRecyclerView();
         initFab();
         initPullToRefresh();
@@ -171,6 +171,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             materialDialog.dismiss();
         }
         controllableAppBarLayout.removeOnOffsetChangedListener(this);
+        if (latestCategory) {
+            latestCategoryPos = selectedCategory;
+            saveToPref();
+        }
     }
 
     @Override
@@ -209,6 +213,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 mToolbar, collapsingToolbar, toolbarImage);
     }
 
+    private void loadLastSelectedCategory() {
+        if (latestCategory) {
+            mNavigationDrawerFragment.selectItem(latestCategoryPos, false);
+        }
+    }
+
     private void initRecyclerView() {
         int mLayoutId = 1;
         if (numberOfColumns == 1 && mOrientation == 1) {
@@ -223,15 +233,15 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         else if(numberOfColumns == 2 && mOrientation == 2) {
             mLayoutId = 3;
         }
-        mLayoutManager = new StaggeredGridLayoutManager(mLayoutId, StaggeredGridLayoutManager.VERTICAL);
 
+        mLayoutManager = new StaggeredGridLayoutManager(mLayoutId, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView = (EmptyRecyclerView) findViewById(R.id.mainList);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setEmptyView(findViewById(R.id.list_empty));
         mRecyclerView.setControllableAppBarLayout(controllableAppBarLayout);
-
         mRecyclerView.setLayoutManager(mLayoutManager);
+
         if (selectedCategory == 0) {
             allWebCams = db.getAllWebCams(sortOrder);
         }
@@ -303,20 +313,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 assignSelectedWebCamsToCategory();
             }
         });
-
-//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                int scrollLimit = 4;
-//                boolean scrollLimitReached = Math.abs(dy) >= scrollLimit;
-//                if (scrollLimitReached) {
-//                    boolean scrollUp = dy >= 0;
-//                    if (scrollUp) {
-//                        floatingActionMenu.hideMenuButton(true);
-//                    } else floatingActionMenu.showMenuButton(true);
-//                }
-//            }
-//        });
 
         floatingActionMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
@@ -669,6 +665,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         intent.putExtra("url", webCam.getUrl());
         intent.putExtra("name", webCam.getName());
         intent.putExtra("fullScreen", fullScreen);
+        intent.putExtra("hwAcceleration", hwAcceleration);
+        intent.putExtra("screenAlwaysOn", screenAlwaysOn);
         startActivity(intent);
     }
 
@@ -893,11 +891,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         db.closeDB();
                         reInitializeDrawerListAdapter();
                         //ToDo: Only temporary solution until FloatingActionMenuBehavior don't work correctly
-                        //floatingActionMenu.showMenuButton(true);
+                        floatingActionMenu.showMenuButton(true);
                     }
                 })
                 .show();
-        //temporaryHideFab(false);
+        temporaryHideFab(false);
     }
 
     @Override
@@ -1084,29 +1082,30 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private void saveDone() {
         Snackbar.make(findViewById(R.id.coordinator_layout), R.string.dialog_positive_toast_message,
                 Snackbar.LENGTH_SHORT).show();
-        //temporaryHideFab(true);
+        temporaryHideFab(true);
     }
 
     private void listIsEmpty() {
         Snackbar.make(findViewById(R.id.coordinator_layout), R.string.list_is_empty,
                 Snackbar.LENGTH_SHORT).show();
-        //temporaryHideFab(true);
+        temporaryHideFab(true);
     }
 
     //ToDo: Only temporary solution until FloatingActionMenuBehavior don't work correctly
-//    private void temporaryHideFab(boolean durationShort) {
-//        floatingActionMenu.hideMenuButton(true);
-//
-//        int duration = 2000;
-//        if (!durationShort) duration = 3200;
-//
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                floatingActionMenu.showMenuButton(true);
-//            }
-//        }, duration);
-//    }
+    private void temporaryHideFab(boolean durationShort) {
+        floatingActionMenu.hideMenuButton(true);
+
+        // ToDo: Need to be tested on real device
+        int duration = 2400;
+        if (!durationShort) duration = 4200;
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                floatingActionMenu.showMenuButton(true);
+            }
+        }, duration);
+    }
 
     private void refresh() {
         if (mAdapter.getItemCount() != 0) {
@@ -1161,7 +1160,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         autoRefresh = preferences.getBoolean("pref_auto_refresh", false);
         autoRefreshInterval = preferences.getInt("pref_auto_refresh_interval", 30000);
         autoRefreshFullScreenOnly = preferences.getBoolean("pref_auto_refresh_fullscreen", false);
+        hwAcceleration = preferences.getBoolean("pref_screen_hw_acceleration", true);
         screenAlwaysOn = preferences.getBoolean("pref_screen_always_on", false);
+        latestCategory = preferences.getBoolean("pref_last_category", false);
+        latestCategoryPos = preferences.getInt("pref_last_category_pos", 0);
     }
 
     private void saveToPref(){
@@ -1171,6 +1173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         editor.putInt("number_of_columns", numberOfColumns);
         editor.putBoolean("pref_images_on_off", imagesOnOff);
         editor.putString("pref_sort_order", sortOrder);
+        editor.putInt("pref_last_category_pos", latestCategoryPos);
         editor.apply();
     }
 }

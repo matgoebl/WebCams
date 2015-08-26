@@ -56,6 +56,14 @@ public class TranslatorsDialog extends DialogFragment {
                 })
                 .build();
 
+        String dmitryProfile =
+                "https://plus.google.com/106699989673791238897";
+
+        initTranslator(dialog, "cs", R.id.translators_language_czech_flag, "cz",
+                R.id.translators_language_czech, R.id.translators_language_czech_container,
+                new SimpleIntentOnClickListener(getActivity(),
+                        Utils.YAV));
+
         initTranslator(dialog, "en", R.id.translators_language_english_flag, "us",
                 R.id.translators_language_english, R.id.translators_language_english_container,
                 new SimpleIntentOnClickListener(getActivity(),
@@ -81,20 +89,25 @@ public class TranslatorsDialog extends DialogFragment {
                 new SimpleIntentOnClickListener(getActivity(),
                         "http://0p.no/"));
 
-        initTranslator(dialog, "sv", R.id.translators_language_swedish_flag, "se",
-                R.id.translators_language_swedish, R.id.translators_language_swedish_container,
+        initTranslator(dialog, "ru", R.id.translators_language_russian_flag, "ru",
+                R.id.translators_language_russian, R.id.translators_language_russian_container,
                 new SimpleIntentOnClickListener(getActivity(),
-                        "https://plus.google.com/118225125255733736923"));
-
-        initTranslator(dialog, "cs", R.id.translators_language_czech_flag, "cz",
-                R.id.translators_language_czech, R.id.translators_language_czech_container,
-                new SimpleIntentOnClickListener(getActivity(),
-                        Utils.YAV));
+                        dmitryProfile));
 
         initTranslator(dialog, "sk", R.id.translators_language_slovak_flag, "sk",
                 R.id.translators_language_slovak, R.id.translators_language_slovak_container,
                 new SimpleIntentOnClickListener(getActivity(),
                         Utils.YAV));
+
+        initTranslator(dialog, "sv", R.id.translators_language_swedish_flag, "se",
+                R.id.translators_language_swedish, R.id.translators_language_swedish_container,
+                new SimpleIntentOnClickListener(getActivity(),
+                        "https://plus.google.com/118225125255733736923"));
+
+        initTranslator(dialog, "uk", R.id.translators_language_ukrainian_flag, "ua",
+                R.id.translators_language_ukrainian, R.id.translators_language_ukrainian_container,
+                new SimpleIntentOnClickListener(getActivity(),
+                        dmitryProfile));
 
         return dialog;
     }

@@ -279,5 +279,9 @@
 <string name="bad_location">"Schlechter Ort"</string>
 <string name="play_maximize">"Abspielen oder maximieren"</string>
 <string name="play">"Abspielen"</string>
-<string name="disable_and_try_again">"Would you like to disable it and try again?"</string>
+<string name="disable_and_try_again">"Möchtest du es deaktivieren und es erneut versuchen?"</string>
+<string name="pref_hw_acceleration">"HW Beschleunigung"</string>
+<string name="pref_hw_acceleration_summary">"Aktiviere oder deaktiviere HW Beschleunigung für das Livedekodieren von Streams (deaktiviere es wenn Probleme auftreten)"</string>
+<string name="pref_last_category">"Neueste Kategorie"</string>
+<string name="pref_last_category_summary">"Zeige die zuletzt geöffnete Kategorie nach dem Start"</string>
 </resources>

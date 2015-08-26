@@ -58,6 +58,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -286,7 +287,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             selectedMarker = ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null);
                             markerNotSelected = ResourcesCompat.getDrawable(getResources(), R.drawable.marker_not_selected, null);
 
-                            markers = new ArrayList<>();
+                            markers = new LinkedList<>();
                             for (WebCam webCam : importWebCams) {
                                 LatLng latLng = new LatLng(webCam.getLatitude(), webCam.getLongitude());
                                 Marker marker = new Marker(mMapView, webCam.getName(), String.valueOf(webCam.getLatitude()) +
@@ -553,6 +554,8 @@ public class JsonFetcherDialog extends DialogFragment {
                     mMapView.setZoom(3);
                 } else mMapView.setZoom(8);
 
+                //ToDO: https://github.com/mapbox/mapbox-android-sdk/issues/822
+                //mMapView.setClusteringEnabled(true, null, 9);
                 mMapView.addMarkers(markers);
                 mMapView.setDiskCacheEnabled(false);
 
@@ -570,7 +573,7 @@ public class JsonFetcherDialog extends DialogFragment {
                     }
                 });
 
-                selMarkers = new ArrayList<>();
+                selMarkers = new LinkedList<>();
                 mMapView.addItemizedOverlay(new ItemizedIconOverlay(mActivity, markers,
                         new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
 

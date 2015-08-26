@@ -49,7 +49,7 @@
             android:parentActivityName=".MainActivity">
         </activity>
         <activity
-            android:name=".stream.LiveStreamActivity"
+            android:name=".fullscreen.LiveStreamActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppCompatFullScreen"
             android:parentActivityName=".MainActivity">

@@ -27,6 +27,33 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/translators_language_czech_container"
+            style="@style/translators_container">
+
+            <LinearLayout
+                style="@style/inner_container"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/translators_language_czech_flag"
+                    style="@style/translators_flag" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/inner_container"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/translators_name"
+                    android:text="@string/tomas_valenta"/>
+
+                <TextView
+                    android:id="@+id/translators_language_czech"
+                    style="@style/translators_language" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/translators_language_english_container"
             style="@style/translators_container">
 
@@ -51,8 +78,16 @@
                     android:id="@+id/translators_language_english"
                     style="@style/translators_language" />
             </LinearLayout>
-
         </LinearLayout>
+    </LinearLayout>
+
+    <include
+        layout="@layout/view_full_divider"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/translators_language_english2_container"
@@ -79,17 +114,7 @@
                     android:id="@+id/translators_language_english2"
                     style="@style/translators_language" />
             </LinearLayout>
-
         </LinearLayout>
-    </LinearLayout>
-
-    <include
-        layout="@layout/view_full_divider"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/translators_language_german_container"
@@ -116,8 +141,16 @@
                     android:id="@+id/translators_language_german"
                     style="@style/translators_language" />
             </LinearLayout>
-
         </LinearLayout>
+    </LinearLayout>
+
+    <include
+        layout="@layout/view_full_divider"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/translators_language_japanese_container"
@@ -144,17 +177,7 @@
                     android:id="@+id/translators_language_japanese"
                     style="@style/translators_language" />
             </LinearLayout>
-
         </LinearLayout>
-    </LinearLayout>
-
-    <include
-        layout="@layout/view_full_divider"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/translators_language_norwegian_container"
@@ -181,8 +204,79 @@
                     android:id="@+id/translators_language_norwegian"
                     style="@style/translators_language" />
             </LinearLayout>
-
         </LinearLayout>
+    </LinearLayout>
+
+    <include
+        layout="@layout/view_full_divider"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/translators_language_russian_container"
+            style="@style/translators_container">
+
+            <LinearLayout
+                style="@style/inner_container"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/translators_language_russian_flag"
+                    style="@style/translators_flag" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/inner_container"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/translators_name"
+                    android:text="@string/dmitry_grechka"/>
+
+                <TextView
+                    android:id="@+id/translators_language_russian"
+                    style="@style/translators_language" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/translators_language_slovak_container"
+            style="@style/translators_container">
+
+            <LinearLayout
+                style="@style/inner_container"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/translators_language_slovak_flag"
+                    style="@style/translators_flag" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/inner_container"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/translators_name"
+                    android:text="@string/tomas_valenta"/>
+
+                <TextView
+                    android:id="@+id/translators_language_slovak"
+                    style="@style/translators_language" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <include
+        layout="@layout/view_full_divider"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/translators_language_swedish_container"
@@ -209,20 +303,10 @@
                     android:id="@+id/translators_language_swedish"
                     style="@style/translators_language" />
             </LinearLayout>
-
         </LinearLayout>
-    </LinearLayout>
-
-    <include
-        layout="@layout/view_full_divider"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/translators_language_czech_container"
+            android:id="@+id/translators_language_ukrainian_container"
             style="@style/translators_container">
 
             <LinearLayout
@@ -230,7 +314,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/translators_language_czech_flag"
+                    android:id="@+id/translators_language_ukrainian_flag"
                     style="@style/translators_flag" />
             </LinearLayout>
 
@@ -240,69 +324,13 @@
 
                 <TextView
                     style="@style/translators_name"
-                    android:text="@string/tomas_valenta"/>
+                    android:text="@string/dmitry_grechka"/>
 
                 <TextView
-                    android:id="@+id/translators_language_czech"
+                    android:id="@+id/translators_language_ukrainian"
                     style="@style/translators_language" />
             </LinearLayout>
-
         </LinearLayout>
-        <LinearLayout
-            android:id="@+id/translators_language_slovak_container"
-            style="@style/translators_container">
-
-            <LinearLayout
-                style="@style/inner_container"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/translators_language_slovak_flag"
-                    style="@style/translators_flag" />
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/inner_container"
-                android:orientation="vertical">
-
-                <TextView
-                    style="@style/translators_name"
-                    android:text="@string/tomas_valenta"/>
-
-                <TextView
-                    android:id="@+id/translators_language_slovak"
-                    style="@style/translators_language" />
-            </LinearLayout>
-
-        </LinearLayout>
-        <!--<LinearLayout-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight=".50"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:paddingTop="@dimen/twelve_padding"-->
-            <!--android:paddingBottom="@dimen/twelve_padding">-->
-
-            <!--<LinearLayout-->
-                <!--style="@style/inner_container"-->
-                <!--android:orientation="horizontal">-->
-
-                <!--<ImageView-->
-                    <!--style="@style/translators_flag" />-->
-            <!--</LinearLayout>-->
-
-            <!--<LinearLayout-->
-                <!--style="@style/inner_container"-->
-                <!--android:orientation="vertical">-->
-
-                <!--<TextView-->
-                    <!--style="@style/translators_name"/>-->
-
-                <!--<TextView-->
-                    <!--style="@style/translators_language" />-->
-            <!--</LinearLayout>-->
-
-        <!--</LinearLayout>-->
     </LinearLayout>
 
 </LinearLayout>

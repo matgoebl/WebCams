@@ -280,4 +280,8 @@
 <string name="play_maximize">"Play or Maximize"</string>
 <string name="play">"Play"</string>
 <string name="disable_and_try_again">"Would you like to disable it and try again?"</string>
+<string name="pref_hw_acceleration">"HW Acceleration"</string>
+<string name="pref_hw_acceleration_summary">"Enable or disable HW acceleration for decoding live streams (disable only when problems occur)"</string>
+<string name="pref_last_category">"Latest category"</string>
+<string name="pref_last_category_summary">"After application start open the last used category"</string>
 </resources>
