@@ -27,7 +27,7 @@ This application has a community based database and also allows you to manually 
 - Completely free, open source and no Ads!
 
 **Supported languages:**
-* English, Czech, Slovak, German, Japanese, Norwegian, Swedish, Russian, Ukrainian([Want to translate?](http://goo.gl/MUJqYZ))
+* English, Czech, Slovak, German, Japanese, Norwegian, Swedish, Russian, Ukrainian ([Want to translate?](http://goo.gl/MUJqYZ))
 
 **Bug reports:**
 
