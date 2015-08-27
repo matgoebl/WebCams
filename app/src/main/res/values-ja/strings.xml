@@ -279,5 +279,11 @@
 <string name="bad_location">"場所の間違い"</string>
 <string name="play_maximize">"再生または最大化"</string>
 <string name="play">"再生"</string>
-<string name="disable_and_try_again">"Would you like to disable it and try again?"</string>
+<string name="disable_and_try_again">"無効にしてもう一度試しますか?"</string>
+<string name="pref_hw_acceleration">"HW アクセラレーション"</string>
+<string name="pref_hw_acceleration_summary">"ライブストリームのデコードために HW アクセラレーションを有効または無効にします (問題が発生した場合にのみ無効にしてください)"</string>
+<string name="pref_last_category">"最後のカテゴリー"</string>
+<string name="pref_last_category_summary">"アプリケーションの起動後に、最後に使用したカテゴリーを開きます"</string>
+<string name="hw_acceleration_disabled">"HW アクセラレーションは無効です"</string>
+<string name="hw_acceleration_enabled">"HW アクセラレーションは有効です"</string>
 </resources>

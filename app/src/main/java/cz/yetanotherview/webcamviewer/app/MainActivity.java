@@ -1095,9 +1095,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private void temporaryHideFab(boolean durationShort) {
         floatingActionMenu.hideMenuButton(true);
 
-        // ToDo: Need to be tested on real device
-        int duration = 2400;
-        if (!durationShort) duration = 4200;
+        int duration = 2000;
+        if (!durationShort) duration = 3200;
 
         new Handler().postDelayed(new Runnable() {
             @Override

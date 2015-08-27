@@ -280,4 +280,10 @@
 <string name="play_maximize">"Відтворити або на повний екран"</string>
 <string name="play">"Відтворити"</string>
 <string name="disable_and_try_again">"Хочете відключити і спробувати знову?"</string>
+<string name="pref_hw_acceleration">"Апаратне прискорення"</string>
+<string name="pref_hw_acceleration_summary">"Ввімкнути або вимкнути апаратне прискорення для обробки прямих трансляцій (вимикати тільки у разі проблем)."</string>
+<string name="pref_last_category">"Останні категорії"</string>
+<string name="pref_last_category_summary">"Відкривати останню використовану катерогію після запуску додатку"</string>
+<string name="hw_acceleration_disabled">"Апаратне прискорення вимкнено"</string>
+<string name="hw_acceleration_enabled">"Апаратне прискорення ввімкнено"</string>
 </resources>

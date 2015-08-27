@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -105,6 +106,12 @@ public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
 
         mHardwareAccelerationError = false;
         hwAcceleration = extras.getBoolean("hwAcceleration");
+
+        String toastText;
+        if (hwAcceleration) {
+            toastText = getString(R.string.hw_acceleration_enabled);
+        } else toastText = getString(R.string.hw_acceleration_disabled);
+        Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
     }
 
     @Override

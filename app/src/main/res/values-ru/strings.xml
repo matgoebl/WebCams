@@ -280,4 +280,10 @@
 <string name="play_maximize">"Воспроизвести или на полный экран"</string>
 <string name="play">"Воспроизвести"</string>
 <string name="disable_and_try_again">"Хотите отключить и попробовать снова?"</string>
+<string name="pref_hw_acceleration">"Аппаратное ускорение"</string>
+<string name="pref_hw_acceleration_summary">"Включить или отключить аппаратное ускорение для обработки прямых трансляций (отключать только в случае проблем)."</string>
+<string name="pref_last_category">"Последние категории"</string>
+<string name="pref_last_category_summary">"Открывать последнюю использованную категорию после запуска приложения"</string>
+<string name="hw_acceleration_disabled">"Аппаратное ускорение отключено"</string>
+<string name="hw_acceleration_enabled">"Аппаратное ускорение включено"</string>
 </resources>
