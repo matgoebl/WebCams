@@ -18,17 +18,17 @@
 
 package cz.yetanotherview.webcamviewer.app.fullscreen;
 
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.helper.ImmersiveMode;
 import cz.yetanotherview.webcamviewer.app.maps.MapsFragment;
 
-public class FullScreenActivity extends Activity {
+public class FullScreenActivity extends AppCompatActivity {
 
     private MapsFragment mapsFragment;
 

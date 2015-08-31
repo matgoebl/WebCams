@@ -18,12 +18,12 @@
 
 package cz.yetanotherview.webcamviewer.app.fullscreen;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
@@ -42,7 +42,7 @@ import org.videolan.libvlc.MediaPlayer;
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.helper.ImmersiveMode;
 
-public class LiveStreamActivity extends Activity implements IVLCVout.Callback,
+public class LiveStreamActivity extends AppCompatActivity implements IVLCVout.Callback,
         MediaPlayer.EventListener, LibVLC.HardwareAccelerationError {
 
     private final static String TAG = "LiveStreamActivity";

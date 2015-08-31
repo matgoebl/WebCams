@@ -18,34 +18,37 @@
 
 package cz.yetanotherview.webcamviewer.app.widget;
 
-import android.app.Activity;
 import android.appwidget.*;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.afollestad.materialdialogs.ColorChooserDialog;
+
 import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
-import cz.yetanotherview.webcamviewer.app.actions.ColorChooserDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.WidgetConfigureAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
-public class WvWidgetConfigure extends Activity implements ColorChooserDialog.Callback{
+public class WvWidgetConfigure extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
 
     private static final String PREFS_NAME
             = "cz.yetanotherview.webcamviewer.app_widgets";
     private static final String PREF_PREFIX_KEY = "widget_";
-    private static int selectedColorIndex = 0;
-    private static int selectedColorIndex2 = 2;
+    private static int preSelectedColorText;
+    private static int preSelectedColorBackground;
     private ImageView text_color_icon, background_color_icon;
 
     private static Context context;
@@ -80,8 +83,10 @@ public class WvWidgetConfigure extends Activity implements ColorChooserDialog.Ca
         LinearLayout backgroundColorButton = (LinearLayout) findViewById(R.id.background_color);
         text_color_icon = (ImageView) findViewById(R.id.text_color_icon);
         text_color_icon.setColorFilter(Utils.getColor(getResources(), R.color.white));
+        preSelectedColorText = Utils.getColor(getResources(), R.color.white);
         background_color_icon = (ImageView) findViewById(R.id.background_color_icon);
         background_color_icon.setColorFilter(Utils.getColor(getResources(), R.color.widget_background));
+        preSelectedColorBackground = Utils.getColor(getResources(), R.color.widget_background);
 
         context = this;
 
@@ -135,19 +140,25 @@ public class WvWidgetConfigure extends Activity implements ColorChooserDialog.Ca
         textColorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showCustomColorChooser(selectedColorIndex, true);
+                showColorChooser(preSelectedColorText, true);
             }
         });
         backgroundColorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showCustomColorChooser(selectedColorIndex2, false);
+                showColorChooser(preSelectedColorBackground, false);
             }
         });
     }
 
-    private void showCustomColorChooser(int preselected, Boolean fromTextButton) {
-        new ColorChooserDialog().show(this, preselected, fromTextButton);
+    private void showColorChooser(int preselected, Boolean fromTextButton) {
+        new ColorChooserDialog.Builder(this, R.string.color_chooser)
+                .accentMode(fromTextButton)
+                .doneButton(R.string.done)
+                .cancelButton(android.R.string.cancel)
+                .backButton(R.string.back)
+                .preselect(preselected)
+                .show();
     }
 
     private static void saveSelectedPref(Context context, int appWidgetId, String key, String value) {
@@ -183,14 +194,13 @@ public class WvWidgetConfigure extends Activity implements ColorChooserDialog.Ca
     }
 
     @Override
-    public void onColorSelection(int index, int color, int darker, boolean fromTextButton) {
-        if (fromTextButton) {
-            selectedColorIndex = index;
+    public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int color) {
+        if (dialog.isAccentMode()) {
+            preSelectedColorText = color;
             saveSelectedColor(context, mAppWidgetId, "textColor", color);
             text_color_icon.setColorFilter(color);
-        }
-        else {
-            selectedColorIndex2 = index;
+        } else {
+            preSelectedColorBackground = color;
             saveSelectedColor(context, mAppWidgetId, "backgroundColor", color);
             background_color_icon.setColorFilter(color);
         }
