@@ -552,11 +552,7 @@ public class JsonFetcherDialog extends DialogFragment {
                 mMapView.setCenter(latLng);
                 if (knownLocation.isNotDetected()) {
                     mMapView.setZoom(3);
-                } else mMapView.setZoom(8);
-
-                //ToDO: https://github.com/mapbox/mapbox-android-sdk/issues/822
-                //mMapView.setClusteringEnabled(true, null, 9);
-                mMapView.addMarkers(markers);
+                } else mMapView.setZoom(7);
                 mMapView.setDiskCacheEnabled(false);
 
                 ImageButton zoomIn = (ImageButton) dialog.findViewById(R.id.zoomIn);
@@ -574,7 +570,7 @@ public class JsonFetcherDialog extends DialogFragment {
                 });
 
                 selMarkers = new LinkedList<>();
-                mMapView.addItemizedOverlay(new ItemizedIconOverlay(mActivity, markers,
+                ItemizedIconOverlay mItemizedIconOverlay = new ItemizedIconOverlay(mActivity, markers,
                         new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
 
                             @Override
@@ -604,7 +600,10 @@ public class JsonFetcherDialog extends DialogFragment {
                             public boolean onItemLongPress(int i, Marker marker) {
                                 return true;
                             }
-                        }));
+                        });
+
+                mItemizedIconOverlay.setClusteringEnabled(true, null, 8);
+                mMapView.addItemizedOverlay(mItemizedIconOverlay);
 
                 initDialog.dismiss();
                 dialog.show();
