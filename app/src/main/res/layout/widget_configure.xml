@@ -54,12 +54,12 @@
             android:id="@+id/text_color"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_action_image_palette"
+            <View
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginRight="@dimen/main_middle_margin"
                 android:layout_marginEnd="@dimen/main_middle_margin"
+                android:background="@drawable/circle"
                 android:id="@+id/text_color_icon" />
 
             <TextView
@@ -81,12 +81,12 @@
             android:id="@+id/background_color"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_action_image_palette"
+            <View
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginRight="@dimen/main_middle_margin"
                 android:layout_marginEnd="@dimen/main_middle_margin"
+                android:background="@drawable/circle"
                 android:id="@+id/background_color_icon" />
 
             <TextView

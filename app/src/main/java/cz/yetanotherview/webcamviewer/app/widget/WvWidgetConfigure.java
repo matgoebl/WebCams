@@ -22,6 +22,7 @@ import android.appwidget.*;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -29,7 +30,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.ColorChooserDialog;
@@ -49,7 +49,7 @@ public class WvWidgetConfigure extends AppCompatActivity implements ColorChooser
     private static final String PREF_PREFIX_KEY = "widget_";
     private static int preSelectedColorText;
     private static int preSelectedColorBackground;
-    private ImageView text_color_icon, background_color_icon;
+    private GradientDrawable textColorBgShape, backgroundColorBgShape;
 
     private static Context context;
 
@@ -64,6 +64,7 @@ public class WvWidgetConfigure extends AppCompatActivity implements ColorChooser
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        context = this;
 
         mAppWidgetId = getIntent().getIntExtra(
                 AppWidgetManager.EXTRA_APPWIDGET_ID,
@@ -73,7 +74,7 @@ public class WvWidgetConfigure extends AppCompatActivity implements ColorChooser
         setResult(RESULT_CANCELED, mResult);
 
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish(); // Invalid widget ID, closing
+            finish();
             return;
         }
 
@@ -81,14 +82,16 @@ public class WvWidgetConfigure extends AppCompatActivity implements ColorChooser
         View mEmptyView = findViewById(R.id.empty_text);
         LinearLayout textColorButton = (LinearLayout) findViewById(R.id.text_color);
         LinearLayout backgroundColorButton = (LinearLayout) findViewById(R.id.background_color);
-        text_color_icon = (ImageView) findViewById(R.id.text_color_icon);
-        text_color_icon.setColorFilter(Utils.getColor(getResources(), R.color.white));
-        preSelectedColorText = Utils.getColor(getResources(), R.color.white);
-        background_color_icon = (ImageView) findViewById(R.id.background_color_icon);
-        background_color_icon.setColorFilter(Utils.getColor(getResources(), R.color.widget_background));
-        preSelectedColorBackground = Utils.getColor(getResources(), R.color.widget_background);
 
-        context = this;
+        View text_color_icon = findViewById(R.id.text_color_icon);
+        preSelectedColorText = Utils.getColor(getResources(), R.color.white);
+        textColorBgShape = (GradientDrawable) text_color_icon.getBackground();
+        textColorBgShape.setColor(preSelectedColorText);
+
+        View background_color_icon = findViewById(R.id.background_color_icon);
+        preSelectedColorBackground = Utils.getColor(getResources(), R.color.widget_background);
+        backgroundColorBgShape = (GradientDrawable) background_color_icon.getBackground();
+        backgroundColorBgShape.setColor(preSelectedColorBackground);
 
         DatabaseHelper db = new DatabaseHelper(context);
         allWebCams = db.getAllWebCams(Utils.nameSortOrder);
@@ -198,11 +201,11 @@ public class WvWidgetConfigure extends AppCompatActivity implements ColorChooser
         if (dialog.isAccentMode()) {
             preSelectedColorText = color;
             saveSelectedColor(context, mAppWidgetId, "textColor", color);
-            text_color_icon.setColorFilter(color);
+            textColorBgShape.setColor(color);
         } else {
             preSelectedColorBackground = color;
             saveSelectedColor(context, mAppWidgetId, "backgroundColor", color);
-            background_color_icon.setColorFilter(color);
+            backgroundColorBgShape.setColor(color);
         }
     }
 }
