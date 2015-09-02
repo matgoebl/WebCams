@@ -37,6 +37,7 @@ public class DeleteAllWebCams {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putLong("pref_last_fetch_popular", 0);
         editor.putLong("pref_last_fetch_latest", 0);
+        editor.putInt("pref_last_category_pos", 0);
         editor.apply();
     }
 }
