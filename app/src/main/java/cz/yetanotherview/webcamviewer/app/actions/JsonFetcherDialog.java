@@ -552,7 +552,7 @@ public class JsonFetcherDialog extends DialogFragment {
                 mMapView.setCenter(latLng);
                 if (knownLocation.isNotDetected()) {
                     mMapView.setZoom(3);
-                } else mMapView.setZoom(7);
+                } else mMapView.setZoom(8);
                 mMapView.setDiskCacheEnabled(false);
 
                 ImageButton zoomIn = (ImageButton) dialog.findViewById(R.id.zoomIn);
@@ -602,7 +602,7 @@ public class JsonFetcherDialog extends DialogFragment {
                             }
                         });
 
-                mItemizedIconOverlay.setClusteringEnabled(true, null, 8);
+                mItemizedIconOverlay.setClusteringEnabled(true, null, 7);
                 mMapView.addItemizedOverlay(mItemizedIconOverlay);
 
                 initDialog.dismiss();
