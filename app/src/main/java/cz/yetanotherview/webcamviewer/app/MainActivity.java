@@ -552,9 +552,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
     @Override
     public void onOffsetChanged(AppBarLayout controllableAppBarLayout, int i) {
-        if (i == 0) {
-            swipeRefreshLayout.setEnabled(true);
-        } else swipeRefreshLayout.setEnabled(false);
+        swipeRefreshLayout.setEnabled(i == 0);
     }
 
     private void showSortDialog() {
@@ -666,7 +664,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         intent.putExtra("name", webCam.getName());
         intent.putExtra("fullScreen", fullScreen);
         intent.putExtra("hwAcceleration", hwAcceleration);
-        intent.putExtra("screenAlwaysOn", screenAlwaysOn);
         startActivity(intent);
     }
 

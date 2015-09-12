@@ -268,8 +268,8 @@
 <string name="no_webcams_to_show_description">"Hvis du vil legge til nye webkamera, bruk den røde knappen eller endre på søket ditt."</string>
 <string name="analyzer_tool">"Analyseringsverktøy"</string>
 <string name="category_management">"Kategoribehandling"</string>
-<string name="no_nearby_webcams_send_location">"Oh no! :( No nearby WebCams found. Do you want to help improve the community database by sending your approximate location for manual research?"</string>
-<string name="research">"Research"</string>
+<string name="no_nearby_webcams_send_location">"Ånei! :( Fant ingen nære webkamera. Vil du sende inn posisjonen din for manuell undersøkelse?"</string>
+<string name="research">"Forskning"</string>
 <string name="stay_tuned_content_approval">"The request was sent. In the next hours or days please try to find your WebCam in the community database or you can simply check the last added WebCams by using function: Import from Server -&gt; Latest WebCams."</string>
 <string name="stay_tuned_content_wrong">"The report was sent. In the next hours or days please try to update the reported WebCam from the community database by using function: Import from Server -&gt; Latest WebCams."</string>
 <string name="stay_tuned_content_location">"The report with location was sent. In the next hours or days please try again to find nearby WebCams or you can simply check the last added WebCams by using function: Import from Server -&gt; Latest WebCams."</string>
@@ -279,11 +279,11 @@
 <string name="bad_location">"Feil med lokasjon"</string>
 <string name="play_maximize">"Spill eller maksimér"</string>
 <string name="play">"Spill"</string>
-<string name="disable_and_try_again">"Would you like to disable it and try again?"</string>
+<string name="disable_and_try_again">"Vil du deaktivere og prøve igjen?"</string>
 <string name="pref_hw_acceleration">"Maskinvareakselerasjon"</string>
-<string name="pref_hw_acceleration_summary">"Enable or disable HW acceleration for decoding live streams (disable only when problems occur)"</string>
+<string name="pref_hw_acceleration_summary">"Aktiver/deaktiver maskinvareakselerasjon for dekoding av strømmer (deaktiver ved problemer)"</string>
 <string name="pref_last_category">"Siste kategori"</string>
-<string name="pref_last_category_summary">"After application start open the last used category"</string>
+<string name="pref_last_category_summary">"Ved oppstart, åpne sist brukte kategori"</string>
 <string name="hw_acceleration_disabled">"Maskinvareakselerasjon deaktivert"</string>
 <string name="hw_acceleration_enabled">"Maskinvareakselerasjon aktivert"</string>
 </resources>

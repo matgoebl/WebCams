@@ -25,10 +25,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -38,6 +38,8 @@ import org.videolan.libvlc.IVLCVout;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
+
+import java.util.ArrayList;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.helper.ImmersiveMode;
@@ -50,16 +52,18 @@ public class LiveStreamActivity extends AppCompatActivity implements IVLCVout.Ca
     private String mFilePath;
     private MaterialDialog dialog;
 
-    // display surface
-    private SurfaceView mSurface;
     private FrameLayout playButton;
 
+    // display surface
+    private SurfaceView mSurface;
+    private SurfaceHolder holder;
+
     // media player
-    private LibVLC mLibVLC;
-    private IVLCVout vlcVout;
-    private MediaPlayer mMediaPlayer;
+    private LibVLC libvlc;
+    private MediaPlayer mMediaPlayer = null;
     private int mVideoWidth;
     private int mVideoHeight;
+
     private boolean mHardwareAccelerationError, hwAcceleration;
 
     @Override
@@ -77,19 +81,14 @@ public class LiveStreamActivity extends AppCompatActivity implements IVLCVout.Ca
             mName = "";
         }
 
-        // Screen Always on
-        if (extras.getBoolean("screenAlwaysOn")) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        } else {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
-
         // Go FullScreen only on KitKat and up
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && extras.getBoolean("fullScreen")) {
             new ImmersiveMode().goFullScreen(this);
         }
 
         mSurface = (SurfaceView) findViewById(R.id.surface);
+        holder = mSurface.getHolder();
+
         playButton = (FrameLayout) findViewById(R.id.play_button);
 
         dialog = new MaterialDialog.Builder(this)
@@ -123,7 +122,7 @@ public class LiveStreamActivity extends AppCompatActivity implements IVLCVout.Ca
     @Override
     protected void onResume() {
         super.onResume();
-        createPlayer();
+        createPlayer(mFilePath);
     }
 
     @Override
@@ -138,44 +137,16 @@ public class LiveStreamActivity extends AppCompatActivity implements IVLCVout.Ca
         releasePlayer();
     }
 
-    @Override
-    public void onNewLayout(IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
-        setSize(width, height);
-    }
-
-    @Override
-    public void onSurfacesCreated(IVLCVout ivlcVout) {}
-
-    @Override
-    public void onSurfacesDestroyed(IVLCVout ivlcVout) {}
-
-    @Override
-    public void onEvent(MediaPlayer.Event event) {
-        switch (event.type) {
-            case MediaPlayer.Event.Playing:
-                Log.i(TAG, "MediaPlayerPlaying");
-                dialog.dismiss();
-                break;
-            case MediaPlayer.Event.EndReached:
-                Log.i(TAG, "MediaPlayerEndReached");
-                releasePlayer();
-                playButton.setVisibility(View.VISIBLE);
-                break;
-            case MediaPlayer.Event.EncounteredError:
-                Log.i(TAG, "MediaPlayerEncounteredError");
-                dialog.dismiss();
-                streamError();
-                break;
-        }
-    }
-
+    /*************
+     * Surface
+     *************/
     private void setSize(int width, int height) {
         mVideoWidth = width;
         mVideoHeight = height;
         if (mVideoWidth * mVideoHeight <= 1)
             return;
 
-        if(mSurface == null)
+        if(holder == null || mSurface == null)
             return;
 
         // get screen size
@@ -199,6 +170,9 @@ public class LiveStreamActivity extends AppCompatActivity implements IVLCVout.Ca
         else
             w = (int) (h * videoAR);
 
+        // force surface buffer size
+        holder.setFixedSize(mVideoWidth, mVideoHeight);
+
         // set display size
         LayoutParams lp = mSurface.getLayoutParams();
         lp.width = w;
@@ -207,29 +181,42 @@ public class LiveStreamActivity extends AppCompatActivity implements IVLCVout.Ca
         mSurface.invalidate();
     }
 
-    private void createPlayer() {
+    /*************
+     * Player
+     *************/
+
+    private void createPlayer(String media) {
         releasePlayer();
         try {
-            mLibVLC = new LibVLC();
-            mLibVLC.setOnHardwareAccelerationError(this);
+            // Create LibVLC
+            ArrayList<String> options = new ArrayList<>();
+            //options.add("--aout=opensles");
+            //options.add("--audio-time-stretch"); // time stretching
+            //options.add("-vvv"); // verbosity
+            libvlc = new LibVLC(options);
+            libvlc.setOnHardwareAccelerationError(this);
+            holder.setKeepScreenOn(true);
 
-            mMediaPlayer = new MediaPlayer(mLibVLC);
-            vlcVout = mMediaPlayer.getVLCVout();
-            vlcVout.setVideoView(mSurface);
-            vlcVout.addCallback(this);
-            vlcVout.attachViews();
-
+            // Create media player
+            mMediaPlayer = new MediaPlayer(libvlc);
             mMediaPlayer.setEventListener(this);
-            Media media = new Media(mLibVLC, Uri.parse(mFilePath));
+
+            // Set up video output
+            final IVLCVout vout = mMediaPlayer.getVLCVout();
+            vout.setVideoView(mSurface);
+            vout.addCallback(this);
+            vout.attachViews();
+
+            Media m = new Media(libvlc, Uri.parse(media));
             if (!hwAcceleration || mHardwareAccelerationError) {
-                media.setHWDecoderEnabled(false, false);
+                m.setHWDecoderEnabled(false, false);
                 Log.d("HW Acc: ", "Disabled");
             }
             else {
-                media.setHWDecoderEnabled(true, false);
+                m.setHWDecoderEnabled(true, false);
                 Log.d("HW Acc: ", "Enabled");
             }
-            mMediaPlayer.setMedia(media);
+            mMediaPlayer.setMedia(m);
             mMediaPlayer.play();
         } catch (Exception e) {
             streamError();
@@ -237,16 +224,92 @@ public class LiveStreamActivity extends AppCompatActivity implements IVLCVout.Ca
     }
 
     private void releasePlayer() {
-        if (mLibVLC == null)
+        if (libvlc == null)
             return;
-        vlcVout.detachViews();
-        vlcVout.removeCallback(this);
-        mLibVLC.release();
-        mMediaPlayer.release();
+        mMediaPlayer.stop();
+        final IVLCVout vout = mMediaPlayer.getVLCVout();
+        vout.removeCallback(this);
+        vout.detachViews();
+        holder = null;
+        libvlc.release();
+        libvlc = null;
 
         mVideoWidth = 0;
         mVideoHeight = 0;
     }
+
+    /*************
+     * Events
+     *************/
+
+    @Override
+    public void onEvent(MediaPlayer.Event event) {
+        switch (event.type) {
+            case MediaPlayer.Event.Playing:
+                Log.i(TAG, "MediaPlayerPlaying");
+                dialog.dismiss();
+                break;
+            case MediaPlayer.Event.EndReached:
+                Log.i(TAG, "MediaPlayerEndReached");
+                releasePlayer();
+                playButton.setVisibility(View.VISIBLE);
+                break;
+            case MediaPlayer.Event.EncounteredError:
+                Log.i(TAG, "MediaPlayerEncounteredError");
+                dialog.dismiss();
+                streamError();
+                break;
+        }
+    }
+
+    @Override
+    public void onNewLayout(IVLCVout vout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
+        if (width * height == 0)
+            return;
+
+        // store video size
+        mVideoWidth = width;
+        mVideoHeight = height;
+        setSize(mVideoWidth, mVideoHeight);
+    }
+
+    @Override
+    public void onSurfacesCreated(IVLCVout vout) {}
+
+    @Override
+    public void onSurfacesDestroyed(IVLCVout vout) {}
+
+    @Override
+    public void eventHardwareAccelerationError() {
+        Log.e(TAG, "Error with hardware acceleration");
+        mHardwareAccelerationError = true;
+        dialog.dismiss();
+        this.releasePlayer();
+        String content = getString(R.string.error_hw) + " " + getString(R.string.disable_and_try_again);
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .title(R.string.error)
+                .content(content)
+                .positiveText(R.string.Yes)
+                .negativeText(R.string.No)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        createPlayer(mFilePath);
+                    }
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        finish();
+                    }
+                })
+                .build();
+        if(!isFinishing()) {
+            dialog.show();
+        }
+    }
+
+    /*************
+     * Others
+     *************/
 
     public void rePlay(View view) {
         playButton.setVisibility(View.GONE);
@@ -271,33 +334,5 @@ public class LiveStreamActivity extends AppCompatActivity implements IVLCVout.Ca
                     }
                 })
                 .show();
-    }
-
-    @Override
-    public void eventHardwareAccelerationError() {
-        Log.e(TAG, "Error with hardware acceleration");
-        mHardwareAccelerationError = true;
-        dialog.dismiss();
-        releasePlayer();
-        String content = getString(R.string.error_hw) + " " + getString(R.string.disable_and_try_again);
-        MaterialDialog dialog = new MaterialDialog.Builder(this)
-                .title(R.string.error)
-                .content(content)
-                .positiveText(R.string.Yes)
-                .negativeText(R.string.No)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        createPlayer();
-                    }
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        finish();
-                    }
-                })
-                .build();
-        if(!isFinishing()) {
-            dialog.show();
-        }
     }
 }
