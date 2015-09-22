@@ -18,7 +18,6 @@
 
 package cz.yetanotherview.webcamviewer.app;
 
-import android.annotation.TargetApi;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -82,7 +81,6 @@ import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.settings.SettingsActivity;
 import cz.yetanotherview.webcamviewer.app.fullscreen.LiveStreamActivity;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
-import cz.yetanotherview.webcamviewer.app.helper.ImmersiveMode;
 import cz.yetanotherview.webcamviewer.app.helper.SendToInbox;
 import cz.yetanotherview.webcamviewer.app.listener.WebCamListener;
 import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
@@ -103,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private ManualSelectionAdapter manualSelectionAdapter;
     private int numberOfColumns, mOrientation, selectedCategory, autoRefreshInterval, mPosition,
             webCamToDeletePosition, selectedCategoryId, latestCategoryPos;
-    private boolean firstRun, fullScreen, autoRefresh, autoRefreshFullScreenOnly, hwAcceleration,
+    private boolean firstRun, autoRefresh, autoRefreshFullScreenOnly, hwAcceleration,
             screenAlwaysOn, imagesOnOff, latestCategory;
     private String mStringSignature, sortOrder;
     private FloatingActionMenu floatingActionMenu;
@@ -125,18 +123,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         loadPref();
 
         // Inflating main layout
-        if (fullScreen) {
-            setContentView(R.layout.activity_main_immersive);
-        }
-        else setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
         // Auto Refreshing
         if (autoRefresh && !autoRefreshFullScreenOnly) {
             autoRefreshTimer(autoRefreshInterval);
         }
-
-        // Go FullScreen only on KitKat and up
-        goToFullScreen();
 
         // Screen Always on
         if (screenAlwaysOn){
@@ -190,12 +182,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         super.onDestroy();
         Utils.deleteTmpCache();
         new ClearImageCache(this).execute();
-    }
-
-    private void goToFullScreen() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && fullScreen) {
-            new ImmersiveMode().goFullScreen(this);
-        }
     }
 
     private void initToolbar() {
@@ -318,12 +304,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             @Override
             public void onMenuToggle(boolean b) {
                 if (b) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !fullScreen) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         getWindow().setStatusBarColor(Utils.getColor(getResources(), R.color.black_transparent));
                     }
                     floatingActionButtonNative.setVisibility(View.INVISIBLE);
                 } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !fullScreen) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         getWindow().setStatusBarColor(Utils.getColor(getResources(), android.R.color.transparent));
                     }
                     floatingActionButtonNative.setVisibility(View.VISIBLE);
@@ -428,7 +414,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             public boolean onMenuItemActionExpand(MenuItem item) {
                 controllableAppBarLayout.collapseToolbar(true);
                 collapsingToolbar.setCollapsedTitleTextColor(Utils.getColor(getResources(), android.R.color.transparent));
-                goToFullScreen();
                 searchView.setIconified(false);
                 searchView.requestFocus();
                 return true;
@@ -438,7 +423,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 controllableAppBarLayout.expandToolbar(true);
                 collapsingToolbar.setCollapsedTitleTextColor(Utils.getColor(getResources(), R.color.white));
-                goToFullScreen();
                 searchView.clearFocus();
                 return true;
             }
@@ -662,7 +646,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         Intent intent = new Intent(this, LiveStreamActivity.class);
         intent.putExtra("url", webCam.getUrl());
         intent.putExtra("name", webCam.getName());
-        intent.putExtra("fullScreen", fullScreen);
         intent.putExtra("hwAcceleration", hwAcceleration);
         startActivity(intent);
     }
@@ -677,7 +660,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         intent.putExtra("url", url);
         intent.putExtra("latitude", webCam.getLatitude());
         intent.putExtra("longitude", webCam.getLongitude());
-        intent.putExtra("fullScreen", fullScreen);
         intent.putExtra("autoRefresh", autoRefresh);
         intent.putExtra("interval", autoRefreshInterval);
         intent.putExtra("screenAlwaysOn", screenAlwaysOn);
@@ -1133,26 +1115,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         timer.schedule(doAsynchronousTask, 0, interval);
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && fullScreen) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
-    }
-
     private void loadPref(){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         firstRun = preferences.getBoolean("pref_first_run", true);
         numberOfColumns = preferences.getInt("number_of_columns", 1);
         imagesOnOff = preferences.getBoolean("pref_images_on_off", true);
         sortOrder = preferences.getString("pref_sort_order", Utils.defaultSortOrder);
-        fullScreen = preferences.getBoolean("pref_full_screen", false);
         autoRefresh = preferences.getBoolean("pref_auto_refresh", false);
         autoRefreshInterval = preferences.getInt("pref_auto_refresh_interval", 30000);
         autoRefreshFullScreenOnly = preferences.getBoolean("pref_auto_refresh_fullscreen", false);

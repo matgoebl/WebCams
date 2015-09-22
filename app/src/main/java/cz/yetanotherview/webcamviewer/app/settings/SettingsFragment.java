@@ -22,7 +22,6 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -80,11 +79,6 @@ public class SettingsFragment extends PreferenceFragment {
 
         addPreferencesFromResource(R.xml.preferences);
         context = getActivity().getApplicationContext();
-
-        // Enable immersive mode setting only on Kitkat and up
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getPreferenceScreen().findPreference("pref_full_screen").setEnabled(true);
-        }
 
         db = new DatabaseHelper(context);
 

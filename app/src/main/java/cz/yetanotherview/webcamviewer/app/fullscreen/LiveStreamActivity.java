@@ -82,7 +82,7 @@ public class LiveStreamActivity extends AppCompatActivity implements IVLCVout.Ca
         }
 
         // Go FullScreen only on KitKat and up
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && extras.getBoolean("fullScreen")) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             new ImmersiveMode().goFullScreen(this);
         }
 
@@ -226,6 +226,7 @@ public class LiveStreamActivity extends AppCompatActivity implements IVLCVout.Ca
     private void releasePlayer() {
         if (libvlc == null)
             return;
+        mMediaPlayer.pause();
         mMediaPlayer.stop();
         final IVLCVout vout = mMediaPlayer.getVLCVout();
         vout.removeCallback(this);

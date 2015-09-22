@@ -71,7 +71,7 @@ public class Utils {
     public static final String GOOGLE_GSON_VERSION = "2.3.1";
     public static final String JSOUP_VERSION = "1.8.2";
     public static final String MAPBOX_VERSION = "0.7.4";
-    public static final String FAB_VERSION = "1.6.0";
+    public static final String FAB_VERSION = "1.6.1";
 
     private static final String CORE = "http://api.yetanotherview.cz/api/v3/";
     private static final String PHP = ".php";

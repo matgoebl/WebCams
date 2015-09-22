@@ -39,11 +39,10 @@ public class FullScreenActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         boolean map = bundle.getBoolean("map");
-        boolean fullScreen = bundle.getBoolean("fullScreen");
         boolean screenAlwaysOn = bundle.getBoolean("screenAlwaysOn");
 
         // Go FullScreen only on KitKat and up
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && fullScreen) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             new ImmersiveMode().goFullScreen(this);
         }
 

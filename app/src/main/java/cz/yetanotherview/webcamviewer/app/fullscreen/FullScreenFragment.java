@@ -55,7 +55,6 @@ public class FullScreenFragment extends Fragment {
     private String url;
     private StringSignature stringSignature;
     private double latitude, longitude;
-    private boolean fullScreen;
     private ImageButton backButton;
     private DiaporamaAdapter diaporamaAdapter;
 
@@ -72,7 +71,6 @@ public class FullScreenFragment extends Fragment {
         int autoRefreshInterval = bundle.getInt("interval");
         latitude = bundle.getDouble("latitude");
         longitude = bundle.getDouble("longitude");
-        fullScreen = bundle.getBoolean("fullScreen");
 
         if (signature != null) {
             stringSignature = new StringSignature(signature);
@@ -84,10 +82,7 @@ public class FullScreenFragment extends Fragment {
         }
 
         // Back button
-        if (fullScreen) {
-            backButton = (ImageButton) view.findViewById(R.id.back_button);
-            backButton.setVisibility(View.VISIBLE);
-        }
+        backButton = (ImageButton) view.findViewById(R.id.back_button);
 
         initViews();
         initDiaporamaAdapter();
@@ -105,9 +100,7 @@ public class FullScreenFragment extends Fragment {
         View.OnClickListener touchImageViewsListener = new View.OnClickListener() {
             public void onClick(View v) {
                 mButtonsLayout.setVisibility(View.VISIBLE);
-                if (!fullScreen) {
-                    getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-                }
+                getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
                 mButtonsLayout.startAnimation(fadeOut);
             }
         };
@@ -170,14 +163,12 @@ public class FullScreenFragment extends Fragment {
             }
         });
 
-        if (fullScreen) {
-            backButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getActivity().finish();
-                }
-            });
-        }
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
     }
 
     private void initDiaporamaAdapter() {
@@ -194,9 +185,7 @@ public class FullScreenFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if (!fullScreen) {
-                    getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-                }
+                getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
                 mButtonsLayout.setVisibility(View.GONE);
             }
 

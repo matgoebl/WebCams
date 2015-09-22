@@ -29,14 +29,6 @@
         android:icon="@drawable/settings_hw_acc"
         android:summary="@string/pref_hw_acceleration_summary" />
 
-     <CheckBoxPreference
-        android:key="pref_full_screen"
-        android:enabled="false"
-        android:checked="false"
-        android:title="@string/pref_full_screen"
-        android:icon="@drawable/settings_immersive_mode"
-        android:summary="@string/pref_full_screen_summ" />
-
     <CheckBoxPreference
         android:key="pref_screen_always_on"
         android:checked="false"
