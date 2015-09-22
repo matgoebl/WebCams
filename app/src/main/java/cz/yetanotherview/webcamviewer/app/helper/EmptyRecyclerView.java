@@ -21,6 +21,7 @@ package cz.yetanotherview.webcamviewer.app.helper;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
@@ -29,7 +30,7 @@ public class EmptyRecyclerView extends RecyclerView {
 
     @Nullable
     private View emptyView;
-    private ControllableAppBarLayout controllableAppBarLayout;
+    private AppBarLayout appBarLayout;
 
     public EmptyRecyclerView(Context context) {
         super(context);
@@ -87,8 +88,8 @@ public class EmptyRecyclerView extends RecyclerView {
         checkIfEmpty();
     }
 
-    public void setControllableAppBarLayout(@Nullable ControllableAppBarLayout controllableAppBarLayout) {
-        this.controllableAppBarLayout = controllableAppBarLayout;
+    public void setAppBarLayout(@Nullable AppBarLayout appBarLayout) {
+        this.appBarLayout = appBarLayout;
         checkIfEmpty();
     }
 
@@ -99,10 +100,10 @@ public class EmptyRecyclerView extends RecyclerView {
 
         if (getAdapter().getItemCount() > 0) {
             emptyView.setVisibility(GONE);
-            controllableAppBarLayout.expandToolbar(true);
+            appBarLayout.setExpanded(true, true);
         } else {
             emptyView.setVisibility(VISIBLE);
-            controllableAppBarLayout.collapseToolbar(true);
+            appBarLayout.setExpanded(false, true);
         }
     }
 }

@@ -31,7 +31,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.SearchView;
@@ -74,7 +73,6 @@ import cz.yetanotherview.webcamviewer.app.fullscreen.FullScreenActivity;
 import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
 import cz.yetanotherview.webcamviewer.app.help.HelpActivity;
 import cz.yetanotherview.webcamviewer.app.helper.ClearImageCache;
-import cz.yetanotherview.webcamviewer.app.helper.ControllableAppBarLayout;
 import cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView;
 import cz.yetanotherview.webcamviewer.app.helper.OnFilterTextChange;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
@@ -87,7 +85,7 @@ import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks, WebCamListener,
-        JsonFetcherDialog.ReloadInterface, AppBarLayout.OnOffsetChangedListener {
+        JsonFetcherDialog.ReloadInterface {
 
     private DatabaseHelper db;
     private WebCam webCam, webCamToDelete;
@@ -106,10 +104,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private String mStringSignature, sortOrder;
     private FloatingActionMenu floatingActionMenu;
     private android.support.design.widget.FloatingActionButton floatingActionButtonNative;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbar;
-    private ControllableAppBarLayout controllableAppBarLayout;
+    private AppBarLayout appBarLayout;
     private MaterialDialog materialDialog, indeterminateProgress;
     private MenuItem searchItem;
     private SearchView searchView;
@@ -151,7 +148,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         loadLastSelectedCategory();
         initRecyclerView();
         initFab();
-        initPullToRefresh();
         initFirstRun();
         initReceivedIntent();
     }
@@ -162,7 +158,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         if (materialDialog != null) {
             materialDialog.dismiss();
         }
-        controllableAppBarLayout.removeOnOffsetChangedListener(this);
         if (latestCategory) {
             latestCategoryPos = selectedCategory;
             saveToPref();
@@ -172,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     @Override
     public void onResume() {
         super.onResume();
-        controllableAppBarLayout.addOnOffsetChangedListener(this);
         reInitializeRecyclerViewAdapter();
         reInitializeDrawerListAdapter();
     }
@@ -189,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         setSupportActionBar(mToolbar);
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         toolbarImage = (ImageView) findViewById(R.id.toolbar_image);
-        controllableAppBarLayout = (ControllableAppBarLayout) findViewById(R.id.controllable_app_bar_layout);
+        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
     }
 
     private void initDrawer() {
@@ -225,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setEmptyView(findViewById(R.id.list_empty));
-        mRecyclerView.setControllableAppBarLayout(controllableAppBarLayout);
+        mRecyclerView.setAppBarLayout(appBarLayout);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         if (selectedCategory == 0) {
@@ -318,24 +312,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         });
     }
 
-    private void initPullToRefresh() {
-        // Pull To Refresh 1/2
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-        swipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.swipe, R.color.yellow);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refresh();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 2500);
-            }
-        });
-    }
-
     private void initFirstRun() {
         if (firstRun){
             showWelcomeDialog();
@@ -378,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             reInitializeRecyclerViewAdapter();
             floatingActionMenu.showMenuButton(true);
             if (mAdapter.getItemCount() != 0) {
-                controllableAppBarLayout.expandToolbar();
+                appBarLayout.setExpanded(true, false);
             }
         }
     }
@@ -412,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                controllableAppBarLayout.collapseToolbar(true);
+                appBarLayout.setExpanded(false, true);
                 collapsingToolbar.setCollapsedTitleTextColor(Utils.getColor(getResources(), android.R.color.transparent));
                 searchView.setIconified(false);
                 searchView.requestFocus();
@@ -421,7 +397,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                controllableAppBarLayout.expandToolbar(true);
+                appBarLayout.setExpanded(true, true);
                 collapsingToolbar.setCollapsedTitleTextColor(Utils.getColor(getResources(), R.color.white));
                 searchView.clearFocus();
                 return true;
@@ -532,11 +508,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onOffsetChanged(AppBarLayout controllableAppBarLayout, int i) {
-        swipeRefreshLayout.setEnabled(i == 0);
     }
 
     private void showSortDialog() {

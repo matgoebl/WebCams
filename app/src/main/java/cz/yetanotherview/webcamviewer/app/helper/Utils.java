@@ -64,7 +64,7 @@ public class Utils {
     public static final String HELP_CATEGORY_MANAGEMENT = "SZGEwhPltJk";
     public static final String HELP_BACKUP_RESTORE = "qVdhrAGEmp4";
 
-    public static final String SUPPORT_LIBRARIES_VERSION = "22.2.1";
+    public static final String SUPPORT_LIBRARIES_VERSION = "23.0.1";
     public static final String GLIDE_VERSION = "3.6.1";
     public static final String LIB_VLC_VERSION = "3.0.0-1.5.90";
     public static final String MATERIAL_DIALOGS_VERSION = "0.7.9.1";

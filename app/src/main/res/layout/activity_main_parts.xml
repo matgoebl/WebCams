@@ -2,24 +2,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_container"
+    <cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView
+        android:id="@+id/mainList"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView
-            android:id="@+id/mainList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:scrollbars="vertical" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/small_floating_action_button"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        app:layout_anchor="@id/controllable_app_bar_layout"
+        app:layout_anchor="@id/app_bar_layout"
         app:layout_anchorGravity="bottom|right|end"
         android:layout_margin="16dp"
         app:fabSize="mini"
