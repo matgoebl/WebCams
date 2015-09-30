@@ -67,11 +67,11 @@ public class Utils {
     public static final String SUPPORT_LIBRARIES_VERSION = "23.0.1";
     public static final String GLIDE_VERSION = "3.6.1";
     public static final String LIB_VLC_VERSION = "3.0.0-1.5.90";
-    public static final String MATERIAL_DIALOGS_VERSION = "0.7.9.1";
+    public static final String MATERIAL_DIALOGS_VERSION = "0.8.1.0";
     public static final String GOOGLE_GSON_VERSION = "2.3.1";
     public static final String JSOUP_VERSION = "1.8.2";
     public static final String MAPBOX_VERSION = "0.7.4";
-    public static final String FAB_VERSION = "1.6.1";
+    public static final String FAB_VERSION = "1.6.1"; //ToDo
 
     private static final String CORE = "http://api.yetanotherview.cz/api/v3/";
     private static final String PHP = ".php";

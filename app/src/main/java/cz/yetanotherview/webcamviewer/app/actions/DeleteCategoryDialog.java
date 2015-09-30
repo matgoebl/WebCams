@@ -26,7 +26,6 @@ import android.os.Bundle;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import cz.yetanotherview.webcamviewer.app.R;
-import cz.yetanotherview.webcamviewer.app.drawer.NavigationDrawerFragment;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.model.Category;
 
@@ -72,17 +71,17 @@ public class DeleteCategoryDialog extends DialogFragment {
     }
 
     private void reloadHost() {
-        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
-                mActivity.getFragmentManager().findFragmentById(R.id.fragment_drawer);
-        if (mNavigationDrawerFragment != null) {
-            mNavigationDrawerFragment.deleteData(position);
-        }
-        CategoryDialog categoryDialog = (CategoryDialog) getFragmentManager().findFragmentByTag("CategoryDialog");
-        if (categoryDialog != null) {
-            categoryDialog.deleteCategoryInAdapter(position);
-            if (mNavigationDrawerFragment != null) {
-                mNavigationDrawerFragment.reloadData();
-            }
-        }
+//        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
+//                mActivity.getFragmentManager().findFragmentById(R.id.fragment_drawer);
+//        if (mNavigationDrawerFragment != null) {
+//            mNavigationDrawerFragment.deleteData(position);
+//        }
+//        CategoryDialog categoryDialog = (CategoryDialog) getFragmentManager().findFragmentByTag("CategoryDialog");
+//        if (categoryDialog != null) {
+//            categoryDialog.deleteCategoryInAdapter(position);
+//            if (mNavigationDrawerFragment != null) {
+//                mNavigationDrawerFragment.reloadData();
+//            }
+//        }
     }
 }

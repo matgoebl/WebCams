@@ -32,7 +32,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.afollestad.materialdialogs.ColorChooserDialog;
+import com.afollestad.materialdialogs.color.ColorChooserDialog;
 
 import java.util.List;
 

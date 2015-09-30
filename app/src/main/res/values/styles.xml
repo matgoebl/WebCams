@@ -17,11 +17,36 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">@color/very_dark_grey</item>
         <item name="android:windowBackground">@color/white</item>
-        <item name="actionBarTheme">@style/ActionBarTheme</item>
+        <!--<item name="actionBarTheme">@style/ActionBarTheme</item>-->
+    </style>
+
+    <style name="Title" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="Title.Expanded" parent="Title">
+        <item name="android:textSize">30sp</item>
+    </style>
+    <style name="Title.Collapsed" parent="Title">
+        <item name="android:textSize">@dimen/abc_text_size_title_material_toolbar</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="ActionBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:titleTextStyle">@color/white</item>
+    </style>
+
+    <style name="ThemeOverlay.ActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
+
+    <style name="Widget.MyApp.ActionBar" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">?colorPrimary</item>
+        <item name="theme">@style/ThemeOverlay.MyApp.ActionBar</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="ThemeOverlay.MyApp.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@color/white</item>
     </style>
 
     <style name="TranslucentStatusBar" parent="AppTheme">
@@ -145,9 +170,6 @@
         <item name="android:textColorHint">@color/hint_gray</item>
     </style>
 
-    <style name="ThemeOverlay.ActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:textCursorDrawable">@null</item>
-    </style>
 
     <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
         <item name="queryBackground">@color/black</item>

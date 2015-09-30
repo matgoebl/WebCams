@@ -104,7 +104,7 @@ public class JsonFetcherDialog extends DialogFragment {
     private String importProgress, units, countryCode, countryName, pN;
     private EditText filterBox;
     private ManualSelectionAdapter manualSelectionAdapter;
-    private ReloadInterface mListener;
+    //private ReloadInterface mListener;
     private KnownLocation knownLocation;
     private SeekBar seekBar;
     private TextView seekBarText;
@@ -121,13 +121,13 @@ public class JsonFetcherDialog extends DialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
-        mListener = (ReloadInterface) activity;
+        //mListener = (ReloadInterface) activity;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        //mListener = null;
     }
 
     @Override
@@ -763,8 +763,8 @@ public class JsonFetcherDialog extends DialogFragment {
 
                 progressDialog.dismiss();
                 if (lastFetchNewWebCams) {
-                    mListener = (ReloadInterface) mActivity;
-                    mListener.invokeReload();
+                    //mListener = (ReloadInterface) mActivity;
+                    //mListener.invokeReload();
                     showReportDialog();
                 } else {
                     if (selection == 1) {

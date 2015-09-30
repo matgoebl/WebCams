@@ -286,4 +286,5 @@
 <string name="pref_last_category_summary">"After application start open the last used category"</string>
 <string name="hw_acceleration_disabled">"HW acceleration is Disabled"</string>
 <string name="hw_acceleration_enabled">"HW acceleration is Enabled"</string>
+<string name="all_local_webcams">"All local WebCams"</string>
 </resources>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/latest_webcams"
+        android:id="@+id/latest_webcams"
+        android:icon="@drawable/icon_latest"/>
+
+    <item android:title="@string/popular_webcams"
+        android:id="@+id/popular_webcams"
+        android:icon="@drawable/icon_popular"/>
+
+    <item android:title="@string/nearby_webcams"
+        android:id="@+id/nearby_webcams"
+        android:icon="@drawable/icon_nearby"/>
+
+    <item android:title="@string/selecting_by_name"
+        android:id="@+id/selecting_by_name"
+        android:icon="@drawable/icon_selected"/>
+
+    <item android:title="@string/selecting_by_country"
+        android:id="@+id/selecting_by_country"
+        android:icon="@drawable/icon_country"/>
+
+    <item android:title="@string/selecting_by_type"
+        android:id="@+id/selecting_by_type"
+        android:icon="@drawable/icon_mountains"/>
+
+    <item android:title="@string/live_streams"
+        android:id="@+id/live_streams"
+        android:icon="@drawable/icon_live_streams"/>
+
+    <item android:title="@string/selecting_from_map"
+        android:id="@+id/selecting_from_map"
+        android:icon="@drawable/icon_map"/>
+
+    <item android:title="Favorites WebCams"
+        android:id="@+id/favorites_webcams"
+        android:icon="@drawable/icon_favorites"/>
+
+    <item android:title="In device">
+        <menu>
+            <item
+                android:title="@string/all_local_webcams"
+                android:id="@+id/all_local_webcams"
+                android:icon="@drawable/icon_all_imported"/>
+        </menu>
+    </item>
+
+    <group android:id="@+id/group_settings_id">
+
+        <item android:title="@string/action_settings"
+            android:id="@+id/action_settings"
+            android:icon="@drawable/icon_custom0"/>
+        <item android:title="@string/action_menu_help"
+            android:id="@+id/action_menu_help"
+            android:icon="@drawable/icon_unknown"/>
+    </group>
+</menu>

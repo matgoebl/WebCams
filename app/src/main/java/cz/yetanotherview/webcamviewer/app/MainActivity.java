@@ -18,157 +18,146 @@
 
 package cz.yetanotherview.webcamviewer.app;
 
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.ActionMode;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.bumptech.glide.signature.StringSignature;
-import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 
-import cz.yetanotherview.webcamviewer.app.actions.AddDialog;
-import cz.yetanotherview.webcamviewer.app.actions.EditDialog;
-import cz.yetanotherview.webcamviewer.app.actions.JsonFetcherDialog;
-import cz.yetanotherview.webcamviewer.app.actions.SaveDialog;
 import cz.yetanotherview.webcamviewer.app.actions.SelectionDialog;
-import cz.yetanotherview.webcamviewer.app.actions.ShareDialog;
 import cz.yetanotherview.webcamviewer.app.actions.SuggestionDialog;
 import cz.yetanotherview.webcamviewer.app.actions.WelcomeDialog;
 import cz.yetanotherview.webcamviewer.app.actions.simple.LocationWarningDialog;
-import cz.yetanotherview.webcamviewer.app.actions.simple.NoCoordinatesDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.ManualSelectionAdapter;
-import cz.yetanotherview.webcamviewer.app.drawer.NavigationDrawerCallbacks;
-import cz.yetanotherview.webcamviewer.app.drawer.NavigationDrawerFragment;
-import cz.yetanotherview.webcamviewer.app.fullscreen.FullScreenActivity;
-import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
+import cz.yetanotherview.webcamviewer.app.fragments.BaseFragment;
+import cz.yetanotherview.webcamviewer.app.fragments.MapAppBarFragment;
+import cz.yetanotherview.webcamviewer.app.fragments.StandardAppBarFragment;
+import cz.yetanotherview.webcamviewer.app.fragments.StandardLocalAppBarFragment;
+import cz.yetanotherview.webcamviewer.app.fragments.tabs.TabHolderFragment;
 import cz.yetanotherview.webcamviewer.app.help.HelpActivity;
 import cz.yetanotherview.webcamviewer.app.helper.ClearImageCache;
-import cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView;
 import cz.yetanotherview.webcamviewer.app.helper.OnFilterTextChange;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.settings.SettingsActivity;
-import cz.yetanotherview.webcamviewer.app.fullscreen.LiveStreamActivity;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
-import cz.yetanotherview.webcamviewer.app.helper.SendToInbox;
-import cz.yetanotherview.webcamviewer.app.listener.WebCamListener;
 import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
+import cz.yetanotherview.webcamviewer.app.util.Navigator;
 
-public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks, WebCamListener,
-        JsonFetcherDialog.ReloadInterface {
+public class MainActivity extends AppCompatActivity { //implements WebCamListener, JsonFetcherDialog.ReloadInterface
 
     private DatabaseHelper db;
     private WebCam webCam, webCamToDelete;
     private List<Integer> webCamToDelete_category_ids;
-    private List<WebCam> allWebCams, reallyAllWebCams;
-    private EmptyRecyclerView mRecyclerView;
-    private StaggeredGridLayoutManager mLayoutManager;
-    private View mTintView;
+    private List<WebCam> reallyAllWebCams;
     private ImageView toolbarImage;
-    private WebCamAdapter mAdapter;
     private ManualSelectionAdapter manualSelectionAdapter;
-    private int numberOfColumns, mOrientation, selectedCategory, autoRefreshInterval, mPosition,
+    private int numberOfColumns, selectedCategory, autoRefreshInterval,
             webCamToDeletePosition, selectedCategoryId, latestCategoryPos;
     private boolean firstRun, autoRefresh, autoRefreshFullScreenOnly, hwAcceleration,
             screenAlwaysOn, imagesOnOff, latestCategory;
-    private String mStringSignature, sortOrder;
-    private FloatingActionMenu floatingActionMenu;
-    private android.support.design.widget.FloatingActionButton floatingActionButtonNative;
+    private String sortOrder;
+    private FloatingActionButton floatingActionButtonNative;
     private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbar;
-    private AppBarLayout appBarLayout;
+
     private MaterialDialog materialDialog, indeterminateProgress;
     private MenuItem searchItem;
     private SearchView searchView;
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    //private NavigationDrawerFragment mNavigationDrawerFragment;
+
+    private static Navigator mNavigator;
+
+    //private Drawer mDrawer = null;
+    private DrawerLayout mDrawerLayout;
+    NavigationView mNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // loading saved preferences
-        loadPref();
+//        loadPref();
 
         // Inflating main layout
         setContentView(R.layout.activity_main);
 
-        // Auto Refreshing
-        if (autoRefresh && !autoRefreshFullScreenOnly) {
-            autoRefreshTimer(autoRefreshInterval);
-        }
+        //ButterKnife.bind(this);
 
-        // Screen Always on
-        if (screenAlwaysOn){
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
-        else getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        // Auto Refreshing
+//        if (autoRefresh && !autoRefreshFullScreenOnly) {
+//            autoRefreshTimer(autoRefreshInterval);
+//        }
+//
+//        // Screen Always on
+//        if (screenAlwaysOn){
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        }
+//        else getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // Init DatabaseHelper for late use
         db = new DatabaseHelper(getApplicationContext());
 
-        // Get current orientation
-        mOrientation = getResources().getConfiguration().orientation;
 
-        // New signature
-        mStringSignature = UUID.randomUUID().toString();
+
 
         // Other core init
-        initToolbar();
-        initDrawer();
-        loadLastSelectedCategory();
-        initRecyclerView();
-        initFab();
-        initFirstRun();
-        initReceivedIntent();
+        setupToolbar();
+        setupNavDrawer();
+        initNavigator();
+
+        //ToDo
+        setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.latest_webcams, getString(R.string.latest_webcams));
+
+        //loadLastSelectedCategory();
+        //initRecyclerView();
+        //initFab();
+        //initFirstRun();
+        //initReceivedIntent();
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (materialDialog != null) {
-            materialDialog.dismiss();
-        }
-        if (latestCategory) {
-            latestCategoryPos = selectedCategory;
-            saveToPref();
-        }
+//        if (materialDialog != null) {
+//            materialDialog.dismiss();
+//        }
+//        if (latestCategory) {
+//            latestCategoryPos = selectedCategory;
+//            saveToPref();
+//        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        reInitializeRecyclerViewAdapter();
-        reInitializeDrawerListAdapter();
+        //reInitializeRecyclerViewAdapter();
+        //reInitializeDrawerListAdapter();
     }
 
     @Override
@@ -178,144 +167,115 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         new ClearImageCache(this).execute();
     }
 
-    private void initToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        toolbarImage = (ImageView) findViewById(R.id.toolbar_image);
-        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+    @Override
+    public void finish() {
+        mNavigator = null;
+        super.finish();
     }
 
-    private void initDrawer() {
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.fragment_drawer);
-        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer_layout),
-                mToolbar, collapsingToolbar, toolbarImage);
+    private void setupToolbar() {
+        //mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(mToolbar);
+        //collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        //toolbarImage = (ImageView) findViewById(R.id.toolbar_image);
+        //appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+    }
+
+    public ImageView getToolbarImage() {
+        return toolbarImage;
+    }
+
+    private void setupNavDrawer() {
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+                menuItem.setChecked(true);
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                String title = menuItem.getTitle().toString();
+                switch (menuItem.getItemId()) {
+                    case R.id.latest_webcams:
+                        setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.latest_webcams, title);
+                        return true;
+                    case R.id.popular_webcams:
+                        setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.popular_webcams, title);
+                        return true;
+                    case R.id.nearby_webcams:
+                        setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.nearby_webcams, title);
+                        return true;
+                    case R.id.selecting_by_name:
+                        //setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.selecting_by_name, title);
+                        return true;
+                    case R.id.selecting_by_country:
+                        //setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.selecting_by_country, title);
+                        return true;
+                    case R.id.selecting_by_type:
+                        setNewRootFragment(TabHolderFragment.newInstance(), R.id.selecting_by_type, title);
+                        return true;
+                    case R.id.live_streams:
+                        setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.live_streams, title);
+                        return true;
+                    case R.id.selecting_from_map:
+                        setNewRootFragment(MapAppBarFragment.newInstance(), R.id.selecting_from_map, title);
+                        return true;
+                    case R.id.favorites_webcams:
+                        //setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.favorites_webcams, title);
+                        return true;
+                    case R.id.all_local_webcams:
+                        setNewRootFragment(StandardLocalAppBarFragment.newInstance(), R.id.all_local_webcams, title);
+                        return true;
+                    case R.id.action_settings:
+                        openSettings();
+                        return true;
+                    case R.id.action_menu_help:
+                        openHelp();
+                        return true;
+                    default:
+                        return true;
+                }
+            }
+        });
+    }
+
+    private void initNavigator() {
+        if(mNavigator != null) return;
+        mNavigator = new Navigator(getSupportFragmentManager(), R.id.container);
+    }
+
+    public void openDrawer(){
+        mDrawerLayout.openDrawer(GravityCompat.START);
+    }
+
+
+    private void setNewRootFragment(BaseFragment fragment, int id, String title) {
+        mNavigator.setRootFragment(fragment, id, title);
     }
 
     private void loadLastSelectedCategory() {
         if (latestCategory) {
-            mNavigationDrawerFragment.selectItem(latestCategoryPos, false);
+            //mNavigationDrawerFragment.selectItem(latestCategoryPos, false);
         }
-    }
-
-    private void initRecyclerView() {
-        int mLayoutId = 1;
-        if (numberOfColumns == 1 && mOrientation == 1) {
-            mLayoutId = 1;
-        }
-        else if(numberOfColumns == 1 && mOrientation == 2) {
-            mLayoutId = 2;
-        }
-        else if(numberOfColumns == 2 && mOrientation == 1) {
-            mLayoutId = 2;
-        }
-        else if(numberOfColumns == 2 && mOrientation == 2) {
-            mLayoutId = 3;
-        }
-
-        mLayoutManager = new StaggeredGridLayoutManager(mLayoutId, StaggeredGridLayoutManager.VERTICAL);
-        mRecyclerView = (EmptyRecyclerView) findViewById(R.id.mainList);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setEmptyView(findViewById(R.id.list_empty));
-        mRecyclerView.setAppBarLayout(appBarLayout);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        if (selectedCategory == 0) {
-            allWebCams = db.getAllWebCams(sortOrder);
-        }
-        else allWebCams = db.getAllWebCamsByCategory(selectedCategoryId, sortOrder);
-        db.closeDB();
-
-        mAdapter = new WebCamAdapter(this, allWebCams, mOrientation, mLayoutId,
-                new StringSignature(mStringSignature), imagesOnOff);
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setClickListener(new WebCamAdapter.ClickListener() {
-
-            @Override
-            public void onClick(View view, int position, boolean isEditClick, boolean isLongClick,
-                                View tintView, View errorView) {
-                if (isEditClick) {
-                    mTintView = tintView;
-                    showOptionsDialog(position);
-                } else if (isLongClick) {
-                    mTintView = tintView;
-                    mPosition = position;
-                    moveItem();
-                } else {
-                    webCam = (WebCam) mAdapter.getItem(position);
-                    if (errorView.getVisibility() == View.VISIBLE && !webCam.isStream()) {
-                        refreshSelected(position);
-                    } else maximizeImageOrPlayStream(position, false, false);
-                }
-            }
-        });
     }
 
     private void initFab() {
-        floatingActionMenu = (FloatingActionMenu) findViewById(R.id.floating_action_menu);
-        floatingActionMenu.setClosedOnTouchOutside(true);
 
-        com.github.clans.fab.FloatingActionButton floatingActionButtonImport =
-                (com.github.clans.fab.FloatingActionButton) findViewById(R.id.floating_action_button_import);
-        com.github.clans.fab.FloatingActionButton floatingActionButtonManual =
-                (com.github.clans.fab.FloatingActionButton) findViewById(R.id.floating_action_button_manual);
-        com.github.clans.fab.FloatingActionButton floatingActionButtonSuggestion =
-                (com.github.clans.fab.FloatingActionButton) findViewById(R.id.floating_action_button_suggestion);
-
-        floatingActionButtonImport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openAfterDelay(0);
-                hideAfterDelay();
-            }
-        });
-        floatingActionButtonManual.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openAfterDelay(1);
-                hideAfterDelay();
-            }
-        });
-        floatingActionButtonSuggestion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openAfterDelay(2);
-                hideAfterDelay();
-            }
-        });
-
-        floatingActionButtonNative = (android.support.design.widget.FloatingActionButton) findViewById(R.id.small_floating_action_button);
-        floatingActionButtonNative.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                assignSelectedWebCamsToCategory();
-            }
-        });
-
-        floatingActionMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
-            @Override
-            public void onMenuToggle(boolean b) {
-                if (b) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        getWindow().setStatusBarColor(Utils.getColor(getResources(), R.color.black_transparent));
-                    }
-                    floatingActionButtonNative.setVisibility(View.INVISIBLE);
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        getWindow().setStatusBarColor(Utils.getColor(getResources(), android.R.color.transparent));
-                    }
-                    floatingActionButtonNative.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+//        floatingActionButtonNative = (FloatingActionButton) findViewById(R.id.small_floating_action_button);
+//        floatingActionButtonNative.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                assignSelectedWebCamsToCategory();
+//            }
+//        });
     }
 
     private void initFirstRun() {
         if (firstRun){
             showWelcomeDialog();
-            mNavigationDrawerFragment.openDrawer();
+            //mNavigationDrawerFragment.openDrawer();
             firstRun = false;
             saveToPref();
         }
@@ -328,54 +288,54 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
-                handleReceivedUrl(intent);
+                //handleReceivedUrl(intent);
             }
         }
     }
 
-    private void handleReceivedUrl(Intent intent) {
-        String sharedUrl = intent.getStringExtra(Intent.EXTRA_TEXT);
-        if (sharedUrl != null) {
-            DialogFragment dialogFragment = AddDialog.newInstance(this);
+//    private void handleReceivedUrl(Intent intent) {
+//        String sharedUrl = intent.getStringExtra(Intent.EXTRA_TEXT);
+//        if (sharedUrl != null) {
+//            DialogFragment dialogFragment = AddDialog.newInstance(this);
+//
+//            Bundle bundle = new Bundle();
+//            bundle.putString("sharedUrl", sharedUrl);
+//            dialogFragment.setArguments(bundle);
+//
+//            dialogFragment.show(getFragmentManager(), "AddDialog");
+//        }
+//    }
 
-            Bundle bundle = new Bundle();
-            bundle.putString("sharedUrl", sharedUrl);
-            dialogFragment.setArguments(bundle);
+//    @Override
+//    public void onNavigationDrawerItemSelected(int position, int categoryId) {
+//        selectedCategory = position;
+//        selectedCategoryId = categoryId;
+//        if (mAdapter != null) {
+//            reInitializeRecyclerViewAdapter();
+//            floatingActionMenu.showMenuButton(true);
+//            if (mAdapter.getItemCount() != 0) {
+//                appBarLayout.setExpanded(true, false);
+//            }
+//        }
+//    }
 
-            dialogFragment.show(getFragmentManager(), "AddDialog");
-        }
-    }
-
-    @Override
-    public void onNavigationDrawerItemSelected(int position, int categoryId) {
-        selectedCategory = position;
-        selectedCategoryId = categoryId;
-        if (mAdapter != null) {
-            reInitializeRecyclerViewAdapter();
-            floatingActionMenu.showMenuButton(true);
-            if (mAdapter.getItemCount() != 0) {
-                appBarLayout.setExpanded(true, false);
-            }
-        }
-    }
-
-    private void reInitializeRecyclerViewAdapter() {
-        if (db.getWebCamCount() != 0) {
-            if (selectedCategory == 0) {
-                allWebCams = db.getAllWebCams(sortOrder);
-                mAdapter.swapData(allWebCams);
-            }
-            else {
-                allWebCams = db.getAllWebCamsByCategory(selectedCategoryId, sortOrder);
-                mAdapter.swapData(allWebCams);
-            }
-            saveToPref();
-        }
-        db.closeDB();
-    }
+//    private void reInitializeRecyclerViewAdapter() {
+//        if (db.getWebCamCount() != 0) {
+//            if (selectedCategory == 0) {
+//                allWebCams = db.getAllWebCams(sortOrder);
+//                mAdapter.swapData(allWebCams);
+//            }
+//            else {
+//                allWebCams = db.getAllWebCamsByCategory(selectedCategoryId, sortOrder);
+//                mAdapter.swapData(allWebCams);
+//            }
+//            saveToPref();
+//        }
+//        db.closeDB();
+//    }
 
     private void reInitializeDrawerListAdapter() {
-        mNavigationDrawerFragment.reloadData();
+        //mNavigationDrawerFragment.reloadData();
     }
 
     @Override
@@ -388,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                appBarLayout.setExpanded(false, true);
+                //appBarLayout.setExpanded(false, true);
                 collapsingToolbar.setCollapsedTitleTextColor(Utils.getColor(getResources(), android.R.color.transparent));
                 searchView.setIconified(false);
                 searchView.requestFocus();
@@ -397,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                appBarLayout.setExpanded(true, true);
+                //appBarLayout.setExpanded(true, true);
                 collapsingToolbar.setCollapsedTitleTextColor(Utils.getColor(getResources(), R.color.white));
                 searchView.clearFocus();
                 return true;
@@ -419,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                mAdapter.filter(newText);
+                //mAdapter.filter(newText);
                 return true;
             }
         });
@@ -459,7 +419,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 return super.onOptionsItemSelected(item);
 
             case R.id.action_refresh:
-                refresh();
+                //refresh();
                 break;
 
             case R.id.action_dashboard:
@@ -471,7 +431,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     numberOfColumns = 1;
                     item.setIcon(R.drawable.ic_action_dashboard);
                 }
-                initRecyclerView();
+                //initRecyclerView();
                 saveToPref();
                 break;
 
@@ -489,25 +449,33 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     item.setTitle(R.string.images_off);
                     item.setIcon(R.drawable.ic_action_image_off);
                 }
-                initRecyclerView();
+                //initRecyclerView();
                 saveToPref();
                 break;
 
             case R.id.action_settings:
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, SettingsActivity.class);
-                startActivityForResult(intent, 0);
+                openSettings();
                 break;
 
             case R.id.menu_help:
-                Intent helpIntent = new Intent(this, HelpActivity.class);
-                startActivity(helpIntent);
+                openHelp();
                 break;
 
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openSettings() {
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, SettingsActivity.class);
+        startActivityForResult(intent, 0);
+    }
+
+    private void openHelp() {
+        Intent helpIntent = new Intent(this, HelpActivity.class);
+        startActivity(helpIntent);
     }
 
     private void showSortDialog() {
@@ -571,7 +539,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                             default:
                                 break;
                         }
-                        reInitializeRecyclerViewAdapter();
+                        //reInitializeRecyclerViewAdapter();
                         saveToPref();
 
                         return true;
@@ -585,162 +553,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         new WelcomeDialog().show(getFragmentManager(), "WelcomeDialog");
     }
 
-    private void maximizeImageOrPlayStream(int position, boolean map, boolean fromEditClick) {
-        webCam = (WebCam) mAdapter.getItem(position);
-
-        if (webCam.isStream() && !map) {
-            if (fromEditClick) {
-                new MaterialDialog.Builder(MainActivity.this)
-                        .items(R.array.play_maximize_values)
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                if (which == 0) {
-                                    playStream();
-                                }
-                                else maximizeImage(false, true);
-                            }
-                        })
-                        .show();
-            }
-            else playStream();
-        }
-        else maximizeImage(map, false);
-
-        // Workaround for cleaning the entered searchView text.
-        if (!searchView.isIconified()) {
-            searchView.setIconified(true);
-        }
-    }
-
-    private void playStream() {
-        Intent intent = new Intent(this, LiveStreamActivity.class);
-        intent.putExtra("url", webCam.getUrl());
-        intent.putExtra("name", webCam.getName());
-        intent.putExtra("hwAcceleration", hwAcceleration);
-        startActivity(intent);
-    }
-
-    private void maximizeImage(boolean map, boolean preview) {
-        Intent intent = new Intent(this, FullScreenActivity.class);
-        intent.putExtra("signature", mStringSignature);
-        intent.putExtra("map", map);
-        intent.putExtra("name", webCam.getName());
-        String url = webCam.getUrl();
-        if (preview) url = webCam.getThumbUrl();
-        intent.putExtra("url", url);
-        intent.putExtra("latitude", webCam.getLatitude());
-        intent.putExtra("longitude", webCam.getLongitude());
-        intent.putExtra("autoRefresh", autoRefresh);
-        intent.putExtra("interval", autoRefreshInterval);
-        intent.putExtra("screenAlwaysOn", screenAlwaysOn);
-
-        if (!map){
-            startActivity(intent);
-        }
-        else {
-            if (webCam.getLatitude() != 0 || webCam.getLongitude() != 0) {
-                startActivity(intent);
-            }
-            else new NoCoordinatesDialog().show(getFragmentManager(), "NoCoordinatesDialog");
-        }
-    }
-
-    private void showOptionsDialog(final int position) {
-        webCam = (WebCam) mAdapter.getItem(position);
-
-        String[] options_values = getResources().getStringArray(R.array.opt_values);
-        if (webCam.isStream()) {
-            options_values[4] = getString(R.string.play_maximize);
-        }
-        if (webCam.getUniId() != 0) {
-            options_values[8] = getString(R.string.report_problem);
-        }
-        else options_values[8] = getString(R.string.submit_as_suggestion);
-
-        materialDialog = new MaterialDialog.Builder(this)
-                .items(options_values)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        Bundle bundle = new Bundle();
-                        switch (which) {
-                            case 0:
-                                refreshSelected(position);
-                                break;
-                            case 1:
-                                showEditDialog(position);
-                                break;
-                            case 2:
-                                webCamDeleted(webCam, position);
-                                break;
-                            case 3:
-                                mPosition = position;
-                                moveItem();
-                                break;
-                            case 4:
-                                maximizeImageOrPlayStream(position, false, true);
-                                break;
-                            case 5:
-                                SaveDialog saveDialog = new SaveDialog();
-                                bundle.putInt("from", 0);
-                                bundle.putString("name", webCam.getName());
-                                if (webCam.isStream()) {
-                                    bundle.putString("url", webCam.getThumbUrl());
-                                } else bundle.putString("url", webCam.getUrl());
-                                saveDialog.setArguments(bundle);
-                                saveDialog.show(getFragmentManager(), "SaveDialog");
-                                break;
-                            case 6:
-                                ShareDialog shareDialog = new ShareDialog();
-                                if (webCam.isStream()) {
-                                    bundle.putString("url", webCam.getThumbUrl());
-                                } else bundle.putString("url", webCam.getUrl());
-                                shareDialog.setArguments(bundle);
-                                shareDialog.show(getFragmentManager(), "ShareDialog");
-                                break;
-                            case 7:
-                                maximizeImageOrPlayStream(position, true, true);
-                                break;
-                            case 8:
-                                if (webCam.getUniId() != 0) {
-                                    new MaterialDialog.Builder(MainActivity.this)
-                                            .title(R.string.report_problem)
-                                            .content(R.string.report_problem_summary)
-                                            .positiveText(R.string.send)
-                                            .negativeText(android.R.string.cancel)
-                                            .iconRes(R.drawable.settings_about)
-                                            .items(R.array.whats_wrong)
-                                            .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
-                                                @Override
-                                                public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                                    new SendToInbox().sendToInboxWebCam(MainActivity.this, webCam, true, which);
-                                                    return true;
-                                                }
-                                            })
-                                            .show();
-                                } else new MaterialDialog.Builder(MainActivity.this)
-                                        .title(R.string.submit_as_suggestion)
-                                        .content(R.string.community_list_summary)
-                                        .positiveText(R.string.Yes)
-                                        .negativeText(android.R.string.cancel)
-                                        .iconRes(R.drawable.settings_about)
-                                        .callback(new MaterialDialog.ButtonCallback() {
-                                            @Override
-                                            public void onPositive(MaterialDialog dialog) {
-                                                new SendToInbox().sendToInboxWebCam(MainActivity.this, webCam, false, -1);
-                                            }
-                                        })
-                                        .show();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                })
-                .show();
-    }
-
     private void openAfterDelay(final int which) {
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -750,7 +562,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         new SelectionDialog().show(getFragmentManager(), "SelectionDialog");
                         break;
                     case 1:
-                        AddDialog.newInstance(MainActivity.this).show(getFragmentManager(), "AddDialog");
+                        //AddDialog.newInstance(MainActivity.this).show(getFragmentManager(), "AddDialog");
                         break;
                     case 2:
                         new SuggestionDialog().show(getFragmentManager(), "SuggestionDialog");
@@ -762,99 +574,78 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         }, 50);
     }
 
-    private void hideAfterDelay() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                floatingActionMenu.close(true);
-            }
-        }, 500);
-    }
+//    @Override
+//    public void webCamAdded(WebCam wc, List<Integer> category_ids, boolean share) {
+//        if (category_ids != null) {
+//            wc.setId(db.createWebCam(wc, category_ids));
+//        }
+//        else wc.setId(db.createWebCam(wc, null));
+//        db.closeDB();
+//
+//        mAdapter.addItem(mAdapter.getItemCount(), wc);
+//        mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
+//
+//        reInitializeDrawerListAdapter();
+//
+//        if (share) {
+//            new SendToInbox().sendToInboxWebCam(this, wc, false, -1);
+//        }
+//        else saveDone();
+//    }
+//
+//    @Override
+//    public void webCamEdited(int position, WebCam wc, List<Integer> category_ids) {
+//        if (category_ids != null) {
+//            db.updateWebCam(wc, category_ids);
+//        } else db.updateWebCam(wc, null);
+//        db.closeDB();
+//
+//        mAdapter.modifyItem(position, wc);
+//        reInitializeDrawerListAdapter();
+//
+//        saveDone();
+//    }
+//
+//    @Override
+//    public void webCamDeleted(final WebCam wc, final int position) {
+//        webCamToDelete = wc;
+//        webCamToDelete_category_ids = db.getWebCamCategoriesIds(webCamToDelete.getId());
+//        webCamToDeletePosition = position;
+//
+//        if (mAdapter != null && mAdapter.getItemCount() > 0) {
+//            mAdapter.removeItem(mAdapter.getItemAt(webCamToDeletePosition));
+//
+//            db.deleteWebCam(webCamToDelete.getId());
+//            db.closeDB();
+//            reInitializeDrawerListAdapter();
+//        }
+//
+//        reInitializeDrawerListAdapter();
+//
+//        Snackbar.make(findViewById(R.id.coordinator_layout), R.string.undo,
+//                Snackbar.LENGTH_LONG)
+//                .setAction(R.string.undo, new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        mAdapter.addItem(webCamToDeletePosition, webCamToDelete);
+//                        db.undoDeleteWebCam(webCamToDelete, webCamToDelete_category_ids);
+//                        db.closeDB();
+//                        reInitializeDrawerListAdapter();
+//                        //ToDo: Only temporary solution until FloatingActionMenuBehavior don't work correctly
+//                        floatingActionMenu.showMenuButton(true);
+//                    }
+//                })
+//                .show();
+//        temporaryHideFab(false);
+//    }
 
-    private void showEditDialog(int position) {
-        DialogFragment dialogFragment = EditDialog.newInstance(this);
-
-        webCam = (WebCam) mAdapter.getItem(position);
-        Bundle bundle = new Bundle();
-        bundle.putLong("id", webCam.getId());
-        bundle.putInt("position", position);
-        dialogFragment.setArguments(bundle);
-
-        dialogFragment.show(getFragmentManager(), "EditDialog");
-    }
-
-    @Override
-    public void webCamAdded(WebCam wc, List<Integer> category_ids, boolean share) {
-        if (category_ids != null) {
-            wc.setId(db.createWebCam(wc, category_ids));
-        }
-        else wc.setId(db.createWebCam(wc, null));
-        db.closeDB();
-
-        mAdapter.addItem(mAdapter.getItemCount(), wc);
-        mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
-
-        reInitializeDrawerListAdapter();
-
-        if (share) {
-            new SendToInbox().sendToInboxWebCam(this, wc, false, -1);
-        }
-        else saveDone();
-    }
-
-    @Override
-    public void webCamEdited(int position, WebCam wc, List<Integer> category_ids) {
-        if (category_ids != null) {
-            db.updateWebCam(wc, category_ids);
-        } else db.updateWebCam(wc, null);
-        db.closeDB();
-
-        mAdapter.modifyItem(position, wc);
-        reInitializeDrawerListAdapter();
-
-        saveDone();
-    }
-
-    @Override
-    public void webCamDeleted(final WebCam wc, final int position) {
-        webCamToDelete = wc;
-        webCamToDelete_category_ids = db.getWebCamCategoriesIds(webCamToDelete.getId());
-        webCamToDeletePosition = position;
-
-        if (mAdapter != null && mAdapter.getItemCount() > 0) {
-            mAdapter.removeItem(mAdapter.getItemAt(webCamToDeletePosition));
-
-            db.deleteWebCam(webCamToDelete.getId());
-            db.closeDB();
-            reInitializeDrawerListAdapter();
-        }
-
-        reInitializeDrawerListAdapter();
-
-        Snackbar.make(findViewById(R.id.coordinator_layout), R.string.undo,
-                Snackbar.LENGTH_LONG)
-                .setAction(R.string.undo, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mAdapter.addItem(webCamToDeletePosition, webCamToDelete);
-                        db.undoDeleteWebCam(webCamToDelete, webCamToDelete_category_ids);
-                        db.closeDB();
-                        reInitializeDrawerListAdapter();
-                        //ToDo: Only temporary solution until FloatingActionMenuBehavior don't work correctly
-                        floatingActionMenu.showMenuButton(true);
-                    }
-                })
-                .show();
-        temporaryHideFab(false);
-    }
-
-    @Override
-    public void invokeReload() {
-        reInitializeRecyclerViewAdapter();
-        reInitializeDrawerListAdapter();
-        mNavigationDrawerFragment.openDrawer();
-        mNavigationDrawerFragment.selectPosition();
-    }
+//    @Override
+//    public void invokeReload() {
+//        reInitializeRecyclerViewAdapter();
+//        reInitializeDrawerListAdapter();
+//        //mNavigationDrawerFragment.openDrawer();
+//        //mNavigationDrawerFragment.selectPosition();
+//    }
 
     private void assignSelectedWebCamsToCategory() {
         reallyAllWebCams = db.getAllWebCams(sortOrder);
@@ -897,11 +688,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 });
 
                 dialog.show();
-            } else floatingActionMenu.open(true);
+            };
 
         } else listIsEmpty();
         db.closeDB();
     }
+
+
 
     private class assignSelectedWebCamsToCategoryBackgroundTask extends AsyncTask<Integer, Void, Void> {
 
@@ -931,7 +724,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
 
-            reInitializeRecyclerViewAdapter();
+            //reInitializeRecyclerViewAdapter();
             reInitializeDrawerListAdapter();
             indeterminateProgress.dismiss();
             saveDone();
@@ -945,128 +738,24 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 .show();
     }
 
-    private void moveItem() {
-
-        mToolbar.startActionMode(new ActionMode.Callback() {
-
-            int pos = mPosition;
-            final View tempView = findViewById(R.id.tempView);
-
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                MenuInflater inflater = mode.getMenuInflater();
-                inflater.inflate(R.menu.move_menu, menu);
-                mode.setTitle(R.string.move);
-                mTintView.setVisibility(View.VISIBLE);
-                tempView.setVisibility(View.VISIBLE);
-                return true;
-            }
-
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-
-                switch (item.getItemId()) {
-                    case R.id.up:
-                        mAdapter.moveItemUp(mAdapter.getItemAt(pos));
-                        mLayoutManager.scrollToPosition(0);
-                        if (pos > 0) {
-                            pos = pos - 1;
-                        }
-                        mLayoutManager.scrollToPositionWithOffset(pos, 0);
-                        return true;
-                    case R.id.down:
-                        mAdapter.moveItemDown(mAdapter.getItemAt(pos));
-                        if (pos < (mAdapter.getItemCount() - 1)) {
-                            pos = pos + 1;
-                        }
-                        mLayoutManager.scrollToPositionWithOffset(pos, 0);
-                        return true;
-                    case R.id.done:
-                        sortOrder = "position";
-                        saveToPref();
-                        showIndeterminateProgress();
-                        new savePositionsToDB().execute();
-                        mode.finish();
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-
-            public void onDestroyActionMode(ActionMode mode) {
-                mTintView.setVisibility(View.GONE);
-                tempView.setVisibility(View.GONE);
-            }
-        });
-    }
-
-    private class savePositionsToDB extends AsyncTask<Long, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Long... longs) {
-
-            List<WebCam> newWebCams = mAdapter.getItems();
-            int i = 0;
-            for (WebCam mWebCam : newWebCams) {
-                mWebCam.setPosition(i);
-                db.updateWebCamPosition(mWebCam);
-                i++;
-            }
-            db.closeDB();
-            this.publishProgress();
-
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-
-            indeterminateProgress.dismiss();
-            saveDone();
-        }
-    }
 
     private void saveDone() {
         Snackbar.make(findViewById(R.id.coordinator_layout), R.string.dialog_positive_toast_message,
                 Snackbar.LENGTH_SHORT).show();
-        temporaryHideFab(true);
     }
 
     private void listIsEmpty() {
         Snackbar.make(findViewById(R.id.coordinator_layout), R.string.list_is_empty,
                 Snackbar.LENGTH_SHORT).show();
-        temporaryHideFab(true);
     }
 
-    //ToDo: Only temporary solution until FloatingActionMenuBehavior don't work correctly
-    private void temporaryHideFab(boolean durationShort) {
-        floatingActionMenu.hideMenuButton(true);
+//    private void refresh() {
+//        if (mAdapter.getItemCount() != 0) {
+//            mStringSignature = UUID.randomUUID().toString();
+//            mAdapter.refreshViewImages(new StringSignature(mStringSignature));
+//        }
+//    }
 
-        int duration = 2000;
-        if (!durationShort) duration = 3200;
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                floatingActionMenu.showMenuButton(true);
-            }
-        }, duration);
-    }
-
-    private void refresh() {
-        if (mAdapter.getItemCount() != 0) {
-            mStringSignature = UUID.randomUUID().toString();
-            mAdapter.refreshViewImages(new StringSignature(mStringSignature));
-        }
-    }
-
-    private void refreshSelected(int position) {
-        mStringSignature = UUID.randomUUID().toString();
-        mAdapter.refreshSelectedImage(position, new StringSignature(mStringSignature));
-    }
 
     private void autoRefreshTimer(int interval) {
         final Handler handler = new Handler();
@@ -1077,7 +766,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 handler.post(new Runnable() {
                     public void run() {
                         try {
-                            refresh();
+                            //refresh();
                         } catch (Exception ignored) {}
                     }
                 });

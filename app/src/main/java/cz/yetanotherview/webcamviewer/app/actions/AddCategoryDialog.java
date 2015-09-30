@@ -36,7 +36,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.adapter.IconAdapter;
-import cz.yetanotherview.webcamviewer.app.drawer.NavigationDrawerFragment;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.OnTextChange;
 import cz.yetanotherview.webcamviewer.app.model.Category;
@@ -133,14 +132,14 @@ public class AddCategoryDialog extends DialogFragment {
     }
 
     private void reloadHost() {
-        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.fragment_drawer);
-        if (mNavigationDrawerFragment != null) {
-            mNavigationDrawerFragment.addData(category);
-        }
-        CategoryDialog categoryDialog = (CategoryDialog) getFragmentManager().findFragmentByTag("CategoryDialog");
-        if (categoryDialog != null) {
-            categoryDialog.addCategoryInAdapter(category);
-        }
+//        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
+//                getFragmentManager().findFragmentById(R.id.fragment_drawer);
+//        if (mNavigationDrawerFragment != null) {
+//            mNavigationDrawerFragment.addData(category);
+//        }
+//        CategoryDialog categoryDialog = (CategoryDialog) getFragmentManager().findFragmentByTag("CategoryDialog");
+//        if (categoryDialog != null) {
+//            categoryDialog.addCategoryInAdapter(category);
+//        }
     }
 }

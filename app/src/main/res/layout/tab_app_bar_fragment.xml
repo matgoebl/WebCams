@@ -16,26 +16,14 @@
 ~ *****************************************************************************
 -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/simpleGrid"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:gravity="center_vertical">
-
-    <include
-        layout="@layout/drawer_list_item_parts"/>
-
-    <TextView
-        android:id="@+id/categoryCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/huge_margin"
-        android:layout_marginEnd="@dimen/huge_margin"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:padding="0dp"
-        android:textStyle="bold"
-        android:textColor="@color/drawer_item_text" />
-
-</RelativeLayout>
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="cz.yetanotherview.webcamviewer.app.fragments.tabs.TabFragment"/>

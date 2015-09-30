@@ -1,12 +1,12 @@
 <merge>
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/list_empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="@color/hyperlink"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        android:background="@color/hyperlink">
 
         <ImageView
             android:layout_width="wrap_content"

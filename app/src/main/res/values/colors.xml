@@ -4,7 +4,7 @@
     <!-- Material design -->
     <color name="primary">#4D8531</color>
     <color name="primary_dark">#33691e</color>
-    <color name="accent">@color/primary</color>
+    <color name="accent">#FF5722</color>
     <color name="hyperlink">#689f38</color>
 
     <color name="white">#ffffffff</color>
