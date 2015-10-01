@@ -27,15 +27,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.overlay.Marker;
-import com.mapbox.mapboxsdk.views.MapView;
-
 import cz.yetanotherview.webcamviewer.app.R;
 
 public class MapsFragment extends Fragment {
 
-    private MapView mMapView;
+    //private MapView mMapView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,37 +40,37 @@ public class MapsFragment extends Fragment {
         View view = inflater.inflate(R.layout.maps_layout, container,
                 false);
 
-        ImageButton zoomIn = (ImageButton) view.findViewById(R.id.zoomIn);
-        zoomIn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mMapView.getController().zoomIn();
-            }
-        });
-
-        ImageButton zoomOut = (ImageButton) view.findViewById(R.id.zoomOut);
-        zoomOut.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mMapView.getController().zoomOut();
-            }
-        });
-
-        Intent intent = getActivity().getIntent();
-        String name = intent.getExtras().getString("name");
-        double latitude = intent.getExtras().getDouble("latitude");
-        double longitude = intent.getExtras().getDouble("longitude");
-
-        LatLng latLng = new LatLng(latitude, longitude);
-        Marker marker = new Marker(mMapView, name, String.valueOf(latitude) +
-                ", " + String.valueOf(longitude), latLng);
-        marker.setMarker(ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null));
-
-        mMapView = (MapView) view.findViewById(R.id.mapView);
-        mMapView.setCenter(latLng);
-        mMapView.setZoom(14);
-        mMapView.addMarker(marker);
-        mMapView.selectMarker(marker);
-
-        mMapView.setDiskCacheEnabled(false);
+//        ImageButton zoomIn = (ImageButton) view.findViewById(R.id.zoomIn);
+//        zoomIn.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                mMapView.getController().zoomIn();
+//            }
+//        });
+//
+//        ImageButton zoomOut = (ImageButton) view.findViewById(R.id.zoomOut);
+//        zoomOut.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                mMapView.getController().zoomOut();
+//            }
+//        });
+//
+//        Intent intent = getActivity().getIntent();
+//        String name = intent.getExtras().getString("name");
+//        double latitude = intent.getExtras().getDouble("latitude");
+//        double longitude = intent.getExtras().getDouble("longitude");
+//
+//        LatLng latLng = new LatLng(latitude, longitude);
+//        Marker marker = new Marker(mMapView, name, String.valueOf(latitude) +
+//                ", " + String.valueOf(longitude), latLng);
+//        marker.setMarker(ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null));
+//
+//        mMapView = (MapView) view.findViewById(R.id.mapView);
+//        mMapView.setCenter(latLng);
+//        mMapView.setZoom(14);
+//        mMapView.addMarker(marker);
+//        mMapView.selectMarker(marker);
+//
+//        mMapView.setDiskCacheEnabled(false);
 
         return view;
     }

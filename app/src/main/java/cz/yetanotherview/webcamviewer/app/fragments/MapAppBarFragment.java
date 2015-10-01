@@ -21,29 +21,42 @@ package cz.yetanotherview.webcamviewer.app.fragments;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.signature.StringSignature;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.overlay.ItemizedIconOverlay;
-import com.mapbox.mapboxsdk.overlay.Marker;
-import com.mapbox.mapboxsdk.views.InfoWindow;
-import com.mapbox.mapboxsdk.views.MapView;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import cz.yetanotherview.webcamviewer.app.R;
@@ -57,9 +70,10 @@ import cz.yetanotherview.webcamviewer.app.helper.SendToInbox;
 import cz.yetanotherview.webcamviewer.app.helper.URLFetchTask;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
+import cz.yetanotherview.webcamviewer.app.model.MarkerCluster;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
-public class MapAppBarFragment extends BaseFragment {
+public class MapAppBarFragment extends BaseFragment implements OnMapReadyCallback {
 
     private StaggeredGridLayoutManager mLayoutManager;
     private RecyclerView mRecyclerView;
@@ -75,16 +89,16 @@ public class MapAppBarFragment extends BaseFragment {
 
     URLFetchTask mTask;
 
-    MapView mMapView;
+    //MapView mMapView;
 
     private Drawable selectedMarker, markerNotSelected;
 
-    List<Marker> markers;
+    //List<Marker> markers;
 
 
     //private AppBarLayout appBarLayout;
 
-
+    private GoogleMap map;
 
     public static MapAppBarFragment newInstance() {
         return new MapAppBarFragment();
@@ -95,118 +109,98 @@ public class MapAppBarFragment extends BaseFragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setList();
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        supportMapFragment.getMapAsync(this);
+    }
 
-        //ToDo ???
-//        // Sync UI state to current fragment and task state
-//        if(isTaskRunning(mTask)) {
-//            showProgressBar();
-//        }else {
-//            hideProgressBar();
-//        }
-//        if(webCams!=null) {
-//            populateResult(webCams);
-//        }
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.map = googleMap;
+        initData();
+        mStringSignature = UUID.randomUUID().toString();
+    }
+
+
+    private void initData() {
+        webCams = new ArrayList<>();
+        mTask = new URLFetchTask(this, getActivity());
+        mTask.showProgress(true);
+        mTask.execute(-1);
     }
 
     private void setList() {
 
-        // New signature
-        mStringSignature = UUID.randomUUID().toString();
-
-        KnownLocation knownLocation = Utils.getLastKnownLocation(getActivity());
-        selectedMarker = ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null);
-        markerNotSelected = ResourcesCompat.getDrawable(getResources(), R.drawable.marker_not_selected, null);
-
-        initData();
 
 
-
-
-        mMapView = (MapView) getActivity().findViewById(R.id.mapView);
-        LatLng latLng = new LatLng(knownLocation.getLatitude(), knownLocation.getLongitude());
-        mMapView.setCenter(latLng);
-        if (knownLocation.isNotDetected()) {
-            mMapView.setZoom(3);
-        } else mMapView.setZoom(8);
-        mMapView.setDiskCacheEnabled(false);
-
-        ImageButton zoomIn = (ImageButton) getActivity().findViewById(R.id.zoomIn);
-        zoomIn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mMapView.getController().zoomIn();
-            }
-        });
-
-        ImageButton zoomOut = (ImageButton) getActivity().findViewById(R.id.zoomOut);
-        zoomOut.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mMapView.getController().zoomOut();
-            }
-        });
+//        mMapView = (MapView) getActivity().findViewById(R.id.mapView);
+//        LatLng latLng = new LatLng(knownLocation.getLatitude(), knownLocation.getLongitude());
+//        mMapView.setCenter(latLng);
+//        if (knownLocation.isNotDetected()) {
+//            mMapView.setZoom(3);
+//        } else mMapView.setZoom(8);
+//        mMapView.setDiskCacheEnabled(false);
+//
+//        ImageButton zoomIn = (ImageButton) getActivity().findViewById(R.id.zoomIn);
+//        zoomIn.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                mMapView.getController().zoomIn();
+//            }
+//        });
+//
+//        ImageButton zoomOut = (ImageButton) getActivity().findViewById(R.id.zoomOut);
+//        zoomOut.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                mMapView.getController().zoomOut();
+//            }
+//        });
 
         //selMarkers = new LinkedList<>();
 
 
     }
 
-    private void initData() {
-
-        webCams = new ArrayList<>();
-
-        mTask = new URLFetchTask(this, getActivity());
-        mTask.showProgress(true);
-        mTask.execute(-1);
-    }
 
     @Override
     public void populateResult(List<WebCam> webCams) {
         this.webCams = webCams;
 
-        markers = new LinkedList<>();
+        // Declare a variable for the cluster manager.
+        ClusterManager<MarkerCluster> mClusterManager;
+
+        KnownLocation knownLocation = Utils.getLastKnownLocation(getActivity());
+
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                new LatLng(knownLocation.getLatitude(), knownLocation.getLongitude()), 10));
+        map.getUiSettings().setZoomControlsEnabled(true);
+
+        // Initialize the manager with the context and the map.
+        // (Activity extends context, so we can pass 'this' in the constructor.)
+        mClusterManager = new ClusterManager<>(getContext(), map);
+        mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MarkerCluster>() {
+            @Override
+                public boolean onClusterItemClick(MarkerCluster markerCluster) {
+                //ToDO
+                return false;
+            }
+        });
+
+        // Point the map's listeners at the listeners implemented by the cluster
+        // manager.
+        map.setOnCameraChangeListener(mClusterManager);
+        map.setOnMarkerClickListener(mClusterManager);
+
+        // Add ten cluster items in close proximity, for purposes of this example.
         for (WebCam webCam : webCams) {
-            LatLng latLng = new LatLng(webCam.getLatitude(), webCam.getLongitude());
-            Marker marker = new Marker(mMapView, webCam.getName(), String.valueOf(webCam.getLatitude()) +
-                    ", " + String.valueOf(webCam.getLongitude()), latLng);
-            marker.setMarker(markerNotSelected);
-            markers.add(marker);
+            String url;
+            if (webCam.isStream()) {
+                url = webCam.getThumbUrl();
+            }
+            else url = webCam.getUrl();
+            MarkerCluster markerCluster = new MarkerCluster(webCam.getLatitude(), webCam.getLongitude(), webCam.getName(), url);
+            mClusterManager.addItem(markerCluster);
         }
-        ItemizedIconOverlay mItemizedIconOverlay = new ItemizedIconOverlay(getActivity(), markers,
-                new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
-
-                    @Override
-                    public boolean onItemSingleTapUp(int i, Marker marker) {
-                        InfoWindow tooltip = marker.getToolTip(mMapView);
-
-//                        if (selMarkers.size() != 0) {
-//                            if (selMarkers.contains(marker)) {
-//                                marker.getToolTip(mMapView).close();
-//                                marker.setMarker(markerNotSelected);
-//                                selMarkers.remove(marker);
-//                            } else {
-//                                selMarkers.add(marker);
-//                                marker.setMarker(selectedMarker);
-//                                marker.showBubble(tooltip, mMapView, true);
-//                            }
-//                        } else {
-//                            selMarkers.add(marker);
-//                            marker.setMarker(selectedMarker);
-//                            marker.showBubble(tooltip, mMapView, true);
-//                        }
-
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onItemLongPress(int i, Marker marker) {
-                        return true;
-                    }
-                });
-
-        mItemizedIconOverlay.setClusteringEnabled(true, null, 7);
-        mMapView.addItemizedOverlay(mItemizedIconOverlay);
     }
 
     //ToDo ???
@@ -290,7 +284,4 @@ public class MapAppBarFragment extends BaseFragment {
             else new NoCoordinatesDialog().show(getActivity().getFragmentManager(), "NoCoordinatesDialog");
         }
     }
-
-
-
 }

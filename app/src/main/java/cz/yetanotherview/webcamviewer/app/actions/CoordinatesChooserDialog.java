@@ -28,11 +28,6 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.mapbox.mapboxsdk.api.ILatLng;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.overlay.Marker;
-import com.mapbox.mapboxsdk.views.MapView;
-import com.mapbox.mapboxsdk.views.MapViewListener;
 
 import cz.yetanotherview.webcamviewer.app.R;
 
@@ -40,8 +35,8 @@ public class CoordinatesChooserDialog extends DialogFragment {
 
     private Activity mActivity;
     private Callback mCallback;
-    private MapView mMapView;
-    private Marker marker;
+    //private MapView mMapView;
+    //private Marker marker;
 
     public interface Callback {
         void onCoordinatesSave(String latitude, String longitude);
@@ -62,76 +57,76 @@ public class CoordinatesChooserDialog extends DialogFragment {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        if (marker != null) {
-                            LatLng latLng = marker.getPoint();
-                            mCallback.onCoordinatesSave(String.valueOf(latLng.getLatitude()), String.valueOf(latLng.getLongitude()));
-                        }
+                        //if (marker != null) {
+                        //    LatLng latLng = marker.getPoint();
+                        //    mCallback.onCoordinatesSave(String.valueOf(latLng.getLatitude()), String.valueOf(latLng.getLongitude()));
+                        //}
                     }
                 })
                 .build();
 
-        mMapView = (MapView) dialog.findViewById(R.id.mapView);
-
-        if (getArguments().getBoolean("empty")) {
-            marker = null;
-            mMapView.setZoom(2);
-        } else {
-            LatLng initPosition = new LatLng(getArguments().getDouble("latitude"), getArguments().getDouble("longitude"));
-            addMarker(initPosition);
-            mMapView.setZoom(16);
-            mMapView.setCenter(initPosition);
-        }
-
-        ImageButton zoomIn = (ImageButton) dialog.findViewById(R.id.zoomIn);
-        zoomIn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mMapView.getController().zoomIn();
-            }
-        });
-
-        ImageButton zoomOut = (ImageButton) dialog.findViewById(R.id.zoomOut);
-        zoomOut.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mMapView.getController().zoomOut();
-            }
-        });
-
-        mMapView.setDiskCacheEnabled(false);
-        mMapView.setMapViewListener(new MapViewListener() {
-            @Override
-            public void onShowMarker(MapView pMapView, Marker pMarker) {}
-
-            @Override
-            public void onHideMarker(MapView pMapView, Marker pMarker) {}
-
-            @Override
-            public void onTapMarker(MapView pMapView, Marker pMarker) {}
-
-            @Override
-            public void onLongPressMarker(MapView pMapView, Marker pMarker) {}
-
-            @Override
-            public void onTapMap(MapView pMapView, ILatLng pPosition) {
-                if (marker != null) {
-                    mMapView.removeMarker(marker);
-                }
-                addMarker(new LatLng(pPosition.getLatitude(), pPosition.getLongitude()));
-                Toast.makeText(mActivity, String.valueOf(pPosition.getLatitude()) + ", " +
-                        String.valueOf(pPosition.getLongitude()), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onLongPressMap(MapView pMapView, ILatLng pPosition) {}
-        });
+//        mMapView = (MapView) dialog.findViewById(R.id.mapView);
+//
+//        if (getArguments().getBoolean("empty")) {
+//            marker = null;
+//            mMapView.setZoom(2);
+//        } else {
+//            LatLng initPosition = new LatLng(getArguments().getDouble("latitude"), getArguments().getDouble("longitude"));
+//            addMarker(initPosition);
+//            mMapView.setZoom(16);
+//            mMapView.setCenter(initPosition);
+//        }
+//
+//        ImageButton zoomIn = (ImageButton) dialog.findViewById(R.id.zoomIn);
+//        zoomIn.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                mMapView.getController().zoomIn();
+//            }
+//        });
+//
+//        ImageButton zoomOut = (ImageButton) dialog.findViewById(R.id.zoomOut);
+//        zoomOut.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                mMapView.getController().zoomOut();
+//            }
+//        });
+//
+//        mMapView.setDiskCacheEnabled(false);
+//        mMapView.setMapViewListener(new MapViewListener() {
+//            @Override
+//            public void onShowMarker(MapView pMapView, Marker pMarker) {}
+//
+//            @Override
+//            public void onHideMarker(MapView pMapView, Marker pMarker) {}
+//
+//            @Override
+//            public void onTapMarker(MapView pMapView, Marker pMarker) {}
+//
+//            @Override
+//            public void onLongPressMarker(MapView pMapView, Marker pMarker) {}
+//
+//            @Override
+//            public void onTapMap(MapView pMapView, ILatLng pPosition) {
+//                if (marker != null) {
+//                    mMapView.removeMarker(marker);
+//                }
+//                addMarker(new LatLng(pPosition.getLatitude(), pPosition.getLongitude()));
+//                Toast.makeText(mActivity, String.valueOf(pPosition.getLatitude()) + ", " +
+//                        String.valueOf(pPosition.getLongitude()), Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onLongPressMap(MapView pMapView, ILatLng pPosition) {}
+//        });
 
         return dialog;
     }
 
-    private void addMarker(LatLng markerPosition) {
-        marker = new Marker(mMapView, "", "", markerPosition);
-        marker.setMarker(ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null));
-        mMapView.addMarker(marker);
-    }
+//    private void addMarker(LatLng markerPosition) {
+//        marker = new Marker(mMapView, "", "", markerPosition);
+//        marker.setMarker(ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null));
+//        mMapView.addMarker(marker);
+//    }
 
     @Override
     public void onAttach(Activity activity) {

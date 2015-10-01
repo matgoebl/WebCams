@@ -20,6 +20,7 @@ package cz.yetanotherview.webcamviewer.app.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +43,7 @@ public abstract class BaseFragment extends Fragment {
     Toolbar mToolbar;
     ImageView mToolbarImage;
     CollapsingToolbarLayout collapsingToolbar;
+    AppBarLayout appBarLayout;
 
     public MainActivity getDrawerActivity(){
         return ((MainActivity) super.getActivity());
@@ -65,8 +67,8 @@ public abstract class BaseFragment extends Fragment {
         mToolbarImage = (ImageView) getActivity().findViewById(R.id.toolbar_image);
         collapsingToolbar = (CollapsingToolbarLayout) getActivity().findViewById(R.id.collapsing_toolbar);
         mToolbar.inflateMenu(R.menu.menu);
-        mToolbar.setTitle(getArguments().getString("title"));
-        //collapsingToolbar.setTitle(getString(R.string.app_name));
+        collapsingToolbar.setTitle(getArguments().getString("title"));
+        appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.app_bar_layout);
         mToolbar.setNavigationIcon(R.drawable.ic_menu);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +96,7 @@ public abstract class BaseFragment extends Fragment {
             case R.id.live_streams:
                 return R.drawable.image_live_streams;
             case R.id.selecting_from_map:
+                appBarLayout.setExpanded(false, true);
                 return R.drawable.image_map;
             case R.id.favorites_webcams:
                 return R.drawable.image_popular; //ToDo

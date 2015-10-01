@@ -40,11 +40,6 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.overlay.ItemizedIconOverlay;
-import com.mapbox.mapboxsdk.overlay.Marker;
-import com.mapbox.mapboxsdk.views.InfoWindow;
-import com.mapbox.mapboxsdk.views.MapView;
 
 import junit.framework.Assert;
 
@@ -94,7 +89,7 @@ public class JsonFetcherDialog extends DialogFragment {
     private List<WebCam> importWebCams, allWebCams;
     private List<Country> countryList;
     private List<Type> typeList;
-    private List<Marker> markers, selMarkers;
+    //private List<Marker> markers, selMarkers;
     private MaterialDialog initDialog, progressDialog;
     private int selection, newWebCams, duplicityWebCams, updatedWebCams, maxProgressValue, seekBarProgress,
             seekBarCorrection;
@@ -108,7 +103,7 @@ public class JsonFetcherDialog extends DialogFragment {
     private KnownLocation knownLocation;
     private SeekBar seekBar;
     private TextView seekBarText;
-    private MapView mMapView;
+    //private MapView mMapView;
     private Drawable selectedMarker, markerNotSelected;
     private SharedPreferences preferences;
     private Type type;
@@ -287,14 +282,14 @@ public class JsonFetcherDialog extends DialogFragment {
                             selectedMarker = ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null);
                             markerNotSelected = ResourcesCompat.getDrawable(getResources(), R.drawable.marker_not_selected, null);
 
-                            markers = new LinkedList<>();
-                            for (WebCam webCam : importWebCams) {
-                                LatLng latLng = new LatLng(webCam.getLatitude(), webCam.getLongitude());
-                                Marker marker = new Marker(mMapView, webCam.getName(), String.valueOf(webCam.getLatitude()) +
-                                        ", " + String.valueOf(webCam.getLongitude()), latLng);
-                                marker.setMarker(markerNotSelected);
-                                markers.add(marker);
-                            }
+//                            markers = new LinkedList<>();
+//                            for (WebCam webCam : importWebCams) {
+//                                LatLng latLng = new LatLng(webCam.getLatitude(), webCam.getLongitude());
+//                                Marker marker = new Marker(mMapView, webCam.getName(), String.valueOf(webCam.getLatitude()) +
+//                                        ", " + String.valueOf(webCam.getLongitude()), latLng);
+//                                marker.setMarker(markerNotSelected);
+//                                markers.add(marker);
+//                            }
                             handleMapSelection();
                         }
                         else if (selection == 6) {
@@ -547,63 +542,63 @@ public class JsonFetcherDialog extends DialogFragment {
                         .positiveText(R.string.import_selected)
                         .build();
 
-                mMapView = (MapView) dialog.findViewById(R.id.mapView);
-                LatLng latLng = new LatLng(knownLocation.getLatitude(), knownLocation.getLongitude());
-                mMapView.setCenter(latLng);
-                if (knownLocation.isNotDetected()) {
-                    mMapView.setZoom(3);
-                } else mMapView.setZoom(8);
-                mMapView.setDiskCacheEnabled(false);
-
-                ImageButton zoomIn = (ImageButton) dialog.findViewById(R.id.zoomIn);
-                zoomIn.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        mMapView.getController().zoomIn();
-                    }
-                });
-
-                ImageButton zoomOut = (ImageButton) dialog.findViewById(R.id.zoomOut);
-                zoomOut.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        mMapView.getController().zoomOut();
-                    }
-                });
-
-                selMarkers = new LinkedList<>();
-                ItemizedIconOverlay mItemizedIconOverlay = new ItemizedIconOverlay(mActivity, markers,
-                        new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
-
-                            @Override
-                            public boolean onItemSingleTapUp(int i, Marker marker) {
-                                InfoWindow tooltip = marker.getToolTip(mMapView);
-
-                                if (selMarkers.size() != 0) {
-                                    if (selMarkers.contains(marker)) {
-                                        marker.getToolTip(mMapView).close();
-                                        marker.setMarker(markerNotSelected);
-                                        selMarkers.remove(marker);
-                                    } else {
-                                        selMarkers.add(marker);
-                                        marker.setMarker(selectedMarker);
-                                        marker.showBubble(tooltip, mMapView, true);
-                                    }
-                                } else {
-                                    selMarkers.add(marker);
-                                    marker.setMarker(selectedMarker);
-                                    marker.showBubble(tooltip, mMapView, true);
-                                }
-
-                                return true;
-                            }
-
-                            @Override
-                            public boolean onItemLongPress(int i, Marker marker) {
-                                return true;
-                            }
-                        });
-
-                mItemizedIconOverlay.setClusteringEnabled(true, null, 7);
-                mMapView.addItemizedOverlay(mItemizedIconOverlay);
+//                mMapView = (MapView) dialog.findViewById(R.id.mapView);
+//                LatLng latLng = new LatLng(knownLocation.getLatitude(), knownLocation.getLongitude());
+//                mMapView.setCenter(latLng);
+//                if (knownLocation.isNotDetected()) {
+//                    mMapView.setZoom(3);
+//                } else mMapView.setZoom(8);
+//                mMapView.setDiskCacheEnabled(false);
+//
+//                ImageButton zoomIn = (ImageButton) dialog.findViewById(R.id.zoomIn);
+//                zoomIn.setOnClickListener(new View.OnClickListener() {
+//                    public void onClick(View v) {
+//                        mMapView.getController().zoomIn();
+//                    }
+//                });
+//
+//                ImageButton zoomOut = (ImageButton) dialog.findViewById(R.id.zoomOut);
+//                zoomOut.setOnClickListener(new View.OnClickListener() {
+//                    public void onClick(View v) {
+//                        mMapView.getController().zoomOut();
+//                    }
+//                });
+//
+//                selMarkers = new LinkedList<>();
+//                ItemizedIconOverlay mItemizedIconOverlay = new ItemizedIconOverlay(mActivity, markers,
+//                        new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
+//
+//                            @Override
+//                            public boolean onItemSingleTapUp(int i, Marker marker) {
+//                                InfoWindow tooltip = marker.getToolTip(mMapView);
+//
+//                                if (selMarkers.size() != 0) {
+//                                    if (selMarkers.contains(marker)) {
+//                                        marker.getToolTip(mMapView).close();
+//                                        marker.setMarker(markerNotSelected);
+//                                        selMarkers.remove(marker);
+//                                    } else {
+//                                        selMarkers.add(marker);
+//                                        marker.setMarker(selectedMarker);
+//                                        marker.showBubble(tooltip, mMapView, true);
+//                                    }
+//                                } else {
+//                                    selMarkers.add(marker);
+//                                    marker.setMarker(selectedMarker);
+//                                    marker.showBubble(tooltip, mMapView, true);
+//                                }
+//
+//                                return true;
+//                            }
+//
+//                            @Override
+//                            public boolean onItemLongPress(int i, Marker marker) {
+//                                return true;
+//                            }
+//                        });
+//
+//                mItemizedIconOverlay.setClusteringEnabled(true, null, 7);
+//                mMapView.addItemizedOverlay(mItemizedIconOverlay);
 
                 initDialog.dismiss();
                 dialog.show();
@@ -639,13 +634,13 @@ public class JsonFetcherDialog extends DialogFragment {
                     break;
                 case 5:
                     List<WebCam> tempList = new ArrayList<>();
-                    for (Marker marker : markers) {
-                        if (selMarkers.contains(marker)) {
-                            WebCam webCam = importWebCams.get(markers.indexOf(marker));
-                            tempList.add(webCam);
-                        }
-                    }
-                    importWebCams = tempList;
+//                    for (Marker marker : markers) {
+//                        if (selMarkers.contains(marker)) {
+//                            WebCam webCam = importWebCams.get(markers.indexOf(marker));
+//                            tempList.add(webCam);
+//                        }
+//                    }
+//                    importWebCams = tempList;
 
                     proceed(new Category("@drawable/icon_map", mActivity.getString(R.string.from_map) + " " +
                             Utils.getDateString()));

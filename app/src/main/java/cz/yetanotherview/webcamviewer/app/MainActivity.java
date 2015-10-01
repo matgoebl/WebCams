@@ -250,7 +250,6 @@ public class MainActivity extends AppCompatActivity { //implements WebCamListene
         mDrawerLayout.openDrawer(GravityCompat.START);
     }
 
-
     private void setNewRootFragment(BaseFragment fragment, int id, String title) {
         mNavigator.setRootFragment(fragment, id, title);
     }

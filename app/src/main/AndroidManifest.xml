@@ -80,6 +80,10 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAVdd4AImE1BsC5ENIUye7JdrEDVk50ak0" />
     </application>
 
 </manifest>

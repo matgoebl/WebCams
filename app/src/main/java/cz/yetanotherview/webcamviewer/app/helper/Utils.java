@@ -70,7 +70,7 @@ public class Utils {
     public static final String MATERIAL_DIALOGS_VERSION = "0.8.1.0";
     public static final String GOOGLE_GSON_VERSION = "2.3.1";
     public static final String JSOUP_VERSION = "1.8.2";
-    public static final String MAPBOX_VERSION = "0.7.4";
+    public static final String MAPBOX_VERSION = "0.7.4"; //ToDo: Replace
     public static final String FAB_VERSION = "1.6.1"; //ToDo
 
     private static final String CORE = "http://api.yetanotherview.cz/api/v3/";
