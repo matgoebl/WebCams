@@ -67,8 +67,6 @@ public class URLFetchTask extends AsyncTask<Integer, Void, List<WebCam>> {
                 action = "3";
             } else if (id == R.id.popular_webcams) {
                 action = "1";
-            } else if (id == R.id.nearby_webcams) {
-                action = "4";
             } else if (id == R.id.live_streams) {
                 action = "2";
             } else action = "0";
@@ -77,13 +75,18 @@ public class URLFetchTask extends AsyncTask<Integer, Void, List<WebCam>> {
             if (id == R.id.nearby_webcams) {
                 KnownLocation knownLocation = Utils.getLastKnownLocation(activity);
                 url = new URL(Utils.JSON_FILE_SNRSRKUBIIXK +
-                        "?action=" + action +
+                        "?action=" + "4" +
                         "&id=" + activity.getApplicationContext().getPackageName() +
                         "&latitude=" + knownLocation.getLatitude() +
                         "&longitude=" + knownLocation.getLongitude()
                 );
-            }
-            else url = new URL(Utils.JSON_FILE_SNRSRKUBIIXK + "?action=" + action + "&id=" + activity.getApplicationContext().getPackageName());
+            } else if (id == R.id.selecting_by_type) {
+                url = new URL(Utils.JSON_FILE_SNRSRKUBIIXK +
+                        "?action=" + "5" +
+                        "&id=" + activity.getApplicationContext().getPackageName() +
+                        "&type=" + params[1]
+                );
+            } else url = new URL(Utils.JSON_FILE_SNRSRKUBIIXK + "?action=" + action + "&id=" + activity.getApplicationContext().getPackageName());
 
             HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
             urlConn.connect();

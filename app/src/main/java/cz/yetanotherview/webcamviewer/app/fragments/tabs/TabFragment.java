@@ -18,7 +18,7 @@
 
 package cz.yetanotherview.webcamviewer.app.fragments.tabs;
 
-import android.app.Fragment;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -38,14 +38,10 @@ import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
 import cz.yetanotherview.webcamviewer.app.fragments.BaseFragment;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView;
+import cz.yetanotherview.webcamviewer.app.helper.URLFetchTask;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TabFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class TabFragment extends BaseFragment {
 
     private static final String ARG_START = "start_param";
@@ -54,28 +50,34 @@ public class TabFragment extends BaseFragment {
 
     int mStart, mOrientation;
 
-    int id = R.id.selecting_by_type;
+    int id;
 
     DatabaseHelper db;
 
-    private List<WebCam> allWebCams;
     private String mStringSignature, sortOrder;
 
     private StaggeredGridLayoutManager mLayoutManager;
 
     private WebCamAdapter mAdapter;
 
-
-    public static TabFragment newInstance(int start) {
-        TabFragment fragment = new TabFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_START, start);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private List<WebCam> webCams;
+    URLFetchTask mTask;
+//
+//
+//    public static TabFragment newInstance(int start) {
+//        TabFragment fragment = new TabFragment();
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_START, start);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     public TabFragment() {
-        // Required empty public constructor
+    }
+
+    @SuppressLint("ValidFragment")
+    public TabFragment(int id) {
+        this.id = id;
     }
 
     @Override
@@ -100,25 +102,17 @@ public class TabFragment extends BaseFragment {
 
     private void initData() {
 
-        allWebCams = new ArrayList<>();
+        webCams = new ArrayList<>();
 
-        if (id < 9999) {
+        mTask = new URLFetchTask(this, getActivity());
+        mTask.showProgress(true);
+        mTask.execute(R.id.selecting_by_type, id);
+    }
 
-            //startURLFetch(id);
-
-
-
-        }
-        else {
-            if (db == null) {
-                db = new DatabaseHelper(getContext());
-            }
-            //if (selectedCategory == 0) {
-            allWebCams = db.getAllWebCams(sortOrder);
-            //}
-            //else allWebCams = db.getAllWebCamsByCategory(selectedCategoryId, sortOrder);
-            db.closeDB();
-        }
+    @Override
+    public void populateResult(List<WebCam> webCams) {
+        this.webCams = webCams;
+        mAdapter.swapData(this.webCams);
     }
 
     private void setupRecyclerView(View view) {
@@ -136,7 +130,7 @@ public class TabFragment extends BaseFragment {
         mRecyclerView.setAppBarLayout((AppBarLayout) view.findViewById(R.id.app_bar_layout));
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new WebCamAdapter(getContext(), allWebCams, mOrientation, mLayoutId,
+        mAdapter = new WebCamAdapter(getContext(), webCams, mOrientation, mLayoutId,
                 new StringSignature(mStringSignature), imagesOnOff);
         mRecyclerView.setAdapter(mAdapter);
     }

@@ -99,7 +99,6 @@ public class MapAppBarFragment extends BaseFragment implements OnMapReadyCallbac
         mStringSignature = UUID.randomUUID().toString();
     }
 
-
     private void initData() {
         webCams = new ArrayList<>();
         mTask = new URLFetchTask(this, getActivity());

@@ -65,9 +65,10 @@ public abstract class BaseFragment extends Fragment {
         if(!hasCustomToolbar()) return;
         mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         mToolbarImage = (ImageView) getActivity().findViewById(R.id.toolbar_image);
-        collapsingToolbar = (CollapsingToolbarLayout) getActivity().findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar = (CollapsingToolbarLayout) getActivity().findViewById(R.id.collapsing_toolbar_layout);
         mToolbar.inflateMenu(R.menu.menu);
-        collapsingToolbar.setTitle(getArguments().getString("title"));
+        mToolbar.setTitle(getArguments().getString("title"));
+        //collapsingToolbar.setTitle(getArguments().getString("title"));
         appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.app_bar_layout);
         mToolbar.setNavigationIcon(R.drawable.ic_menu);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -92,7 +93,7 @@ public abstract class BaseFragment extends Fragment {
             case R.id.selecting_by_country:
                 return R.drawable.image_country;
             case R.id.selecting_by_type:
-                return R.drawable.image_manual; //ToDo
+                return R.drawable.image_airports;
             case R.id.live_streams:
                 return R.drawable.image_live_streams;
             case R.id.selecting_from_map:

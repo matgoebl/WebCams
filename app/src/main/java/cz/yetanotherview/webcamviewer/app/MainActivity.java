@@ -173,6 +173,15 @@ public class MainActivity extends AppCompatActivity { //implements WebCamListene
         super.finish();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void setupToolbar() {
         //mToolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(mToolbar);

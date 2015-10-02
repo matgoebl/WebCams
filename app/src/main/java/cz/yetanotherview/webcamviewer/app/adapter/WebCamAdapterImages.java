@@ -31,7 +31,7 @@ import com.bumptech.glide.signature.StringSignature;
 
 import cz.yetanotherview.webcamviewer.app.helper.HttpHeader;
 
-class WebCamAdapterImages {
+public class WebCamAdapterImages {
 
     private final Context context;
     private final WebCamAdapter.WebCamViewHolder webcamViewHolder;

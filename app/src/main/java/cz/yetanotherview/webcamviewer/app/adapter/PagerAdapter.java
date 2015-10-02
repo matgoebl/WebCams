@@ -18,65 +18,39 @@
 
 package cz.yetanotherview.webcamviewer.app.adapter;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import cz.yetanotherview.webcamviewer.app.R;
-import cz.yetanotherview.webcamviewer.app.fragments.tabs.TabFragment;
-import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
-    private Context mContext;
-    private List<WebCam> webCams;
+    private final List<Fragment> mFragmentList = new ArrayList<>();
+    private final List<String> mFragmentTitleList = new ArrayList<>();
 
-    public PagerAdapter(FragmentManager fm, Context context) {
-        super(fm);
-        mContext = context;
+    public PagerAdapter(FragmentManager fragmentManager) {
+        super(fragmentManager);
     }
 
     @Override
     public Fragment getItem(int position) {
-        return TabFragment.newInstance(getOffset(position));
-    }
-
-    private int getOffset(int position){
-        switch (position){
-            case 0: return 0;
-            case 1: return 5;
-            case 2: return 10;
-            case 3: return 15;
-        }
-        return 0;
+        return mFragmentList.get(position);
     }
 
     @Override
     public int getCount() {
-        return 4;
+        return mFragmentList.size();
+    }
+
+    public void addFrag(Fragment fragment, String title) {
+        mFragmentList.add(fragment);
+        mFragmentTitleList.add(title);
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        String title = "not_title_set";
-        switch (position) {
-            case 0:
-                title = "pop_title";
-                break;
-            case 1:
-                title = "indie_title";
-                break;
-            case 2:
-                title = "rock_title";
-                break;
-            case 3:
-                //title = mContext.getString(R.string.r8b_title);
-                title = "r8b_title";
-                break;
-        }
-        return title;
+        return mFragmentTitleList.get(position);
     }
 }

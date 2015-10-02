@@ -32,13 +32,10 @@
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
+            android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="256dp"
             app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginStart="48dp"
-            app:expandedTitleMarginEnd="64dp"
-            app:expandedTitleTextAppearance="@style/Title.Expanded"
             app:collapsedTitleTextAppearance="@style/Title.Collapsed"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             android:fitsSystemWindows="true">
