@@ -21,52 +21,29 @@ package cz.yetanotherview.webcamviewer.app.fragments;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.ActionMode;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.bumptech.glide.signature.StringSignature;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import cz.yetanotherview.webcamviewer.app.R;
-import cz.yetanotherview.webcamviewer.app.actions.SaveDialog;
-import cz.yetanotherview.webcamviewer.app.actions.ShareDialog;
+import cz.yetanotherview.webcamviewer.app.actions.ThumbnailDialog;
 import cz.yetanotherview.webcamviewer.app.actions.simple.NoCoordinatesDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
 import cz.yetanotherview.webcamviewer.app.fullscreen.FullScreenActivity;
 import cz.yetanotherview.webcamviewer.app.fullscreen.LiveStreamActivity;
-import cz.yetanotherview.webcamviewer.app.helper.SendToInbox;
 import cz.yetanotherview.webcamviewer.app.helper.URLFetchTask;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
@@ -181,7 +158,13 @@ public class MapAppBarFragment extends BaseFragment implements OnMapReadyCallbac
         mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MarkerCluster>() {
             @Override
                 public boolean onClusterItemClick(MarkerCluster markerCluster) {
-                //ToDO
+                ThumbnailDialog thumbnailDialog = new ThumbnailDialog();
+                Bundle bundle = new Bundle();
+                bundle.putString("title", markerCluster.getTitle());
+                bundle.putString("tags", markerCluster.getTags());
+                bundle.putString("url", markerCluster.getUrl());
+                thumbnailDialog.setArguments(bundle);
+                thumbnailDialog.show(getActivity().getFragmentManager(), "ThumbnailDialog");
                 return false;
             }
         });
@@ -198,7 +181,7 @@ public class MapAppBarFragment extends BaseFragment implements OnMapReadyCallbac
                 url = webCam.getThumbUrl();
             }
             else url = webCam.getUrl();
-            MarkerCluster markerCluster = new MarkerCluster(webCam.getLatitude(), webCam.getLongitude(), webCam.getName(), url);
+            MarkerCluster markerCluster = new MarkerCluster(webCam.getLatitude(), webCam.getLongitude(), webCam.getName(), webCam.getTags(), url);
             mClusterManager.addItem(markerCluster);
         }
     }

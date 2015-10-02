@@ -24,16 +24,30 @@ import com.google.maps.android.clustering.ClusterItem;
 public class MarkerCluster implements ClusterItem {
     private final LatLng mPosition;
     private final String mTitle;
-    private final String mImageUrl;
+    private final String mTags;
+    private final String mUrl;
 
-    public MarkerCluster(double lat, double lng, String title, String imageUrl) {
+    public MarkerCluster(double lat, double lng, String title, String tags, String url) {
         mPosition = new LatLng(lat, lng);
         mTitle = title;
-        mImageUrl = imageUrl;
+        mTags = tags;
+        mUrl = url;
     }
 
     @Override
     public LatLng getPosition() {
         return mPosition;
+    }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public String getTags() {
+        return mTags;
+    }
+
+    public String getUrl() {
+        return mUrl;
     }
 }
