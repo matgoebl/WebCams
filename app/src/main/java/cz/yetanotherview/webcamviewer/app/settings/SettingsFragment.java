@@ -29,16 +29,10 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.support.design.widget.Snackbar;
-import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-
-import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.actions.simple.TranslatorsDialog;
@@ -47,18 +41,13 @@ import cz.yetanotherview.webcamviewer.app.actions.simple.AboutDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ExportDialog;
 import cz.yetanotherview.webcamviewer.app.actions.ImportDialog;
 import cz.yetanotherview.webcamviewer.app.actions.simple.LibrariesDialog;
-import cz.yetanotherview.webcamviewer.app.actions.simple.NothingSelectedDialog;
-import cz.yetanotherview.webcamviewer.app.adapter.ManualSelectionAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.DeleteAllWebCams;
-import cz.yetanotherview.webcamviewer.app.helper.OnFilterTextChange;
 import cz.yetanotherview.webcamviewer.app.listener.SeekBarChangeListener;
-import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class SettingsFragment extends PreferenceFragment {
 
     private Context context;
-    private List<WebCam> allWebCams;
     private MaterialDialog indeterminateProgress;
     private SeekBar seekBar;
     private TextView seekBarText;
@@ -69,9 +58,6 @@ public class SettingsFragment extends PreferenceFragment {
     private Preference prefAutoRefreshFullScreen, prefAutoRefreshInterval;
     private PreferenceCategory preferenceCategory;
     private DialogFragment dialogFragment;
-    private ManualSelectionAdapter manualSelectionAdapter;
-    private ListView manualSelectionList;
-    private EditText filterBox;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,13 +71,11 @@ public class SettingsFragment extends PreferenceFragment {
         setAutoRefreshInterval();
         setAutoHideListener();
 
-        deleteSelectedWebCams();
         deleteAllWebCams();
 
         importFromExt();
         exportToExt();
 
-        resetLastCheck();
         cleanCacheAndTmpFolder();
         showTranslators();
         showLibraries();
@@ -174,81 +158,6 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
-    private void deleteSelectedWebCams() {
-        Preference pref_delete_selected = findPreference("pref_delete_selected");
-        pref_delete_selected.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-
-                allWebCams = db.getAllWebCams(Utils.defaultSortOrder);
-                db.closeDB();
-                if (allWebCams.size() > 0) {
-                    MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                            .title(R.string.delete_webcams)
-                            .customView(R.layout.manual_selection_dialog, false)
-                            .positiveText(R.string.choose)
-                            .iconRes(R.drawable.settings_delete_selected)
-                            .callback(new MaterialDialog.ButtonCallback() {
-                                @Override
-                                public void onPositive(MaterialDialog dialog) {
-
-                                    if (manualSelectionAdapter.getCheckedCount() != 0) {
-                                        showIndeterminateProgress();
-                                        new deleteSelectedWebCamsBackgroundTask().execute();
-                                    } else new NothingSelectedDialog().show(getFragmentManager(),
-                                            "NothingSelectedDialog");
-                                }
-                            })
-                            .build();
-
-                    manualSelectionList = (ListView) dialog.findViewById(R.id.filtered_list_view);
-                    manualSelectionList.setEmptyView(dialog.findViewById(R.id.empty_info_text));
-                    manualSelectionAdapter = new ManualSelectionAdapter(getActivity(), allWebCams);
-                    manualSelectionList.setAdapter(manualSelectionAdapter);
-
-                    filterBox = (EditText) dialog.findViewById(R.id.ms_filter);
-                    filterBox.setHint(R.string.enter_name);
-                    filterBox.addTextChangedListener(new OnFilterTextChange(manualSelectionAdapter));
-
-                    CheckBox chkAll = (CheckBox) dialog.findViewById(R.id.chkAll);
-                    chkAll.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            CheckBox chk = (CheckBox) v;
-                            if (chk.isChecked()) {
-                                manualSelectionAdapter.setAllChecked();
-                            } else manualSelectionAdapter.setAllUnChecked();
-                        }
-                    });
-
-                    dialog.show();
-
-                } else listIsEmpty();
-
-                return true;
-            }
-        });
-    }
-
-    private class deleteSelectedWebCamsBackgroundTask extends AsyncTask<Integer, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Integer... integers) {
-            for (WebCam deleteWebCam : allWebCams) {
-                if (deleteWebCam.isSelected()) {
-                    db.deleteWebCam(deleteWebCam.getId());
-                }
-            }
-            if (db.getWebCamCount() == 0) {
-                DeleteAllWebCams.execute(context, false);
-            }
-            db.closeDB();
-
-            showDeletedSnackBar();
-            return null;
-        }
-    }
-
     private void deleteAllWebCams() {
         Preference pref_delete_all = findPreference("pref_delete_all");
         pref_delete_all.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -310,34 +219,6 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 dialogFragment = new ImportDialog();
                 dialogFragment.show(getFragmentManager(), "ImportDialog");
-                return true;
-            }
-        });
-    }
-
-    private void resetLastCheck() {
-        Preference pref_reset_last_check = findPreference("pref_reset_last_check");
-        pref_reset_last_check.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-
-                new MaterialDialog.Builder(getActivity())
-                        .title(R.string.pref_reset_last_check)
-                        .content(R.string.reset_last_check_message)
-                        .positiveText(R.string.Yes)
-                        .negativeText(R.string.No)
-                        .iconRes(R.drawable.settings_reset_last_check)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                sharedPref.edit().putLong("pref_last_fetch_popular", 0).apply();
-                                sharedPref.edit().putLong("pref_last_fetch_latest", 0).apply();
-
-                                Snackbar.make(getActivity().findViewById(R.id.content_frame), R.string.done,
-                                        Snackbar.LENGTH_SHORT).show();
-                            }
-                        })
-                        .show();
-
                 return true;
             }
         });

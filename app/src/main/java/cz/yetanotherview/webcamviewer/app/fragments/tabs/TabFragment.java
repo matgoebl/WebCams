@@ -62,18 +62,8 @@ public class TabFragment extends BaseFragment {
 
     private List<WebCam> webCams;
     URLFetchTask mTask;
-//
-//
-//    public static TabFragment newInstance(int start) {
-//        TabFragment fragment = new TabFragment();
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_START, start);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
-    public TabFragment() {
-    }
+    public TabFragment() {}
 
     @SuppressLint("ValidFragment")
     public TabFragment(int id) {

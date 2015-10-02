@@ -287,7 +287,6 @@
 <string name="hw_acceleration_disabled">"HW acceleration is Disabled"</string>
 <string name="hw_acceleration_enabled">"HW acceleration is Enabled"</string>
 <string name="all_local_webcams">"All local WebCams"</string>
-<string name="boats">"Boats"</string>
 <string name="fun_parks">"Fun parks"</string>
 <string name="golf_resorts">"Golf Resorts"</string>
 <string name="rocks">"Rocks"</string>
@@ -295,4 +294,5 @@
 <string name="stations">"Stations"</string>
 <string name="streets">"Streets"</string>
 <string name="surfs">"Surfs"</string>
+<string name="ships">"Ships"</string>
 </resources>

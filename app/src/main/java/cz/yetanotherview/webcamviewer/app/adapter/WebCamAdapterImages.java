@@ -82,7 +82,7 @@ public class WebCamAdapterImages {
         @Override
         public boolean onException(Exception e, GlideUrl model, Target<GlideDrawable> target,
                                    boolean isFirstResource) {
-            if (count == 6) {
+            if (count == 2) {
                 webcamViewHolder.vProgress.setVisibility(View.GONE);
                 webcamViewHolder.vError.setVisibility(View.VISIBLE);
             }

@@ -47,6 +47,8 @@ public class TabHolderFragment extends BaseFragment {
     ViewPager mViewPager;
     ImageView mToolbarImage;
 
+    PagerAdapter adapter;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -87,20 +89,7 @@ public class TabHolderFragment extends BaseFragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
-
-                int image = R.drawable.image_all;
-                switch (tab.getPosition()) {
-                    case 0: image = R.drawable.image_airports; break;
-                    case 1: image = R.drawable.image_animals; break;
-                    case 2: image = R.drawable.image_beaches; break;
-                    case 3: image = R.drawable.image_all; break; //ToDo
-                    case 4: image = R.drawable.image_bridges; break;
-                    case 5: image = R.drawable.image_buildings; break;
-                    case 6: image = R.drawable.image_castles; break;
-                    case 7: image = R.drawable.image_cities; break;
-                }
-
-                Glide.with(getActivity()).load(image).centerCrop().into(mToolbarImage);
+                Glide.with(getActivity()).load(adapter.getPageImage(tab.getPosition())).centerCrop().into(mToolbarImage);
             }
 
             @Override
@@ -114,15 +103,39 @@ public class TabHolderFragment extends BaseFragment {
     }
 
     private void setupViewPager() {
-        PagerAdapter adapter = new PagerAdapter(getChildFragmentManager());
-        adapter.addFrag(new TabFragment(0), getString(R.string.airports));
-        adapter.addFrag(new TabFragment(1), getString(R.string.animals));
-        adapter.addFrag(new TabFragment(2), getString(R.string.beaches));
-        adapter.addFrag(new TabFragment(24), getString(R.string.boats));
-        adapter.addFrag(new TabFragment(3), getString(R.string.bridges));
-        adapter.addFrag(new TabFragment(4), getString(R.string.buildings));
-        adapter.addFrag(new TabFragment(5), getString(R.string.castles));
-        adapter.addFrag(new TabFragment(6), getString(R.string.cities));
+        adapter = new PagerAdapter(getChildFragmentManager());
+        adapter.addFrag(new TabFragment(0), getString(R.string.airports), R.drawable.image_airports);
+        adapter.addFrag(new TabFragment(1), getString(R.string.animals), R.drawable.image_animals);
+        adapter.addFrag(new TabFragment(2), getString(R.string.beaches), R.drawable.image_beaches);
+        adapter.addFrag(new TabFragment(3), getString(R.string.bridges), R.drawable.image_bridges);
+        adapter.addFrag(new TabFragment(4), getString(R.string.buildings), R.drawable.image_buildings);
+        adapter.addFrag(new TabFragment(5), getString(R.string.castles), R.drawable.image_castles);
+        adapter.addFrag(new TabFragment(6), getString(R.string.cities), R.drawable.image_cities);
+        adapter.addFrag(new TabFragment(7), getString(R.string.constructions), R.drawable.image_constructions);
+        adapter.addFrag(new TabFragment(31), getString(R.string.fun_parks), R.drawable.image_fun_parks);
+        adapter.addFrag(new TabFragment(29), getString(R.string.golf_resorts), R.drawable.image_golf_resorts);
+        adapter.addFrag(new TabFragment(8), getString(R.string.harbours), R.drawable.image_harbours);
+        adapter.addFrag(new TabFragment(9), getString(R.string.churches), R.drawable.image_churches);
+        adapter.addFrag(new TabFragment(10), getString(R.string.indoors), R.drawable.image_indoors);
+        adapter.addFrag(new TabFragment(11), getString(R.string.lakes), R.drawable.image_lakes);
+        adapter.addFrag(new TabFragment(12), getString(R.string.landscapes), R.drawable.image_landscapes);
+        adapter.addFrag(new TabFragment(13), getString(R.string.market_square), R.drawable.image_market_square);
+        adapter.addFrag(new TabFragment(14), getString(R.string.mountains), R.drawable.image_mountains);
+        adapter.addFrag(new TabFragment(15), getString(R.string.others), R.drawable.image_others);
+        adapter.addFrag(new TabFragment(16), getString(R.string.parks), R.drawable.image_parks);
+        adapter.addFrag(new TabFragment(17), getString(R.string.pools), R.drawable.image_pools);
+        adapter.addFrag(new TabFragment(18), getString(R.string.radio_studios), R.drawable.image_radio_studios);
+        adapter.addFrag(new TabFragment(19), getString(R.string.railways), R.drawable.image_railways);
+        adapter.addFrag(new TabFragment(20), getString(R.string.rivers), R.drawable.image_rivers);
+        adapter.addFrag(new TabFragment(30), getString(R.string.rocks), R.drawable.image_rocks);
+        adapter.addFrag(new TabFragment(24), getString(R.string.ships), R.drawable.image_ships);
+        adapter.addFrag(new TabFragment(21), getString(R.string.ski_resorts), R.drawable.image_ski_resorts);
+        adapter.addFrag(new TabFragment(25), getString(R.string.skies), R.drawable.image_skies);
+        adapter.addFrag(new TabFragment(26), getString(R.string.stations), R.drawable.image_stations);
+        adapter.addFrag(new TabFragment(27), getString(R.string.streets), R.drawable.image_streets);
+        adapter.addFrag(new TabFragment(28), getString(R.string.surfs), R.drawable.image_surfs);
+        adapter.addFrag(new TabFragment(22), getString(R.string.traffic_cameras), R.drawable.image_traffic_cameras);
+        adapter.addFrag(new TabFragment(23), getString(R.string.universities), R.drawable.image_universities);
         mViewPager.setAdapter(adapter);
     }
 

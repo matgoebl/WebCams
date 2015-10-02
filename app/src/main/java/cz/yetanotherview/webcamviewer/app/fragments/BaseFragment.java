@@ -100,7 +100,7 @@ public abstract class BaseFragment extends Fragment {
                 appBarLayout.setExpanded(false, true);
                 return R.drawable.image_map;
             case R.id.favorites_webcams:
-                return R.drawable.image_popular; //ToDo
+                return R.drawable.image_favorites;
             case R.id.all_local_webcams:
                 return R.drawable.image_imported;
             default:

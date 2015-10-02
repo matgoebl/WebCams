@@ -29,6 +29,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
+    private final List<Integer> mFragmentImageList = new ArrayList<>();
 
     public PagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -44,13 +45,18 @@ public class PagerAdapter extends FragmentPagerAdapter {
         return mFragmentList.size();
     }
 
-    public void addFrag(Fragment fragment, String title) {
+    public void addFrag(Fragment fragment, String title, int image) {
         mFragmentList.add(fragment);
         mFragmentTitleList.add(title);
+        mFragmentImageList.add(image);
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         return mFragmentTitleList.get(position);
+    }
+
+    public Integer getPageImage(int position) {
+        return mFragmentImageList.get(position);
     }
 }

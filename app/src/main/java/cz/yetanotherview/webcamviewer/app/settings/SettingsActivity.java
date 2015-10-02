@@ -41,7 +41,6 @@ public class SettingsActivity extends AppCompatActivity {
         actionBar = getSupportActionBar();
         initHomeButton();
 
-        // Display the fragment as the main content.
         getFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, new SettingsFragment())
                 .commit();
@@ -49,10 +48,11 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void initHomeButton() {
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed(){ //ToDo
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

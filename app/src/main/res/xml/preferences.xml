@@ -70,12 +70,6 @@
         android:title="@string/pref_web_cams">
 
         <Preference
-            android:key="pref_delete_selected"
-            android:title="@string/delete_webcams"
-            android:icon="@drawable/settings_delete_selected"
-            android:summary="@string/delete_webcams_summary" />
-
-        <Preference
             android:key="pref_delete_all"
             android:title="@string/pref_delete_all_webcams"
             android:icon="@drawable/settings_delete_all"
@@ -100,12 +94,6 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/other">
-
-        <Preference
-            android:key="pref_reset_last_check"
-            android:title="@string/pref_reset_last_check"
-            android:icon="@drawable/settings_reset_last_check"
-            android:summary="@string/pref_reset_last_check_summary" />
 
         <Preference
             android:key="pref_clean_cache_and_tmp"
