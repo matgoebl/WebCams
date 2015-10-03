@@ -40,6 +40,7 @@ import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView;
 import cz.yetanotherview.webcamviewer.app.helper.URLFetchTask;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
+import cz.yetanotherview.webcamviewer.app.listener.WebCamClickListener;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public class TabFragment extends BaseFragment {
@@ -123,6 +124,7 @@ public class TabFragment extends BaseFragment {
         mAdapter = new WebCamAdapter(getContext(), webCams, mOrientation, mLayoutId,
                 new StringSignature(mStringSignature), imagesOnOff);
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setClickListener(new WebCamClickListener(getActivity(), mAdapter, mStringSignature));
     }
 
     @Override

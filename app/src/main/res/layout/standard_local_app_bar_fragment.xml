@@ -25,10 +25,10 @@
     android:fitsSystemWindows="true">
 
     <include
-        layout="@layout/app_bar_fragment"/>
+        layout="@layout/activity_main_empty_list"/>
 
     <include
-        layout="@layout/activity_main_empty_list"/>
+        layout="@layout/app_bar_fragment"/>
 
     <cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView
         android:id="@+id/emptyRecyclerViewList"
