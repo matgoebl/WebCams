@@ -29,12 +29,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -55,9 +53,10 @@ import cz.yetanotherview.webcamviewer.app.actions.simple.LocationWarningDialog;
 import cz.yetanotherview.webcamviewer.app.adapter.ManualSelectionAdapter;
 import cz.yetanotherview.webcamviewer.app.fragments.BaseFragment;
 import cz.yetanotherview.webcamviewer.app.fragments.MapAppBarFragment;
+import cz.yetanotherview.webcamviewer.app.fragments.SearchAppBarFragment;
 import cz.yetanotherview.webcamviewer.app.fragments.StandardAppBarFragment;
 import cz.yetanotherview.webcamviewer.app.fragments.StandardLocalAppBarFragment;
-import cz.yetanotherview.webcamviewer.app.fragments.tabs.TabHolderFragment;
+import cz.yetanotherview.webcamviewer.app.fragments.TabHolderFragment;
 import cz.yetanotherview.webcamviewer.app.help.HelpActivity;
 import cz.yetanotherview.webcamviewer.app.helper.ClearImageCache;
 import cz.yetanotherview.webcamviewer.app.helper.OnFilterTextChange;
@@ -217,7 +216,7 @@ public class MainActivity extends AppCompatActivity { //implements WebCamListene
                         setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.nearby_webcams, title);
                         return true;
                     case R.id.selecting_by_name:
-                        //setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.selecting_by_name, title);
+                        setNewRootFragment(SearchAppBarFragment.newInstance(), R.id.selecting_by_name, title);
                         return true;
                     case R.id.selecting_by_country:
                         //setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.selecting_by_country, title);
@@ -344,135 +343,6 @@ public class MainActivity extends AppCompatActivity { //implements WebCamListene
 
     private void reInitializeDrawerListAdapter() {
         //mNavigationDrawerFragment.reloadData();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-
-        searchItem = menu.findItem(R.id.action_search);
-        searchView = (SearchView) searchItem.getActionView();
-        searchView.setQueryHint(getString(R.string.search_hint));
-        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                //appBarLayout.setExpanded(false, true);
-                collapsingToolbar.setCollapsedTitleTextColor(Utils.getColor(getResources(), android.R.color.transparent));
-                searchView.setIconified(false);
-                searchView.requestFocus();
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                //appBarLayout.setExpanded(true, true);
-                collapsingToolbar.setCollapsedTitleTextColor(Utils.getColor(getResources(), R.color.white));
-                searchView.clearFocus();
-                return true;
-            }
-        });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                searchItem.collapseActionView();
-                return false;
-            }
-        });
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchView.clearFocus();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //mAdapter.filter(newText);
-                return true;
-            }
-        });
-
-        MenuItem dashboard = menu.findItem(R.id.action_dashboard);
-        if (numberOfColumns == 1) {
-            dashboard.setIcon(R.drawable.ic_action_dashboard);
-        }
-        else dashboard.setIcon(R.drawable.ic_action_view_day);
-
-        MenuItem imagesOnOffItem = menu.findItem(R.id.action_image_on_off);
-        if (imagesOnOff) {
-            imagesOnOffItem.setTitle(R.string.images_off);
-            imagesOnOffItem.setIcon(R.drawable.ic_action_image_off);
-        }
-        else {
-            imagesOnOffItem.setTitle(R.string.images_on);
-            imagesOnOffItem.setIcon(R.drawable.ic_action_image_on);
-        }
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onSearchRequested() {
-        MenuItemCompat.expandActionView(searchItem);
-        searchView.requestFocus();
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-
-            case R.id.action_search:
-                return super.onOptionsItemSelected(item);
-
-            case R.id.action_refresh:
-                //refresh();
-                break;
-
-            case R.id.action_dashboard:
-                if (numberOfColumns == 1) {
-                    numberOfColumns = 2;
-                    item.setIcon(R.drawable.ic_action_view_day);
-                }
-                else if (numberOfColumns == 2) {
-                    numberOfColumns = 1;
-                    item.setIcon(R.drawable.ic_action_dashboard);
-                }
-                //initRecyclerView();
-                saveToPref();
-                break;
-
-            case R.id.action_sort:
-                showSortDialog();
-                break;
-
-            case R.id.action_image_on_off:
-                if (imagesOnOff) {
-                    imagesOnOff = false;
-                    item.setTitle(R.string.images_on);
-                    item.setIcon(R.drawable.ic_action_image_on);
-                } else {
-                    imagesOnOff = true;
-                    item.setTitle(R.string.images_off);
-                    item.setIcon(R.drawable.ic_action_image_off);
-                }
-                //initRecyclerView();
-                saveToPref();
-                break;
-
-            case R.id.action_settings:
-                openSettings();
-                break;
-
-            case R.id.menu_help:
-                openHelp();
-                break;
-
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void openSettings() {

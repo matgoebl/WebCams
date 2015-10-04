@@ -49,10 +49,12 @@ public class URLFetchTask extends AsyncTask<Integer, Void, List<WebCam>> {
 
     BaseFragment container;
     Activity activity;
+    String query;
 
-    public URLFetchTask(BaseFragment f, Activity activity) {
-        this.container = f;
-        this.activity = activity;
+    public URLFetchTask(BaseFragment baseFragment, String query) {
+        this.container = baseFragment;
+        this.activity = baseFragment.getActivity();
+        this.query = query;
     }
 
     @Override
@@ -76,15 +78,21 @@ public class URLFetchTask extends AsyncTask<Integer, Void, List<WebCam>> {
                 KnownLocation knownLocation = Utils.getLastKnownLocation(activity);
                 url = new URL(Utils.JSON_FILE_SNRSRKUBIIXK +
                         "?action=" + "4" +
-                        "&id=" + activity.getApplicationContext().getPackageName() +
+                        "&id=" + activity.getApplicationContext().getPackageName() + //ToDo
                         "&latitude=" + knownLocation.getLatitude() +
                         "&longitude=" + knownLocation.getLongitude()
                 );
             } else if (id == R.id.selecting_by_type) {
                 url = new URL(Utils.JSON_FILE_SNRSRKUBIIXK +
                         "?action=" + "5" +
-                        "&id=" + activity.getApplicationContext().getPackageName() +
+                        "&id=" + activity.getApplicationContext().getPackageName() + //ToDo
                         "&type=" + params[1]
+                );
+            } else if (id == R.id.selecting_by_name) {
+                url = new URL(Utils.JSON_FILE_SNRSRKUBIIXK +
+                        "?action=" + "6" +
+                        "&id=" + activity.getApplicationContext().getPackageName() + //ToDo
+                        "&query=" + query
                 );
             } else url = new URL(Utils.JSON_FILE_SNRSRKUBIIXK + "?action=" + action + "&id=" + activity.getApplicationContext().getPackageName());
 

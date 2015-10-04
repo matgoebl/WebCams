@@ -36,6 +36,7 @@ import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.MainActivity;
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.listener.OnMenuItemClickListener;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
 public abstract class BaseFragment extends Fragment {
@@ -66,7 +67,6 @@ public abstract class BaseFragment extends Fragment {
         mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         mToolbarImage = (ImageView) getActivity().findViewById(R.id.toolbar_image);
         collapsingToolbar = (CollapsingToolbarLayout) getActivity().findViewById(R.id.collapsing_toolbar_layout);
-        mToolbar.inflateMenu(R.menu.menu);
         mToolbar.setTitle(getArguments().getString("title"));
         //collapsingToolbar.setTitle(getArguments().getString("title"));
         appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.app_bar_layout);
@@ -78,6 +78,7 @@ public abstract class BaseFragment extends Fragment {
             }
         });
         Glide.with(getActivity()).load(selectCategoryImage()).centerCrop().into(mToolbarImage);
+        mToolbar.setOnMenuItemClickListener(new OnMenuItemClickListener());
     }
 
     private int selectCategoryImage() {
@@ -89,7 +90,7 @@ public abstract class BaseFragment extends Fragment {
             case R.id.nearby_webcams:
                 return R.drawable.image_nearby;
             case R.id.selecting_by_name:
-                return R.drawable.image_manual;
+                return R.drawable.image_manual; //ToDo !! Something darker on top
             case R.id.selecting_by_country:
                 return R.drawable.image_country;
             case R.id.selecting_by_type:

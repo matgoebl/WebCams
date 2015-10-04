@@ -26,4 +26,4 @@
     android:paddingStart="8dp"
     android:paddingEnd="8dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="cz.yetanotherview.webcamviewer.app.fragments.tabs.TabFragment"/>
+    tools:context="cz.yetanotherview.webcamviewer.app.fragments.TabFragment"/>

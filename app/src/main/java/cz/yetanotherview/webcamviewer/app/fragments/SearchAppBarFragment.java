@@ -21,8 +21,11 @@ package cz.yetanotherview.webcamviewer.app.fragments;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.signature.StringSignature;
 
@@ -36,7 +39,7 @@ import cz.yetanotherview.webcamviewer.app.helper.URLFetchTask;
 import cz.yetanotherview.webcamviewer.app.listener.WebCamClickListener;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
-public class StandardAppBarFragment extends BaseFragment {
+public class SearchAppBarFragment extends BaseFragment {
 
     private StaggeredGridLayoutManager mLayoutManager;
     private RecyclerView mRecyclerView;
@@ -49,16 +52,53 @@ public class StandardAppBarFragment extends BaseFragment {
 
     URLFetchTask mTask;
 
-    public static StandardAppBarFragment newInstance() {
-        return new StandardAppBarFragment();
-    }
+    MenuItem searchButton;
+    SearchView searchView;
 
-    public StandardAppBarFragment() {}
+    public SearchAppBarFragment() {}
+
+    public static SearchAppBarFragment newInstance() {
+        return new SearchAppBarFragment();
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mToolbar.inflateMenu(R.menu.menu_search);
         mToolbar.inflateMenu(R.menu.menu_others);
+
+        RelativeLayout progressBar = (RelativeLayout) getActivity().findViewById(R.id.progressBarFetch);
+        progressBar.setVisibility(View.GONE);
+
+        searchButton = mToolbar.getMenu().findItem(R.id.action_search);
+        searchButton.expandActionView();
+
+        searchView = (SearchView) searchButton.getActionView();
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                searchButton.collapseActionView();
+                return false;
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                initData(query);
+                searchView.clearFocus();
+                //searchButton.collapseActionView(); //ToDO
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //mAdapter.filter(newText); //ToDO
+                return true;
+            }
+        });
+
+
+
         setList();
 
         //ToDo ???
@@ -85,8 +125,6 @@ public class StandardAppBarFragment extends BaseFragment {
 
         id = getArguments().getInt("id");
 
-        initData();
-
         int mLayoutId = 1; //ToDo
         imagesOnOff = true;
 //        if (numberOfColumns == 1 && mOrientation == 1) {
@@ -108,22 +146,20 @@ public class StandardAppBarFragment extends BaseFragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        webCams = new ArrayList<>();
+
         mAdapter = new WebCamAdapter(getContext(), webCams, mOrientation, mLayoutId,
                 new StringSignature(mStringSignature), imagesOnOff);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setClickListener(new WebCamClickListener(getActivity(), mAdapter, mStringSignature));
     }
 
-    private void initData() {
+    private void initData(String query) {
 
-        webCams = new ArrayList<>();
-
-        mTask = new URLFetchTask(this, null);
+        mTask = new URLFetchTask(this, query);
         mTask.showProgress(true);
         mTask.execute(id);
-
     }
-
 
     @Override
     public void populateResult(List<WebCam> webCams) {

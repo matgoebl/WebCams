@@ -16,12 +16,11 @@
 * *****************************************************************************
 */
 
-package cz.yetanotherview.webcamviewer.app.fragments.tabs;
+package cz.yetanotherview.webcamviewer.app.fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,13 +31,7 @@ import com.bumptech.glide.Glide;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.adapter.PagerAdapter;
-import cz.yetanotherview.webcamviewer.app.fragments.BaseFragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TabHolderFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class TabHolderFragment extends BaseFragment {
 
     View root;
@@ -49,18 +42,16 @@ public class TabHolderFragment extends BaseFragment {
 
     PagerAdapter adapter;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment TabFragment.
-     */
+    public TabHolderFragment() {}
+
     public static TabHolderFragment newInstance() {
         return new TabHolderFragment();
     }
 
-    public TabHolderFragment() {
-        // Required empty public constructor
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mToolbar.inflateMenu(R.menu.menu_others);
     }
 
     @Override

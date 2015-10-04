@@ -62,6 +62,7 @@ public class StandardLocalAppBarFragment extends BaseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mToolbar.inflateMenu(R.menu.menu_others);
         setList();
 
         //ToDo ???

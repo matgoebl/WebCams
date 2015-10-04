@@ -16,7 +16,7 @@
 * *****************************************************************************
 */
 
-package cz.yetanotherview.webcamviewer.app.fragments.tabs;
+package cz.yetanotherview.webcamviewer.app.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -35,7 +35,6 @@ import java.util.UUID;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
-import cz.yetanotherview.webcamviewer.app.fragments.BaseFragment;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView;
 import cz.yetanotherview.webcamviewer.app.helper.URLFetchTask;
@@ -80,6 +79,11 @@ public class TabFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
@@ -95,7 +99,7 @@ public class TabFragment extends BaseFragment {
 
         webCams = new ArrayList<>();
 
-        mTask = new URLFetchTask(this, getActivity());
+        mTask = new URLFetchTask(this, null);
         mTask.showProgress(true);
         mTask.execute(R.id.selecting_by_type, id);
     }
@@ -125,11 +129,6 @@ public class TabFragment extends BaseFragment {
                 new StringSignature(mStringSignature), imagesOnOff);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setClickListener(new WebCamClickListener(getActivity(), mAdapter, mStringSignature));
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 
     @Override

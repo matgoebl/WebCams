@@ -54,6 +54,7 @@ public class MapAppBarFragment extends BaseFragment implements OnMapReadyCallbac
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mToolbar.inflateMenu(R.menu.menu_others);
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(this);
     }
@@ -66,7 +67,7 @@ public class MapAppBarFragment extends BaseFragment implements OnMapReadyCallbac
     }
 
     private void initData() {
-        mTask = new URLFetchTask(this, getActivity());
+        mTask = new URLFetchTask(this, null);
         mTask.showProgress(true);
         mTask.execute(-1);
     }
