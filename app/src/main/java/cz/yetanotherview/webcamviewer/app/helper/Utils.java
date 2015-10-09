@@ -73,12 +73,14 @@ public class Utils {
     public static final String MAPBOX_VERSION = "0.7.4"; //ToDo: Replace
     public static final String FAB_VERSION = "1.6.1"; //ToDo
 
-    private static final String CORE = "http://api.yetanotherview.cz/api/v3/";
+    private static final String CORE = "https://api.yetanotherview.cz/api/v4/";
     private static final String PHP = ".php";
-    public static final String JSON_FILE_SNRSRKUBIIXK = CORE + "SNRSrkubIIxk" + PHP;
+    public static final String JSON_FILE_A3L1Y8QFXHPG = CORE + "a3L1Y8QfxhpG" + PHP;
     public static final String JSON_FILE_NPOEMOWQCPPO = CORE + "NPOEmowqCppo" + PHP;
     public static final String JSON_FILE_OZOBFUTXJVXO = CORE + "OZObFutXjVxo" + PHP;
     public static final String JSON_FILE_JDWUFOYXLOYY = CORE + "jDWUFOyxlOyY" + PHP;
+
+    public static String basicAuth = "sample:sample";
 
     /**
      * Get current date

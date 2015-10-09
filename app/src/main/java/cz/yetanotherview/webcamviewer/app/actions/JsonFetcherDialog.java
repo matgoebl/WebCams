@@ -180,7 +180,7 @@ public class JsonFetcherDialog extends DialogFragment {
                         break;
                 }
 
-                URL url = new URL(Utils.JSON_FILE_SNRSRKUBIIXK + "?action=" + action + "&id=" + pN);
+                URL url = new URL("?action=" + action + "&id=" + pN);
                 HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
                 urlConn.connect();
                 Assert.assertEquals(HttpURLConnection.HTTP_OK, urlConn.getResponseCode());

@@ -90,7 +90,7 @@ public abstract class BaseFragment extends Fragment {
             case R.id.nearby_webcams:
                 return R.drawable.image_nearby;
             case R.id.selecting_by_name:
-                return R.drawable.image_manual; //ToDo !! Something darker on top
+                return R.drawable.image_manual;
             case R.id.selecting_by_country:
                 return R.drawable.image_country;
             case R.id.selecting_by_type:

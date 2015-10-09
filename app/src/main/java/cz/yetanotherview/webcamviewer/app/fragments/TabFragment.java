@@ -37,7 +37,7 @@ import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView;
-import cz.yetanotherview.webcamviewer.app.helper.URLFetchTask;
+import cz.yetanotherview.webcamviewer.app.helper.DataFetcher;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.listener.WebCamClickListener;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
@@ -61,7 +61,7 @@ public class TabFragment extends BaseFragment {
     private WebCamAdapter mAdapter;
 
     private List<WebCam> webCams;
-    URLFetchTask mTask;
+    DataFetcher mTask;
 
     public TabFragment() {}
 
@@ -99,7 +99,7 @@ public class TabFragment extends BaseFragment {
 
         webCams = new ArrayList<>();
 
-        mTask = new URLFetchTask(this, null);
+        mTask = new DataFetcher(this, null);
         mTask.showProgress(true);
         mTask.execute(R.id.selecting_by_type, id);
     }

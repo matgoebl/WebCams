@@ -35,7 +35,7 @@ import java.util.UUID;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
-import cz.yetanotherview.webcamviewer.app.helper.URLFetchTask;
+import cz.yetanotherview.webcamviewer.app.helper.DataFetcher;
 import cz.yetanotherview.webcamviewer.app.listener.WebCamClickListener;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
@@ -50,7 +50,7 @@ public class SearchAppBarFragment extends BaseFragment {
     private String mStringSignature, title;
     private boolean imagesOnOff, autoRefresh;
 
-    URLFetchTask mTask;
+    DataFetcher mTask;
 
     MenuItem searchButton;
     SearchView searchView;
@@ -156,7 +156,7 @@ public class SearchAppBarFragment extends BaseFragment {
 
     private void initData(String query) {
 
-        mTask = new URLFetchTask(this, query);
+        mTask = new DataFetcher(this, query);
         mTask.showProgress(true);
         mTask.execute(id);
     }
@@ -168,10 +168,10 @@ public class SearchAppBarFragment extends BaseFragment {
     }
 
     //ToDo ???
-    protected boolean isTaskRunning(URLFetchTask task) {
+    protected boolean isTaskRunning(DataFetcher task) {
         if (task==null ) {
             return false;
-        } else if(task.getStatus() == URLFetchTask.Status.FINISHED){
+        } else if(task.getStatus() == DataFetcher.Status.FINISHED){
             return false;
         } else {
             return true;

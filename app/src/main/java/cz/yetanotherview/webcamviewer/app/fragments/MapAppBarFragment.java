@@ -33,7 +33,7 @@ import java.util.List;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.actions.ThumbnailDialog;
-import cz.yetanotherview.webcamviewer.app.helper.URLFetchTask;
+import cz.yetanotherview.webcamviewer.app.helper.DataFetcher;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.model.KnownLocation;
 import cz.yetanotherview.webcamviewer.app.model.MarkerCluster;
@@ -42,7 +42,7 @@ import cz.yetanotherview.webcamviewer.app.model.WebCam;
 public class MapAppBarFragment extends BaseFragment implements OnMapReadyCallback, ClusterManager.OnClusterItemClickListener<MarkerCluster> {
 
 
-    URLFetchTask mTask;
+    DataFetcher mTask;
     private GoogleMap map;
 
     public static MapAppBarFragment newInstance() {
@@ -67,7 +67,7 @@ public class MapAppBarFragment extends BaseFragment implements OnMapReadyCallbac
     }
 
     private void initData() {
-        mTask = new URLFetchTask(this, null);
+        mTask = new DataFetcher(this, null);
         mTask.showProgress(true);
         mTask.execute(-1);
     }

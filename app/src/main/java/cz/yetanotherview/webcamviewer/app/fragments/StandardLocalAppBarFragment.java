@@ -34,7 +34,7 @@ import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
 import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.EmptyRecyclerView;
-import cz.yetanotherview.webcamviewer.app.helper.URLFetchTask;
+import cz.yetanotherview.webcamviewer.app.helper.DataFetcher;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.listener.WebCamClickListener;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
@@ -139,10 +139,10 @@ public class StandardLocalAppBarFragment extends BaseFragment {
     }
 
     //ToDo ???
-    protected boolean isTaskRunning(URLFetchTask task) {
+    protected boolean isTaskRunning(DataFetcher task) {
         if(task==null ) {
             return false;
-        } else if(task.getStatus() == URLFetchTask.Status.FINISHED){
+        } else if(task.getStatus() == DataFetcher.Status.FINISHED){
             return false;
         } else {
             return true;

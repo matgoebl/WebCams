@@ -32,7 +32,7 @@ import java.util.UUID;
 
 import cz.yetanotherview.webcamviewer.app.R;
 import cz.yetanotherview.webcamviewer.app.adapter.WebCamAdapter;
-import cz.yetanotherview.webcamviewer.app.helper.URLFetchTask;
+import cz.yetanotherview.webcamviewer.app.helper.DataFetcher;
 import cz.yetanotherview.webcamviewer.app.listener.WebCamClickListener;
 import cz.yetanotherview.webcamviewer.app.model.WebCam;
 
@@ -47,7 +47,7 @@ public class StandardAppBarFragment extends BaseFragment {
     private String mStringSignature, title;
     private boolean imagesOnOff, autoRefresh;
 
-    URLFetchTask mTask;
+    DataFetcher mTask;
 
     public static StandardAppBarFragment newInstance() {
         return new StandardAppBarFragment();
@@ -118,7 +118,7 @@ public class StandardAppBarFragment extends BaseFragment {
 
         webCams = new ArrayList<>();
 
-        mTask = new URLFetchTask(this, null);
+        mTask = new DataFetcher(this, null);
         mTask.showProgress(true);
         mTask.execute(id);
 
@@ -132,10 +132,10 @@ public class StandardAppBarFragment extends BaseFragment {
     }
 
     //ToDo ???
-    protected boolean isTaskRunning(URLFetchTask task) {
+    protected boolean isTaskRunning(DataFetcher task) {
         if (task==null ) {
             return false;
-        } else if(task.getStatus() == URLFetchTask.Status.FINISHED){
+        } else if(task.getStatus() == DataFetcher.Status.FINISHED){
             return false;
         } else {
             return true;
