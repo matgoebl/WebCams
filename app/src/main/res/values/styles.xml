@@ -10,14 +10,27 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
 
-        <item name="android:activatedBackgroundIndicator">@drawable/drawer_list_bg</item>
-        <item name="selectableItemBackground">@drawable/ripple</item>
-        <item name="android:selectableItemBackground">@drawable/ripple</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
-        <item name="windowActionModeOverlay">true</item>
-        <item name="actionModeBackground">@color/very_dark_grey</item>
+        <!--<item name="android:activatedBackgroundIndicator">@drawable/drawer_list_bg</item>-->
+        <!--<item name="selectableItemBackground">@drawable/ripple</item>-->
+        <!--<item name="android:selectableItemBackground">@drawable/ripple</item>-->
+
+        <!--<item name="windowActionModeOverlay">true</item>-->
+        <!--<item name="actionModeBackground">@color/very_dark_grey</item>-->
         <item name="android:windowBackground">@color/white</item>
-        <!--<item name="actionBarTheme">@style/ActionBarTheme</item>-->
+        <item name="actionBarTheme">@style/ActionBarTheme</item>
+
+        <!-- No-selector-background bug-fix -->
+        <item name="android:activatedBackgroundIndicator">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <!-- This is needed because the default PreferenceCategory appearance uses italic style -->
+    <style name="Preference_TextAppearanceMaterialBody2">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 
     <style name="Title" parent="TextAppearance.AppCompat.Title">

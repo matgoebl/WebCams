@@ -21,7 +21,7 @@
             android:title="@string/pref_general"
             android:key="pref_category_general">
 
-    <CheckBoxPreference
+    <SwitchPreferenceCompat
         android:key="pref_screen_hw_acceleration"
         android:checked="true"
         android:defaultValue="true"
@@ -29,28 +29,28 @@
         android:icon="@drawable/settings_hw_acc"
         android:summary="@string/pref_hw_acceleration_summary" />
 
-    <CheckBoxPreference
+    <SwitchPreferenceCompat
         android:key="pref_screen_always_on"
         android:checked="false"
         android:title="@string/pref_screen_always_on"
         android:icon="@drawable/settings_power"
         android:summary="@string/pref_screen_always_on_summary" />
 
-    <CheckBoxPreference
+    <SwitchPreferenceCompat
         android:key="pref_last_category"
         android:checked="false"
         android:title="@string/pref_last_category"
         android:icon="@drawable/settings_last_category"
         android:summary="@string/pref_last_category_summary" />
 
-    <CheckBoxPreference
+    <SwitchPreferenceCompat
         android:key="pref_auto_refresh"
         android:checked="false"
         android:title="@string/pref_auto_refresh"
         android:icon="@drawable/settings_auto_refresh"
         android:summary="@string/pref_auto_refresh_summary" />
 
-        <CheckBoxPreference
+        <SwitchPreferenceCompat
             android:dependency="pref_auto_refresh"
             android:key="pref_auto_refresh_fullscreen"
             android:checked="false"

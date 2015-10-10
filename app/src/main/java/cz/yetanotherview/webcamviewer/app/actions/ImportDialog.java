@@ -303,7 +303,7 @@ public class ImportDialog extends DialogFragment {
             public void run() {
 
                 progressDialog.dismiss();
-                Snackbar.make(mActivity.findViewById(R.id.content_frame), R.string.import_done,
+                Snackbar.make(mActivity.findViewById(R.id.settings_fragment), R.string.import_done,
                         Snackbar.LENGTH_SHORT).show();
             }
         });
@@ -315,7 +315,7 @@ public class ImportDialog extends DialogFragment {
             public void run() {
 
                 progressDialog.dismiss();
-                Snackbar.make(mActivity.findViewById(R.id.content_frame), R.string.import_failed,
+                Snackbar.make(mActivity.findViewById(R.id.settings_fragment), R.string.import_failed,
                         Snackbar.LENGTH_SHORT).show();
             }
         });

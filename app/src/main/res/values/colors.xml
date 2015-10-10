@@ -7,6 +7,9 @@
     <color name="accent">#FF5722</color>
     <color name="hyperlink">#689f38</color>
 
+    <!-- this is needed as preference_category_material layout uses this color as the text color -->
+    <color name="preference_fallback_accent_color">@color/accent</color>
+
     <color name="white">#ffffffff</color>
     <color name="yellow">#ffeb3b</color>
     <color name="orange">#EF6C00</color>

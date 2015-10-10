@@ -23,12 +23,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceFragment;
 import android.support.design.widget.Snackbar;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceCategory;
+import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.SwitchPreferenceCompat;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -45,7 +44,7 @@ import cz.yetanotherview.webcamviewer.app.helper.DatabaseHelper;
 import cz.yetanotherview.webcamviewer.app.helper.DeleteAllWebCams;
 import cz.yetanotherview.webcamviewer.app.listener.SeekBarChangeListener;
 
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragmentCompat {
 
     private Context context;
     private MaterialDialog indeterminateProgress;
@@ -60,9 +59,7 @@ public class SettingsFragment extends PreferenceFragment {
     private DialogFragment dialogFragment;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.preferences);
         context = getActivity().getApplicationContext();
 
@@ -86,7 +83,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void setAutoRefreshInterval() {
         Preference pref_auto_refresh_interval = findPreference("pref_auto_refresh_interval");
-        pref_auto_refresh_interval.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        pref_auto_refresh_interval.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
 
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
@@ -127,7 +124,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void setAutoHideListener() {
         preferenceCategory = (PreferenceCategory)findPreference("pref_category_general");
-        CheckBoxPreference prefA = (CheckBoxPreference)findPreference("pref_auto_refresh");
+        SwitchPreferenceCompat prefA = (SwitchPreferenceCompat)findPreference("pref_auto_refresh");
 
         prefAutoRefreshFullScreen = findPreference("pref_auto_refresh_fullscreen");
         prefAutoRefreshInterval = findPreference("pref_auto_refresh_interval");
@@ -160,7 +157,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void deleteAllWebCams() {
         Preference pref_delete_all = findPreference("pref_delete_all");
-        pref_delete_all.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        pref_delete_all.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
 
                 if (db.getWebCamCount() > 0) {
@@ -204,10 +201,10 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void exportToExt() {
         Preference pref_export_to_ext = findPreference("pref_export_to_ext");
-        pref_export_to_ext.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        pref_export_to_ext.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 dialogFragment = new ExportDialog();
-                dialogFragment.show(getFragmentManager(), "ExportDialog");
+                dialogFragment.show(getActivity().getFragmentManager(), "ExportDialog");
                 return true;
             }
         });
@@ -215,10 +212,10 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void importFromExt() {
         Preference pref_import_from_ext = findPreference("pref_import_from_ext");
-        pref_import_from_ext.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        pref_import_from_ext.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 dialogFragment = new ImportDialog();
-                dialogFragment.show(getFragmentManager(), "ImportDialog");
+                dialogFragment.show(getActivity().getFragmentManager(), "ImportDialog");
                 return true;
             }
         });
@@ -226,7 +223,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void cleanCacheAndTmpFolder() {
         Preference pref_clean_cache_and_tmp = findPreference("pref_clean_cache_and_tmp");
-        pref_clean_cache_and_tmp.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        pref_clean_cache_and_tmp.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
 
                 new MaterialDialog.Builder(getActivity())
@@ -251,11 +248,11 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void showTranslators() {
         Preference pref_translators = findPreference("pref_translators");
-        pref_translators.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        pref_translators.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
 
                 dialogFragment = new TranslatorsDialog();
-                dialogFragment.show(getFragmentManager(), "TranslatorsDialog");
+                dialogFragment.show(getActivity().getFragmentManager(), "TranslatorsDialog");
 
                 return true;
             }
@@ -264,11 +261,11 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void showLibraries() {
         Preference pref_libraries = findPreference("pref_libraries");
-        pref_libraries.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        pref_libraries.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
 
                 dialogFragment = new LibrariesDialog();
-                dialogFragment.show(getFragmentManager(), "LibrariesDialog");
+                dialogFragment.show(getActivity().getFragmentManager(), "LibrariesDialog");
 
                 return true;
             }
@@ -277,11 +274,11 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void showAbout() {
         Preference pref_about = findPreference("pref_about");
-        pref_about.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        pref_about.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
 
                 dialogFragment = new AboutDialog();
-                dialogFragment.show(getFragmentManager(), "AboutDialog");
+                dialogFragment.show(getActivity().getFragmentManager(), "AboutDialog");
 
                 return true;
             }
@@ -308,17 +305,17 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void listIsEmpty() {
-        Snackbar.make(getActivity().findViewById(R.id.content_frame), R.string.list_is_empty,
+        Snackbar.make(getActivity().findViewById(R.id.settings_fragment), R.string.list_is_empty,
                 Snackbar.LENGTH_SHORT).show();
     }
 
     private void deleteDone() {
-        Snackbar.make(getActivity().findViewById(R.id.content_frame), R.string.action_deleted,
+        Snackbar.make(getActivity().findViewById(R.id.settings_fragment), R.string.action_deleted,
                 Snackbar.LENGTH_SHORT).show();
     }
 
     private void saveDone() {
-        Snackbar.make(getActivity().findViewById(R.id.content_frame), R.string.dialog_positive_toast_message,
+        Snackbar.make(getActivity().findViewById(R.id.settings_fragment), R.string.dialog_positive_toast_message,
                         Snackbar.LENGTH_SHORT).show();
     }
 }

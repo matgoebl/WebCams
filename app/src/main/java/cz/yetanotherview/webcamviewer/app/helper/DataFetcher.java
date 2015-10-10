@@ -150,7 +150,6 @@ public class DataFetcher extends AsyncTask<Integer, Void, List<WebCam>> {
     @Override
     protected void onPostExecute(List<WebCam> allWebCams) {
         super.onPostExecute(allWebCams);
-        // The activity can be null if it is thrown out by Android while task is running!
         if(container!=null && container.getActivity()!=null) {
             container.populateResult(allWebCams);
             if (showProgress) {

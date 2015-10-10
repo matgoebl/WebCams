@@ -143,7 +143,7 @@ public class ExportDialog extends DialogFragment {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Snackbar.make(getActivity().findViewById(R.id.content_frame), R.string.export_failed,
+            Snackbar.make(getActivity().findViewById(R.id.settings_fragment), R.string.export_failed,
                     Snackbar.LENGTH_SHORT).show();
         }
     }
@@ -194,7 +194,7 @@ public class ExportDialog extends DialogFragment {
     }
 
     private void backUpDone() {
-        Snackbar.make(getActivity().findViewById(R.id.content_frame), R.string.export_done,
+        Snackbar.make(getActivity().findViewById(R.id.settings_fragment), R.string.export_done,
                 Snackbar.LENGTH_SHORT).show();
     }
 }

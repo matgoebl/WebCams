@@ -32,7 +32,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -69,6 +69,8 @@ import cz.yetanotherview.webcamviewer.app.util.Navigator;
 
 public class MainActivity extends AppCompatActivity { //implements WebCamListener, JsonFetcherDialog.ReloadInterface
 
+    private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
+
     private DatabaseHelper db;
     private WebCam webCam, webCamToDelete;
     private List<Integer> webCamToDelete_category_ids;
@@ -77,11 +79,10 @@ public class MainActivity extends AppCompatActivity { //implements WebCamListene
     private ManualSelectionAdapter manualSelectionAdapter;
     private int numberOfColumns, selectedCategory, autoRefreshInterval,
             webCamToDeletePosition, selectedCategoryId, latestCategoryPos;
-    private boolean firstRun, autoRefresh, autoRefreshFullScreenOnly, hwAcceleration,
+    private boolean mUserLearned, autoRefresh, autoRefreshFullScreenOnly, hwAcceleration,
             screenAlwaysOn, imagesOnOff, latestCategory;
     private String sortOrder;
     private FloatingActionButton floatingActionButtonNative;
-    private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbar;
 
     private MaterialDialog materialDialog, indeterminateProgress;
@@ -93,19 +94,19 @@ public class MainActivity extends AppCompatActivity { //implements WebCamListene
 
     //private Drawer mDrawer = null;
     private DrawerLayout mDrawerLayout;
-    NavigationView mNavigationView;
+    private NavigationView mNavigationView;
+    private int mCurrentSelectedPosition;
+    private boolean mFromSavedInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // loading saved preferences
-//        loadPref();
+        loadPref();
 
         // Inflating main layout
         setContentView(R.layout.activity_main);
-
-        //ButterKnife.bind(this);
 
 //        // Auto Refreshing
 //        if (autoRefresh && !autoRefreshFullScreenOnly) {
@@ -122,7 +123,10 @@ public class MainActivity extends AppCompatActivity { //implements WebCamListene
         db = new DatabaseHelper(getApplicationContext());
 
 
-
+        if (savedInstanceState != null) {
+            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+            mFromSavedInstanceState = true;
+        }
 
         // Other core init
         setupToolbar();
@@ -135,9 +139,23 @@ public class MainActivity extends AppCompatActivity { //implements WebCamListene
         //loadLastSelectedCategory();
         //initRecyclerView();
         //initFab();
-        //initFirstRun();
+        initFirstRun();
         //initReceivedIntent();
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION, 0);
+        Menu menu = mNavigationView.getMenu();
+        menu.getItem(mCurrentSelectedPosition).setChecked(true);
     }
 
     @Override
@@ -208,39 +226,51 @@ public class MainActivity extends AppCompatActivity { //implements WebCamListene
                 switch (menuItem.getItemId()) {
                     case R.id.latest_webcams:
                         setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.latest_webcams, title);
+                        mCurrentSelectedPosition = 0;
                         return true;
                     case R.id.popular_webcams:
                         setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.popular_webcams, title);
+                        mCurrentSelectedPosition = 1;
                         return true;
                     case R.id.nearby_webcams:
                         setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.nearby_webcams, title);
+                        mCurrentSelectedPosition = 2;
                         return true;
                     case R.id.selecting_by_name:
                         setNewRootFragment(SearchAppBarFragment.newInstance(), R.id.selecting_by_name, title);
+                        mCurrentSelectedPosition = 3;
                         return true;
                     case R.id.selecting_by_country:
                         //setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.selecting_by_country, title);
+                        //mCurrentSelectedPosition = 4;
                         return true;
                     case R.id.selecting_by_type:
                         setNewRootFragment(TabHolderFragment.newInstance(), R.id.selecting_by_type, title);
+                        mCurrentSelectedPosition = 5;
                         return true;
                     case R.id.live_streams:
                         setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.live_streams, title);
+                        mCurrentSelectedPosition = 6;
                         return true;
                     case R.id.selecting_from_map:
                         setNewRootFragment(MapAppBarFragment.newInstance(), R.id.selecting_from_map, title);
+                        mCurrentSelectedPosition = 7;
                         return true;
                     case R.id.favorites_webcams:
                         //setNewRootFragment(StandardAppBarFragment.newInstance(), R.id.favorites_webcams, title);
+                        //mCurrentSelectedPosition = 8;
                         return true;
                     case R.id.all_local_webcams:
                         setNewRootFragment(StandardLocalAppBarFragment.newInstance(), R.id.all_local_webcams, title);
+                        mCurrentSelectedPosition = 9;
                         return true;
                     case R.id.action_settings:
-                        openSettings();
+                        openHelpOrSettings(0, 200);
+                        mCurrentSelectedPosition = 10;
                         return true;
                     case R.id.action_menu_help:
-                        openHelp();
+                        openHelpOrSettings(1, 200);
+                        mCurrentSelectedPosition = 11;
                         return true;
                     default:
                         return true;
@@ -280,10 +310,10 @@ public class MainActivity extends AppCompatActivity { //implements WebCamListene
     }
 
     private void initFirstRun() {
-        if (firstRun){
+        if (!mUserLearned){
             showWelcomeDialog();
-            //mNavigationDrawerFragment.openDrawer();
-            firstRun = false;
+            openDrawer();
+            mUserLearned = true;
             saveToPref();
         }
     }
@@ -345,15 +375,18 @@ public class MainActivity extends AppCompatActivity { //implements WebCamListene
         //mNavigationDrawerFragment.reloadData();
     }
 
-    private void openSettings() {
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this, SettingsActivity.class);
-        startActivityForResult(intent, 0);
-    }
+    public void openHelpOrSettings(final int what, final int delay) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent;
+                if (what == 0) {
+                    intent = new Intent(MainActivity.this, SettingsActivity.class);
 
-    private void openHelp() {
-        Intent helpIntent = new Intent(this, HelpActivity.class);
-        startActivity(helpIntent);
+                } else intent = new Intent(MainActivity.this, HelpActivity.class);
+                startActivity(intent);
+            }
+        }, delay);
     }
 
     private void showSortDialog() {
@@ -655,7 +688,7 @@ public class MainActivity extends AppCompatActivity { //implements WebCamListene
 
     private void loadPref(){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        firstRun = preferences.getBoolean("pref_first_run", true);
+        mUserLearned = preferences.getBoolean("pref_first_run", false);
         numberOfColumns = preferences.getInt("number_of_columns", 1);
         imagesOnOff = preferences.getBoolean("pref_images_on_off", true);
         sortOrder = preferences.getString("pref_sort_order", Utils.defaultSortOrder);
@@ -671,7 +704,7 @@ public class MainActivity extends AppCompatActivity { //implements WebCamListene
     private void saveToPref(){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("pref_first_run", firstRun);
+        editor.putBoolean("pref_first_run", mUserLearned);
         editor.putInt("number_of_columns", numberOfColumns);
         editor.putBoolean("pref_images_on_off", imagesOnOff);
         editor.putString("pref_sort_order", sortOrder);

@@ -78,7 +78,7 @@ public abstract class BaseFragment extends Fragment {
             }
         });
         Glide.with(getActivity()).load(selectCategoryImage()).centerCrop().into(mToolbarImage);
-        mToolbar.setOnMenuItemClickListener(new OnMenuItemClickListener());
+        mToolbar.setOnMenuItemClickListener(new OnMenuItemClickListener(getDrawerActivity()));
     }
 
     private int selectCategoryImage() {
