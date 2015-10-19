@@ -18,15 +18,19 @@
 
 package cz.yetanotherview.webcamviewer.app.widget;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
+import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -37,6 +41,7 @@ import com.bumptech.glide.request.target.*;
 import java.util.*;
 
 import cz.yetanotherview.webcamviewer.app.R;
+import cz.yetanotherview.webcamviewer.app.MainActivity;
 import cz.yetanotherview.webcamviewer.app.helper.Utils;
 import cz.yetanotherview.webcamviewer.app.helper.HttpHeader;
 
@@ -48,7 +53,9 @@ public class WvWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
                          int[] appWidgetIds) {
 
+        Log.d("WebCamWidget", "Update");
         for (int appWidgetId : appWidgetIds) {
+            Log.d("WebCamWidget", "Update for id="+appWidgetId);
 
             int textColor = WvWidgetConfigure.loadSelectedColor(context, appWidgetId, "textColor");
             int backgroundColor = WvWidgetConfigure.loadSelectedColor(context, appWidgetId, "backgroundColor");
@@ -59,6 +66,7 @@ public class WvWidgetProvider extends AppWidgetProvider {
 
             RemoteViews remoteViews =  new RemoteViews(context.getPackageName(), R.layout.widget_layout);
             remoteViews.setOnClickPendingIntent(R.id.sync_button, createRefresh(context, appWidgetId));
+            remoteViews.setOnClickPendingIntent(R.id.wImage, createMain(context, appWidgetId));
             remoteViews.setTextViewText(R.id.wTitle, name);
             if (textColor != 0) {
                 remoteViews.setTextColor(R.id.wTitle, textColor);
@@ -73,6 +81,25 @@ public class WvWidgetProvider extends AppWidgetProvider {
 
             loadImage(context, remoteViews, appWidgetId);
         }
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        Boolean autoRefresh = preferences.getBoolean("pref_auto_refresh", false);
+        Boolean autoRefreshFullScreenOnly = preferences.getBoolean("pref_auto_refresh_fullscreen", false);
+        int autoRefreshInterval = preferences.getInt("pref_auto_refresh_interval", 30000);
+
+        if (autoRefresh && !autoRefreshFullScreenOnly)
+        {
+            Intent intent = new Intent(context, WvWidgetProvider.class);
+            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Log.d("WebCamWidget", "Schedule update in " + autoRefreshInterval + " seconds");
+            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            am.set(AlarmManager.RTC, System.currentTimeMillis() + autoRefreshInterval, pendingIntent);
+        }
+
     }
 
     private PendingIntent createRefresh(Context context, int appWidgetId) {
@@ -84,8 +111,18 @@ public class WvWidgetProvider extends AppWidgetProvider {
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    private PendingIntent createMain(Context context, int appWidgetId) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return PendingIntent.getActivity(context, appWidgetId, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
     @Override
     public void onReceive(@NonNull Context context, @NonNull Intent intent) {
+        Log.d("WebCamWidget", "Received intent");
         if (WIDGET_BUTTON.equals(intent.getAction())) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
